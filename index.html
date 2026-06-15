@@ -282,6 +282,13 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
 .plan-add-row input{flex:1;font-size:13px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);min-width:0}
 .plan-add-btn{width:100%;background:#085041;border:none;border-radius:var(--border-radius-md);padding:10px;cursor:pointer;font-size:13px;color:#fff;font-weight:600;margin-top:4px}
 .plan-add-msg{font-size:11px;color:#1b5e20;text-align:center;margin-top:8px;min-height:14px}
+.plan-sleep{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.plan-sleep-input{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.plan-sleep-lbl{font-size:12px;color:var(--color-text-secondary);flex-shrink:0}
+.plan-sleep-input input{flex:1;font-size:13px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);min-width:0}
+.plan-sleep-btn{background:#085041;border:none;border-radius:var(--border-radius-md);padding:7px 16px;cursor:pointer;font-size:13px;color:#fff;font-weight:600;flex-shrink:0}
+.plan-sleep-chart{width:100%}
+.plan-sleep-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:14px 0}
 .plan-backup{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
 .plan-backup>summary{padding:11px 14px;font-size:13px;font-weight:600;color:var(--color-text-primary);cursor:pointer;list-style:none;display:flex;align-items:center}
 .plan-backup>summary::-webkit-details-marker{display:none}
@@ -603,7 +610,7 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
 <div class="rest-day">
 <div style="font-size:56px;margin-bottom:16px">😴</div>
 <div class="rest-title">일요일 — 완전 휴식</div>
-<div class="rest-desc">근육은 <b>휴식 중에 성장</b>합니다.<br><br>✔ 수분 2.5~3L<br>✔ 단백질 210g 유지<br>✔ 24:00 이전 취침 사수<br>✔ 가벼운 스트레칭<br><br><b>내일 월요일 Day 1 Push 💪</b></div>
+<div class="rest-desc">근육은 <b>휴식 중에 성장</b>합니다.<br><br>✔ 수분 2.5~3L<br>✔ 단백질 180g 유지<br>✔ 24:00 이전 취침 사수<br>✔ 가벼운 스트레칭<br><br><b>내일 월요일 Day 1 Push 💪</b></div>
 </div>
 </div>
 </div>
@@ -748,19 +755,19 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
 </div>
 </div>
 
-<div class="supp-sec">🥩 단백질 섭취 체크 (목표 210g)</div>
+<div class="supp-sec">🥩 단백질 섭취 체크 (목표 180g)</div>
 <div class="prot-wrap">
 <div class="prot-hd">오늘 단백질 달성 현황</div>
 <div class="prot-body">
 <div class="prot-meals">
-<input type="checkbox" id="p1" class="pck"><label class="p-lbl" for="p1"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">아침식사</div><div class="p-gm">목표 35g</div><div class="p-tip">계란 2알 + 그릭요거트 + 오트밀</div></div></label>
-<input type="checkbox" id="p2" class="pck"><label class="p-lbl" for="p2"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">점심식사</div><div class="p-gm">목표 55g</div><div class="p-tip">닭가슴살·소고기·생선 200g 이상 메인</div></div></label>
-<input type="checkbox" id="p3" class="pck"><label class="p-lbl" for="p3"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">16:00 단백질 바</div><div class="p-gm">목표 24g</div><div class="p-tip">닥터유 프로 1개 (베타알라닌과 함께)</div></div></label>
+<input type="checkbox" id="p1" class="pck"><label class="p-lbl" for="p1"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">아침식사</div><div class="p-gm">목표 30g</div><div class="p-tip">계란 2알 + 그릭요거트 + 오트밀</div></div></label>
+<input type="checkbox" id="p2" class="pck"><label class="p-lbl" for="p2"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">점심식사</div><div class="p-gm">목표 40g</div><div class="p-tip">닭가슴살·소고기·생선 메인 (구내식당 기준)</div></div></label>
+<input type="checkbox" id="p3" class="pck"><label class="p-lbl" for="p3"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">16:00 단백질 바</div><div class="p-gm">목표 25g</div><div class="p-tip">닥터유 프로 1개 (베타알라닌과 함께)</div></div></label>
 <input type="checkbox" id="p4" class="pck"><label class="p-lbl" for="p4"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">19:00 웨이 (셰이커)</div><div class="p-gm">목표 30g</div><div class="p-tip">시트룰린+웨이+탄수 셰이커 1회 일괄</div></div></label>
-<input type="checkbox" id="p5" class="pck"><label class="p-lbl" for="p5"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">21:30 운동 후 본식</div><div class="p-gm">목표 40g</div><div class="p-tip">고단백 실음식 본식</div></div></label>
+<input type="checkbox" id="p5" class="pck"><label class="p-lbl" for="p5"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">21:30 운동 후 본식</div><div class="p-gm">목표 30g</div><div class="p-tip">고단백 실음식 본식</div></div></label>
 <input type="checkbox" id="p6" class="pck"><label class="p-lbl" for="p6"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">23:00 카제인</div><div class="p-gm">목표 25g</div><div class="p-tip">취침 1시간 전 카제인</div></div></label>
 </div>
-<div class="p-done">🎉 오늘 단백질 목표 210g 달성! 리컴프 최적 상태</div>
+<div class="p-done">🎉 오늘 단백질 목표 180g 달성! 리컴프 최적 상태</div>
 </div>
 </div>
 
@@ -774,6 +781,8 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
 <div class="hab-row"><input type="checkbox" id="h4" class="hck"><label class="hab-lbl" for="h4"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🏋️ 20:00 도착 즉시 운동 시작<small>프리식사 없이 바로 — 풀볼륨</small></div></label></div>
 <div class="hab-row"><input type="checkbox" id="h5" class="hck"><label class="hab-lbl" for="h5"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🍽️ 21:30 운동 후 30분 이내 본식<small>크레아틴도 본식과 함께</small></div></label></div>
 <div class="hab-row"><input type="checkbox" id="h6" class="hck"><label class="hab-lbl" for="h6"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">😴 24:00 이전 취침<small>수면 7시간 이상 — 리컴프 핵심</small></div></label></div>
+<div class="hab-row"><input type="checkbox" id="h7" class="hck"><label class="hab-lbl" for="h7"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🥦 브로콜리·십자화과 섭취<small>인돌-3-카비놀 → 에스트로겐 대사 촉진</small></div></label></div>
+<div class="hab-row"><input type="checkbox" id="h8" class="hck"><label class="hab-lbl" for="h8"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🍺 알코올 회피 (주 1회 이하)<small>음주 → 에스트로겐↑·테스토스테론↓</small></div></label></div>
 </div></div></div></div>
 <div class="tab-body tab-p">
 <div class="plan-wrap">
@@ -833,6 +842,18 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
   </div>
 </details>
 
+<!-- 수면 추세 -->
+<div class="plan-hd" style="margin-top:20px">😴 수면 추세 (목표 7시간+)</div>
+<div class="plan-sleep">
+  <div class="plan-sleep-input">
+    <span class="plan-sleep-lbl">오늘 수면</span>
+    <input type="number" step="0.5" inputmode="decimal" id="sleep-hr" placeholder="시간">
+    <button class="plan-sleep-btn" onclick="PlanApp.addSleep()">기록</button>
+  </div>
+  <div class="plan-sleep-chart" id="sleep-chart"></div>
+  <div class="plan-add-msg" id="sleep-msg"></div>
+</div>
+
 <!-- Phase 타임라인 -->
 <div class="plan-hd" style="margin-top:20px">🗓 단계별 플랜</div>
 <div class="plan-phase-track">
@@ -870,7 +891,7 @@ details[open]>summary .plan-trend-ic{transform:rotate(180deg)}
 <div class="plan-hd" style="margin-top:20px">⏱ 6주 블록 진행</div>
 <div class="plan-block-card">
   <div class="plan-block-header">
-    <span class="plan-block-title">1차 블록 리뷰</span>
+    <span class="plan-block-title" id="block-title">1차 블록 리뷰</span>
     <span class="plan-block-date" id="block-review-date"></span>
   </div>
   <div class="plan-block-bar"><div class="plan-block-fill" id="block-fill"></div></div>
@@ -1357,7 +1378,7 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.loadBlood();this.loadBody();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.loadBlood();this.loadBody();this.loadSleep();},
 
   // ── 체성분 추세 ──
   BODY_METRICS:{
@@ -1381,6 +1402,49 @@ const PlanApp={
     this.renderBody();
   },
   async saveBody(){try{await window.storage.set('plan_body_v2',JSON.stringify(this.bodyData));}catch(_){}},
+  // ── 수면 추세 ──
+  sleepData:[],
+  async loadSleep(){
+    try{const r=await window.storage.get('plan_sleep_v1');if(r)this.sleepData=JSON.parse(r.value);}catch(_){}
+    if(!Array.isArray(this.sleepData))this.sleepData=[];
+    this.sleepData.sort((a,b)=>a.date<b.date?-1:1);
+    this.drawSleep();
+  },
+  async addSleep(){
+    const inp=document.getElementById('sleep-hr');const msg=document.getElementById('sleep-msg');
+    const h=parseFloat(inp&&inp.value);
+    if(!h||h<=0||h>24){if(msg)msg.textContent='0~24 사이 시간을 입력하세요';return;}
+    const today=new Date().toISOString().slice(0,10);
+    const i=this.sleepData.findIndex(e=>e.date===today);
+    if(i>=0)this.sleepData[i].h=h;else this.sleepData.push({date:today,h});
+    this.sleepData.sort((a,b)=>a.date<b.date?-1:1);
+    try{await window.storage.set('plan_sleep_v1',JSON.stringify(this.sleepData));}catch(_){}
+    if(inp)inp.value='';this.drawSleep();
+    if(msg){msg.textContent='✓ '+today.replace(/-/g,'.')+' '+h+'시간 기록';setTimeout(()=>{if(msg)msg.textContent='';},2000);}
+  },
+  drawSleep(){
+    const chart=document.getElementById('sleep-chart');if(!chart)return;
+    const pts=this.sleepData.slice(-14);
+    if(pts.length<2){chart.innerHTML='<div class="plan-sleep-empty">2일 이상 기록되면 추세가 표시됩니다.</div>';return;}
+    const W=300,H=92,pad=24,TARGET=7;
+    const vals=pts.map(p=>p.h).concat([TARGET]);
+    let lo=Math.min(...vals),hi=Math.max(...vals);if(lo===hi){lo-=1;hi+=1;}const sp=(hi-lo)*0.12;lo-=sp;hi+=sp;
+    const x=i=>pad+(W-pad*2)*(i/(pts.length-1));
+    const y=v=>13+(H-26)*(1-(v-lo)/(hi-lo));
+    const line=pts.map((p,i)=>x(i).toFixed(1)+','+y(p.h).toFixed(1)).join(' ');
+    const ty=y(TARGET);
+    const dots=pts.map((p,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(p.h).toFixed(1)+'" r="3" fill="'+(p.h>=TARGET?'#1b5e20':'#e65100')+'"/>').join('');
+    const last=pts[pts.length-1];
+    chart.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">'
+      +'<line x1="'+pad+'" y1="'+ty.toFixed(1)+'" x2="'+(W-pad)+'" y2="'+ty.toFixed(1)+'" stroke="#bbb" stroke-width="1" stroke-dasharray="3 3"/>'
+      +'<text x="'+(W-pad)+'" y="'+(ty-4).toFixed(1)+'" font-size="9" fill="#999" text-anchor="end">목표 7시간</text>'
+      +'<polyline points="'+line+'" fill="none" stroke="#185FA5" stroke-width="2" stroke-linejoin="round"/>'
+      +dots
+      +'<text x="'+x(0).toFixed(1)+'" y="'+(H-2)+'" font-size="8" fill="#999" text-anchor="start">'+pts[0].date.slice(5)+'</text>'
+      +'<text x="'+x(pts.length-1).toFixed(1)+'" y="'+(H-2)+'" font-size="8" fill="#999" text-anchor="end">'+last.date.slice(5)+'</text>'
+      +'<text x="'+x(pts.length-1).toFixed(1)+'" y="'+(y(last.h)-7).toFixed(1)+'" font-size="10" font-weight="700" fill="#185FA5" text-anchor="middle">'+last.h+'h</text>'
+      +'</svg>';
+  },
   async exportAll(){
     const msg=document.getElementById('pb-backup-msg');const area=document.getElementById('pb-backup');
     try{
@@ -1493,13 +1557,15 @@ const PlanApp={
   },
   renderBlock(){
     const start=new Date('2026-05-25T00:00:00');
-    const review=new Date(start);review.setDate(start.getDate()+42);
     const now=new Date();
-    const elapsed=Math.max(0,Math.min(42,Math.floor((now-start)/864e5)));
+    const daysElapsed=Math.max(0,Math.floor((now-start)/864e5));
+    const blockNum=Math.floor(daysElapsed/42)+1;
+    const elapsed=daysElapsed-(blockNum-1)*42;   // 현재 블록 내 경과(0~41)
     const pct=Math.round(elapsed/42*100);
-    const remain=Math.max(0,42-elapsed);
-    const fill=document.getElementById('block-fill');
-    if(fill)fill.style.width=pct+'%';
+    const remain=42-elapsed;
+    const review=new Date(start);review.setDate(start.getDate()+blockNum*42);
+    const title=document.getElementById('block-title');if(title)title.textContent=blockNum+'차 블록 리뷰';
+    const fill=document.getElementById('block-fill');if(fill)fill.style.width=pct+'%';
     const rd=document.getElementById('block-review-date');if(rd)rd.textContent=review.toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
     const dt=document.getElementById('block-days-txt');if(dt)dt.textContent=elapsed+'/42일 ('+pct+'%)';
     const rm=document.getElementById('block-remain-txt');if(rm)rm.textContent='잔여 '+remain+'일';
