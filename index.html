@@ -1391,9 +1391,12 @@ const ExLog={
           });
         });
       });
-      const res=await fetch(url,{method:'POST',body:JSON.stringify({rows}),headers:{'Content-Type':'text/plain'}});
-      const json=await res.json();
-      if(btn){btn.textContent=json.ok?'✓':'❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
+      // 헤더를 직접 지정하지 않으면 fetch가 자동으로 text/plain;charset=UTF-8 적용
+      // → simple request라 preflight 없이 전송되고, 응답도 읽을 수 있음
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({rows}),redirect:'follow'});
+      let okFlag=true;
+      try{const json=await res.json();okFlag=json.ok!==false;}catch(_){okFlag=res.ok;}
+      if(btn){btn.textContent=okFlag?'✓':'❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
     }catch(err){
       if(btn){btn.textContent='❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
       console.error('sync error',err);
