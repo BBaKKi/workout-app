@@ -425,16 +425,23 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .plan-stat-bar{height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden;margin-bottom:4px}
 .plan-stat-fill{height:100%;border-radius:3px}
 .plan-stat-sub{font-size:10px;color:var(--color-text-tertiary)}
-.inbody-open-btn{display:block;width:100%;margin:8px 0 0;padding:10px;background:none;border:0.5px dashed var(--color-border-secondary);border-radius:10px;font-size:13px;color:#085041;font-weight:700;cursor:pointer}
-.ib-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:flex-end}
-.ib-modal-box{width:100%;background:var(--color-background-primary);border-radius:18px 18px 0 0;padding:20px 20px 34px;box-sizing:border-box}
-.ib-modal-hd{font-size:15px;font-weight:800;margin-bottom:14px;color:var(--color-text-primary)}
-.ib-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.ib-lbl{font-size:12px;font-weight:600;color:var(--color-text-secondary);width:90px;flex-shrink:0}
-.ib-inp{flex:1;padding:9px 10px;border:0.5px solid var(--color-border-secondary);border-radius:8px;font-size:14px;background:var(--color-background-secondary);color:var(--color-text-primary)}
-.ib-btns{display:flex;gap:8px;margin-top:14px}
-.ib-cancel{flex:1;padding:11px;background:var(--color-background-secondary);border:none;border-radius:10px;font-size:14px;cursor:pointer;color:var(--color-text-secondary)}
-.ib-save{flex:2;padding:11px;background:#085041;border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer}
+.inbody-open-btn{display:block;width:100%;margin:10px 0 0;padding:12px;background:none;border:1.5px dashed #3B6D11;border-radius:12px;font-size:13px;color:#085041;font-weight:700;cursor:pointer;letter-spacing:.2px}
+.ib-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:flex;align-items:flex-end}
+.ib-modal-box{width:100%;background:var(--color-background-primary,#fff);border-radius:22px 22px 0 0;padding:0 0 40px;box-sizing:border-box;max-height:92vh;overflow-y:auto}
+.ib-modal-handle{width:36px;height:4px;background:var(--color-border-secondary,#ccc);border-radius:2px;margin:12px auto 0}
+.ib-modal-hd{font-size:17px;font-weight:800;color:var(--color-text-primary);padding:16px 20px 4px;letter-spacing:-.2px}
+.ib-modal-sub{font-size:12px;color:var(--color-text-tertiary);padding:0 20px 14px;border-bottom:0.5px solid var(--color-border-tertiary,#e5e5ea)}
+.ib-fields{padding:8px 20px 0}
+.ib-field{margin-bottom:6px;padding:12px 14px;background:var(--color-background-secondary,#f2f2f7);border-radius:12px}
+.ib-lbl{display:block;font-size:11px;font-weight:700;color:var(--color-text-tertiary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.ib-inp{display:block;width:100%;box-sizing:border-box;padding:0;border:none;background:transparent;font-size:22px;font-weight:700;color:var(--color-text-primary);font-family:var(--font-mono,monospace);outline:none}
+.ib-inp::placeholder{color:var(--color-border-secondary,#c7c7cc);font-weight:400;font-size:20px}
+.ib-inp-date{display:block;width:100%;box-sizing:border-box;padding:0;border:none;background:transparent;font-size:18px;font-weight:600;color:var(--color-text-primary);outline:none;-webkit-appearance:none}
+.ib-unit{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.ib-divider{height:0.5px;background:var(--color-border-tertiary,#e5e5ea);margin:6px 20px}
+.ib-btns{display:flex;gap:10px;padding:14px 20px 0}
+.ib-cancel{flex:1;padding:14px;background:var(--color-background-secondary,#f2f2f7);border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;color:var(--color-text-secondary)}
+.ib-save{flex:2;padding:14px;background:#085041;border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:.2px}
 .ib-spark-wrap{margin-top:7px}
 .ib-spark-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
 .ib-spark svg{display:block;width:100%;height:32px}
@@ -686,14 +693,39 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <button class="inbody-open-btn" onclick="InBody.openModal()">＋ 인바디 입력</button>
 
 <!-- 체성분 입력 모달 -->
-<div id="inbody-modal" class="ib-modal" style="display:none">
+<div id="inbody-modal" class="ib-modal" style="display:none" onclick="if(event.target===this)InBody.closeModal()">
   <div class="ib-modal-box">
+    <div class="ib-modal-handle"></div>
     <div class="ib-modal-hd">📋 인바디 입력</div>
-    <div class="ib-row"><label class="ib-lbl">측정일</label><input type="date" id="ib-date" class="ib-inp"></div>
-    <div class="ib-row"><label class="ib-lbl">체중 (kg)</label><input type="number" id="ib-wt" class="ib-inp" step="0.1" placeholder="예: 89.4"></div>
-    <div class="ib-row"><label class="ib-lbl">골격근량 (kg)</label><input type="number" id="ib-sm" class="ib-inp" step="0.1" placeholder="예: 36.2"></div>
-    <div class="ib-row"><label class="ib-lbl">체지방률 (%)</label><input type="number" id="ib-bf" class="ib-inp" step="0.1" placeholder="예: 28.5"></div>
-    <div class="ib-row"><label class="ib-lbl">복부지방률</label><input type="number" id="ib-ab" class="ib-inp" step="0.01" placeholder="예: 0.96"></div>
+    <div class="ib-modal-sub">인바디 측정 후 수치를 그대로 입력하세요</div>
+    <div class="ib-fields">
+      <div class="ib-field">
+        <span class="ib-lbl">측정일</span>
+        <input type="date" id="ib-date" class="ib-inp-date">
+      </div>
+      <div class="ib-divider"></div>
+      <div class="ib-field">
+        <span class="ib-lbl">체중</span>
+        <input type="number" id="ib-wt" class="ib-inp" step="0.1" placeholder="0.0" inputmode="decimal">
+        <div class="ib-unit">kg</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">골격근량</span>
+        <input type="number" id="ib-sm" class="ib-inp" step="0.1" placeholder="0.0" inputmode="decimal">
+        <div class="ib-unit">kg</div>
+      </div>
+      <div class="ib-divider"></div>
+      <div class="ib-field">
+        <span class="ib-lbl">체지방률</span>
+        <input type="number" id="ib-bf" class="ib-inp" step="0.1" placeholder="0.0" inputmode="decimal">
+        <div class="ib-unit">%</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">복부지방률</span>
+        <input type="number" id="ib-ab" class="ib-inp" step="0.01" placeholder="0.00" inputmode="decimal">
+        <div class="ib-unit">인바디 출력값 그대로 (예: 0.96)</div>
+      </div>
+    </div>
     <div class="ib-btns">
       <button class="ib-cancel" onclick="InBody.closeModal()">취소</button>
       <button class="ib-save" onclick="InBody.save()">저장</button>
