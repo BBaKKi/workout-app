@@ -13,9 +13,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-r,.day-r,.exck,.sck,.wck,.pck,.hck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .nav-lbl{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:#8e8e93;cursor:pointer;border-bottom:2.5px solid transparent}
-#tw:checked~.top-nav .lbl-w,#ts:checked~.top-nav .lbl-s,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
+#tw:checked~.top-nav .lbl-w,#ts:checked~.top-nav .lbl-s,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
 .tab-body{display:none}
-#tw:checked~.tab-w,#ts:checked~.tab-s,#tp:checked~.tab-p{display:block}
+#tw:checked~.tab-w,#ts:checked~.tab-s,#td:checked~.tab-d,#tl:checked~.tab-l,#tp:checked~.tab-p{display:block}
 .day-sel{display:flex;gap:5px;padding:10px 16px;overflow-x:auto;background:#fff;border-bottom:1px solid #f0f0f0;-webkit-overflow-scrolling:touch}
 .day-sel::-webkit-scrollbar{display:none}
 .day-lbl{flex-shrink:0;width:44px;height:50px;border-radius:10px;border:1.5px solid #d1d1d6;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative}
@@ -337,8 +337,82 @@ details[open]>summary .ic{transform:rotate(180deg)}
 
 /* 플랜 탭 */
 .plan-wrap{padding:12px 16px 80px}
-.plan-hd{font-size:11px;font-weight:700;color:var(--color-text-secondary);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;padding-left:9px;border-left:3px solid #3B6D11;line-height:1.25}
+.plan-hd{font-size:13px;font-weight:800;color:var(--color-text-primary);margin:24px 0 12px;padding:9px 12px;background:var(--color-background-secondary,#ebedef);border-left:3px solid #3B6D11;border-radius:8px;line-height:1.3}
+.plan-hd:first-of-type{margin-top:2px}
 .plan-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.plan-vol-head{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:8px}
+.plan-vol-note{font-size:11px;color:var(--color-text-tertiary);margin-top:9px;line-height:1.45}
+.plan-vol-empty{font-size:12px;color:var(--color-text-tertiary);padding:4px 2px;line-height:1.55}
+.pv-row{display:flex;align-items:center;gap:8px;margin:5px 0}
+.pv-nm{font-size:11px;font-weight:600;width:70px;flex-shrink:0;color:var(--color-text-secondary)}
+.pv-track{flex:1;height:8px;background:var(--color-border-tertiary,#e5e5ea);border-radius:5px;overflow:hidden}
+.pv-fill{height:100%;border-radius:5px;transition:width .3s}
+.pv-val{font-size:11px;font-weight:700;width:40px;text-align:right;color:var(--color-text-secondary)}
+.pv-val.low{color:#BA7517}
+.tr-row{padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary,#e5e5ea)}
+.tr-row:last-child{border-bottom:0;padding-bottom:0}
+.tr-row:first-child{padding-top:0}
+.tr-top{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.tr-nm{font-size:12px;font-weight:700;color:var(--color-text-primary)}
+.tr-plat{font-size:9px;font-weight:700;color:#fff;background:#BA7517;padding:1px 6px;border-radius:8px}
+.tr-mid{display:flex;align-items:center;gap:10px}
+.tr-spark{flex-shrink:0}
+.tr-stat{font-size:11px;color:var(--color-text-secondary)}
+.tr-e1{font-weight:700;color:var(--color-text-primary)}
+.tr-up{color:#3B6D11;font-weight:700}.tr-dn{color:#E24B4A;font-weight:700}.tr-eq{color:#999}
+.tr-set{color:var(--color-text-tertiary)}
+.mm-wrap{padding:14px 16px 80px}
+.mm-title{font-size:15px;font-weight:800;color:var(--color-text-primary);margin-bottom:4px}
+.mm-sub{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px}
+.mm-svg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto;color:var(--color-text-secondary)}
+.mm-sil *{fill:var(--color-border-tertiary,#dadde0);opacity:.45;stroke:none}
+.mz{stroke:#fff;stroke-width:1;cursor:pointer;fill-opacity:.5;transition:fill-opacity .15s}
+.mz[data-m="가슴"]{fill:#D85A30}.mz[data-m="등"]{fill:#185FA5}.mz[data-m="측면삼각"]{fill:#BA7517}.mz[data-m="전면삼각"]{fill:#E0922F}.mz[data-m="삼두"]{fill:#0C447C}.mz[data-m="이두"]{fill:#3B6D11}.mz[data-m="대퇴사두"]{fill:#27500A}.mz[data-m="후면사슬"]{fill:#6B4FA0}.mz[data-m="코어"]{fill:#888}
+.mz.sel{fill-opacity:.95;stroke:#085041;stroke-width:1.5}
+.mm-vlbl{font-size:10px;fill:var(--color-text-tertiary);text-anchor:middle}
+.mm-info{margin-top:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;background:var(--color-background-primary);min-height:70px}
+.mm-info-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:16px 0}
+.mm-h{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.mm-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.mm-nm{font-size:15px;font-weight:800;color:var(--color-text-primary)}
+.mm-loc{font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px}
+.mm-fn{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:10px}
+.mm-sc{display:flex;flex-direction:column;gap:8px;margin-bottom:11px}
+.mm-scr{display:flex;gap:8px;font-size:12px;line-height:1.5}
+.mm-scr .tg{font-weight:800;flex-shrink:0;width:48px}
+.mm-scr.stretch .tg{color:#185FA5}.mm-scr.contract .tg{color:#D85A30}.mm-scr.cue .tg{color:#3B6D11}
+.mm-scr .tx{color:var(--color-text-secondary)}
+.mm-exs-lbl{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:6px}
+.mm-exs{display:flex;flex-wrap:wrap;gap:6px}
+.mm-ex{font-size:11px;background:var(--color-background-secondary,#eef0f2);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:4px 10px;color:var(--color-text-secondary)}
+.lib-wrap{padding:12px 16px 80px}
+.lib-intro{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:10px}
+.lib-search{width:100%;box-sizing:border-box;padding:9px 12px;border:0.5px solid var(--color-border-secondary);border-radius:10px;font-size:13px;margin-bottom:8px;background:var(--color-background-primary);color:var(--color-text-primary)}
+.lib-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.lib-chip{font-size:12px;padding:5px 12px;border-radius:16px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer}
+.lib-chip.on{background:#085041;color:#fff;border-color:#085041}
+.lib-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:8px;background:var(--color-background-primary);overflow:hidden}
+.lib-card>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer}
+.lib-card>summary::-webkit-details-marker{display:none}
+.lib-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.lib-nm{font-size:13px;font-weight:700;color:var(--color-text-primary)}
+.lib-mus{font-size:11px;color:var(--color-text-tertiary);margin-left:auto;text-align:right}
+.lib-card .chev{font-size:11px;color:var(--color-text-tertiary);margin-left:4px}
+.lib-body{padding:0 13px 13px;display:flex;flex-direction:column;gap:7px}
+.lib-r{display:flex;gap:8px;font-size:12px;line-height:1.5}
+.lib-l{font-weight:800;color:#085041;flex-shrink:0;width:46px}
+.lib-r span:last-child{color:var(--color-text-secondary)}
+.lib-add{margin-top:5px;background:#085041;color:#fff;border:0;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer}
+.lib-add.added{background:#3B6D11}
+.lib-add:disabled{opacity:.85}
+.lib-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:20px 0}
+.ex-extra{margin-top:8px;border-top:0.5px solid var(--color-border-tertiary);padding-top:8px}
+.ex-extra>summary{font-size:12px;font-weight:700;color:#085041;cursor:pointer;list-style:none}
+.ex-extra>summary::-webkit-details-marker{display:none}
+.ex-extra-body{display:flex;flex-direction:column;gap:6px;margin-top:7px}
+.exx-row{display:flex;gap:8px;font-size:12px;line-height:1.5}
+.exx-l{font-weight:800;color:var(--color-text-tertiary);flex-shrink:0;width:52px}
+.exx-row span:last-child{color:var(--color-text-secondary)}
 /* 체성분 카드 */
 .plan-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .plan-stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px}
@@ -351,6 +425,20 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .plan-stat-bar{height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden;margin-bottom:4px}
 .plan-stat-fill{height:100%;border-radius:3px}
 .plan-stat-sub{font-size:10px;color:var(--color-text-tertiary)}
+.inbody-open-btn{display:block;width:100%;margin:8px 0 0;padding:10px;background:none;border:0.5px dashed var(--color-border-secondary);border-radius:10px;font-size:13px;color:#085041;font-weight:700;cursor:pointer}
+.ib-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:flex-end}
+.ib-modal-box{width:100%;background:var(--color-background-primary);border-radius:18px 18px 0 0;padding:20px 20px 34px;box-sizing:border-box}
+.ib-modal-hd{font-size:15px;font-weight:800;margin-bottom:14px;color:var(--color-text-primary)}
+.ib-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ib-lbl{font-size:12px;font-weight:600;color:var(--color-text-secondary);width:90px;flex-shrink:0}
+.ib-inp{flex:1;padding:9px 10px;border:0.5px solid var(--color-border-secondary);border-radius:8px;font-size:14px;background:var(--color-background-secondary);color:var(--color-text-primary)}
+.ib-btns{display:flex;gap:8px;margin-top:14px}
+.ib-cancel{flex:1;padding:11px;background:var(--color-background-secondary);border:none;border-radius:10px;font-size:14px;cursor:pointer;color:var(--color-text-secondary)}
+.ib-save{flex:2;padding:11px;background:#085041;border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer}
+.ib-spark-wrap{margin-top:7px}
+.ib-spark-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
+.ib-spark svg{display:block;width:100%;height:32px}
+.ib-no-data{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:12px 0;border:0.5px dashed var(--color-border-tertiary);border-radius:8px}
 .plan-inbody-note{font-size:11px;color:var(--color-text-tertiary);text-align:center;padding:4px 0}
 /* Phase */
 .plan-phase-track{margin-bottom:10px}
@@ -412,63 +500,11 @@ details[open]>summary .ic{transform:rotate(180deg)}
 </style>
 </head>
 <body>
-<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="ts" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-s" for="ts">💊 영양제</label><label class="nav-lbl lbl-p" for="tp">📊 플랜</label></div>
+<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
-<details class="info-card" style="margin:10px 16px 0">
-<summary>📊 RPE &amp; 휴식 기준<span class="ic">▾</span></summary>
-<div class="rpe-grid">
-<div class="rpe-box r6"><div class="rn">RPE 6</div><div class="rl">가볍다</div><div class="rd">4~5회 더 가능. 워밍업 수준.</div></div>
-<div class="rpe-box r7"><div class="rn">RPE 7</div><div class="rl">적당하다</div><div class="rd">3회 더 가능. 메인 하단.</div></div>
-<div class="rpe-box r8"><div class="rn">RPE 8 ⭐</div><div class="rl">오늘 목표</div><div class="rd">2회 남김. 이 강도를 유지.</div></div>
-<div class="rpe-box r9"><div class="rn">RPE 9</div><div class="rl">매우 힘들다</div><div class="rd">1회 남김. 과부하 위험.</div></div>
-</div>
-<div class="rest-grid">
-<div class="rg"><div class="rg-t">🔴 복합운동</div><div class="rg-v">2~3분</div><div class="rg-e">스쿼트·데드·벤치·OHP·로우</div></div>
-<div class="rg"><div class="rg-t">🟡 고립운동</div><div class="rg-v">60~90초</div><div class="rg-e">컬·레이즈·푸시다운·플라이</div></div>
-</div>
-</details>
-<details class="info-card" style="margin:10px 16px 0">
-<summary>📖 참고 가이드 — 알아두면 좋은 것들<span class="ic">▾</span></summary>
-<div class="info-body">
-
-<div style="margin-bottom:12px">
-<div style="font-size:12px;font-weight:700;color:#085041;margin-bottom:5px">⏱ 운동 전 영양 타이밍</div>
-<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.65">
-완전 공복 운동 금지 — 특히 하체 날(글리코겐 소모 최대). <b>19:00 셰이커(웨이+빠른탄수)가 운동 전 식사 역할</b>이므로 절대 거르지 않기. 고형식은 운동 <b>2시간+ 전</b>까지만. <b>하체 날 운동 후</b>: 본식 밥 양 늘려도 OK(인슐린 민감도↑), 23:00 카제인에 견과류 한 줌 추가. <b>가슴·등 날</b>: 추가 불필요, 기존 루틴 유지.</div>
-</div>
-
-<div style="margin-bottom:12px">
-<div style="font-size:12px;font-weight:700;color:#185FA5;margin-bottom:5px">🔄 템포 — 부위별 자극 포인트</div>
-<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.65">
-<b>등</b>: 정점 1초 수축(두께) + 2~3초 신장(너비). 신장 자극이 잘 느껴져도 정점 수축을 버리면 절반 손해.<br>
-<b>가슴·하체</b>: 2~3초 신장 후 폭발적으로 밀기. 내릴 때 빠르게 툭 놓으면 자극 손실.<br>
-<b>상체 고립</b>: 무게 욕심보다 마인드머슬 연결 우선 (체형 특성상 핵심).</div>
-</div>
-
-<div style="margin-bottom:12px">
-<div style="font-size:12px;font-weight:700;color:#D85A30;margin-bottom:5px">⚡ 통증 구분 — 계속 vs 중단</div>
-<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.65">
-<b>뭉치고 타는 느낌</b>(점진적) = 피로성, 정상 범위.<br>
-<b>날카롭거나 찌르는 통증</b>(갑작스러움·특정 자세) = 즉시 중단 신호. 무게를 내리고 폼 재점검.<br>
-기립근 사례: 80kg 통증 → 75kg 안정화 후 재증량이 정답.</div>
-</div>
-
-<div style="margin-bottom:12px">
-<div style="font-size:12px;font-weight:700;color:#BA7517;margin-bottom:5px">💧 전해질 — 다한증 필수 대응</div>
-<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.65">
-땀 많은 체질 → 물만 마시면 나트륨 희석으로 힘 빠짐. 운동 중 <b>물 500ml+ 소금 한 꼬집</b> 또는 전해질 파우더. 특히 하체 날·여름철 필수.</div>
-</div>
-
-<div>
-<div style="font-size:12px;font-weight:700;color:#3B6D11;margin-bottom:5px">🤝 그립 — 데드리프트 악력 해결</div>
-<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.65">
-악력 한계 시 <b>오버언더 그립</b>(한 손 오버 + 한 손 언더) — 바 구름 방지로 30~40% 더 버팀. 언더그립 팔꿈치는 항상 쭉 편 상태 유지(이두 보호). <b>세트마다 좌우 교대</b>로 비대칭 방지.</div>
-</div>
-
-</div></details>
 <div class="day-sel">
 <label class="day-lbl lbl-d1" for="d1"><div class="today-dot"></div><span class="dn">Day1</span><span class="dl">Push</span><span class="dw">월</span></label>
 <label class="day-lbl lbl-d2" for="d2"><span class="dn">Day2</span><span class="dl">Pull</span><span class="dw">화</span></label>
@@ -578,215 +614,95 @@ details[open]>summary .ic{transform:rotate(180deg)}
 </div>
 </div>
 </div>
-<div class="tab-body tab-s">
-<div class="supp-toggle-bar">
-  <span style="font-size:12px;color:var(--color-text-secondary)">타이밍 참고 · 체크리스트</span>
-  <button class="supp-toggle-btn" onclick="toggleSupp(this)" id="supp-toggle-btn">📋 상세 보기</button>
-</div>
-<div class="supp-wrap">
-
-<div class="supp-timeline-wrap collapsed" id="supp-timeline"><div class="supp-sec">최적화된 하루 영양제 타이밍</div>
-<div class="tl">
-<div class="ti">
-<div class="t-left"><div class="t-time">09:00</div><div class="t-sub">아침</div></div>
-<div class="t-axis"><div class="t-dot c-am"></div><div class="t-line l-am"></div></div>
-<div class="t-right">
-<div class="t-name">아침식사와 함께</div>
-<div class="t-pills"><span class="sp sp-v">종합비타민</span><span class="sp sp-v">마카</span><span class="sp sp-p">베타알라닌 1.6g</span></div>
-<div class="t-note">계란·그릭요거트 <b>지방과 함께</b> 복용<br>마카는 오전 복용 필수 (오후 늦으면 수면 방해)<br>베타알라닌 분할 1차 (하루 총 4.8g / 3분할)</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">11:30</div><div class="t-sub">점심 30분 전</div></div>
-<div class="t-axis"><div class="t-dot c-pre"></div><div class="t-line l-pre"></div></div>
-<div class="t-right">
-<div class="t-name">점심 30분 전</div>
-<div class="t-pills"><span class="sp sp-v">밀크씨슬</span></div>
-<div class="t-note">식전 복용 → 간이 음식을 받기 전에 <b>보호막 먼저 형성</b></div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">12:00</div><div class="t-sub">점심 직후</div></div>
-<div class="t-axis"><div class="t-dot c-lu"></div><div class="t-line l-lu"></div></div>
-<div class="t-right">
-<div class="t-name">점심식사 직후 즉시 <span class="chg">✨ 변경</span></div>
-<div class="t-pills"><span class="sp sp-p">카르니틴</span><span class="sp sp-p">베타알라닌 1.6g</span><span class="sp sp-v">오메가3 2,000mg</span><span class="sp sp-v">D3+K2 75μg</span></div>
-<div class="t-note"><b>카르니틴</b> — 식후 인슐린 타이밍에 맞춰 근육 내 흡수 최대화<br><b>오메가3 2,000mg·D3+K2</b> — 지용성, 점심이 하루 중 가장 기름지고 시간 압박 없는 슬롯<br><b>베타알라닌</b> — 분할 2차</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">12:30+</div><div class="t-sub">커피</div></div>
-<div class="t-axis"><div class="t-dot c-cof"></div><div class="t-line l-cof"></div></div>
-<div class="t-right">
-<div class="t-name">커피</div>
-<div class="t-pills"><span class="sp sp-c">☕ 커피</span></div>
-<div class="t-note">카르니틴 복용 후 <b>최소 30분 경과</b> 후만 가능</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">16:00</div><div class="t-sub">오후 간식</div></div>
-<div class="t-axis"><div class="t-dot c-pre"></div><div class="t-line l-pre"></div></div>
-<div class="t-right">
-<div class="t-name">오후 단백질 펄스 <span class="chg">✨ 변경</span></div>
-<div class="t-pills"><span class="sp sp-pr">단백질 바 24g (닥터유 프로)</span><span class="sp sp-p">베타알라닌 1.6g</span></div>
-<div class="t-note"><b>단백질 바 (닥터유 프로)</b> — 셰이커·조리 불필요. 12→19시 단백 펄스 공백 메움. 베타알라닌 분할 3차 (총 4.8g 달성)<br>※ 포화지방 6g·287kcal → Phase1 2,300kcal 안에서 관리. 운동 4시간 전 슬롯이라 소화 영향 미미</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">19:00</div><div class="t-sub">퇴근 직전·이동</div></div>
-<div class="t-axis"><div class="t-dot c-pw"></div><div class="t-line l-pw"></div></div>
-<div class="t-right">
-<div class="t-name">프리워크아웃 (퇴근 직전·이동 중) <span class="chg">✨ 변경</span></div>
-<div class="t-pills"><span class="sp sp-p">L-시트룰린 6g</span><span class="sp sp-c">빠른 탄수 30~40g</span><span class="sp sp-pr">웨이 파우더 (셰이커 일괄)</span></div>
-<div class="t-note"><b>L-시트룰린 6g + 웨이 + 빠른 탄수를 셰이커 1회에 일괄</b><br>시트룰린은 웨이 아미노산과 흡수 경쟁 없음 → 간격·순서 불필요. 혼합 가능<br>빠른 탄수(바나나 1개 또는 쌀떡 2~3개) — 글리코겐 충전 → 운동 후반 세트 힘 유지<br>※ 말레이트 2:1 제품 사용 시 9g으로 조정</div>
-<div class="t-alert g"><b>실행 핵심</b> — 시트룰린 파우더 + 웨이 파우더를 셰이커에 함께 넣고 빠른 탄수와 함께. 단계 없이 한 번에 → 아르기닌 대비 퍼포먼스 2~3배·실행 최단순. 이 슬롯 누락 시 반공복 훈련됨</div>
+<div class="tab-body tab-d">
+<div class="mm-wrap">
+  <div class="mm-title">💪 근육 지도</div>
+  <div class="mm-sub">부위를 탭하면 기능 · 어디가 늘어나고(신장) 조여야 하는지(수축) · 자극 운동을 볼 수 있습니다.</div>
+  <svg viewBox="0 0 330 366" class="mm-svg" xmlns="http://www.w3.org/2000/svg">
+    <!-- 실루엣 (앞) -->
+    <g class="mm-sil">
+      <circle cx="85" cy="26" r="15"/>
+      <polygon points="60,50 110,50 104,150 66,150"/>
+      <rect x="60" y="148" width="50" height="52" rx="10"/>
+      <rect x="40" y="56" width="13" height="92" rx="6"/>
+      <rect x="117" y="56" width="13" height="92" rx="6"/>
+      <rect x="66" y="196" width="17" height="150" rx="8"/>
+      <rect x="87" y="196" width="17" height="150" rx="8"/>
+    </g>
+    <!-- 근육 영역 (앞) -->
+    <ellipse class="mz" data-m="전면삼각" cx="62" cy="66" rx="11" ry="9" onclick="MuscleMap.show('전면삼각')"/>
+    <ellipse class="mz" data-m="전면삼각" cx="108" cy="66" rx="11" ry="9" onclick="MuscleMap.show('전면삼각')"/>
+    <ellipse class="mz" data-m="측면삼각" cx="48" cy="70" rx="7" ry="10" onclick="MuscleMap.show('측면삼각')"/>
+    <ellipse class="mz" data-m="측면삼각" cx="122" cy="70" rx="7" ry="10" onclick="MuscleMap.show('측면삼각')"/>
+    <ellipse class="mz" data-m="가슴" cx="74" cy="90" rx="13" ry="11" onclick="MuscleMap.show('가슴')"/>
+    <ellipse class="mz" data-m="가슴" cx="96" cy="90" rx="13" ry="11" onclick="MuscleMap.show('가슴')"/>
+    <ellipse class="mz" data-m="이두" cx="47" cy="112" rx="6" ry="16" onclick="MuscleMap.show('이두')"/>
+    <ellipse class="mz" data-m="이두" cx="123" cy="112" rx="6" ry="16" onclick="MuscleMap.show('이두')"/>
+    <rect class="mz" data-m="코어" x="73" y="106" width="24" height="42" rx="6" onclick="MuscleMap.show('코어')"/>
+    <ellipse class="mz" data-m="대퇴사두" cx="76" cy="245" rx="11" ry="34" onclick="MuscleMap.show('대퇴사두')"/>
+    <ellipse class="mz" data-m="대퇴사두" cx="94" cy="245" rx="11" ry="34" onclick="MuscleMap.show('대퇴사두')"/>
+    <!-- 실루엣 (뒤) -->
+    <g class="mm-sil">
+      <circle cx="245" cy="26" r="15"/>
+      <polygon points="220,50 270,50 264,150 226,150"/>
+      <rect x="220" y="148" width="50" height="52" rx="10"/>
+      <rect x="200" y="56" width="13" height="92" rx="6"/>
+      <rect x="277" y="56" width="13" height="92" rx="6"/>
+      <rect x="226" y="196" width="17" height="150" rx="8"/>
+      <rect x="247" y="196" width="17" height="150" rx="8"/>
+    </g>
+    <!-- 근육 영역 (뒤) -->
+    <ellipse class="mz" data-m="측면삼각" cx="208" cy="68" rx="8" ry="9" onclick="MuscleMap.show('측면삼각')"/>
+    <ellipse class="mz" data-m="측면삼각" cx="282" cy="68" rx="8" ry="9" onclick="MuscleMap.show('측면삼각')"/>
+    <ellipse class="mz" data-m="등" cx="232" cy="108" rx="14" ry="26" onclick="MuscleMap.show('등')"/>
+    <ellipse class="mz" data-m="등" cx="258" cy="108" rx="14" ry="26" onclick="MuscleMap.show('등')"/>
+    <ellipse class="mz" data-m="삼두" cx="206" cy="112" rx="6" ry="16" onclick="MuscleMap.show('삼두')"/>
+    <ellipse class="mz" data-m="삼두" cx="284" cy="112" rx="6" ry="16" onclick="MuscleMap.show('삼두')"/>
+    <ellipse class="mz" data-m="후면사슬" cx="245" cy="178" rx="22" ry="15" onclick="MuscleMap.show('후면사슬')"/>
+    <ellipse class="mz" data-m="후면사슬" cx="236" cy="250" rx="10" ry="32" onclick="MuscleMap.show('후면사슬')"/>
+    <ellipse class="mz" data-m="후면사슬" cx="254" cy="250" rx="10" ry="32" onclick="MuscleMap.show('후면사슬')"/>
+    <text x="85" y="362" class="mm-vlbl">앞면</text>
+    <text x="245" y="362" class="mm-vlbl">뒷면</text>
+  </svg>
+  <div id="mm-info" class="mm-info"><div class="mm-info-empty">위 그림에서 부위를 탭해 보세요.</div></div>
 </div>
 </div>
-<div class="ti">
-<div class="t-left"><div class="t-time">20:00</div><div class="t-sub">운동</div></div>
-<div class="t-axis"><div class="t-dot" style="border-color:#D85A30;background:#FAECE7"></div><div class="t-line" style="background:#F0997B;opacity:.3"></div></div>
-<div class="t-right">
-<div class="t-name">운동 (도착 즉시·풀볼륨 / 20:00~21:30)</div>
-<div class="t-note">PPL×2 주 6회. 압축 불필요(취침 24:00 허용) / 수분 300~500ml<br>운동 중 보충제 없음 — 물·전해질만</div>
+<div class="tab-body tab-l">
+<div class="lib-wrap">
+  <div class="mm-title">📚 운동 도감</div>
+  <div class="lib-intro">부위별 운동·머신 카탈로그. 펼치면 타겟·그립/힘·세팅·가동범위(ROM)를 볼 수 있고, [운동에 추가]를 누르면 오늘 운동에 들어가 동일하게 기록됩니다.</div>
+  <input class="lib-search" placeholder="🔍 운동·부위 검색..." oninput="LibApp.search(this.value)">
+  <div class="lib-chips" id="lib-chips"></div>
+  <div id="lib-list"></div>
 </div>
 </div>
-<div class="ti">
-<div class="t-left"><div class="t-time">21:30</div><div class="t-sub">운동 후 본식</div></div>
-<div class="t-axis"><div class="t-dot c-dn"></div><div class="t-line l-dn"></div></div>
-<div class="t-right">
-<div class="t-name">운동 후 본식 <span class="chg">✨ 변경</span></div>
-<div class="t-pills"><span class="sp sp-pr">고단백 식사 40g</span><span class="sp sp-p">크레아틴 3~5g</span><span class="sp sp-v">오메가3 1,000mg</span></div>
-<div class="t-note"><b>운동 직후 실음식 본식</b> — 쉐이크 대신 실제 음식으로 MPS 피크 + 포만·미세영양<br><b>크레아틴</b> — 포화 기반·타이밍 무관, 본식과 함께 복용<br>운동 종료 30분 이내 섭취</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">23:00</div><div class="t-sub">취침 1시간 전</div></div>
-<div class="t-axis"><div class="t-dot c-mg"></div><div class="t-line l-mg"></div></div>
-<div class="t-right">
-<div class="t-name">취침 1시간 전</div>
-<div class="t-pills"><span class="sp sp-b">카제인 25g</span><span class="sp sp-v">마그네슘 200mg</span><span class="sp sp-v">아슈와간다 600mg</span></div>
-<div class="t-note"><b>카제인</b> — 본식과 1.5h 분리된 야간 독립 펄스. 7~8h 서방형 공급. 물 200ml 이상<br><b>마그네슘 글리시네이트(Albion)</b> — 수면 진입 보조<br><b>아슈와간다 600mg</b> — 코르티솔 보조 (수면충돌 완화로 의미 경량화, 컷 후보)</div>
-</div>
-</div>
-<div class="ti">
-<div class="t-left"><div class="t-time">24:00</div><div class="t-sub">취침</div></div>
-<div class="t-axis"><div class="t-dot c-bd"></div></div>
-<div class="t-right">
-<div class="t-name">취침</div>
-<div class="t-note">운동 종료 후 2.5h 경과 → 코르티솔·심부체온 충분히 하강한 상태</div>
-<div class="t-alert a"><b>수면 7시간 이상 사수</b> — 성장호르몬 분비가 수면 첫 2시간에 집중. 모든 보충제의 효과 전제 조건.</div>
-</div>
-</div>
-</div>
-
-</div>
-<div class="supp-sec">오늘 복용 체크리스트</div>
-<div class="cl-wrap">
-<div class="cl-hd">💊 영양제 체크 (매일 리셋)</div>
-<div class="cl-body">
-<div class="cl-row"><input type="checkbox" id="s1" class="sck"><label class="cl-lbl" for="s1"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">종합비타민<small>09:00 아침식사 중</small></div><div class="tm-b">09:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s2" class="sck"><label class="cl-lbl" for="s2"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">마카<small>09:00 아침식사 중</small></div><div class="tm-b">09:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s3" class="sck"><label class="cl-lbl" for="s3"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">베타알라닌 1.6g (1차)<small>09:00 아침식사 중</small></div><div class="tm-b">09:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s4" class="sck"><label class="cl-lbl" for="s4"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">밀크씨슬<small>11:30 점심 30분 전</small></div><div class="tm-b">11:30</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s5" class="sck"><label class="cl-lbl" for="s5"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">카르니틴<small>12:00 점심 직후 즉시</small></div><div class="tm-b">12:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s6" class="sck"><label class="cl-lbl" for="s6"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">베타알라닌 1.6g (2차)<small>12:00 점심 직후</small></div><div class="tm-b">12:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s7" class="sck"><label class="cl-lbl" for="s7"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">오메가3 2,000mg<small>12:00 점심 직후 (총 3,000mg 중 2,000)</small></div><div class="tm-b">12:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s8" class="sck"><label class="cl-lbl" for="s8"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">D3+K2 75μg ✨<small>12:00 점심 직후 (변경)</small></div><div class="tm-b">12:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s9" class="sck"><label class="cl-lbl" for="s9"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">단백질 바 (닥터유 프로 24g)<small>16:00 오후 간식</small></div><div class="tm-b">16:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s10" class="sck"><label class="cl-lbl" for="s10"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">베타알라닌 1.6g (3차)<small>16:00 오후 간식 (총 4.8g 달성)</small></div><div class="tm-b">16:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s11" class="sck"><label class="cl-lbl" for="s11"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">L-시트룰린 6g + 웨이 파우더 + 빠른 탄수 (셰이커 일괄)<small>19:00 출발 즉시 — 혼합 가능, 순서·간격 불필요</small></div><div class="tm-b">19:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s14" class="sck"><label class="cl-lbl" for="s14"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">크레아틴 3~5g ✨<small>21:30 운동 후 본식과 함께 (변경)</small></div><div class="tm-b">21:30</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s18" class="sck"><label class="cl-lbl" for="s18"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">오메가3 1,000mg<small>21:30 본식과 함께 (총 3,000mg 중 1,000)</small></div><div class="tm-b">21:30</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s15" class="sck"><label class="cl-lbl" for="s15"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">마그네슘 글리시네이트 200mg<small>23:00 취침 1시간 전</small></div><div class="tm-b">23:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s16" class="sck"><label class="cl-lbl" for="s16"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">아슈와간다 600mg<small>23:00 취침 1시간 전 (컷 후보)</small></div><div class="tm-b">23:00</div></label></div>
-<div class="cl-row"><input type="checkbox" id="s17" class="sck"><label class="cl-lbl" for="s17"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="cl-txt">카제인 25g<small>23:00 취침 1시간 전</small></div><div class="tm-b">23:00</div></label></div>
-</div>
-</div>
-
-<div class="supp-sec">💧 수분 섭취 트래커 (목표 2.5L)</div>
-<div class="water-wrap">
-<div class="water-hd">하루 수분 목표 <span style="font-size:12px;font-weight:500">500ml × 5컵 = 2.5L</span></div>
-<div class="water-body">
-<div class="water-cups">
-<input type="checkbox" id="w1" class="wck"><label class="w-lbl" for="w1"><div class="w-cup">🥤</div><div class="w-ml">500ml</div></label>
-<input type="checkbox" id="w2" class="wck"><label class="w-lbl" for="w2"><div class="w-cup">🥤</div><div class="w-ml">1L</div></label>
-<input type="checkbox" id="w3" class="wck"><label class="w-lbl" for="w3"><div class="w-cup">🥤</div><div class="w-ml">1.5L</div></label>
-<input type="checkbox" id="w4" class="wck"><label class="w-lbl" for="w4"><div class="w-cup">🥤</div><div class="w-ml">2L</div></label>
-<input type="checkbox" id="w5" class="wck"><label class="w-lbl" for="w5"><div class="w-cup">🥤</div><div class="w-ml">2.5L ✅</div></label>
-</div>
-<div class="w-done">🎉 오늘 수분 목표 달성! 크레아틴·베타알라닌 효과 극대화 중</div>
-<div style="font-size:11px;color:#636366;text-align:center;line-height:1.6;margin-top:4px">소변 색 <b>연한 노란색</b>이 기준</div>
-</div>
-</div>
-
-<div class="supp-sec">🥩 단백질 섭취 체크 (목표 180g · 도전 210g)</div>
-<div class="prot-wrap">
-<div class="prot-hd">오늘 단백질 달성 현황</div>
-<div class="prot-body">
-<div class="prot-meals">
-<input type="checkbox" id="p1" class="pck"><label class="p-lbl" for="p1"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">아침식사</div><div class="p-gm">목표 35g</div><div class="p-tip">계란 2알 + 그릭요거트 + 오트밀</div></div></label>
-<input type="checkbox" id="p2" class="pck"><label class="p-lbl" for="p2"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">점심식사</div><div class="p-gm">목표 55g</div><div class="p-tip">닭가슴살·소고기·생선 200g 이상 메인</div></div></label>
-<input type="checkbox" id="p3" class="pck"><label class="p-lbl" for="p3"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">16:00 단백질 바</div><div class="p-gm">목표 24g</div><div class="p-tip">닥터유 프로 1개 (베타알라닌과 함께)</div></div></label>
-<input type="checkbox" id="p4" class="pck"><label class="p-lbl" for="p4"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">19:00 웨이 (셰이커)</div><div class="p-gm">목표 30g</div><div class="p-tip">시트룰린+웨이+탄수 셰이커 1회 일괄</div></div></label>
-<input type="checkbox" id="p5" class="pck"><label class="p-lbl" for="p5"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">21:30 운동 후 본식</div><div class="p-gm">목표 40g</div><div class="p-tip">고단백 실음식 본식</div></div></label>
-<input type="checkbox" id="p6" class="pck"><label class="p-lbl" for="p6"><div class="p-chk"><span class="p-ci">✓</span></div><div class="p-info"><div class="p-mn">23:00 카제인</div><div class="p-gm">목표 25g</div><div class="p-tip">취침 1시간 전 카제인</div></div></label>
-</div>
-<div class="p-done">🎉 단백질 충분 섭취! (180g 돌파) 리컴프 최적 상태</div>
-</div>
-</div>
-
-<div class="supp-sec">✅ 오늘의 생활습관 체크</div>
-<div class="hab-wrap">
-<div class="hab-hd">목표 달성 핵심 습관</div>
-<div class="hab-body">
-<div class="hab-row"><input type="checkbox" id="h1" class="hck"><label class="hab-lbl" for="h1"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">☕ 아침 커피 안 마심<small>종합비타민 흡수 보호 완료</small></div></label></div>
-<div class="hab-row"><input type="checkbox" id="h2" class="hck"><label class="hab-lbl" for="h2"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">⏱️ 커피는 카르니틴 후 30분 경과 확인<small>카르니틴 흡수 보호</small></div></label></div>
-<div class="hab-row"><input type="checkbox" id="h3" class="hck"><label class="hab-lbl" for="h3"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🎒 19:00 시트룰린+웨이+탄수 셰이커 1회<small>혼합 가능·순서 불필요. 누락 시 반공복 훈련 — 실행 핵심</small></div></label></div>
-<div class="hab-row"><input type="checkbox" id="h4" class="hck"><label class="hab-lbl" for="h4"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🏋️ 20:00 도착 즉시 운동 시작<small>프리식사 없이 바로 — 풀볼륨</small></div></label></div>
-<div class="hab-row"><input type="checkbox" id="h5" class="hck"><label class="hab-lbl" for="h5"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">🍽️ 21:30 운동 후 30분 이내 본식<small>크레아틴도 본식과 함께</small></div></label></div>
-<div class="hab-row"><input type="checkbox" id="h6" class="hck"><label class="hab-lbl" for="h6"><div class="chk-box"><span class="chk-ic">✓</span></div><div class="hab-txt">😴 24:00 이전 취침<small>수면 7시간 이상 — 리컴프 핵심</small></div></label></div>
-</div></div></div></div>
 <div class="tab-body tab-p">
 <div class="plan-wrap">
 
 <!-- 체성분 현황 -->
 <div class="plan-hd">📊 체성분 현황</div>
-<div class="plan-stat-grid">
-  <div class="plan-stat-card" style="grid-column:1/-1">
-    <div class="plan-stat-lbl">체중</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">89.4</span><span class="plan-stat-unit">kg</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">84kg</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:0%;background:#085041"></div></div>
-    <div class="plan-stat-sub">목표까지 −5.4kg · 초기 상승은 리컴프 정상 신호</div>
-  </div>
-  <div class="plan-stat-card">
-    <div class="plan-stat-lbl">골격근량</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">36.2</span><span class="plan-stat-unit">kg</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">38kg</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:40%;background:#3B6D11"></div></div>
-    <div class="plan-stat-sub">+1.2kg 달성 · 잔여 +1.8kg</div>
-  </div>
-  <div class="plan-stat-card">
-    <div class="plan-stat-lbl">체지방률</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">28.5</span><span class="plan-stat-unit">%</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">20%</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:12%;background:#185FA5"></div></div>
-    <div class="plan-stat-sub">−1.1%p 달성 · 잔여 −8.5%p</div>
-  </div>
-  <div class="plan-stat-card">
-    <div class="plan-stat-lbl">허리둘레</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">101.1</span><span class="plan-stat-unit">cm</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">&lt;94cm</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:0%;background:#D85A30"></div></div>
-    <div class="plan-stat-sub">기준점 확보 · 추세 관찰 중</div>
-  </div>
-  <div class="plan-stat-card">
-    <div class="plan-stat-lbl">복부지방률</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">0.96</span><span class="plan-stat-unit"></span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">0.90</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:17%;background:#BA7517"></div></div>
-    <div class="plan-stat-sub">경계 이상 → 정상화 진행 중</div>
+<div id="inbody-cards"></div>
+<div class="plan-inbody-note" id="plan-inbody-note"></div>
+<button class="inbody-open-btn" onclick="InBody.openModal()">＋ 인바디 입력</button>
+
+<!-- 체성분 입력 모달 -->
+<div id="inbody-modal" class="ib-modal" style="display:none">
+  <div class="ib-modal-box">
+    <div class="ib-modal-hd">📋 인바디 입력</div>
+    <div class="ib-row"><label class="ib-lbl">측정일</label><input type="date" id="ib-date" class="ib-inp"></div>
+    <div class="ib-row"><label class="ib-lbl">체중 (kg)</label><input type="number" id="ib-wt" class="ib-inp" step="0.1" placeholder="예: 89.4"></div>
+    <div class="ib-row"><label class="ib-lbl">골격근량 (kg)</label><input type="number" id="ib-sm" class="ib-inp" step="0.1" placeholder="예: 36.2"></div>
+    <div class="ib-row"><label class="ib-lbl">체지방률 (%)</label><input type="number" id="ib-bf" class="ib-inp" step="0.1" placeholder="예: 28.5"></div>
+    <div class="ib-row"><label class="ib-lbl">복부지방률</label><input type="number" id="ib-ab" class="ib-inp" step="0.01" placeholder="예: 0.96"></div>
+    <div class="ib-btns">
+      <button class="ib-cancel" onclick="InBody.closeModal()">취소</button>
+      <button class="ib-save" onclick="InBody.save()">저장</button>
+    </div>
   </div>
 </div>
-<div class="plan-inbody-note" id="plan-inbody-note">📅 최근 측정: 2026.06.06 · InBody 점수 70</div>
 
 <!-- Phase 타임라인 -->
-<div class="plan-hd" style="margin-top:20px">🗓 단계별 플랜</div>
+<div class="plan-hd">🗓 단계별 플랜</div>
 <div class="plan-phase-track">
   <div class="plan-phase-bar">
     <div class="plan-phase-seg" id="ph-prog" style="background:#3B6D11;border-radius:5px 0 0 5px"></div>
@@ -819,7 +735,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 </div>
 
 <!-- 6주 블록 -->
-<div class="plan-hd" style="margin-top:20px">⏱ 6주 블록 진행</div>
+<div class="plan-hd">⏱ 6주 블록 진행</div>
 <div class="plan-block-card">
   <div class="plan-block-header">
     <span class="plan-block-title">1차 블록 리뷰</span>
@@ -838,24 +754,14 @@ details[open]>summary .ic{transform:rotate(180deg)}
   </div>
 </div>
 
-<!-- 이번 주 체크 -->
-<div class="plan-hd" style="margin-top:20px">✅ 이번 주 운동 완료</div>
-<div class="plan-week-grid" id="plan-week-grid"></div>
-<div class="plan-week-note">탭하면 완료/미완료 토글 · 자동 저장</div>
-
-<!-- 단백질 분배 -->
-<div class="plan-hd" style="margin-top:20px">🥩 하루 단백질 목표 180g (도전 210g)</div>
-<div class="plan-card"><div class="prot-bar-wrap">
-  <div class="prot-bar"><div class="prl" style="background:#E8C27A">아침식사</div><div class="prg">35g</div></div>
-  <div class="prot-bar"><div class="prl" style="background:#D98B3A">점심식사</div><div class="prg">55g</div></div>
-  <div class="prot-bar"><div class="prl" style="background:#3B6D11">16:00 단백질바</div><div class="prg">24g</div></div>
-  <div class="prot-bar"><div class="prl" style="background:#185FA5">19:00 웨이</div><div class="prg">30g</div></div>
-  <div class="prot-bar"><div class="prl" style="background:#085041">운동후 본식</div><div class="prg">40g</div></div>
-  <div class="prot-bar"><div class="prl" style="background:#3B3B50">23:00 카제인</div><div class="prg">25g</div></div>
-</div></div>
-
 <!-- 체질 프로파일 -->
-<div class="plan-hd" style="margin-top:20px">🧬 체질 프로파일</div>
+<div class="plan-hd">📊 주간 부위별 볼륨</div>
+<div id="plan-vol" class="plan-card"></div>
+
+<div class="plan-hd">📈 종목별 추세 · 정체</div>
+<div id="plan-trend" class="plan-card"></div>
+
+<div class="plan-hd">🧬 체질 프로파일</div>
 <div class="plan-body-card">
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
     <span class="plan-badge" style="background:#BA7517">안드로이드형</span>
@@ -873,52 +779,13 @@ details[open]>summary .ic{transform:rotate(180deg)}
   </div>
 </div>
 
-<!-- 6개월 혈액검사 -->
-<div class="plan-hd" style="margin-top:20px">🩸 6개월 혈액검사 체크리스트</div>
-<div class="plan-blood-note">비뇨기과 또는 내분비내과 방문 · 일반 건강검진에 미포함 항목 따로 요청</div>
-<div class="plan-blood-list" id="plan-blood-list">
-  <div class="plan-blood-item" data-key="t1" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">총 테스토스테론 · 유리 테스토스테론</div><div class="plan-blood-why">근육 합성·지방 분배 핵심. 낮으면 컷팅+근성장 동시 달성 난이도 상승</div></div>
-  </div>
-  <div class="plan-blood-item" data-key="t2" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">에스트라디올 (E2)</div><div class="plan-blood-why">내장지방 → 아로마타이제이션 → E2 상승 악순환 확인. 골반 넓은 안드로이드형에서 중요</div></div>
-  </div>
-  <div class="plan-blood-item" data-key="t3" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">공복 혈당 · 인슐린 (HOMA-IR)</div><div class="plan-blood-why">복부지방률 0.96 → 인슐린 저항성 가능성. 식사 순서·탄수화물 조정 근거</div></div>
-  </div>
-  <div class="plan-blood-item" data-key="t4" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">SHBG (성호르몬결합글로불린)</div><div class="plan-blood-why">유리 테스토스테론 비율 결정. 높으면 총 T가 정상이어도 실제 활성 T가 낮을 수 있음</div></div>
-  </div>
-  <div class="plan-blood-item" data-key="t5" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">비타민 D (25-OH)</div><div class="plan-blood-why">테스토스테론 합성 경로 직접 관여. 목표 40~60 ng/mL. D3+K2 복용 중 → 효과 확인</div></div>
-  </div>
-  <div class="plan-blood-item" data-key="t6" onclick="PlanApp.toggleBlood(this)">
-    <div class="plan-blood-cb"><span class="plan-blood-ck"></span></div>
-    <div><div class="plan-blood-name">간수치 (AST·ALT·GGT)</div><div class="plan-blood-why">밀크씨슬 복용 중. 6개월 후 간 보호 효과 확인 + 보충제 스택 안전성 검증</div></div>
-  </div>
-</div>
-
-<!-- 핵심 규칙 -->
-<div class="plan-hd" style="margin-top:20px">🔑 핵심 규칙</div>
-<div class="plan-card"><div class="plan-rules">
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#E24B4A">1</span><div><b>밀크씨슬 점심 30분 전</b> — 식전 복용으로 간 보호막 형성</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#BA7517">2</span><div><b>점심 순서</b> — 식사 → 카르니틴·베타알라닌·오메가3·D3+K2 즉시 → 30분 뒤 커피</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#E24B4A">3</span><div><b>19:00 시트룰린+웨이+탄수 셰이커 1회</b> — 혼합 가능·순서 불필요. 누락 시 반공복 훈련됨</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#BA7517">4</span><div><b>L-시트룰린 6g 단일 복용</b> — 아르기닌 대비 2~3배. 말레이트 2:1이면 9g</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">5</span><div><b>운동 후 21:30 본식 + 크레아틴·오메가3</b> — 쉐이크 대신 실음식. 23:00 카제인 별도</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">6</span><div><b>24:00 이전 취침 · 수면 7시간+</b> — 테스토스테론의 70~80% 수면 중 분비. 모든 보충제 효과의 전제</div></div>
-  <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">7</span><div><b>하루 수분 2.5~3L</b> — 크레아틴·베타알라닌 효과의 기반. 소변 연한 노란색 기준</div></div>
-</div></div>
-
 </div><!-- plan-wrap -->
 </div><!-- tab-body tab-p -->
 
+<script src="exercise-library.js"></script>
 <script>
+if(typeof window.EXERCISE_LIBRARY==='undefined')window.EXERCISE_LIBRARY=[];
+if(typeof window.EXERCISE_CATS==='undefined')window.EXERCISE_CATS={};
 /* ── Storage shim: Claude artifact → window.storage, 브라우저 직접 → localStorage ── */
 if(!window.storage||typeof window.storage.get!=='function'){
   window.storage={
@@ -1042,6 +909,7 @@ const ExLog={
     this.injectAddBtns();
     this.injectTargets();
     this.refresh();
+    augmentCards();
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1155,6 +1023,39 @@ const ExLog={
     }
     this.refresh();
     this.injectTargets();
+  },
+
+  addExternal(name){
+    name=(name||'').trim();if(!name)return false;
+    const s=this.session();
+    if(!s.exercises.find(e=>e.name===name)){s.exercises.push({name,sets:[]});this.setSession(s);}
+    const dr=document.querySelector('.day-r:checked');
+    const idx=dr?dr.id.replace('d',''):'1';
+    const panel=document.querySelector('.day-panel.dp'+idx);
+    if(panel){
+      const area=panel.querySelector('.ex-custom-area');
+      const inPanel=[...panel.querySelectorAll('.ex-nm')].some(el=>el.textContent.trim()===name);
+      if(area&&!inPanel&&!area.querySelector('[data-cname="'+name+'"]')){
+        const match=[...document.querySelectorAll('.ex-nm')].find(el=>el.textContent.trim()===name);
+        const wrap=document.createElement('div');wrap.className='ex-wrap custom-ex';wrap.dataset.cname=name;
+        if(match){
+          const cloned=match.closest('details.ex-card').cloneNode(true);
+          cloned.querySelector('.ex-log')?.remove();cloned.querySelector('.ex-extra')?.remove();
+          const newId='cx_'+Date.now();
+          const cb=document.createElement('input');cb.type='checkbox';cb.className='exck';cb.id=newId;
+          const lbl=cloned.querySelector('.ck-btn');if(lbl){lbl.setAttribute('for',newId);lbl.setAttribute('onclick','event.stopPropagation()');}
+          wrap.appendChild(cb);wrap.appendChild(cloned);
+        }else{
+          wrap.innerHTML='<details class="ex-card"><summary><div class="ex-info"><div class="ex-nm">'+name+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"></div></details>';
+        }
+        area.appendChild(wrap);
+        const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';area.insertBefore(lab,wrap);
+        const newDet=wrap.querySelector('.ex-detail');
+        if(newDet&&!newDet.querySelector('.ex-log')){const log=document.createElement('div');log.className='ex-log';log.dataset.exname=name;log.innerHTML=this.makeLogHtml();newDet.appendChild(log);}
+      }
+    }
+    this.refresh();this.injectTargets();augmentCards();
+    return true;
   },
 
   startSet(btn){
@@ -1436,7 +1337,7 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.loadBlood();},
+  init(){this.renderPhase();this.renderBlock();this.renderVolume();this.renderTrends();},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
     const now=new Date();
@@ -1506,9 +1407,290 @@ const PlanApp={
     const key=el.dataset.key;let checked={};
     try{const r=await window.storage.get('plan_blood_v1');if(r)checked=JSON.parse(r.value);}catch(_){}
     checked[key]=!checked[key];await window.storage.set('plan_blood_v1',JSON.stringify(checked));this.loadBlood();
+  },
+  // ── 로그 분석: 부위별 주간 볼륨 + 종목 추세 ──
+  async _logData(){try{const r=await window.storage.get('wl_v2');return r?JSON.parse(r.value):{};}catch(_){return{};}},
+  _weekRange(){
+    const now=new Date();const dow=now.getDay();
+    const ws=new Date(now);ws.setDate(now.getDate()-(dow===0?6:dow-1));ws.setHours(0,0,0,0);
+    const we=new Date(ws);we.setDate(ws.getDate()+6);we.setHours(23,59,59,999);
+    return{ws,we};
+  },
+  _isTimed(n){return /플랭크|데드행/.test(n||'');},
+  muscleOf(name){
+    const n=name||'';
+    if(/래터럴|레터럴|사이드\s*레이즈/.test(n))return{p:'측면삼각',s:[]};
+    if(/페이스풀|리어|후면\s*삼각|리버스\s*펙/.test(n))return{p:'등',s:[]};
+    if(/숄더\s*프레스|숄더프레스|오버헤드\s*프레스|오버헤드프레스|밀리터리|OHP/i.test(n))return{p:'전면삼각',s:['삼두','측면삼각']};
+    if(/컬|바이셉스/.test(n)&&!/레그/.test(n))return{p:'이두',s:[]};
+    if(/트라이|푸시다운|딥스|킥백/.test(n))return{p:'삼두',s:[]};
+    if(/플라이|펙덱|체스트|벤치|인클라인|디클라인/.test(n))return{p:'가슴',s:['삼두']};
+    if(/데드행/.test(n))return null;
+    if(/루마니안|RDL|레그\s*컬|레그컬|힙\s*쓰러스트|힙쓰러스트|힙\s*어브덕션|힙어브덕션/.test(n))return{p:'후면사슬',s:[]};
+    if(/데드리프트/.test(n))return{p:'후면사슬',s:['등']};
+    if(/로우|풀다운|풀\s*다운|풀업|랫|친업/.test(n))return{p:'등',s:['이두']};
+    if(/스쿼트|레그\s*프레스|레그프레스|익스텐션|런지|불가리안/.test(n))return{p:'대퇴사두',s:['후면사슬']};
+    if(/플랭크|크런치|레그레이즈|레그\s*레이즈|복근|싯업/.test(n))return{p:'코어',s:[]};
+    return null;
+  },
+  async renderVolume(){
+    const box=document.getElementById('plan-vol');if(!box)return;
+    const data=await this._logData();const{ws,we}=this._weekRange();
+    const order=['가슴','등','측면삼각','전면삼각','삼두','이두','대퇴사두','후면사슬','코어'];
+    const COL={'가슴':'#D85A30','등':'#185FA5','측면삼각':'#BA7517','전면삼각':'#E0922F','삼두':'#0C447C','이두':'#3B6D11','대퇴사두':'#27500A','후면사슬':'#6B4FA0','코어':'#888'};
+    const PRI={'측면삼각':1,'등':1,'가슴':1};
+    const vol={};order.forEach(m=>vol[m]=0);
+    for(const dk in data){
+      const d=new Date(dk+'T12:00:00');if(d<ws||d>we)continue;
+      (data[dk].exercises||[]).forEach(ex=>{
+        const n=(ex.sets||[]).filter(s=>s.reps>0).length;if(!n)return;
+        const mu=this.muscleOf(ex.name);if(!mu)return;
+        vol[mu.p]=(vol[mu.p]||0)+n;
+        (mu.s||[]).forEach(sec=>{vol[sec]=(vol[sec]||0)+n*0.5;});
+      });
+    }
+    const total=order.reduce((a,m)=>a+vol[m],0);
+    if(total===0){box.innerHTML='<div class="plan-vol-empty">이번 주 기록이 없습니다. 운동 탭에서 세트를 기록하면 부위별로 집계됩니다.</div>';return;}
+    const max=Math.max(10,...order.map(m=>vol[m]));
+    box.innerHTML='<div class="plan-vol-head">이번 주 누적 세트 · 부위별</div>'+order.map(m=>{
+      const v=vol[m];const w=Math.round(v/max*100);const low=PRI[m]&&v<8;
+      const vt=(v%1===0?String(v):v.toFixed(1));
+      return '<div class="pv-row"><span class="pv-nm">'+m+(PRI[m]?' ⭐':'')+'</span><div class="pv-track"><div class="pv-fill" style="width:'+w+'%;background:'+COL[m]+'"></div></div><span class="pv-val'+(low?' low':'')+'">'+vt+(low?' ⚠':'')+'</span></div>';
+    }).join('')+'<div class="plan-vol-note">⭐ V-테이퍼 우선 부위 · 권장 주 10~20세트 (⚠ 8 미만). 보조 개입은 0.5세트로 계산.</div>';
+  },
+  _e1rm(s){return s.weight*(1+s.reps/30);},
+  _spark(vals){
+    const w=84,h=26,pad=4;const mn=Math.min(...vals),mx=Math.max(...vals);const rng=mx-mn||1;
+    const v=vals.slice(-6);const step=v.length>1?(w-pad*2)/(v.length-1):0;
+    const pts=v.map((x,i)=>(pad+i*step).toFixed(1)+','+(h-pad-(x-mn)/rng*(h-pad*2)).toFixed(1));
+    const lp=pts[pts.length-1].split(',');const top=v[v.length-1]>=mx-0.01;
+    return '<svg class="tr-spark" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linejoin="round"/><circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="2.3" fill="'+(top?'#3B6D11':'#888')+'"/></svg>';
+  },
+  async renderTrends(){
+    const box=document.getElementById('plan-trend');if(!box)return;
+    const data=await this._logData();const byEx={};
+    Object.keys(data).sort().forEach(dk=>{
+      (data[dk].exercises||[]).forEach(ex=>{
+        if(this._isTimed(ex.name))return;
+        const sets=(ex.sets||[]).filter(s=>s.weight>0&&s.reps>0);if(!sets.length)return;
+        const e1=Math.max.apply(null,sets.map(s=>this._e1rm(s)));
+        const heavy=sets.reduce((a,s)=>s.weight>a.weight?s:a,sets[0]);
+        (byEx[ex.name]=byEx[ex.name]||[]).push({dk,e1,w:heavy.weight,r:heavy.reps});
+      });
+    });
+    const names=Object.keys(byEx).filter(n=>byEx[n].length>=2);
+    if(!names.length){box.innerHTML='<div class="plan-vol-empty">추세를 보려면 같은 종목을 2회 이상 기록하세요. 점진 과부하가 쌓이면 여기서 추정 1RM 흐름과 정체를 확인할 수 있습니다.</div>';return;}
+    names.sort((a,b)=>byEx[b][byEx[b].length-1].dk.localeCompare(byEx[a][byEx[a].length-1].dk));
+    box.innerHTML=names.slice(0,8).map(n=>{
+      const arr=byEx[n];const last=arr[arr.length-1],prev=arr[arr.length-2];
+      const delta=last.e1-prev.e1;
+      const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
+      let plateau=false;
+      if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
+      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div></div>';
+    }).join('');
   }
 };
-document.addEventListener('DOMContentLoaded',()=>{ExLog.init();PlanApp.init();});
+const MUSCLE_INFO={
+ '가슴':{c:'#D85A30',loc:'가슴 앞면 · 대흉근',fn:'팔을 몸 앞·안쪽으로 모으고 미는 근육. 상부/중부/하부로 나뉜다.',stretch:'바·덤벨을 내릴 때 가슴이 양옆으로 활짝 열리며 길게 늘어나야 한다. 견갑은 모아 고정.',contract:'밀어 올려 양손을 모을 때 가슴 중앙을 짜내듯 조이고 정점 1초.',cue:'팔이 아니라 가슴이 모이는 힘으로 민다. 인클라인=상부, 디클라인=하부.'},
+ '등':{c:'#185FA5',loc:'등 전체 · 광배근·능형근',fn:'팔을 아래·뒤로 당김. 너비(광배)와 두께(능형근·중부승모)를 만든다.',stretch:'당기기 전 팔을 끝까지 뻗어 광배가 위로 길게 늘어나고 견갑이 따라 올라가야 한다.',contract:'팔꿈치를 갈비뼈·엉덩이 방향으로 당겨 견갑을 모으고 1초 짜기.',cue:'손이 아니라 팔꿈치를 뒷주머니에 넣는 느낌. 랫풀다운 하강 시 검지·중지에, 릴리즈 시 약지·소지에 힘을 실으면 팔 개입이 줄고 광배 자극이 산다.'},
+ '측면삼각':{c:'#BA7517',loc:'어깨 바깥 · 중간 삼각근',fn:'팔을 옆으로 들어올림(외전). 어깨너비와 V-테이퍼의 핵심.',stretch:'내릴 때 팔이 몸 옆을 지나며 어깨 바깥이 길어진다. 2~3초로 천천히.',contract:'새끼손가락 쪽을 살짝 위로, 팔꿈치로 옆을 밀어 어깨 높이까지. 정점에서 멈춤.',cue:'승모근이 으쓱 올라가지 않게 어깨만 사용. 반동 절대 금지.'},
+ '전면삼각':{c:'#E0922F',loc:'어깨 앞 · 전면 삼각근',fn:'팔을 앞·위로 듦. 오버헤드 프레스의 주동근.',stretch:'프레스를 내릴 때 앞어깨가 늘어난다(귀 높이까지).',contract:'머리 위로 밀어 정점에서 어깨를 귀 옆까지 올려 잠근다.',cue:'허리를 젖히지 말고 복압으로 상체 고정. 가슴 프레스에서도 보조로 쓰인다.'},
+ '이두':{c:'#3B6D11',loc:'위팔 앞 · 상완이두근',fn:'팔꿈치 굽힘 + 전완 회외(손바닥 돌리기).',stretch:'내릴 때 팔을 완전히 펴 이두가 길게 늘어나야 한다. 끝까지 신전.',contract:'올릴 때 새끼손가락을 바깥으로 살짝 돌리며 정점에서 짜기.',cue:'팔꿈치를 옆구리에 고정. 반동·어깨로 들지 말고 이두만.'},
+ '삼두':{c:'#0C447C',loc:'위팔 뒤 · 상완삼두근',fn:'팔꿈치 폄. 위팔 두께의 약 2/3를 차지. 장두는 어깨 신전도 담당.',stretch:'팔을 머리 위·뒤로 내려 장두가 최대로 늘어난다(오버헤드 익스텐션).',contract:'팔꿈치를 고정하고 전완만 펴 정점에서 1초 조이기.',cue:'팔꿈치가 옆으로 벌어지면 효과 급감 — 귀 옆에 붙여 고정.'},
+ '대퇴사두':{c:'#27500A',loc:'허벅지 앞 · 대퇴사두근',fn:'무릎 폄. 스쿼트·레그프레스의 주동근.',stretch:'앉아 내려갈 때 깊게 내려 허벅지 앞이 늘어난다(가동범위 확보).',contract:'일어설 때 무릎을 펴며 허벅지 앞을 조임. 레그익스텐션 정점 1초.',cue:'무릎이 안으로 모이지 않게 발끝 방향으로. 발 전체로 바닥 밀기.'},
+ '후면사슬':{c:'#6B4FA0',loc:'엉덩이·허벅지 뒤 · 둔근·햄스트링',fn:'고관절 신전(둔근)과 무릎 굽힘(햄스트링). 힘의 원천.',stretch:'RDL·힌지에서 엉덩이를 뒤로 빼며 햄스트링이 길게 늘어나야 한다.',contract:'엉덩이를 앞으로 밀어 잠그며(힙쓰러스트 정점) 둔근을 강하게 조임.',cue:'허리가 아니라 엉덩이로 민다. 레그컬은 발끝을 정강이로 당겨(배측굴곡) 종아리 개입을 줄인다.'},
+ '코어':{c:'#888',loc:'배 앞·옆 · 복직근·복사근',fn:'척추 굽힘·회전, 그리고 모든 리프트에서 몸통 안정화.',stretch:'크런치 상단에서 복부가 늘어난다(과신전 아님).',contract:'갈비뼈를 골반 쪽으로 말아 복부를 짧게. 숨을 내쉬며 조이기.',cue:'목·고관절 힘이 아니라 복부로 말아 올린다. 플랭크는 엉덩이·복부를 동시에 조여 일직선.'}
+};
+const MuscleMap={
+  _exByMus:null,
+  init(){
+    if(this._exByMus)return;
+    const all=new Set();
+    Object.values(EL_DAY_EX).forEach(arr=>arr.forEach(n=>all.add(n)));
+    const map={};
+    all.forEach(n=>{const mu=PlanApp.muscleOf(n);if(!mu)return;(map[mu.p]=map[mu.p]||[]).push(n);});
+    this._exByMus=map;
+  },
+  show(m){
+    this.init();
+    document.querySelectorAll('.mz').forEach(z=>z.classList.toggle('sel',z.dataset.m===m));
+    const info=MUSCLE_INFO[m];const box=document.getElementById('mm-info');if(!box||!info)return;
+    const exs=this._exByMus[m]||[];
+    box.innerHTML='<div class="mm-h"><span class="mm-dot" style="background:'+info.c+'"></span><span class="mm-nm">'+m+'</span></div>'
+      +'<div class="mm-loc">'+info.loc+'</div>'
+      +'<div class="mm-fn">'+info.fn+'</div>'
+      +'<div class="mm-sc">'
+      +'<div class="mm-scr stretch"><span class="tg">신장 ↕</span><span class="tx">'+info.stretch+'</span></div>'
+      +'<div class="mm-scr contract"><span class="tg">수축 ◉</span><span class="tx">'+info.contract+'</span></div>'
+      +'<div class="mm-scr cue"><span class="tg">포인트</span><span class="tx">'+info.cue+'</span></div>'
+      +'</div>'
+      +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'');
+  }
+};
+function libLookup(){
+  if(libLookup._m)return libLookup._m;
+  const m={};(window.EXERCISE_LIBRARY||[]).forEach(e=>{m[e.name]=e;(e.aka||[]).forEach(a=>{if(!m[a])m[a]=e;});});
+  libLookup._m=m;return m;
+}
+function augmentCards(){
+  const m=libLookup();
+  document.querySelectorAll('details.ex-card').forEach(card=>{
+    const nm=card.querySelector('.ex-nm');const det=card.querySelector('.ex-detail');
+    if(!nm||!det)return;
+    const e=m[nm.textContent.trim()];if(!e)return;
+    if(det.querySelector('.ex-extra'))return;
+    const d=document.createElement('details');d.className='ex-extra';
+    d.innerHTML='<summary>📐 그립 · 세팅 · ROM</summary><div class="ex-extra-body">'
+      +(e.grip?'<div class="exx-row"><span class="exx-l">그립·힘</span><span>'+e.grip+'</span></div>':'')
+      +(e.setup?'<div class="exx-row"><span class="exx-l">세팅</span><span>'+e.setup+'</span></div>':'')
+      +(e.rom?'<div class="exx-row"><span class="exx-l">가동범위</span><span>'+e.rom+'</span></div>':'')
+      +'</div>';
+    det.appendChild(d);
+  });
+}
+const LibApp={
+  cat:'all',q:'',
+  render(){
+    const box=document.getElementById('lib-list');if(!box)return;
+    const lib=window.EXERCISE_LIBRARY||[];const cats=window.EXERCISE_CATS||{};
+    const chipWrap=document.getElementById('lib-chips');
+    if(chipWrap&&!chipWrap.dataset.done){
+      let h='<button class="lib-chip on" data-c="all" onclick="LibApp.setCat(\'all\')">전체</button>';
+      Object.keys(cats).forEach(c=>{h+='<button class="lib-chip" data-c="'+c+'" onclick="LibApp.setCat(\''+c+'\')">'+cats[c].split(' ')[0]+'</button>';});
+      chipWrap.innerHTML=h;chipWrap.dataset.done='1';
+    }
+    const q=this.q.trim();
+    const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
+    const items=lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||e.name.indexOf(q)>=0||(e.mus||'').indexOf(q)>=0));
+    if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
+    box.innerHTML=items.map(function(e){
+      return '<details class="lib-card"><summary><span class="lib-dot" style="background:'+(COL[e.cat]||'#888')+'"></span><span class="lib-nm">'+e.name+'</span><span class="lib-mus">'+(e.mus||'')+'</span><span class="chev">▾</span></summary>'
+        +'<div class="lib-body">'
+        +'<div class="lib-r"><span class="lib-l">타겟</span><span>'+(e.target||'')+'</span></div>'
+        +'<div class="lib-r"><span class="lib-l">그립·힘</span><span>'+(e.grip||'')+'</span></div>'
+        +'<div class="lib-r"><span class="lib-l">세팅</span><span>'+(e.setup||'')+'</span></div>'
+        +'<div class="lib-r"><span class="lib-l">ROM</span><span>'+(e.rom||'')+'</span></div>'
+        +(e.sets?'<div class="lib-r"><span class="lib-l">권장</span><span>'+e.sets+'</span></div>':'')
+        +'<button class="lib-add" onclick="LibApp.add(this,\''+e.name.replace(/'/g,"\\'")+'\')">＋ 운동에 추가</button>'
+        +'</div></details>';
+    }).join('');
+  },
+  setCat(c){this.cat=c;document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c===c));this.render();},
+  search(v){this.q=v;this.render();},
+  add(btn,name){
+    if(ExLog.addExternal(name)){
+      btn.textContent='✓ 운동 탭에 추가됨';btn.classList.add('added');btn.disabled=true;
+      setTimeout(function(){btn.textContent='＋ 운동에 추가';btn.classList.remove('added');btn.disabled=false;},2500);
+    }
+  }
+};
+const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90};
+const IB_SEED=[
+  {date:'2026-05-25',wt:88.1,sm:35.0,bf:29.6,ab:0.97},
+  {date:'2026-06-06',wt:89.4,sm:36.2,bf:28.5,ab:0.96}
+];
+const InBody={
+  _log:null,
+  async load(){
+    if(this._log)return;
+    try{const r=await window.storage.get('inbody_log');this._log=r?JSON.parse(r.value):null;}catch(_){this._log=null;}
+    if(!this._log){this._log=[...IB_SEED];await this._save();}
+  },
+  async _save(){try{await window.storage.set('inbody_log',JSON.stringify(this._log));}catch(_){}},
+  async render(){
+    await this.load();
+    const log=this._log;const last=log[log.length-1];
+    const box=document.getElementById('inbody-cards');
+    const note=document.getElementById('plan-inbody-note');
+    if(!box)return;
+    if(!last){box.innerHTML='<div class="ib-no-data">아직 측정 기록이 없습니다.<br>아래 버튼으로 첫 인바디 수치를 입력하세요.</div>';if(note)note.textContent='';return;}
+
+    const FIELDS=[
+      {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,col:'#085041',dir:-1,wide:true,
+       sub:v=>{const d=(v-IB_GOALS.wt).toFixed(1);return d>0?'목표까지 −'+d+'kg':'✓ 목표 도달!';}},
+      {key:'sm',lbl:'골격근량',unit:'kg',goal:IB_GOALS.sm,col:'#3B6D11',dir:1,
+       sub:v=>{const s=log[0]?.sm??v;const d=(v-s).toFixed(1);const r=(IB_GOALS.sm-v).toFixed(1);return(d>=0?'+':'')+d+'kg 달성 · 잔여 +'+Math.max(0,r)+'kg';}},
+      {key:'bf',lbl:'체지방률',unit:'%',goal:IB_GOALS.bf,col:'#185FA5',dir:-1,
+       sub:v=>{const s=log[0]?.bf??v;const d=(v-s).toFixed(1);const r=(v-IB_GOALS.bf).toFixed(1);return(d<0?d:'+'+d)+'%p 변화 · 잔여 −'+Math.max(0,r)+'%p';}},
+      {key:'ab',lbl:'복부지방률',unit:'',goal:IB_GOALS.ab,col:'#BA7517',dir:-1,
+       sub:v=>{const r=(v-IB_GOALS.ab).toFixed(2);return r>0?'잔여 −'+r:'✓ 목표 도달!';}}
+    ];
+
+    const pct=(f,v)=>{
+      const start=log[0]?.[f.key]??v,goal=f.goal;
+      const total=Math.abs(goal-start);if(!total)return 0;
+      const done=f.dir===1?(v-start):(start-v);
+      return Math.min(100,Math.max(0,Math.round(done/total*100)));
+    };
+
+    const spark=(key,col)=>{
+      if(log.length<2)return'';
+      const vals=log.slice(-8).map(e=>e[key]);
+      const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn||.001;
+      const W=200,H=28,pad=4;
+      const step=(W-pad*2)/(vals.length-1);
+      const pts=vals.map((v,i)=>(pad+i*step).toFixed(1)+','+(H-pad-(v-mn)/rng*(H-pad*2)).toFixed(1));
+      const last=pts[pts.length-1].split(',');
+      return'<div class="ib-spark-wrap"><div class="ib-spark-lbl">최근 '+vals.length+'회 추세</div>'
+        +'<div class="ib-spark"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'
+        +'<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linejoin="round"/>'
+        +'<circle cx="'+last[0]+'" cy="'+last[1]+'" r="2.5" fill="'+col+'"/>'
+        +'</svg></div></div>';
+    };
+
+    let html='<div class="plan-stat-grid">';
+    FIELDS.forEach(f=>{
+      const v=last[f.key];const p=pct(f,v);
+      const vStr=f.key==='ab'?v.toFixed(2):v;
+      html+='<div class="plan-stat-card"'+(f.wide?' style="grid-column:1/-1"':'')+'>'+
+        '<div class="plan-stat-lbl">'+f.lbl+'</div>'+
+        '<div class="plan-stat-vals"><span class="plan-stat-cur">'+vStr+'</span><span class="plan-stat-unit">'+f.unit+'</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">'+f.goal+(f.unit==='%'?'%':'')+(f.unit==='kg'?'kg':'')+'</span></div>'+
+        '<div class="plan-stat-bar"><div class="plan-stat-fill" style="width:'+p+'%;background:'+f.col+'"></div></div>'+
+        '<div class="plan-stat-sub">'+f.sub(v)+'</div>'+
+        spark(f.key,f.col)+
+        '</div>';
+    });
+    html+='</div>';
+    box.innerHTML=html;
+    if(note){const d=new Date(last.date+'T12:00:00');note.textContent='📅 최근 측정: '+d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'})+' · '+log.length+'회 누적';}
+  },
+  openModal(){
+    const today=new Date().toISOString().slice(0,10);
+    document.getElementById('ib-date').value=today;
+    ['wt','sm','bf','ab'].forEach(k=>document.getElementById('ib-'+k).value='');
+    document.getElementById('inbody-modal').style.display='flex';
+  },
+  closeModal(){document.getElementById('inbody-modal').style.display='none';},
+  async save(){
+    const date=document.getElementById('ib-date').value;
+    const wt=parseFloat(document.getElementById('ib-wt').value);
+    const sm=parseFloat(document.getElementById('ib-sm').value);
+    const bf=parseFloat(document.getElementById('ib-bf').value);
+    const ab=parseFloat(document.getElementById('ib-ab').value);
+    if(!date||isNaN(wt)||isNaN(sm)||isNaN(bf)||isNaN(ab)){alert('모든 항목을 입력해 주세요.');return;}
+    await this.load();
+    const entry={date,wt,sm,bf,ab};
+    const idx=this._log.findIndex(e=>e.date===date);
+    if(idx>=0)this._log[idx]=entry;
+    else{this._log.push(entry);this._log.sort((a,b)=>a.date.localeCompare(b.date));}
+    await this._save();
+    this.closeModal();
+    this.render();
+    // 구글시트 전송 (Apps Script URL이 설정돼 있을 때만)
+    ExLog.getScriptUrl().then(url=>{
+      if(!url)return;
+      fetch(url,{method:'POST',body:JSON.stringify({inbody:entry}),redirect:'follow'})
+        .then(r=>r.json())
+        .then(j=>{
+          const note=document.getElementById('plan-inbody-note');
+          if(note){const prev=note.textContent;note.textContent+=' · 시트 저장 '+(j.ok?'✓':'❌');setTimeout(()=>{note.textContent=prev;},3000);}
+        })
+        .catch(()=>{});
+    });
+  }
+};
+document.addEventListener('DOMContentLoaded',()=>{ExLog.init();PlanApp.init();MuscleMap.init();LibApp.render();InBody.render();});
 </script>
 </body>
 <!-- 동기화 설정 모달 -->
