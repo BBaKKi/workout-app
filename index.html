@@ -337,7 +337,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 
 /* 플랜 탭 */
 .plan-wrap{padding:12px 16px 80px}
-.plan-hd{font-size:11px;font-weight:700;color:var(--color-text-tertiary);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;padding-left:2px}
+.plan-hd{font-size:11px;font-weight:700;color:var(--color-text-secondary);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;padding-left:9px;border-left:3px solid #3B6D11;line-height:1.25}
+.plan-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 /* 체성분 카드 */
 .plan-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .plan-stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px}
@@ -362,6 +363,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .plan-phase-kcal{font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--color-text-primary)}
 .plan-phase-months{font-size:9px;color:var(--color-text-tertiary);margin-top:2px}
 .plan-phase-focus{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
+.plan-phase-card.future{opacity:.55}
 .plan-phase-card.future .plan-phase-kcal{color:var(--color-text-tertiary)}
 /* 6주 블록 */
 .plan-block-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
@@ -627,7 +629,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <div class="t-right">
 <div class="t-name">오후 단백질 펄스 <span class="chg">✨ 변경</span></div>
 <div class="t-pills"><span class="sp sp-pr">단백질 바 24g (닥터유 프로)</span><span class="sp sp-p">베타알라닌 1.6g</span></div>
-<div class="t-note"><b>단백질 바 (닥터유 프로)</b> — 셰이커·조리 불필요. 12→19시 단백 펄스 공백 메움. 베타알라닌 분할 3차 (총 4.8g 달성)<br>※ 포화지방 6g·287kcal → Phase1 2,400kcal 안에서 관리. 운동 4시간 전 슬롯이라 소화 영향 미미</div>
+<div class="t-note"><b>단백질 바 (닥터유 프로)</b> — 셰이커·조리 불필요. 12→19시 단백 펄스 공백 메움. 베타알라닌 분할 3차 (총 4.8g 달성)<br>※ 포화지방 6g·287kcal → Phase1 2,300kcal 안에서 관리. 운동 4시간 전 슬롯이라 소화 영향 미미</div>
 </div>
 </div>
 <div class="ti">
@@ -750,6 +752,12 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <!-- 체성분 현황 -->
 <div class="plan-hd">📊 체성분 현황</div>
 <div class="plan-stat-grid">
+  <div class="plan-stat-card" style="grid-column:1/-1">
+    <div class="plan-stat-lbl">체중</div>
+    <div class="plan-stat-vals"><span class="plan-stat-cur">89.4</span><span class="plan-stat-unit">kg</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">84kg</span></div>
+    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:0%;background:#085041"></div></div>
+    <div class="plan-stat-sub">목표까지 −5.4kg · 초기 상승은 리컴프 정상 신호</div>
+  </div>
   <div class="plan-stat-card">
     <div class="plan-stat-lbl">골격근량</div>
     <div class="plan-stat-vals"><span class="plan-stat-cur">36.2</span><span class="plan-stat-unit">kg</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">38kg</span></div>
@@ -758,13 +766,13 @@ details[open]>summary .ic{transform:rotate(180deg)}
   </div>
   <div class="plan-stat-card">
     <div class="plan-stat-lbl">체지방률</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">28.5</span><span class="plan-stat-unit">%</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">15%</span></div>
-    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:8%;background:#185FA5"></div></div>
-    <div class="plan-stat-sub">-1.1%p 달성 · 잔여 -13.5%p</div>
+    <div class="plan-stat-vals"><span class="plan-stat-cur">28.5</span><span class="plan-stat-unit">%</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">20%</span></div>
+    <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:12%;background:#185FA5"></div></div>
+    <div class="plan-stat-sub">−1.1%p 달성 · 잔여 −8.5%p</div>
   </div>
   <div class="plan-stat-card">
     <div class="plan-stat-lbl">허리둘레</div>
-    <div class="plan-stat-vals"><span class="plan-stat-cur">101.1</span><span class="plan-stat-unit">cm</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">&lt;90cm</span></div>
+    <div class="plan-stat-vals"><span class="plan-stat-cur">101.1</span><span class="plan-stat-unit">cm</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">&lt;94cm</span></div>
     <div class="plan-stat-bar"><div class="plan-stat-fill" style="width:0%;background:#D85A30"></div></div>
     <div class="plan-stat-sub">기준점 확보 · 추세 관찰 중</div>
   </div>
@@ -792,21 +800,21 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <div class="plan-phase-cards">
   <div class="plan-phase-card current">
     <div class="plan-phase-badge" style="background:#3B6D11">Phase 1</div>
+    <div class="plan-phase-kcal">2,300 kcal</div>
+    <div class="plan-phase-months">1~3개월</div>
+    <div class="plan-phase-focus">적자 확립 · 리컴프</div>
+  </div>
+  <div class="plan-phase-card future">
+    <div class="plan-phase-badge" style="background:#185FA5">Phase 2</div>
+    <div class="plan-phase-kcal">2,200 kcal</div>
+    <div class="plan-phase-months">4~5개월</div>
+    <div class="plan-phase-focus">적자 유지 · 근손실 방지</div>
+  </div>
+  <div class="plan-phase-card future">
+    <div class="plan-phase-badge" style="background:#BA7517">Phase 3</div>
     <div class="plan-phase-kcal">2,400 kcal</div>
-    <div class="plan-phase-months">1~4개월</div>
-    <div class="plan-phase-focus">리컴프 · 적자유지</div>
-  </div>
-  <div class="plan-phase-card future">
-    <div class="plan-phase-badge" style="background:#185FA5;opacity:.5">Phase 2</div>
-    <div class="plan-phase-kcal" style="opacity:.5">2,600 kcal</div>
-    <div class="plan-phase-months">5~8개월</div>
-    <div class="plan-phase-focus">근육 강화</div>
-  </div>
-  <div class="plan-phase-card future">
-    <div class="plan-phase-badge" style="background:#BA7517;opacity:.5">Phase 3</div>
-    <div class="plan-phase-kcal" style="opacity:.5">2,700 kcal</div>
-    <div class="plan-phase-months">9~12개월</div>
-    <div class="plan-phase-focus">최대 강도</div>
+    <div class="plan-phase-months">6~7개월</div>
+    <div class="plan-phase-focus">유지 전환 · 마무리</div>
   </div>
 </div>
 
@@ -837,14 +845,14 @@ details[open]>summary .ic{transform:rotate(180deg)}
 
 <!-- 단백질 분배 -->
 <div class="plan-hd" style="margin-top:20px">🥩 하루 단백질 목표 180g (도전 210g)</div>
-<div class="prot-bar-wrap">
+<div class="plan-card"><div class="prot-bar-wrap">
   <div class="prot-bar"><div class="prl" style="background:#E8C27A">아침식사</div><div class="prg">35g</div></div>
   <div class="prot-bar"><div class="prl" style="background:#D98B3A">점심식사</div><div class="prg">55g</div></div>
   <div class="prot-bar"><div class="prl" style="background:#3B6D11">16:00 단백질바</div><div class="prg">24g</div></div>
   <div class="prot-bar"><div class="prl" style="background:#185FA5">19:00 웨이</div><div class="prg">30g</div></div>
   <div class="prot-bar"><div class="prl" style="background:#085041">운동후 본식</div><div class="prg">40g</div></div>
   <div class="prot-bar"><div class="prl" style="background:#3B3B50">23:00 카제인</div><div class="prg">25g</div></div>
-</div>
+</div></div>
 
 <!-- 체질 프로파일 -->
 <div class="plan-hd" style="margin-top:20px">🧬 체질 프로파일</div>
@@ -860,6 +868,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
     <div class="plan-body-row"><span class="plan-body-icon">🧠</span><span>상체 고립 → 무게보다 마인드머슬 연결 우선</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">💧</span><span>다한증 → 운동 중 전해질(물+소금) 필수</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">🥦</span><span>브로콜리 매일 + 알코올 주 1회 이하 → 에스트로겐 억제</span></div>
+    <div class="plan-body-row"><span class="plan-body-icon">📐</span><span>넓은 골반 → 측면삼각근·광배 우선 = V-테이퍼로 허리 좁아 보이게(체형상 최대 레버)</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">😴</span><span>수면 7시간 이상 → 테스토스테론의 70~80% 수면 중 분비</span></div>
   </div>
 </div>
@@ -896,7 +905,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 
 <!-- 핵심 규칙 -->
 <div class="plan-hd" style="margin-top:20px">🔑 핵심 규칙</div>
-<div class="plan-rules">
+<div class="plan-card"><div class="plan-rules">
   <div class="plan-rule"><span class="plan-rule-n" style="background:#E24B4A">1</span><div><b>밀크씨슬 점심 30분 전</b> — 식전 복용으로 간 보호막 형성</div></div>
   <div class="plan-rule"><span class="plan-rule-n" style="background:#BA7517">2</span><div><b>점심 순서</b> — 식사 → 카르니틴·베타알라닌·오메가3·D3+K2 즉시 → 30분 뒤 커피</div></div>
   <div class="plan-rule"><span class="plan-rule-n" style="background:#E24B4A">3</span><div><b>19:00 시트룰린+웨이+탄수 셰이커 1회</b> — 혼합 가능·순서 불필요. 누락 시 반공복 훈련됨</div></div>
@@ -904,7 +913,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
   <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">5</span><div><b>운동 후 21:30 본식 + 크레아틴·오메가3</b> — 쉐이크 대신 실음식. 23:00 카제인 별도</div></div>
   <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">6</span><div><b>24:00 이전 취침 · 수면 7시간+</b> — 테스토스테론의 70~80% 수면 중 분비. 모든 보충제 효과의 전제</div></div>
   <div class="plan-rule"><span class="plan-rule-n" style="background:#3B6D11">7</span><div><b>하루 수분 2.5~3L</b> — 크레아틴·베타알라닌 효과의 기반. 소변 연한 노란색 기준</div></div>
-</div>
+</div></div>
 
 </div><!-- plan-wrap -->
 </div><!-- tab-body tab-p -->
@@ -1433,11 +1442,16 @@ const PlanApp={
     const now=new Date();
     const daysElapsed=Math.max(0,Math.floor((now-start)/864e5));
     const weekNum=Math.floor(daysElapsed/7)+1;
-    const pct=Math.min(Math.round(daysElapsed/336*100),100);
+    const pct=Math.min(Math.round(daysElapsed/220*100),100);
+    const phaseIdx=daysElapsed<91?1:(daysElapsed<152?2:3);
     const el=document.getElementById('ph-prog');const lbl=document.getElementById('ph-label');const days=document.getElementById('ph-days');
     if(el)el.style.width=pct+'%';
-    if(lbl)lbl.textContent='Phase 1 진행 중 ('+weekNum+'주차)';
-    if(days)days.textContent=daysElapsed+'일 경과 / 총 336일';
+    if(lbl)lbl.textContent='Phase '+phaseIdx+' 진행 중 ('+weekNum+'주차)';
+    if(days)days.textContent=daysElapsed+'일 경과 / 총 220일';
+    document.querySelectorAll('.plan-phase-cards .plan-phase-card').forEach((c,i)=>{
+      c.classList.toggle('current',i+1===phaseIdx);
+      c.classList.toggle('future',i+1!==phaseIdx);
+    });
   },
   renderBlock(){
     const start=new Date('2026-05-25T00:00:00');
