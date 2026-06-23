@@ -361,6 +361,14 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .tr-e1{font-weight:700;color:var(--color-text-primary)}
 .tr-up{color:#3B6D11;font-weight:700}.tr-dn{color:#E24B4A;font-weight:700}.tr-eq{color:#999}
 .tr-set{color:var(--color-text-tertiary)}
+.tr-alt-btn{font-size:10px;font-weight:700;color:#185FA5;background:none;border:0.5px solid #185FA5;border-radius:8px;padding:2px 8px;cursor:pointer;margin-left:2px}
+.tr-alt{display:none;margin-top:8px;padding-top:8px;border-top:0.5px dashed var(--color-border-tertiary)}
+.tr-alt.open{display:block}
+.tr-alt-hd{font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px}
+.tr-alt-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0}
+.tr-alt-nm{font-size:12px;color:var(--color-text-secondary)}
+.tr-alt-add{font-size:11px;font-weight:700;color:#fff;background:#085041;border:none;border-radius:7px;padding:4px 10px;cursor:pointer;flex-shrink:0}
+.tr-alt-add:disabled{background:#3B6D11}
 .mm-wrap{padding:14px 16px 80px}
 .mm-title{font-size:15px;font-weight:800;color:var(--color-text-primary);margin-bottom:4px}
 .mm-sub{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px}
@@ -448,6 +456,15 @@ details[open]>summary .ic{transform:rotate(180deg)}
 @keyframes pr-pop{0%{transform:scale(.4) rotate(-15deg)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1)}}
 .pr-t1{font-size:11px;font-weight:700;opacity:.85;letter-spacing:.5px}
 .pr-t2{font-size:15px;font-weight:800}
+.prj-card{margin-top:10px;border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:12px 14px;background:var(--color-background-secondary,#f7f8f9)}
+.prj-hd{font-size:12px;font-weight:800;color:#085041;margin-bottom:9px}
+.prj-row{display:flex;align-items:center;gap:7px;font-size:12px;padding:4px 0;flex-wrap:wrap}
+.prj-lbl{font-weight:700;color:var(--color-text-secondary);width:62px;flex-shrink:0}
+.prj-val{font-weight:800;color:var(--color-text-primary)}
+.prj-arrow{color:var(--color-text-tertiary);font-size:11px}
+.prj-ok{margin-left:auto;font-size:11px;font-weight:700;color:#fff;background:#3B6D11;padding:1px 8px;border-radius:8px}
+.prj-no{margin-left:auto;font-size:11px;font-weight:700;color:#fff;background:#BA7517;padding:1px 8px;border-radius:8px}
+.prj-note{font-size:11px;color:var(--color-text-tertiary);margin-top:9px;line-height:1.45;border-top:0.5px solid var(--color-border-tertiary);padding-top:8px}
 .ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-border-tertiary,#e5e5ea);border-radius:12px;overflow:hidden}
 .ws-cell{background:var(--color-background-primary,#fff);padding:13px 12px;text-align:center}
 .ws-v{font-size:23px;font-weight:800;color:var(--color-text-primary);line-height:1.1}
@@ -727,6 +744,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="plan-hd">📊 체성분 현황</div>
 <div id="inbody-cards"></div>
 <div class="plan-inbody-note" id="plan-inbody-note"></div>
+<div id="inbody-projection"></div>
 <button class="inbody-open-btn" onclick="InBody.openModal()">＋ 인바디 입력</button>
 
 <!-- 체성분 입력 모달 -->
@@ -1531,7 +1549,7 @@ const PlanApp={
     if(/데드행/.test(n))return null;
     if(/루마니안|RDL|레그\s*컬|레그컬|힙\s*쓰러스트|힙쓰러스트|힙\s*어브덕션|힙어브덕션/.test(n))return{p:'후면사슬',s:[]};
     if(/데드리프트/.test(n))return{p:'후면사슬',s:['등']};
-    if(/로우|풀다운|풀\s*다운|풀업|랫|친업/.test(n))return{p:'등',s:['이두']};
+    if(/로우|풀다운|풀\s*다운|풀업|풀오버|랫|친업/.test(n))return{p:'등',s:['이두']};
     if(/스쿼트|레그\s*프레스|레그프레스|익스텐션|런지|불가리안/.test(n))return{p:'대퇴사두',s:['후면사슬']};
     if(/플랭크|크런치|레그레이즈|레그\s*레이즈|복근|싯업/.test(n))return{p:'코어',s:[]};
     return null;
@@ -1590,8 +1608,19 @@ const PlanApp={
       const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
       let plateau=false;
       if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
-      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div></div>';
+      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
     }).join('');
+  },
+  toggleAlt(btn,name){
+    const row=btn.closest('.tr-row');const panel=row&&row.querySelector('.tr-alt');if(!panel)return;
+    if(panel.classList.contains('open')){panel.classList.remove('open');panel.innerHTML='';return;}
+    const mu=this.muscleOf(name);const bucket=mu?mu.p:null;
+    const lib=window.EXERCISE_LIBRARY||[];
+    const self=this;
+    const alts=lib.filter(function(e){const m=self.muscleOf(e.name);return m&&m.p===bucket&&e.name!==name;}).slice(0,6);
+    if(!alts.length){panel.innerHTML='<div class="tr-alt-empty">같은 부위 대체 종목이 도감에 없습니다.</div>';}
+    else{panel.innerHTML='<div class="tr-alt-hd">같은 부위('+(bucket||'')+') 대체 종목 — 6주째 정체면 교체 고려</div>'+alts.map(function(e){return '<div class="tr-alt-row"><span class="tr-alt-nm">'+e.name+'</span><button class="tr-alt-add" onclick="ExLog.addExternal(\''+e.name.replace(/'/g,"\\'")+'\');this.textContent=\'✓ 추가됨\';this.disabled=true">＋추가</button></div>';}).join('');}
+    panel.classList.add('open');
   },
   _weekKeys(offset){
     const now=new Date();const dow=now.getDay();
@@ -1822,6 +1851,49 @@ const InBody={
     html+='</div>';
     box.innerHTML=html;
     if(note){const d=new Date(last.date+'T12:00:00');note.textContent='📅 최근 측정: '+d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'})+' · '+log.length+'회 누적';}
+    this.renderProjection();
+  },
+  renderProjection(){
+    const box=document.getElementById('inbody-projection');if(!box)return;
+    const log=this._log||[];
+    if(log.length<2){box.innerHTML='';return;}
+    const t0=new Date(log[0].date+'T12:00:00').getTime();
+    const xs=log.map(e=>(new Date(e.date+'T12:00:00').getTime()-t0)/864e5);
+    const slope=(key)=>{
+      const ys=log.map(e=>e[key]);const n=xs.length;
+      const mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n;
+      let num=0,den=0;for(let i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)*(xs[i]-mx);}
+      return den?{m:num/den,b:my-(num/den)*mx}:null;
+    };
+    const goalDate=new Date('2026-12-31T12:00:00').getTime();
+    const xGoal=(goalDate-t0)/864e5;
+    const CLAMP={wt:[70,120],sm:[30,42],bf:[8,40],ab:[0.70,1.2]};
+    const F=[
+      {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,dir:-1,dec:1},
+      {key:'sm',lbl:'골격근량',unit:'kg',goal:IB_GOALS.sm,dir:1,dec:1},
+      {key:'bf',lbl:'체지방률',unit:'%',goal:IB_GOALS.bf,dir:-1,dec:1},
+      {key:'ab',lbl:'복부지방률',unit:'',goal:IB_GOALS.ab,dir:-1,dec:2}
+    ];
+    let rows='';let onTrack=0,total=0;
+    F.forEach(f=>{
+      const r=slope(f.key);if(!r)return;
+      let proj=r.m*xGoal+r.b;
+      const cl=CLAMP[f.key];proj=Math.max(cl[0],Math.min(cl[1],proj));
+      const reach=f.dir===1?(proj>=f.goal):(proj<=f.goal);
+      total++;if(reach)onTrack++;
+      const perWk=(r.m*7);
+      const projStr=proj.toFixed(f.dec)+f.unit;
+      const gap=Math.abs(proj-f.goal).toFixed(f.dec);
+      const status=reach?'<span class="prj-ok">도달 ✓</span>':'<span class="prj-no">'+gap+f.unit+' 부족</span>';
+      const rate=(Math.abs(perWk)<0.001)?'변화 거의 없음':((perWk>0?'+':'')+perWk.toFixed(f.dec===2?3:2)+f.unit+'/주');
+      rows+='<div class="prj-row"><span class="prj-lbl">'+f.lbl+'</span><span class="prj-val">~'+projStr+'</span><span class="prj-arrow">목표 '+f.goal+f.unit+' · '+rate+'</span>'+status+'</div>';
+    });
+    const spanDays=xs[xs.length-1];
+    let verdict=onTrack===total?'현재 페이스 유지 시 12월 전 항목 도달 예상.':
+      (onTrack===0?'현재 페이스로는 목표 미달 — 적자·볼륨 조정 검토.':
+      '일부 항목 미달 예상 — 부족한 항목 위주로 조정 권장.');
+    const caveat=spanDays<14?' (측정 누적이 짧아 신뢰도 낮음 — 4주 이상 권장)':' (초기 추세는 과장되기 쉬워 방향 참고용)';
+    box.innerHTML='<div class="prj-card"><div class="prj-hd">🎯 12월 예상 · 현재 추세 연장</div>'+rows+'<div class="prj-note">'+verdict+caveat+'</div></div>';
   },
   openModal(){
     const today=new Date().toISOString().slice(0,10);
