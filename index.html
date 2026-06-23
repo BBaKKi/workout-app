@@ -442,6 +442,39 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ib-btns{display:flex;gap:10px;padding:14px 20px 0}
 .ib-cancel{flex:1;padding:14px;background:var(--color-background-secondary,#f2f2f7);border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;color:var(--color-text-secondary)}
 .ib-save{flex:2;padding:14px;background:#085041;border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:.2px}
+.pr-toast{position:fixed;top:-80px;left:50%;transform:translateX(-50%);z-index:500;display:flex;align-items:center;gap:11px;background:linear-gradient(135deg,#3B6D11,#085041);color:#fff;padding:13px 20px;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.28);opacity:0;transition:top .42s cubic-bezier(.2,1.3,.5,1),opacity .35s;pointer-events:none;max-width:90vw}
+.pr-toast.show{top:18px;opacity:1}
+.pr-emoji{font-size:26px;animation:pr-pop .5s ease}
+@keyframes pr-pop{0%{transform:scale(.4) rotate(-15deg)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1)}}
+.pr-t1{font-size:11px;font-weight:700;opacity:.85;letter-spacing:.5px}
+.pr-t2{font-size:15px;font-weight:800}
+.ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-border-tertiary,#e5e5ea);border-radius:12px;overflow:hidden}
+.ws-cell{background:var(--color-background-primary,#fff);padding:13px 12px;text-align:center}
+.ws-v{font-size:23px;font-weight:800;color:var(--color-text-primary);line-height:1.1}
+.ws-v.up,.ws-v.pr{color:#3B6D11}.ws-v.dn{color:#D85A30}
+.ws-u{font-size:13px;font-weight:600;color:var(--color-text-tertiary)}
+.ws-l{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+.ws-note{font-size:11px;color:var(--color-text-tertiary);margin-top:9px;text-align:center}
+.cal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.cal-streak{font-size:14px;color:var(--color-text-primary)}
+.cal-streak b{font-size:18px;color:#D85A30}
+.cal-sub{font-size:10px;color:var(--color-text-tertiary);margin-left:3px}
+.cal-month{font-size:12px;color:var(--color-text-secondary)}
+.cal-month b{color:#3B6D11}
+.cal-grid-wrap{display:flex;gap:5px}
+.cal-rowlabels{display:flex;flex-direction:column;justify-content:space-between;font-size:8px;color:var(--color-text-tertiary);padding:1px 0;height:auto}
+.cal-grid{display:flex;gap:3px;flex:1}
+.cal-col{display:flex;flex-direction:column;gap:3px;flex:1}
+.cal-cell{aspect-ratio:1;border-radius:2px;background:var(--color-border-tertiary,#ebedf0)}
+.cal-cell.l1{background:#c6e48b}.cal-cell.l2{background:#7bc96f}.cal-cell.l3{background:#49a13a}.cal-cell.l4{background:#196127}
+.cal-cell.fut{background:transparent;border:0.5px dashed var(--color-border-tertiary,#e5e5ea)}
+.cal-legend{display:flex;align-items:center;gap:3px;justify-content:flex-end;font-size:10px;color:var(--color-text-tertiary);margin-top:9px}
+.cal-legend .cal-cell{width:11px;height:11px;aspect-ratio:auto;display:inline-block}
+details.plan-fold{margin:0}
+details.plan-fold>summary{list-style:none;cursor:pointer;position:relative}
+details.plan-fold>summary::-webkit-details-marker{display:none}
+details.plan-fold>summary::after{content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-55%);font-size:12px;color:var(--color-text-tertiary)}
+details.plan-fold[open]>summary::after{content:'▴'}
 .ib-spark-wrap{margin-top:7px}
 .ib-spark-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px}
 .ib-spark svg{display:block;width:100%;height:32px}
@@ -508,7 +541,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();},30)">📊 플랜</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -686,6 +719,10 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <div class="tab-body tab-p">
 <div class="plan-wrap">
 
+<!-- 이번 주 성과 요약 -->
+<div class="plan-hd">🏆 이번 주 성과</div>
+<div id="week-summary" class="plan-card"></div>
+
 <!-- 체성분 현황 -->
 <div class="plan-hd">📊 체성분 현황</div>
 <div id="inbody-cards"></div>
@@ -734,7 +771,11 @@ details[open]>summary .ic{transform:rotate(180deg)}
 </div>
 
 <!-- Phase 타임라인 -->
-<div class="plan-hd">🗓 단계별 플랜</div>
+<!-- 운동 캘린더 -->
+<div class="plan-hd">🔥 운동 캘린더</div>
+<div id="plan-calendar" class="plan-card"></div>
+
+<details class="plan-fold"><summary class="plan-hd">🗓 단계별 플랜</summary>
 <div class="plan-phase-track">
   <div class="plan-phase-bar">
     <div class="plan-phase-seg" id="ph-prog" style="background:#3B6D11;border-radius:5px 0 0 5px"></div>
@@ -765,9 +806,10 @@ details[open]>summary .ic{transform:rotate(180deg)}
     <div class="plan-phase-focus">유지 전환 · 마무리</div>
   </div>
 </div>
+</details>
 
 <!-- 6주 블록 -->
-<div class="plan-hd">⏱ 6주 블록 진행</div>
+<details class="plan-fold"><summary class="plan-hd">⏱ 6주 블록 진행</summary>
 <div class="plan-block-card">
   <div class="plan-block-header">
     <span class="plan-block-title">1차 블록 리뷰</span>
@@ -785,6 +827,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
     <div class="plan-block-item">⚖️ 칼로리 조정 여부 결정</div>
   </div>
 </div>
+</details>
 
 <!-- 체질 프로파일 -->
 <div class="plan-hd">📊 주간 부위별 볼륨</div>
@@ -793,7 +836,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 <div class="plan-hd">📈 종목별 추세 · 정체</div>
 <div id="plan-trend" class="plan-card"></div>
 
-<div class="plan-hd">🧬 체질 프로파일</div>
+<details class="plan-fold"><summary class="plan-hd">🧬 체질 프로파일</summary>
 <div class="plan-body-card">
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
     <span class="plan-badge" style="background:#BA7517">안드로이드형</span>
@@ -810,6 +853,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
     <div class="plan-body-row"><span class="plan-body-icon">😴</span><span>수면 7시간 이상 → 테스토스테론의 70~80% 수면 중 분비</span></div>
   </div>
 </div>
+</details>
 
 </div><!-- plan-wrap -->
 </div><!-- tab-body tab-p -->
@@ -1105,12 +1149,38 @@ const ExLog={
     setTimeout(()=>wi?.focus(),50);
   },
 
+  _prE1(s){return s.weight*(1+s.reps/30);},
+  _priorSets(name){
+    let arr=[];
+    for(const dk in this.data){(this.data[dk].exercises||[]).forEach(e=>{if(e.name===name)arr=arr.concat(e.sets||[]);});}
+    return arr.filter(s=>s.reps>0);
+  },
+  checkPR(name,w,r){
+    const prior=this._priorSets(name);if(!prior.length)return false;
+    if(w>0){
+      const loaded=prior.filter(s=>s.weight>0);if(!loaded.length)return true;
+      const best=Math.max.apply(null,loaded.map(s=>this._prE1(s)));
+      return w*(1+r/30)>best+0.05;
+    }else{
+      const bw=prior.filter(s=>s.weight===0);if(!bw.length)return false;
+      return r>Math.max.apply(null,bw.map(s=>s.reps));
+    }
+  },
+  showPR(name){
+    let t=document.getElementById('pr-toast');
+    if(!t){t=document.createElement('div');t.id='pr-toast';t.className='pr-toast';document.body.appendChild(t);}
+    t.innerHTML='<span class="pr-emoji">🎉</span><div class="pr-txt"><div class="pr-t1">개인 신기록!</div><div class="pr-t2">'+name+'</div></div>';
+    t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
+    clearTimeout(this._prTimer);this._prTimer=setTimeout(function(){t.classList.remove('show');},2800);
+  },
+
   confirmSet(el){
     const inp=el.closest('.ex-log-input');
     const log=inp.closest('.ex-log');
     const w=parseFloat(inp.querySelector('.wl-kg-input').value)||0;
     const r=parseInt(inp.querySelector('.wl-rp-input').value)||0;
     if(!w&&!r){this.cancelSet(el);return;}
+    const isPR=this.checkPR(log.dataset.exname,w,r);
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);}
@@ -1118,6 +1188,7 @@ const ExLog={
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
+    if(isPR)this.showPR(log.dataset.exname);
     if(this.date===new Date().toISOString().slice(0,10)){
       this.startRest(log.dataset.exname);
       this.getScriptUrl().then(url=>{if(url)this.syncToSheets(url);});
@@ -1369,7 +1440,7 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderVolume();this.renderTrends();},
+  init(){this.renderPhase();this.renderBlock();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderCalendar();},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
     const now=new Date();
@@ -1521,6 +1592,71 @@ const PlanApp={
       if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
       return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div></div>';
     }).join('');
+  },
+  _weekKeys(offset){
+    const now=new Date();const dow=now.getDay();
+    const ws=new Date(now);ws.setDate(now.getDate()-(dow===0?6:dow-1)+offset*7);ws.setHours(0,0,0,0);
+    const keys=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);keys.push(d.toISOString().slice(0,10));}
+    return keys;
+  },
+  _sessionSets(data,dk){let n=0;(data[dk]&&data[dk].exercises||[]).forEach(e=>{n+=(e.sets||[]).filter(s=>s.reps>0).length;});return n;},
+  _weekVolume(data,keys){let v=0;keys.forEach(dk=>{(data[dk]&&data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(s=>{if(s.reps>0)v+=(s.weight||0)*s.reps;});});});return v;},
+  async renderWeekSummary(){
+    const box=document.getElementById('week-summary');if(!box)return;
+    const data=await this._logData();
+    const thisWk=this._weekKeys(0),lastWk=this._weekKeys(-1);
+    const days=thisWk.filter(dk=>this._sessionSets(data,dk)>0).length;
+    const volT=this._weekVolume(data,thisWk),volL=this._weekVolume(data,lastWk);
+    const volPct=volL?Math.round((volT-volL)/volL*100):0;
+    // PR 수 (이번 주)
+    let prCount=0;const seen={};
+    const allDates=Object.keys(data).sort();
+    thisWk.forEach(dk=>{(data[dk]&&data[dk].exercises||[]).forEach(e=>{
+      (e.sets||[]).filter(s=>s.reps>0).forEach(s=>{
+        // 해당 날짜 이전까지의 최고와 비교
+        let best=-1;for(const pk of allDates){if(pk>=dk)break;(data[pk].exercises||[]).forEach(pe=>{if(pe.name===e.name)(pe.sets||[]).forEach(ps=>{if(ps.reps>0){const v=ps.weight>0?ps.weight*(1+ps.reps/30):ps.reps;best=Math.max(best,v);}});});}
+        const cur=s.weight>0?s.weight*(1+s.reps/30):s.reps;
+        if(best>=0&&cur>best+0.05&&!seen[e.name]){prCount++;seen[e.name]=1;}
+      });
+    });});
+    // D-day (12월 31일)
+    const goal=new Date('2026-12-31T23:59:59');const dday=Math.max(0,Math.ceil((goal-new Date())/864e5));
+    // 체성분 추세
+    let bfTrend='';try{const r=await window.storage.get('inbody_log');const log=r?JSON.parse(r.value):[];if(log.length>=2){const d=log[log.length-1].bf-log[log.length-2].bf;bfTrend=d<0?'↓':(d>0?'↑':'—');}}catch(_){}
+    const volStr=volL?((volPct>=0?'+':'')+volPct+'%'):'기준 주';
+    box.innerHTML=
+      '<div class="ws-grid">'
+      +'<div class="ws-cell"><div class="ws-v">'+days+'<span class="ws-u">/6일</span></div><div class="ws-l">이번 주 운동</div></div>'
+      +'<div class="ws-cell"><div class="ws-v '+(volPct>0?'up':(volPct<0?'dn':''))+'">'+volStr+'</div><div class="ws-l">볼륨 vs 지난주</div></div>'
+      +'<div class="ws-cell"><div class="ws-v '+(prCount>0?'pr':'')+'">'+(prCount>0?'🎉 '+prCount:'0')+'</div><div class="ws-l">이번 주 신기록</div></div>'
+      +'<div class="ws-cell"><div class="ws-v">D-'+dday+'</div><div class="ws-l">목표(12월)까지</div></div>'
+      +'</div>'
+      +(bfTrend?'<div class="ws-note">체지방률 추세 '+bfTrend+' · 골격근·체지방은 체성분 현황에서 확인</div>':'');
+  },
+  async renderCalendar(){
+    const box=document.getElementById('plan-calendar');if(!box)return;
+    const data=await this._logData();
+    const WEEKS=12;
+    // 연속 주(주 4회 이상) 계산
+    let streak=0;for(let off=0;off>-53;off--){const ks=this._weekKeys(off);const cnt=ks.filter(dk=>this._sessionSets(data,dk)>0).length;if(off===0){if(cnt>=4)streak++;continue;}if(cnt>=4)streak++;else break;}
+    const monthDays=(()=>{let n=0;const today=new Date();for(let i=0;i<28;i++){const d=new Date(today);d.setDate(today.getDate()-i);if(this._sessionSets(data,d.toISOString().slice(0,10))>0)n++;}return n;})();
+    // 12주 그리드 (열=주, 행=월~일)
+    let cols='';
+    for(let w=WEEKS-1;w>=0;w--){
+      const ks=this._weekKeys(-w);
+      let cells='';
+      ks.forEach(dk=>{
+        const sets=this._sessionSets(data,dk);
+        const fut=new Date(dk)>new Date();
+        let lv=0;if(sets>=12)lv=4;else if(sets>=8)lv=3;else if(sets>=4)lv=2;else if(sets>=1)lv=1;
+        cells+='<div class="cal-cell l'+lv+(fut?' fut':'')+'" title="'+dk+' · '+sets+'세트"></div>';
+      });
+      cols+='<div class="cal-col">'+cells+'</div>';
+    }
+    box.innerHTML=
+      '<div class="cal-top"><div class="cal-streak">🔥 <b>'+streak+'</b>주 연속<span class="cal-sub">(주 4회+)</span></div><div class="cal-month">최근 28일 <b>'+monthDays+'</b>일 훈련</div></div>'
+      +'<div class="cal-grid-wrap"><div class="cal-rowlabels"><span>월</span><span>수</span><span>금</span><span>일</span></div><div class="cal-grid">'+cols+'</div></div>'
+      +'<div class="cal-legend">적음 <span class="cal-cell l1"></span><span class="cal-cell l2"></span><span class="cal-cell l3"></span><span class="cal-cell l4"></span> 많음</div>';
   }
 };
 const MUSCLE_INFO={
