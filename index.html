@@ -1604,10 +1604,12 @@ const PlanApp={
     if(/래터럴|레터럴|사이드\s*레이즈/.test(n))return{p:'측면삼각',s:[]};
     if(/페이스풀|리어|후면\s*삼각|리버스\s*펙/.test(n))return{p:'등',s:[]};
     if(/숄더\s*프레스|숄더프레스|오버헤드\s*프레스|오버헤드프레스|밀리터리|OHP/i.test(n))return{p:'전면삼각',s:['삼두','측면삼각']};
+    if(/리스트\s*컬|손목/.test(n))return{p:'전완',s:[]};
     if(/컬|바이셉스/.test(n)&&!/레그/.test(n))return{p:'이두',s:[]};
     if(/트라이|푸시다운|딥스|킥백/.test(n))return{p:'삼두',s:[]};
     if(/플라이|펙덱|체스트|벤치|인클라인|디클라인/.test(n))return{p:'가슴',s:['삼두']};
     if(/데드행/.test(n))return null;
+    if(/어덕션|내전/.test(n))return{p:'내전근',s:[]};
     if(/루마니안|RDL|레그\s*컬|레그컬|힙\s*쓰러스트|힙쓰러스트|힙\s*어브덕션|힙어브덕션/.test(n))return{p:'후면사슬',s:[]};
     if(/데드리프트/.test(n))return{p:'후면사슬',s:['등']};
     if(/로우|풀다운|풀\s*다운|풀업|풀오버|랫|친업/.test(n))return{p:'등',s:['이두']};
@@ -1618,9 +1620,10 @@ const PlanApp={
   async renderVolume(){
     const box=document.getElementById('plan-vol');if(!box)return;
     const data=await this._logData();const{ws,we}=this._weekRange();
-    const order=['가슴','등','측면삼각','전면삼각','삼두','이두','대퇴사두','후면사슬','코어'];
-    const COL={'가슴':'#D85A30','등':'#185FA5','측면삼각':'#BA7517','전면삼각':'#E0922F','삼두':'#0C447C','이두':'#3B6D11','대퇴사두':'#27500A','후면사슬':'#6B4FA0','코어':'#888'};
+    const order=['가슴','등','측면삼각','전면삼각','삼두','이두','대퇴사두','후면사슬','코어','전완','내전근'];
+    const COL={'가슴':'#D85A30','등':'#185FA5','측면삼각':'#BA7517','전면삼각':'#E0922F','삼두':'#0C447C','이두':'#3B6D11','대퇴사두':'#27500A','후면사슬':'#6B4FA0','코어':'#888','전완':'#5B8A2A','내전근':'#8B5E3C'};
     const PRI={'측면삼각':1,'등':1,'가슴':1};
+    const OPT={'전완':1,'내전근':1};
     const vol={};order.forEach(m=>vol[m]=0);
     for(const dk in data){
       const d=new Date(dk+'T12:00:00');if(d<ws||d>we)continue;
@@ -1633,8 +1636,9 @@ const PlanApp={
     }
     const total=order.reduce((a,m)=>a+vol[m],0);
     if(total===0){box.innerHTML='<div class="plan-vol-empty">이번 주 기록이 없습니다. 운동 탭에서 세트를 기록하면 부위별로 집계됩니다.</div>';return;}
-    const max=Math.max(10,...order.map(m=>vol[m]));
-    box.innerHTML='<div class="plan-vol-head">이번 주 누적 세트 · 부위별</div>'+order.map(m=>{
+    const shown=order.filter(m=>!OPT[m]||vol[m]>0);
+    const max=Math.max(10,...shown.map(m=>vol[m]));
+    box.innerHTML='<div class="plan-vol-head">이번 주 누적 세트 · 부위별</div>'+shown.map(m=>{
       const v=vol[m];const w=Math.round(v/max*100);const low=PRI[m]&&v<8;
       const vt=(v%1===0?String(v):v.toFixed(1));
       return '<div class="pv-row"><span class="pv-nm">'+m+(PRI[m]?' ⭐':'')+'</span><div class="pv-track"><div class="pv-fill" style="width:'+w+'%;background:'+COL[m]+'"></div></div><span class="pv-val'+(low?' low':'')+'">'+vt+(low?' ⚠':'')+'</span></div>';
