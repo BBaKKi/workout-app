@@ -294,6 +294,9 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-custom-area{margin-top:4px}
 .ex-custom-area .ex-wrap{margin-bottom:8px}
 .custom-ex-label{font-size:11px;color:#D85A30;font-weight:500;padding:6px 14px 2px;display:block}
+.ex-del-btn{background:none;border:none;color:#c7c7cc;font-size:13px;line-height:1;padding:5px 7px;cursor:pointer;flex-shrink:0;margin-left:2px;border-radius:6px}
+.ex-del-btn:hover,.ex-del-btn:active{color:#D85A30;background:#fbeee9}
+.wl-picker-empty{font-size:12px;color:#9aa0a6;padding:6px 2px;display:block}
 
 /* 영양제 토글 */
 .supp-toggle-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 6px;position:sticky;top:52px;background:var(--color-background-default,#f2f2f7);z-index:10}
@@ -403,6 +406,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mm-scr .tx{color:var(--color-text-secondary)}
 .mm-exs-lbl{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:6px}
 .mm-exs{display:flex;flex-wrap:wrap;gap:6px}
+.mm-noex{font-size:11.5px;color:var(--color-text-tertiary);line-height:1.5;padding:8px 10px;background:var(--color-background-secondary,#f2f4f6);border-radius:8px}
+.mm-noex b{color:var(--color-text-secondary)}
 .mm-ex{font-size:11px;background:var(--color-background-secondary,#eef0f2);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:4px 10px;color:var(--color-text-secondary)}
 .lib-wrap{padding:12px 16px 80px}
 .lib-intro{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:10px}
@@ -428,6 +433,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-extra{margin-top:8px;border-top:0.5px solid var(--color-border-tertiary);padding-top:8px}
 .ex-extra>summary{font-size:12px;font-weight:700;color:#085041;cursor:pointer;list-style:none}
 .ex-extra>summary::-webkit-details-marker{display:none}
+.ex-extra>summary::after{content:" ▾";color:#8fb3ac;font-size:10px;font-weight:400}
+.ex-extra[open]>summary::after{content:" ▴"}
 .ex-extra-body{display:flex;flex-direction:column;gap:6px;margin-top:7px}
 .exx-row{display:flex;gap:8px;font-size:12px;line-height:1.5}
 .exx-l{font-weight:800;color:var(--color-text-tertiary);flex-shrink:0;width:52px}
@@ -611,9 +618,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="ex-wrap"><input type="checkbox" id="c2_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바벨 벤트오버 로우</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">WATSON</span><span class="tag t-m">광배·중부등·이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>배꼽 방향</b>으로 당기면 광배 하부.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">상체 <b>45~60도</b>. <b>팔꿈치로 당긴다</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체 반동 금지. <b>허리 중립</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">상체 45~60도·척추 중립</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 뒤로 당기며 복부로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">견갑 모아 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c2_9" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_9" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">T-바 로우</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">T-바 머신</span><span class="tag t-m">중하 승모·능형근·광배</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>등 중앙 두께</b> 담당. 가슴 패드 지지로 기립근 부담 적어 데드리프트와 병행에 유리.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치를 몸통에 붙여 당기면 광배, 벌려 당기면 능형근·후면삼각. <b>정점 1초 등 중앙 조이기</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지. 가슴이 패드에서 떨어지면 무게 과함. <b>2초 신장</b> 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 패드 밀착·발 단단히 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 모으며 팔꿈치로 당기기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 — 등 중앙 조이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c2_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">랫풀다운 / 풀업</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">광배 너비·이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>팔꿈치를 엉덩이 방향</b>으로 내릴 때 광배 수축.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">가슴을 살짝 앞으로 내밀기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">목 뒤로 당기면 <b>경추 부상</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 살짝 앞으로·팔 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 엉덩이 방향 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">가슴 도달 시 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 시티드 로우</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">중부등·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="0" y="28" width="14" height="55" rx="3" fill="currentColor" opacity="0.3"/><circle cx="7" cy="55" r="6" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"/><line x1="14" y1="55" x2="72" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/><rect x="108" y="75" width="48" height="8" rx="2" fill="currentColor" opacity="0.25"/><rect x="152" y="50" width="7" height="35" rx="2" fill="currentColor" opacity="0.25"/><line x1="130" y1="30" x2="130" y2="75" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="130" cy="19" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="130" y1="55" x2="85" y2="58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="85" y1="58" x2="80" y2="64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><ellipse cx="136" cy="52" rx="9" ry="17" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><text x="158" y="52" font-size="9" fill="#D85A30" font-family="sans-serif">등 중부</text><text x="50" y="40" font-size="9" fill="currentColor" font-family="sans-serif" opacity="0.6">팔꿈치 옆구리로</text><line x1="80" y1="45" x2="86" y2="56" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.4"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>등 중부(능형근·중하 승모근)</b> 집중. 팔이 아니라 <b>견갑골이 등 중앙으로 모이는 느낌</b>이 나야 합니다. 동작 끝에 "어깨뼈 두 개를 붙인다"는 느낌이 올바른 자극입니다.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>상체를 90도 직립으로 고정</b>하고 팔꿈치를 옆구리를 스치듯 뒤로 당깁니다. 당길 때 팔의 힘보다 <b>등이 수축하는 느낌</b>으로 리드해야 합니다. 당긴 상태에서 1~2초 견갑 수축을 유지하세요.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체를 앞뒤로 흔들면 허리 부담만 생기고 등 자극이 없어집니다. <b>반동 금지</b>. 팔꿈치를 몸에서 너무 멀리 벌리면 등 상부만 자극됩니다 — 팔꿈치는 옆구리 방향으로.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 머신 앞 벤치 착석, 발 패드에 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">핸들 잡고 팔 완전 신전 (등 스트레칭)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">상체 90도 직립 유지 (반동 금지)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">팔꿈치를 뒤-아래로 당기며 명치 높이로</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">견갑 모아 1~2초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 완전 신전</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 시티드 로우</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">중부등·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="0" y="28" width="14" height="55" rx="3" fill="currentColor" opacity="0.3"/><circle cx="7" cy="55" r="6" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"/><line x1="14" y1="55" x2="72" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/><rect x="108" y="75" width="48" height="8" rx="2" fill="currentColor" opacity="0.25"/><rect x="152" y="50" width="7" height="35" rx="2" fill="currentColor" opacity="0.25"/><line x1="130" y1="30" x2="130" y2="75" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="130" cy="19" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="130" y1="55" x2="85" y2="58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="85" y1="58" x2="80" y2="64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><ellipse cx="136" cy="52" rx="9" ry="17" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><text x="158" y="52" font-size="9" fill="#D85A30" font-family="sans-serif">등 중부</text><text x="50" y="40" font-size="9" fill="currentColor" font-family="sans-serif" opacity="0.6">팔꿈치 옆구리로</text><line x1="80" y1="45" x2="86" y2="56" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.4"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>등 중부(능형근·중하 승모)</b> — 어깨뼈 두 개를 등 중앙으로 모으는 느낌이 정자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔이 아니라 <b>등으로 당겨</b> 당긴 끝에서 견갑 1~2초 수축.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체 <b>반동 금지</b>. 팔꿈치를 옆구리 방향으로(너무 벌리면 등 상부만).</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 머신 앞 벤치 착석, 발 패드에 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">핸들 잡고 팔 완전 신전 (등 스트레칭)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">상체 90도 직립 유지 (반동 금지)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">팔꿈치를 뒤-아래로 당기며 명치 높이로</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">견갑 모아 1~2초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 완전 신전</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c2_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">덤벨 바이셉스 컬</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">올릴 때 손목 <b>바깥으로 회외</b>하면 피크.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>팔꿈치 몸 옆 고정</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>상체 반동 금지</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 고정·전완 완전 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">전완 올리며 손목 회외</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 내리기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">컨센트레이션 컬</div><div class="ex-meta"><span class="tag t-s">3×12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 피크</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="80" y="80" width="50" height="8" rx="2" fill="currentColor" opacity="0.25"/><line x1="105" y1="35" x2="95" y2="80" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="108" cy="24" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="95" y1="80" x2="72" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="80" x2="118" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="60" x2="74" y2="74" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="74" y1="74" x2="62" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="74" cy="74" r="5" stroke="#D85A30" stroke-width="2" fill="none"/><rect x="53" y="42" width="18" height="6" rx="3" fill="currentColor" opacity="0.5"/><ellipse cx="68" cy="61" rx="8" ry="14" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5" transform="rotate(-25,68,61)"/><text x="130" y="60" font-size="9" fill="#D85A30" font-family="sans-serif">이두근</text><text x="28" y="100" font-size="9" fill="#D85A30" font-family="sans-serif">팔꿈치 고정!</text><line x1="74" y1="68" x2="85" y2="78" stroke="#D85A30" stroke-width="1.5" stroke-dasharray="2,2"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>이두근 단두(피크)</b> — 이두 안쪽이 불룩하게 솟아오르는 부분. 팔꿈치를 허벅지에 고정해서 다른 근육이 개입할 수 없게 만드는 <b>완전 고립 종목</b>. 올릴 때 이두 수축이 선명하게 느껴져야 합니다.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치를 허벅지 안쪽에 <b>압박해서 고정</b>하는 게 핵심입니다. 올리면서 새끼손가락 방향으로 <b>살짝 외회전</b>하면 이두 수축이 강해집니다. 정점에서 2초 버티세요.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치가 허벅지에서 떨어지면 바이셉스 컬이 됩니다. <b>상체를 들썩여 보조하면 안 됩니다</b>. 무게를 낮추더라도 팔꿈치 고정이 우선입니다.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">벤치 끝에 걸터앉아 다리 약간 벌리기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">한쪽 팔꿈치를 같은쪽 허벅지 안쪽에 압박 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">덤벨 완전 신전 (팔 쭉 내리기)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 올리며 새끼손가락 방향 외회전</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">이두 완전 수축 정점 2초 유지</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">3초에 걸쳐 천천히 완전 신전 — 반대쪽 반복</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">컨센트레이션 컬</div><div class="ex-meta"><span class="tag t-s">3×12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 피크</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="80" y="80" width="50" height="8" rx="2" fill="currentColor" opacity="0.25"/><line x1="105" y1="35" x2="95" y2="80" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="108" cy="24" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="95" y1="80" x2="72" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="80" x2="118" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="60" x2="74" y2="74" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="74" y1="74" x2="62" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="74" cy="74" r="5" stroke="#D85A30" stroke-width="2" fill="none"/><rect x="53" y="42" width="18" height="6" rx="3" fill="currentColor" opacity="0.5"/><ellipse cx="68" cy="61" rx="8" ry="14" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5" transform="rotate(-25,68,61)"/><text x="130" y="60" font-size="9" fill="#D85A30" font-family="sans-serif">이두근</text><text x="28" y="100" font-size="9" fill="#D85A30" font-family="sans-serif">팔꿈치 고정!</text><line x1="74" y1="68" x2="85" y2="78" stroke="#D85A30" stroke-width="1.5" stroke-dasharray="2,2"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>이두 단두(피크)</b> — 이두 안쪽이 솟는 부분. 완전 고립이라 수축이 선명해야.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">올리며 새끼손가락 쪽으로 <b>살짝 외회전</b> → 정점 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치가 허벅지에서 떨어지거나 상체를 들썩이면 고립이 풀림 — <b>무게보다 팔꿈치 고정 우선</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">벤치 끝에 걸터앉아 다리 약간 벌리기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">한쪽 팔꿈치를 같은쪽 허벅지 안쪽에 압박 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">덤벨 완전 신전 (팔 쭉 내리기)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 올리며 새끼손가락 방향 외회전</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">이두 완전 수축 정점 2초 유지</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">3초에 걸쳐 천천히 완전 신전 — 반대쪽 반복</div></div></div></details></div></details></div>
 </div>
 <div class="cooldown"><b>🧘 쿨다운:</b> 광배 오버헤드 스트레칭·흉추 회전 각 30초.</div>
 </div>
@@ -623,12 +630,12 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="done-banner"><div class="di">🎉</div><div class="dt">Day 3 완료!</div><div class="ds">하체 완료 💪 충분한 단백질 섭취 잊지 마세요.</div></div>
 <div class="ex-list">
 <div class="ex-wrap"><input type="checkbox" id="c3_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">V스쿼트 머신</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">BootyBuilder V-Squat</span><span class="tag t-m">대퇴사두·둔근·햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>대퇴사두 70%+둔근·햄 30%</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>가슴 앞으로 내밀며</b> 허리 중립.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>니인(무릎 안쪽 무너짐) 절대 금지</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">바벨 승모 위 안정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발 어깨너비·발끝 바깥</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 흡기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">엉덩이 뒤로 빼며 하강</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">허벅지 평행 이하까지</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">지면 밀며 일어서기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">루마니안 데드리프트</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">WATSON</span><span class="tag t-m">햄스트링·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="130" y1="55" x2="130" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="140" y1="55" x2="142" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><ellipse cx="134" cy="75" rx="9" ry="20" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5"/><line x1="25" y1="48" x2="130" y2="56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="16" cy="44" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="65" y1="51" x2="68" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="78" y1="52" x2="80" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="58" y="92" width="30" height="4" rx="2" fill="currentColor" opacity="0.6"/><circle cx="58" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><circle cx="88" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><path d="M155,38 Q168,25 172,45" stroke="#D85A30" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/><text x="155" y="22" font-size="9" fill="#D85A30" font-family="sans-serif">힙 힌지</text><text x="148" y="78" font-size="9" fill="#D85A30" font-family="sans-serif">햄스트링</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text><text x="175" y="98" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">무릎 살짝 굽힘</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">허벅지 뒤쪽(햄스트링)의 <b>길게 늘어나는 느낌</b>이 핵심. 스쿼트처럼 무릎을 구부리는 게 아니라 엉덩이를 뒤로 밀면서 상체를 숙이는 <b>힙 힌지 동작</b>. 허벅지 뒤가 당기는 느낌이 들면 올바른 자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">등을 곧게 유지하고 <b>바벨은 허벅지를 스치듯 내려야</b> 합니다. 내릴 때 "엉덩이를 뒤 벽에 갖다 붙인다"고 상상하면 힙 힌지가 자연스럽게 됩니다. 발끝이 아닌 <b>뒤꿈치로 땅을 밀며</b> 올라오세요.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎이 너무 구부러지면 스쿼트가 됩니다 — 무릎은 살짝만. <b>허리가 둥글게 굽어지면 즉시 중단</b>. 골반이 중립 상태를 유지해야 합니다.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨너비 스탠스, 발끝 정면</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 가슴 펴기 (등 일직선)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 뒤로 밀며 상체 45~90도 숙이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">허벅지 뒤 당김 느끼며 2~3초 버티기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">둔근·햄스트링 수축하며 천천히 직립</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">직립 시 엉덩이를 앞으로 밀며 마무리</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">루마니안 데드리프트</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">WATSON</span><span class="tag t-m">햄스트링·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="130" y1="55" x2="130" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="140" y1="55" x2="142" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><ellipse cx="134" cy="75" rx="9" ry="20" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5"/><line x1="25" y1="48" x2="130" y2="56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="16" cy="44" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="65" y1="51" x2="68" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="78" y1="52" x2="80" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="58" y="92" width="30" height="4" rx="2" fill="currentColor" opacity="0.6"/><circle cx="58" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><circle cx="88" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><path d="M155,38 Q168,25 172,45" stroke="#D85A30" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/><text x="155" y="22" font-size="9" fill="#D85A30" font-family="sans-serif">힙 힌지</text><text x="148" y="78" font-size="9" fill="#D85A30" font-family="sans-serif">햄스트링</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text><text x="175" y="98" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">무릎 살짝 굽힘</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">햄스트링이 <b>길게 늘어나는 느낌</b>이 핵심. 무릎을 굽히는 게 아니라 엉덩이를 뒤로 빼는 <b>힙 힌지</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">바를 허벅지에 스치듯 내리고, <b>뒤꿈치로 땅을 밀며</b> 둔근으로 일어서기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎은 살짝만(많이 굽으면 스쿼트). <b>허리가 굽으면 즉시 중단</b> — 골반 중립.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨너비 스탠스, 발끝 정면</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 가슴 펴기 (등 일직선)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 뒤로 밀며 상체 45~90도 숙이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">허벅지 뒤 당김 느끼며 2~3초 버티기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">둔근·햄스트링 수축하며 천천히 직립</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">직립 시 엉덩이를 앞으로 밀며 마무리</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c3_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">시티드 레그프레스</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">Arsenal / Matrix</span><span class="tag t-m">대퇴사두·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발 위치로 자극 조절. <b>발 높이→햄·둔근</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">무릎 <b>완전히 펴지 말고</b> 약간 남기기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>허리가 벤치에서 뜨면 중단</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발판에 발 어깨너비</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">무릎 90도 이하로 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">허리 벤치 유지하며 밀기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">완전신전 직전 멈춤</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c3_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그컬 (머신)</div><div class="ex-meta"><span class="tag t-s">3×8~12</span><span class="tag t-e">CYBEX / Matrix</span><span class="tag t-m">햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">허벅지 뒤쪽이 <b>쥐어짜이는</b> 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">엉덩이 <b>들리지 않게</b> 고정.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동으로 차는 동작 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">복부 벤치에 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">햄스트링으로 당기기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">최대 수축 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
 <div class="ex-wrap"><input type="checkbox" id="c3_7" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_7" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그 익스텐션</div><div class="ex-meta"><span class="tag t-s">4×10~12</span><span class="tag t-e">레그 익스텐션 머신</span><span class="tag t-m">대퇴사두 완전 고립</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>대퇴사두근 완전 고립</b>. 정점에서 허벅지 앞이 단단히 수축하는 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">발끝을 정강이 쪽으로 당긴 채 올리면 수축이 강해집니다. <b>정점 1~2초 유지</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎 완전 잠금(과신전) 금지. <b>내릴 때 천천히</b>(2~3초) 신장성 수축.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">등받이·좌석 위치 조정 (무릎이 패드 축과 일치)</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발끝 정강이 방향, 복압 잡기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">천천히 올리며 정점 1~2초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2~3초 천천히 내리기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙 어브덕션 (머신)</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">Arsenal / Matrix</span><span class="tag t-m">둔근 중간부·외전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="25" y="28" width="170" height="65" rx="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.25"/><rect x="85" y="68" width="50" height="7" rx="2" fill="currentColor" opacity="0.25"/><line x1="110" y1="32" x2="110" y2="68" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="110" cy="22" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="110" y1="50" x2="82" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="110" y1="50" x2="138" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="103" y1="68" x2="55" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="117" y1="68" x2="165" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="73" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><ellipse cx="147" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><line x1="55" y1="85" x2="38" y2="92" stroke="#D85A30" stroke-width="1.5"/><line x1="165" y1="85" x2="182" y2="92" stroke="#D85A30" stroke-width="1.5"/><text x="62" y="99" font-size="9" fill="#D85A30" font-family="sans-serif">둔근 중간부</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>둔근 중간부(gluteus medius)</b> — 엉덩이 옆쪽 근육. 이 근육이 약하면 스쿼트·데드리프트 때 무릎이 안쪽으로 무너집니다. 골반 안정화의 핵심이고 본인 체형(넓은 골반)에서 특히 중요합니다.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">등받이에 <b>등 전체를 밀착</b>하고 시작하세요. 발끝을 살짝 안쪽으로 향하면 둔근 중간부가 더 잘 개입됩니다. 벌릴 때 빠르게 튕기는 게 아니라 <b>2초 동안 천천히</b> 벌리며 옆 엉덩이 수축을 느껴야 합니다.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체가 한쪽으로 기울면 둔근이 아니라 허리 근육이 일합니다. <b>몸통이 수직으로 고정</b>됐는지 확인하세요. 무게가 너무 무거우면 반동이 생기므로 처음엔 가볍게 시작.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">머신에 앉아 등 등받이에 완전 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발끝 살짝 안쪽, 무릎 살짝 구부림</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 골반 고정 (상체 흔들림 없이)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초에 걸쳐 다리 천천히 벌리기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">최대 외전 지점에서 1초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 원위치</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">사이드 플랭크</div><div class="ex-meta"><span class="tag t-s">3×45초 (각)</span><span class="tag t-e">맨몸</span><span class="tag t-m">복사근·코어</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="10" y1="95" x2="210" y2="95" stroke="currentColor" stroke-width="1" opacity="0.2"/><line x1="30" y1="95" x2="52" y2="70" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="52" y1="70" x2="160" y2="46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><line x1="160" y1="46" x2="188" y2="95" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="95" y1="62" x2="95" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="43" cy="59" r="10" stroke="currentColor" stroke-width="2" fill="none"/><ellipse cx="108" cy="57" rx="28" ry="10" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5" transform="rotate(-12,108,57)"/><line x1="40" y1="50" x2="28" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><text x="90" y="35" font-size="9" fill="#D85A30" font-family="sans-serif">복사근</text><text x="155" y="35" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.5">몸 일직선</text><line x1="52" y1="45" x2="162" y2="38" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>복사근(옆구리 근육)</b>과 코어 측면 안정화. 복부지방률 0.96 개선에 기여하는 코어 종목. 엉덩이를 올리는 힘이 느껴지면 제대로 된 자극입니다.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치가 어깨 바로 아래에 와야 합니다. <b>엉덩이를 바닥에서 최대한 높이 유지</b>하세요. 처음엔 30초부터 시작해서 매주 5초씩 늘리면 됩니다. 무릎을 굽히고 하는 변형 동작이 더 쉬워 처음 배울 때 좋습니다.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">엉덩이가 아래로 처지면 허리에 부담이 집중됩니다. <b>발→어깨가 일직선</b>이 되도록 유지. 목이 아래로 떨어지지 않도록 정면을 보세요.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">한쪽 팔꿈치를 어깨 바로 아래에 지지</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발을 겹치거나 앞뒤로 놓기 (편한 쪽)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 들어올려 몸 일직선 만들기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">위쪽 손은 허리에 or 하늘을 향해</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">45초(목표) 버티기 — 처음엔 30초도 OK</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">반대쪽도 동일하게 수행</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙 어브덕션 (머신)</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">Arsenal / Matrix</span><span class="tag t-m">둔근 중간부·외전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="25" y="28" width="170" height="65" rx="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.25"/><rect x="85" y="68" width="50" height="7" rx="2" fill="currentColor" opacity="0.25"/><line x1="110" y1="32" x2="110" y2="68" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="110" cy="22" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="110" y1="50" x2="82" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="110" y1="50" x2="138" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="103" y1="68" x2="55" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="117" y1="68" x2="165" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="73" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><ellipse cx="147" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><line x1="55" y1="85" x2="38" y2="92" stroke="#D85A30" stroke-width="1.5"/><line x1="165" y1="85" x2="182" y2="92" stroke="#D85A30" stroke-width="1.5"/><text x="62" y="99" font-size="9" fill="#D85A30" font-family="sans-serif">둔근 중간부</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>중둔근(엉덩이 옆)</b> — 약하면 스쿼트·데드 때 무릎이 안으로 무너짐. 넓은 골반 체형에 특히 중요.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">발끝을 살짝 안쪽으로, <b>2초에 걸쳐 천천히</b> 벌리며 옆 엉덩이 수축.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체가 기울면 허리가 대신 일함 — <b>몸통 수직 고정</b>. 무거우면 반동 생기니 가볍게.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">머신에 앉아 등 등받이에 완전 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발끝 살짝 안쪽, 무릎 살짝 구부림</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 골반 고정 (상체 흔들림 없이)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초에 걸쳐 다리 천천히 벌리기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">최대 외전 지점에서 1초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 원위치</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">사이드 플랭크</div><div class="ex-meta"><span class="tag t-s">3×45초 (각)</span><span class="tag t-e">맨몸</span><span class="tag t-m">복사근·코어</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="10" y1="95" x2="210" y2="95" stroke="currentColor" stroke-width="1" opacity="0.2"/><line x1="30" y1="95" x2="52" y2="70" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="52" y1="70" x2="160" y2="46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><line x1="160" y1="46" x2="188" y2="95" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="95" y1="62" x2="95" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="43" cy="59" r="10" stroke="currentColor" stroke-width="2" fill="none"/><ellipse cx="108" cy="57" rx="28" ry="10" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5" transform="rotate(-12,108,57)"/><line x1="40" y1="50" x2="28" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><text x="90" y="35" font-size="9" fill="#D85A30" font-family="sans-serif">복사근</text><text x="155" y="35" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.5">몸 일직선</text><line x1="52" y1="45" x2="162" y2="38" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>복사근(옆구리)</b>·코어 측면 안정. 복부지방률 개선에 기여하는 코어 종목.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치는 어깨 바로 아래. 처음엔 30초→매주 5초씩(무릎 굽힌 변형으로 시작 가능).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>발→어깨 일직선</b> 유지 — 엉덩이가 처지면 허리 부담. 목은 정면.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">한쪽 팔꿈치를 어깨 바로 아래에 지지</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발을 겹치거나 앞뒤로 놓기 (편한 쪽)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 들어올려 몸 일직선 만들기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">위쪽 손은 허리에 or 하늘을 향해</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">45초(목표) 버티기 — 처음엔 30초도 OK</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">반대쪽도 동일하게 수행</div></div></div></details></div></details></div>
 </div>
 <div class="cooldown"><b>🧘 쿨다운:</b> 대퇴사두·햄스트링·둔근 각 30초. 폼롤러 IT밴드 권장.</div>
 </div>
@@ -1016,13 +1023,17 @@ const EX_CUES={
 const ExLog={
   date:new Date().toISOString().slice(0,10),
   data:{},
+  plan:{},
   rest:{name:'',endAt:0,total:0,int:null},
 
   async init(){
     await this.load();
+    await this.loadPlan();
     this.injectBar();
     this.injectLogs();
     this.injectAddBtns();
+    this.injectDeleteBtns();
+    this.applyPlan();
     this.injectTargets();
     this.refresh();
     augmentCards();
@@ -1035,6 +1046,78 @@ const ExLog={
   fmt(d){const today=new Date().toISOString().slice(0,10);const s=new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});return d===today?'오늘 ('+s+')':s;},
   session(){return this.data[this.date]||{day:this.dayType(this.date),exercises:[]};},
   setSession(s){this.data[this.date]=s;this.save();},
+
+  // ── 데이 플랜 편집 (DB에서 구성 · 추가/삭제 · 영속) ──
+  PANEL_DAY:['Push','Pull','Legs','Push+','Pull+','Legs+','REST'],
+  DAY_CATS:{Push:['push','small'],'Push+':['push','small'],Pull:['pull','small'],'Pull+':['pull','small'],Legs:['legs','core'],'Legs+':['legs','core']},
+  panelDayOf(panel){const m=((panel&&panel.className)||'').match(/dp([1-7])/);return m?this.PANEL_DAY[+m[1]-1]:'Push';},
+  async loadPlan(){try{const r=await window.storage.get('plan_v2');if(r)this.plan=JSON.parse(r.value);}catch(_){}},
+  savePlan(){try{window.storage.set('plan_v2',JSON.stringify(this.plan));}catch(_){}},
+  planFor(day){if(!this.plan[day])this.plan[day]={add:[],rm:[]};return this.plan[day];},
+  libByName(name){const L=window.EXERCISE_LIBRARY||[];return L.find(e=>e.name===name)||L.find(e=>(e.aka||[]).includes(name));},
+  _tagBtn(n){return '<button class="wl-picker-tag" onclick="ExLog.addEx(\''+String(n).replace(/'/g,"\\'")+'\',this)">'+n+'</button>';},
+
+  dbCardInner(e,name){
+    const nm=name||(e&&e.name)||'';
+    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"></div></details>';}
+    const stim=e.target||'';const tip=e.tip||e.grip||'';const warn=e.warn||'통증이 느껴지면 즉시 중단.';
+    const tags='<span class="tag t-s">'+(e.sets||'')+'</span>'+(e.mus?'<span class="tag t-m">'+e.mus+'</span>':'');
+    return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">'+stim+'</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">'+tip+'</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">'+warn+'</div></div></div></div></details>';
+  },
+  _addDelBtn(card,name){
+    const sm=card.querySelector('summary');if(!sm||sm.querySelector('.ex-del-btn'))return;
+    const b=document.createElement('button');b.className='ex-del-btn';b.type='button';b.textContent='✕';b.title='이 운동 빼기';
+    b.setAttribute('onclick','event.stopPropagation();event.preventDefault();ExLog.removeEx(this)');
+    const chev=sm.querySelector('.chev');if(chev)sm.insertBefore(b,chev);else sm.appendChild(b);
+  },
+  injectDeleteBtns(){
+    document.querySelectorAll('.day-panel .ex-wrap:not(.custom-ex) details.ex-card').forEach(card=>this._addDelBtn(card));
+  },
+  buildCardEl(name){
+    const wrap=document.createElement('div');wrap.className='ex-wrap custom-ex';wrap.dataset.cname=name;
+    const newId='cx_'+Math.random().toString(36).slice(2,8);
+    const match=[...document.querySelectorAll('.day-panel .ex-wrap:not(.custom-ex) .ex-nm')].find(el=>el.textContent.trim()===name);
+    let card;
+    if(match){
+      card=match.closest('details.ex-card').cloneNode(true);
+      ['.ex-log','.ex-extra','.ex-week-target','.ex-cue','.ex-del-btn'].forEach(s=>card.querySelector(s)?.remove());
+    }else{
+      const tmp=document.createElement('div');tmp.innerHTML=this.dbCardInner(this.libByName(name),name);card=tmp.firstElementChild;
+    }
+    const cb=document.createElement('input');cb.type='checkbox';cb.className='exck';cb.id=newId;
+    const lbl=card.querySelector('.ck-btn');if(lbl){lbl.setAttribute('for',newId);lbl.setAttribute('onclick','event.stopPropagation()');}
+    this._addDelBtn(card,name);
+    wrap.appendChild(cb);wrap.appendChild(card);
+    const det=card.querySelector('.ex-detail');
+    if(det&&!det.querySelector('.ex-log')){const log=document.createElement('div');log.className='ex-log';log.dataset.exname=name;log.innerHTML=this.makeLogHtml();det.appendChild(log);}
+    return wrap;
+  },
+  removeEx(btn){
+    const wrap=btn.closest('.ex-wrap');const panel=btn.closest('.day-panel');if(!wrap||!panel)return;
+    const name=(wrap.querySelector('.ex-nm')?.textContent||wrap.dataset.cname||'').trim();
+    const p=this.planFor(this.panelDayOf(panel));
+    if(wrap.classList.contains('custom-ex')){
+      p.add=(p.add||[]).filter(n=>n!==name);
+      const lab=wrap.previousElementSibling;if(lab&&lab.classList.contains('custom-ex-label'))lab.remove();
+      wrap.remove();
+    }else{
+      if(!(p.rm||[]).includes(name))(p.rm=p.rm||[]).push(name);
+      wrap.style.display='none';
+    }
+    this.savePlan();this.refresh();
+  },
+  applyPlan(){
+    document.querySelectorAll('.day-panel').forEach(panel=>{
+      const day=this.panelDayOf(panel);const p=this.plan[day];if(!p)return;
+      (p.rm||[]).forEach(name=>{const n=[...panel.querySelectorAll('.ex-wrap:not(.custom-ex) .ex-nm')].find(el=>el.textContent.trim()===name);if(n)n.closest('.ex-wrap').style.display='none';});
+      const area=panel.querySelector('.ex-custom-area');if(!area)return;
+      (p.add||[]).forEach(name=>{
+        if([...area.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name))return;
+        const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';
+        area.appendChild(lab);area.appendChild(this.buildCardEl(name));
+      });
+    });
+  },
 
   prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=d.toISOString().slice(0,10);this.updateBar();this.injectTargets();this.refresh();},
   next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=d.toISOString().slice(0,10);this.updateBar();this.injectTargets();this.refresh();},
@@ -1084,93 +1167,54 @@ const ExLog={
 
   togglePicker(btn){
     const picker=btn.nextElementSibling;
-    if(picker.style.display==='none'){
-      const day=this.dayType(this.date);
-      const panel=btn.closest('.day-panel');
-      const used=new Set([...panel.querySelectorAll('.ex-nm')].map(e=>e.textContent.trim()));
-      const avail=(EL_DAY_EX[day]||[]).filter(n=>!used.has(n));
-      const tagId='pt_'+Date.now();
-      picker.innerHTML=`<div class="wl-picker-title">${day} 종목 추가 (${avail.length}개)</div><input class="wl-picker-search" placeholder="🔍 검색..." oninput="ExLog.filterPicker(this,'${tagId}','${avail.map(n=>n.replace(/'/g,"&apos;")).join('|')}')"><div class="wl-picker-tags" id="${tagId}">${avail.map(n=>`<button class="wl-picker-tag" onclick="ExLog.addEx('${n.replace(/'/g,"\\'")}',this)">${n}</button>`).join('')}</div><div class="wl-custom-row"><input class="wl-custom-input" id="el-ci" placeholder="직접 입력..."><button class="wl-confirm-btn" onclick="ExLog.addEx(document.getElementById('el-ci').value,this)">추가</button><button class="wl-cancel-btn" onclick="this.closest('.ex-add-picker').style.display='none'">✕</button></div>`;
-      picker.style.display='block';
-    }else{picker.style.display='none';}
+    if(picker.style.display!=='none'){picker.style.display='none';return;}
+    const panel=btn.closest('.day-panel');const day=this.panelDayOf(panel);
+    picker.dataset.day=day;
+    const tagId='pt_'+Date.now();
+    const L=window.EXERCISE_LIBRARY||[];
+    picker.innerHTML='<div class="wl-picker-title">'+day+' 운동 추가 · 도감 '+L.length+'종에서</div>'
+      +'<input class="wl-picker-search" placeholder="🔍 전체 검색 (이름·부위)..." oninput="ExLog.filterPicker(this,\''+tagId+'\')">'
+      +'<div class="wl-picker-tags" id="'+tagId+'"></div>'
+      +'<div class="wl-custom-row"><input class="wl-custom-input" id="el-ci" placeholder="직접 입력..."><button class="wl-confirm-btn" onclick="ExLog.addEx(document.getElementById(\'el-ci\').value,this)">추가</button><button class="wl-cancel-btn" onclick="this.closest(\'.ex-add-picker\').style.display=\'none\'">✕</button></div>';
+    picker.style.display='block';
+    this._fillPicker(picker,tagId,'');
   },
+  _shownNames(panel){const set=new Set();panel.querySelectorAll('.ex-wrap').forEach(w=>{if(w.style.display!=='none'){const n=w.querySelector('.ex-nm');if(n)set.add(n.textContent.trim());}});return set;},
+  _fillPicker(picker,tagId,q){
+    const el=picker.querySelector('#'+tagId);if(!el)return;
+    const panel=picker.closest('.day-panel');const day=picker.dataset.day;
+    const cats=this.DAY_CATS[day]||[];const shown=this._shownNames(panel);
+    const L=window.EXERCISE_LIBRARY||[];q=(q||'').trim().toLowerCase();
+    let list;
+    if(!q)list=L.filter(e=>cats.includes(e.cat)&&!shown.has(e.name));
+    else list=L.filter(e=>!shown.has(e.name)&&(e.name.toLowerCase().includes(q)||(e.mus||'').toLowerCase().includes(q)));
+    el.innerHTML=list.length?list.map(e=>this._tagBtn(e.name)).join(''):'<span class="wl-picker-empty">'+(q?'결과 없음':'추가할 종목이 없습니다')+'</span>';
+  },
+  filterPicker(input,tagId){const picker=input.closest('.ex-add-picker');if(picker)this._fillPicker(picker,tagId,input.value);},
 
   addEx(name,triggerEl){
-    name=name?.trim();if(!name)return;
-    const s=this.session();
-    if(!s.exercises.find(e=>e.name===name)){s.exercises.push({name,sets:[]});this.setSession(s);}
-    triggerEl.closest('.ex-add-picker').style.display='none';
-
-    const panel=triggerEl.closest('.day-panel');
-    const area=panel?.querySelector('.ex-custom-area');
-    if(!area||area.querySelector(`[data-cname="${name}"]`))return;
-
-    // 기존 카드에서 form cue 복제
-    const match=[...document.querySelectorAll('.ex-nm')].find(el=>el.textContent.trim()===name);
-    const wrap=document.createElement('div');
-    wrap.className='ex-wrap custom-ex';wrap.dataset.cname=name;
-
-    if(match){
-      const origCard=match.closest('details.ex-card');
-      const cloned=origCard.cloneNode(true);
-      cloned.querySelector('.ex-log')?.remove();
-      const newId='cx_'+Date.now();
-      const cb=document.createElement('input');
-      cb.type='checkbox';cb.className='exck';cb.id=newId;
-      const lbl=cloned.querySelector('.ck-btn');
-      if(lbl){lbl.setAttribute('for',newId);lbl.setAttribute('onclick','event.stopPropagation()');}
-      wrap.appendChild(cb);wrap.appendChild(cloned);
-    }else{
-      wrap.innerHTML=`<details class="ex-card"><summary><div class="ex-info"><div class="ex-nm">${name}</div></div><span class="chev">▾</span></summary><div class="ex-detail"></div></details>`;
-    }
-
-    area.appendChild(wrap);
-    const lbl=document.createElement('span');
-    lbl.className='custom-ex-label';lbl.textContent='+ 추가됨';
-    area.insertBefore(lbl,wrap);
-
-    // 새 카드에 log 섹션 주입
-    const newDet=wrap.querySelector('.ex-detail');
-    if(newDet&&!newDet.querySelector('.ex-log')){
-      const log=document.createElement('div');
-      log.className='ex-log';log.dataset.exname=name;
-      log.innerHTML=this.makeLogHtml();
-      newDet.appendChild(log);
-    }
-    this.refresh();
-    this.injectTargets();
+    name=(name||'').trim();if(!name)return;
+    const picker=triggerEl.closest('.ex-add-picker');if(picker)picker.style.display='none';
+    const panel=triggerEl.closest('.day-panel');if(!panel)return;
+    const p=this.planFor(this.panelDayOf(panel));
+    const s=this.session();if(!s.exercises.find(e=>e.name===name)){s.exercises.push({name,sets:[]});this.setSession(s);}
+    // 숨겨진 기본 카드면 다시 표시
+    const staticW=[...panel.querySelectorAll('.ex-wrap:not(.custom-ex)')].find(w=>{const n=w.querySelector('.ex-nm');return n&&n.textContent.trim()===name;});
+    if(staticW){p.rm=(p.rm||[]).filter(n=>n!==name);staticW.style.display='';this.savePlan();this.refresh();this.injectTargets();return;}
+    const area=panel.querySelector('.ex-custom-area');if(!area)return;
+    if([...area.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name)){this.refresh();return;}
+    if(!(p.add||[]).includes(name))(p.add=p.add||[]).push(name);
+    const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';
+    area.appendChild(lab);area.appendChild(this.buildCardEl(name));
+    this.savePlan();this.refresh();this.injectTargets();augmentCards();
   },
 
   addExternal(name){
     name=(name||'').trim();if(!name)return false;
-    const s=this.session();
-    if(!s.exercises.find(e=>e.name===name)){s.exercises.push({name,sets:[]});this.setSession(s);}
-    const dr=document.querySelector('.day-r:checked');
-    const idx=dr?dr.id.replace('d',''):'1';
-    const panel=document.querySelector('.day-panel.dp'+idx);
-    if(panel){
-      const area=panel.querySelector('.ex-custom-area');
-      const inPanel=[...panel.querySelectorAll('.ex-nm')].some(el=>el.textContent.trim()===name);
-      if(area&&!inPanel&&!area.querySelector('[data-cname="'+name+'"]')){
-        const match=[...document.querySelectorAll('.ex-nm')].find(el=>el.textContent.trim()===name);
-        const wrap=document.createElement('div');wrap.className='ex-wrap custom-ex';wrap.dataset.cname=name;
-        if(match){
-          const cloned=match.closest('details.ex-card').cloneNode(true);
-          cloned.querySelector('.ex-log')?.remove();cloned.querySelector('.ex-extra')?.remove();
-          const newId='cx_'+Date.now();
-          const cb=document.createElement('input');cb.type='checkbox';cb.className='exck';cb.id=newId;
-          const lbl=cloned.querySelector('.ck-btn');if(lbl){lbl.setAttribute('for',newId);lbl.setAttribute('onclick','event.stopPropagation()');}
-          wrap.appendChild(cb);wrap.appendChild(cloned);
-        }else{
-          wrap.innerHTML='<details class="ex-card"><summary><div class="ex-info"><div class="ex-nm">'+name+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"></div></details>';
-        }
-        area.appendChild(wrap);
-        const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';area.insertBefore(lab,wrap);
-        const newDet=wrap.querySelector('.ex-detail');
-        if(newDet&&!newDet.querySelector('.ex-log')){const log=document.createElement('div');log.className='ex-log';log.dataset.exname=name;log.innerHTML=this.makeLogHtml();newDet.appendChild(log);}
-      }
-    }
-    this.refresh();this.injectTargets();augmentCards();
+    const dr=document.querySelector('.day-r:checked');const idx=dr?dr.id.replace('d',''):'1';
+    const panel=document.querySelector('.day-panel.dp'+idx);if(!panel)return false;
+    const trig=panel.querySelector('.ex-add-btn')||panel.querySelector('.ex-add-row');if(!trig)return false;
+    this.addEx(name,trig);
     return true;
   },
 
@@ -1287,11 +1331,6 @@ const ExLog={
     }
   },
 
-  filterPicker(input,tagId,allStr){
-    const q=input.value.toLowerCase();const all=allStr.split('|');
-    const el=document.getElementById(tagId);if(!el)return;
-    el.innerHTML=all.filter(n=>n.toLowerCase().includes(q)).map(n=>`<button class="wl-picker-tag" onclick="ExLog.addEx('${n.replace(/'/g,"\\'")}',this)">${n}</button>`).join('');
-  },
   // ── 도전 무게 자동 산출 ──
   isCompound(name){return /스쿼트|데드|벤치|프레스|로우|풀업|런지|딥스|쓰러스트|스플릿/.test(name);},
   isTimed(name){return /플랭크|데드행/.test(name);},
@@ -1750,7 +1789,7 @@ const MuscleMap={
       +'<div class="mm-scr cue"><span class="tg">포인트</span><span class="tx">'+info.cue+'</span></div>'
       +'</div>'
       +(info.mistake?'<div class="mm-mistake"><span class="mm-mistake-t">⚠ 흔한 실수</span>'+info.mistake+'</div>':'')
-      +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'');
+      +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'<div class="mm-noex">현재 루틴에선 복합 종목에서 <b>보조로</b> 단련됩니다. 전용 강화가 필요하면 📚 도감에서 종목을 찾아 추가하세요.</div>');
   }
 };
 function libLookup(){
