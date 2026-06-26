@@ -330,6 +330,12 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .sess-sum{margin:10px 16px 0;padding:9px 13px;background:#eef3f7;border:1px solid #cdd9e3;border-radius:10px;font-size:13px;color:#33415c;text-align:center}
 .sess-sum b{color:#185FA5}
 .wl-set-chip .pr-trophy{margin-left:2px}
+.wl-set-chip{cursor:pointer;transition:filter .1s}
+.wl-set-chip:active{filter:brightness(.9)}
+.wl-picker-restore{border-color:#bcd2c2;background:#f1f8f3;color:#1f5b39}
+.wl-picker-restore::before{content:'↩';color:#3a8d5c}
+.wl-del-btn{flex-shrink:0;border:none;background:#fbeaea;color:#c62828;font-size:15px;width:34px;height:34px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.wl-del-btn:active{background:#f5d6d6}
 .motiv-bar{margin:10px 16px 0;padding:10px 13px;background:linear-gradient(135deg,#fff4e0,#ffe9c7);border:1px solid #f0d39a;border-radius:10px;font-size:13px;color:#7a4f10;text-align:center;font-weight:600}
 .ex-cue{margin-bottom:8px;border:1px solid #e3d9c4;border-radius:8px;background:#fbf8f1;overflow:hidden}
 .ex-cue>summary{list-style:none;cursor:pointer;padding:7px 10px;font-size:12px;font-weight:600;color:#8a6d2f}
@@ -1140,7 +1146,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
   },
 
   injectLogs(){
@@ -1180,15 +1186,23 @@ const ExLog={
     this._fillPicker(picker,tagId,'');
   },
   _shownNames(panel){const set=new Set();panel.querySelectorAll('.ex-wrap').forEach(w=>{if(w.style.display!=='none'){const n=w.querySelector('.ex-nm');if(n)set.add(n.textContent.trim());}});return set;},
+  _hiddenStaticNames(panel){const arr=[];panel.querySelectorAll('.ex-wrap:not(.custom-ex)').forEach(w=>{if(w.style.display==='none'){const n=w.querySelector('.ex-nm');if(n)arr.push(n.textContent.trim());}});return arr;},
+  _tagRestoreBtn(n){return '<button class="wl-picker-tag wl-picker-restore" onclick="ExLog.addEx(\''+String(n).replace(/'/g,"\\'")+'\',this)" title="지웠던 기본 운동 복구">'+n+'</button>';},
   _fillPicker(picker,tagId,q){
     const el=picker.querySelector('#'+tagId);if(!el)return;
     const panel=picker.closest('.day-panel');const day=picker.dataset.day;
     const cats=this.DAY_CATS[day]||[];const shown=this._shownNames(panel);
     const L=window.EXERCISE_LIBRARY||[];q=(q||'').trim().toLowerCase();
+    // 지웠던 기본 카드(복구 후보) — 도감 매칭 여부와 무관하게 항상 노출
+    let hidden=this._hiddenStaticNames(panel);
+    if(q)hidden=hidden.filter(n=>n.toLowerCase().includes(q));
+    const hiddenSet=new Set(hidden);
+    const restoreHtml=hidden.map(n=>this._tagRestoreBtn(n)).join('');
     let list;
-    if(!q)list=L.filter(e=>cats.includes(e.cat)&&!shown.has(e.name));
-    else list=L.filter(e=>!shown.has(e.name)&&(e.name.toLowerCase().includes(q)||(e.mus||'').toLowerCase().includes(q)));
-    el.innerHTML=list.length?list.map(e=>this._tagBtn(e.name)).join(''):'<span class="wl-picker-empty">'+(q?'결과 없음':'추가할 종목이 없습니다')+'</span>';
+    if(!q)list=L.filter(e=>cats.includes(e.cat)&&!shown.has(e.name)&&!hiddenSet.has(e.name));
+    else list=L.filter(e=>!shown.has(e.name)&&!hiddenSet.has(e.name)&&(e.name.toLowerCase().includes(q)||(e.mus||'').toLowerCase().includes(q)));
+    const libHtml=list.map(e=>this._tagBtn(e.name)).join('');
+    el.innerHTML=(restoreHtml+libHtml)||'<span class="wl-picker-empty">'+(q?'결과 없음':'추가할 종목이 없습니다')+'</span>';
   },
   filterPicker(input,tagId){const picker=input.closest('.ex-add-picker');if(picker)this._fillPicker(picker,tagId,input.value);},
 
@@ -1222,6 +1236,8 @@ const ExLog={
     const log=btn.closest('.ex-log');
     const inp=log.querySelector('.ex-log-input');
     const sn=log.querySelector('.ex-log-sn');
+    log.dataset.editIdx='';                                  // 신규 입력 모드
+    const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(sn)sn.textContent=(ex?.sets.length||0)+1;
@@ -1229,8 +1245,29 @@ const ExLog={
     if(!ex?.sets.length){const prev=this.prevSession(log.dataset.exname);if(prev&&prev.sets.length)lastW=prev.sets[prev.sets.length-1].weight;}
     const wi=inp.querySelector('.wl-kg-input');
     if(wi)wi.value=lastW||'';
+    inp.querySelector('.wl-rp-input').value='';
     inp.style.display='flex';btn.style.display='none';
     setTimeout(()=>wi?.focus(),50);
+  },
+
+  editSet(chip){
+    const log=chip.closest('.ex-log');if(!log)return;
+    const inp=log.querySelector('.ex-log-input');
+    const sn=log.querySelector('.ex-log-sn');
+    const i=parseInt(chip.dataset.i);
+    const s=this.session();
+    const ex=s.exercises.find(e=>e.name===log.dataset.exname);
+    if(!ex||!ex.sets[i])return;
+    log.dataset.editIdx=String(i);                           // 수정 모드
+    if(sn)sn.textContent=(i+1)+' 수정';
+    const wi=inp.querySelector('.wl-kg-input');
+    const ri=inp.querySelector('.wl-rp-input');
+    if(wi)wi.value=ex.sets[i].weight;
+    if(ri)ri.value=ex.sets[i].reps;
+    const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
+    const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
+    inp.style.display='flex';
+    setTimeout(()=>ri?.focus(),50);
   },
 
   _prE1(s){return s.weight*(1+s.reps/30);},
@@ -1264,19 +1301,28 @@ const ExLog={
     const w=parseFloat(inp.querySelector('.wl-kg-input').value)||0;
     const r=parseInt(inp.querySelector('.wl-rp-input').value)||0;
     if(!w&&!r){this.cancelSet(el);return;}
-    const isPR=this.checkPR(log.dataset.exname,w,r);
+    const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);}
+    if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
+      // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음)
+      ex.sets[+editIdx]={weight:w,reps:r};
+      this.setSession(s);
+      this.cancelSet(el);
+      this.refresh();
+      this._syncSoon();
+      return;
+    }
+    // 신규 세트
+    const isPR=this.checkPR(log.dataset.exname,w,r);
     ex.sets.push({weight:w,reps:r});
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
     if(isPR)this.showPR(log.dataset.exname);
-    if(this.date===new Date().toISOString().slice(0,10)){
-      this.startRest(log.dataset.exname);
-      this.getScriptUrl().then(url=>{if(url)this.syncToSheets(url);});
-    }
+    if(this.date===new Date().toISOString().slice(0,10))this.startRest(log.dataset.exname);
+    this._syncSoon();
   },
 
   cancelSet(el){
@@ -1284,8 +1330,23 @@ const ExLog={
     const log=inp.closest('.ex-log');
     inp.querySelector('.wl-rp-input').value='';
     inp.style.display='none';
+    log.dataset.editIdx='';
+    const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
     const ab=log.querySelector('.ex-log-add-btn');
     if(ab)ab.style.display='';
+  },
+
+  deleteSet(el){
+    const inp=el.closest('.ex-log-input');
+    const log=inp.closest('.ex-log');
+    const editIdx=log.dataset.editIdx;
+    if(editIdx===''||editIdx==null){this.cancelSet(el);return;}
+    const s=this.session();
+    const ex=s.exercises.find(e=>e.name===log.dataset.exname);
+    if(ex&&ex.sets[+editIdx]){ex.sets.splice(+editIdx,1);this.setSession(s);}
+    this.cancelSet(el);
+    this.refresh();
+    this._syncSoon();
   },
 
   prevMaxWeight(name){
@@ -1310,12 +1371,12 @@ const ExLog={
       const todayMax=Math.max(...ex.sets.map(st=>st.weight));
       const isNewPR=todayMax>0&&prevMax>0&&todayMax>prevMax;
       let prShown=false;
-      chips.innerHTML=ex.sets.map(set=>{
+      chips.innerHTML=ex.sets.map((set,i)=>{
         const cls=set.reps>=8?'hit':set.reps>=6?'':'miss';
         totSets++;totVol+=set.weight*set.reps;
         let badge='';
         if(isNewPR&&set.weight===todayMax&&!prShown){badge='<span class="pr-trophy" title="개인 기록 갱신">🏆</span>';prShown=true;}
-        return`<span class="wl-set-chip ${cls}">${set.weight}×${set.reps}${badge}</span>`;
+        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${set.weight}×${set.reps}${badge}</span>`;
       }).join('');
     });
     const sum=document.getElementById('sess-sum');
@@ -1450,6 +1511,11 @@ const ExLog={
   async getScriptUrl(){
     try{const r=await window.storage.get('gs_script_url');return r?r.value:'';}catch(_){return'';}
   },
+  // 연속 입력(세트 여러 개)을 한 번의 전송으로 합치는 디바운스. URL이 없으면 자동 무시.
+  _syncSoon(){
+    clearTimeout(this._syncTimer);
+    this._syncTimer=setTimeout(()=>{this.getScriptUrl().then(url=>{if(url)this.syncToSheets(url);});},1500);
+  },
   async openSync(){
     const url=await this.getScriptUrl();
     const inp=document.getElementById('sync-url-inp');
@@ -1470,6 +1536,7 @@ const ExLog={
   async syncToSheets(url){
     url=url||(await this.getScriptUrl());
     if(!url)return;
+    clearTimeout(this._syncTimer);            // 대기 중 디바운스가 있으면 취소(중복 전송 방지)
     const btn=document.getElementById('log-sync-btn');
     if(btn){btn.classList.add('syncing');btn.textContent='⏳';}
     try{
@@ -1483,9 +1550,9 @@ const ExLog={
           });
         });
       });
-      // 헤더를 직접 지정하지 않으면 fetch가 자동으로 text/plain;charset=UTF-8 적용
-      // → simple request라 preflight 없이 전송되고, 응답도 읽을 수 있음
-      const res=await fetch(url,{method:'POST',body:JSON.stringify({rows}),redirect:'follow'});
+      // mode:'replace' → Apps Script가 기존 데이터 행을 비우고 rows로 새로 씀(중복 방지·수정/삭제 반영).
+      // 헤더 미지정 시 fetch가 text/plain을 적용 → preflight 없는 simple request라 응답도 읽을 수 있음.
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'replace',rows}),redirect:'follow'});
       let okFlag=true;
       try{const json=await res.json();okFlag=json.ok!==false;}catch(_){okFlag=res.ok;}
       if(btn){btn.textContent=okFlag?'✓':'❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
