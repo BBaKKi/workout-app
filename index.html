@@ -292,7 +292,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-add-picker{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-top:8px}
 .ex-custom-area{margin-top:4px}
 .ex-custom-area .ex-wrap{margin-bottom:8px}
-.custom-ex-label{font-size:11px;color:#D85A30;font-weight:500;padding:6px 14px 2px;display:block}
+.ex-list .custom-ex>.ex-card{border-left:3px solid #E8A87C}
 .ex-del-btn{background:none;border:none;color:#c7c7cc;font-size:13px;line-height:1;padding:5px 7px;cursor:pointer;flex-shrink:0;margin-left:2px;border-radius:6px}
 .ex-del-btn:hover,.ex-del-btn:active{color:#D85A30;background:#fbeee9}
 .ex-swap-btn{background:none;border:none;font-size:13px;line-height:1;padding:5px 6px;cursor:pointer;flex-shrink:0;border-radius:6px;opacity:.85}
@@ -1178,7 +1178,6 @@ const ExLog={
     const p=this.planFor(this.panelDayOf(panel));
     if(wrap.classList.contains('custom-ex')){
       p.add=(p.add||[]).filter(n=>n!==name);
-      const lab=wrap.previousElementSibling;if(lab&&lab.classList.contains('custom-ex-label'))lab.remove();
       wrap.remove();
     }else{
       const rmName=wrap.dataset.origname||name;
@@ -1206,12 +1205,13 @@ const ExLog={
         const wrap=statics().find(w=>w.dataset.origname===name)||(statics().map(w=>w).find(w=>(w.querySelector('.ex-nm')?.textContent||'').trim()===name));
         if(wrap)wrap.style.display='none';
       });
-      // 3) 추가 운동
-      const area=panel.querySelector('.ex-custom-area');if(!area)return;
+      // 3) 추가 운동 — 메인 리스트(.ex-list) 끝에 plan.add 순서대로 통합
+      const list=panel.querySelector('.ex-list');if(!list)return;
+      panel.querySelectorAll('.custom-ex-label').forEach(el=>el.remove()); // 구버전 '+추가됨' 구분 라벨 정리
       (p.add||[]).forEach(name=>{
-        if([...area.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name))return;
-        const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';
-        area.appendChild(lab);area.appendChild(this.buildCardEl(name));
+        let w=[...panel.querySelectorAll('.custom-ex')].find(w=>w.dataset.cname===name);
+        if(!w)w=this.buildCardEl(name);
+        list.appendChild(w); // 기존 노드면 리스트 끝으로 이동(순서 정렬), 없으면 신규 추가
       });
     });
   },
@@ -1306,11 +1306,10 @@ const ExLog={
     // 숨겨진 기본 카드면 다시 표시
     const staticW=[...panel.querySelectorAll('.ex-wrap:not(.custom-ex)')].find(w=>{const n=w.querySelector('.ex-nm');return n&&n.textContent.trim()===name;});
     if(staticW){p.rm=(p.rm||[]).filter(n=>n!==name);staticW.style.display='';this.savePlan();this.refresh();this.injectTargets();return;}
-    const area=panel.querySelector('.ex-custom-area');if(!area)return;
-    if([...area.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name)){this.refresh();return;}
+    const list=panel.querySelector('.ex-list');if(!list)return;
+    if([...panel.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name)){this.refresh();return;}
     if(!(p.add||[]).includes(name))(p.add=p.add||[]).push(name);
-    const lab=document.createElement('span');lab.className='custom-ex-label';lab.textContent='+ 추가됨';
-    area.appendChild(lab);area.appendChild(this.buildCardEl(name));
+    list.appendChild(this.buildCardEl(name));
     this.savePlan();this.refresh();this.injectTargets();augmentCards();
   },
 
@@ -1642,6 +1641,8 @@ const ExLog={
           });
         });
       });
+      // 안전장치: 보낼 데이터가 없으면 전송하지 않음(빈 스냅샷이 시트를 비우는 사고 방지)
+      if(rows.length===0){if(btn){btn.textContent='☁️';btn.classList.remove('syncing');}return;}
       // mode:'replace' → Apps Script가 기존 데이터 행을 비우고 rows로 새로 씀(중복 방지·수정/삭제 반영).
       // 헤더 미지정 시 fetch가 text/plain을 적용 → preflight 없는 simple request라 응답도 읽을 수 있음.
       const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'replace',rows}),redirect:'follow'});
