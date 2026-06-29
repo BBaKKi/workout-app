@@ -1118,7 +1118,7 @@ const ExLog={
     let panel=det.querySelector('.ex-swap');
     if(panel&&panel.classList.contains('open')){panel.classList.remove('open');panel.innerHTML='';return;}
     if(!panel){panel=document.createElement('div');panel.className='ex-swap';det.insertBefore(panel,det.firstChild);}
-    const mu=(window.PlanApp&&PlanApp.muscleOf)?PlanApp.muscleOf(name):null;
+    const mu=(typeof PlanApp!=='undefined'&&PlanApp.muscleOf)?PlanApp.muscleOf(name):null;
     const bucket=mu?mu.p:null;
     const lib=window.EXERCISE_LIBRARY||[];
     const alts=bucket?lib.filter(function(e){const m=PlanApp.muscleOf(e.name);return m&&m.p===bucket&&e.name!==name;}):[];
@@ -1127,10 +1127,28 @@ const ExLog={
     else{panel.innerHTML='<div class="ex-swap-hd">🔄 같은 부위('+(bucket||'')+') — 탭하면 이 운동과 교체</div>'+alts.slice(0,12).map(function(e){return '<div class="ex-swap-row"><span class="ex-swap-nm">'+e.name+'</span><button class="ex-swap-pick" onclick="ExLog.swapEx(this,\''+e.name.replace(/'/g,"\\'")+'\')">교체</button></div>';}).join('');}
     panel.classList.add('open');
   },
+  _transformWrap(wrap,newName){
+    // wrap의 class/위치는 유지하고 내부 카드만 새 운동으로 교체
+    const fresh=this.buildCardEl(newName);
+    wrap.innerHTML='';
+    while(fresh.firstChild)wrap.appendChild(fresh.firstChild);
+  },
   swapEx(btn,newName){
-    const wrap=btn.closest('.ex-wrap');if(!wrap)return;
-    this.removeEx(btn);          // 현재 운동 빼기(기본=숨김+rm, 추가운동=삭제)
-    this.addExternal(newName);   // 같은 날짜에 대체 운동 추가
+    const wrap=btn.closest('.ex-wrap');const panel=btn.closest('.day-panel');if(!wrap||!panel)return;
+    newName=(newName||'').trim();if(!newName)return;
+    const p=this.planFor(this.panelDayOf(panel));
+    if(wrap.classList.contains('custom-ex')){
+      const cur=wrap.dataset.cname;
+      p.add=(p.add||[]).map(n=>n===cur?newName:n);   // 같은 위치에서 이름만 교체
+      this._transformWrap(wrap,newName);
+      wrap.dataset.cname=newName;
+    }else{
+      const orig=wrap.dataset.origname||(wrap.querySelector('.ex-nm')?.textContent||'').trim();
+      (p.swap=p.swap||{})[orig]=newName;             // 기본 슬롯 제자리 대체
+      this._transformWrap(wrap,newName);
+      wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
+    }
+    this.savePlan();this.refresh();this.injectTargets();augmentCards();
   },
   injectDeleteBtns(){
     document.querySelectorAll('.day-panel .ex-wrap:not(.custom-ex) details.ex-card').forEach(card=>{this._addDelBtn(card);this._addSwapBtn(card);});
@@ -1163,7 +1181,8 @@ const ExLog={
       const lab=wrap.previousElementSibling;if(lab&&lab.classList.contains('custom-ex-label'))lab.remove();
       wrap.remove();
     }else{
-      if(!(p.rm||[]).includes(name))(p.rm=p.rm||[]).push(name);
+      const rmName=wrap.dataset.origname||name;
+      if(!(p.rm||[]).includes(rmName))(p.rm=p.rm||[]).push(rmName);
       wrap.style.display='none';
     }
     this.savePlan();this.refresh();
@@ -1171,7 +1190,23 @@ const ExLog={
   applyPlan(){
     document.querySelectorAll('.day-panel').forEach(panel=>{
       const day=this.panelDayOf(panel);const p=this.plan[day];if(!p)return;
-      (p.rm||[]).forEach(name=>{const n=[...panel.querySelectorAll('.ex-wrap:not(.custom-ex) .ex-nm')].find(el=>el.textContent.trim()===name);if(n)n.closest('.ex-wrap').style.display='none';});
+      const statics=()=>[...panel.querySelectorAll('.ex-wrap:not(.custom-ex)')];
+      // 1) 자리바꿈 복원: 기본 슬롯을 제자리에서 대체 운동으로 변환
+      const swap=p.swap||{};
+      Object.keys(swap).forEach(orig=>{
+        if((p.rm||[]).includes(orig))return;
+        const newName=swap[orig];
+        let wrap=statics().find(w=>w.dataset.origname===orig)||statics().find(w=>!w.dataset.origname&&(w.querySelector('.ex-nm')?.textContent||'').trim()===orig);
+        if(!wrap||wrap.dataset.swapto===newName)return;
+        this._transformWrap(wrap,newName);
+        wrap.dataset.origname=orig;wrap.dataset.swapto=newName;wrap.style.display='';
+      });
+      // 2) 삭제 숨김 (원본 이름 또는 origname 기준)
+      (p.rm||[]).forEach(name=>{
+        const wrap=statics().find(w=>w.dataset.origname===name)||(statics().map(w=>w).find(w=>(w.querySelector('.ex-nm')?.textContent||'').trim()===name));
+        if(wrap)wrap.style.display='none';
+      });
+      // 3) 추가 운동
       const area=panel.querySelector('.ex-custom-area');if(!area)return;
       (p.add||[]).forEach(name=>{
         if([...area.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name))return;
