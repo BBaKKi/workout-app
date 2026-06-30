@@ -1396,8 +1396,8 @@ const ExLog={
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);}
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
-      // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음)
-      ex.sets[+editIdx]={weight:w,reps:r};
+      // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각 보존.
+      ex.sets[+editIdx]={weight:w,reps:r,ts:ex.sets[+editIdx].ts||new Date().toISOString()};
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
@@ -1406,7 +1406,7 @@ const ExLog={
     }
     // 신규 세트
     const isPR=this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push({weight:w,reps:r});
+    ex.sets.push({weight:w,reps:r,ts:new Date().toISOString()});
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
@@ -1433,10 +1433,21 @@ const ExLog={
     if(editIdx===''||editIdx==null){this.cancelSet(el);return;}
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
-    if(ex&&ex.sets[+editIdx]){ex.sets.splice(+editIdx,1);this.setSession(s);}
+    if(ex&&ex.sets[+editIdx]){
+      const removedSetNo=ex.sets.length; // 삭제 후 뒤 세트들이 한 칸씩 당겨지며 마지막 setNo가 시트에 잔여 행으로 남음
+      ex.sets.splice(+editIdx,1);
+      this.setSession(s);
+      this._deleteFromSheet(this.date,ex.name,removedSetNo);
+    }
     this.cancelSet(el);
     this.refresh();
     this._syncSoon();
+  },
+  // upsert 방식에서는 로컬 삭제만으로 시트 행이 안 지워지므로, 잔여 행을 명시적으로 정리
+  async _deleteFromSheet(date,name,setNo){
+    if(!date||!name||!setNo)return;
+    const url=await this.getScriptUrl();if(!url)return;
+    fetch(url,{method:'POST',body:JSON.stringify({mode:'delete',keys:[{date,name,setNo}]}),redirect:'follow'}).catch(()=>{});
   },
 
   prevMaxWeight(name){
@@ -1637,18 +1648,24 @@ const ExLog={
         s.exercises.forEach(ex=>{
           if(!ex.sets?.length)return;
           ex.sets.forEach((set,i)=>{
-            rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps)});
+            rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null});
           });
         });
       });
       // 안전장치: 보낼 데이터가 없으면 전송하지 않음(빈 스냅샷이 시트를 비우는 사고 방지)
       if(rows.length===0){if(btn){btn.textContent='☁️';btn.classList.remove('syncing');}return;}
-      // mode:'replace' → Apps Script가 기존 데이터 행을 비우고 rows로 새로 씀(중복 방지·수정/삭제 반영).
-      // 헤더 미지정 시 fetch가 text/plain을 적용 → preflight 없는 simple request라 응답도 읽을 수 있음.
-      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'replace',rows}),redirect:'follow'});
-      let okFlag=true;
-      try{const json=await res.json();okFlag=json.ok!==false;}catch(_){okFlag=res.ok;}
-      if(btn){btn.textContent=okFlag?'✓':'❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
+      // mode:'upsert' → Apps Script가 (날짜·종목·세트) 키로 시트의 기존 행만 갱신/추가.
+      // 시트가 원본(source of truth)이라 로컬에 없는 시트 기존 행은 절대 건드리지 않음(로컬 캐시 유실에도 안전).
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'upsert',rows}),redirect:'follow'});
+      let okFlag=true,sawServer=false,stale=false;
+      try{
+        const json=await res.json();sawServer=true;okFlag=json.ok!==false;
+        // 새 서버는 응답에 written 키를 돌려줌. 없으면 옛 배포가 실행 중(이전 코드는 inbody/upsert를 모름).
+        if(json.written===undefined)stale=true;
+      }catch(_){okFlag=res.ok;}   // 응답 본문을 못 읽으면(CORS 등) 판단 보류 — 오탐 방지
+      if(sawServer&&stale){okFlag=false;console.warn('[sync] Apps Script 응답에 replace 표식이 없습니다 → 옛 배포가 실행 중일 수 있어요. 배포 > 배포 관리 > 편집 > 버전 "새 버전"으로 재배포하세요.');}
+      const mark=okFlag?'✓':(sawServer&&stale?'⚠️':'❌');
+      if(btn){btn.textContent=mark;btn.title=(sawServer&&stale)?'서버가 옛 버전 같음 — Apps Script 재배포(새 버전) 필요':'Google Sheets 동기화';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');btn.title='Google Sheets 동기화';},2500);}
     }catch(err){
       if(btn){btn.textContent='❌';setTimeout(()=>{btn.textContent='☁️';btn.classList.remove('syncing');},2000);}
       console.error('sync error',err);
