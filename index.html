@@ -13,9 +13,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-r,.day-r,.exck,.sck,.wck,.pck,.hck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .nav-lbl{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:#8e8e93;cursor:pointer;border-bottom:2.5px solid transparent}
-#tw:checked~.top-nav .lbl-w,#ts:checked~.top-nav .lbl-s,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
+#tw:checked~.top-nav .lbl-w,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
 .tab-body{display:none}
-#tw:checked~.tab-w,#ts:checked~.tab-s,#td:checked~.tab-d,#tl:checked~.tab-l,#tp:checked~.tab-p{display:block}
+#tw:checked~.tab-w,#td:checked~.tab-d,#tl:checked~.tab-l,#tp:checked~.tab-p{display:block}
 .day-sel{display:flex;gap:5px;padding:10px 16px;overflow-x:auto;background:#fff;border-bottom:1px solid #f0f0f0;-webkit-overflow-scrolling:touch}
 .day-sel::-webkit-scrollbar{display:none}
 .day-lbl{flex-shrink:0;width:44px;height:50px;border-radius:10px;border:1.5px solid #d1d1d6;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative}
@@ -119,10 +119,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .rest-title{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:10px}
 .rest-desc{font-size:13.5px;color:#3c3c43;line-height:1.9}
 .rest-desc b{color:#1c1c1e;font-weight:600}
-/* 영양제 탭 */
-.supp-wrap{padding:12px 16px 80px}
-.supp-sec{font-size:11px;font-weight:700;color:#8e8e93;letter-spacing:.07em;text-transform:uppercase;margin:14px 0 8px}
-.supp-sec:first-child{margin-top:0}
 .tl{display:flex;flex-direction:column}
 .ti{display:flex}
 .t-left{width:70px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;padding-right:12px;padding-top:13px}
@@ -307,35 +303,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-swap-pick:active{background:#124a82}
 .wl-picker-empty{font-size:12px;color:#9aa0a6;padding:6px 2px;display:block}
 
-/* 영양제 탭 (체크리스트 + 아슈와간다 사이클) */
-.supp-date-bar{display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 16px;background:#fff;border-bottom:1px solid #f0f0f0;position:sticky;top:44px;z-index:10}
-.supp-nav-btn{width:32px;height:32px;border-radius:8px;border:1px solid #d1d1d6;background:#fff;font-size:16px;color:#085041;cursor:pointer}
-.supp-date-txt{font-size:13px;font-weight:600;color:#1c1c1e;min-width:150px;text-align:center}
-.supp-adherence{margin-bottom:10px}
-.supp-adh-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#1c1c1e;margin-bottom:5px}
-.supp-adh-pct{color:#085041}
-.supp-adh-track{height:8px;border-radius:5px;background:#e5e5ea;overflow:hidden}
-.supp-adh-fill{height:100%;background:#085041;border-radius:5px;transition:width .25s}
-.supp-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e5e5ea;border-radius:10px;background:#fff;margin-bottom:6px;cursor:pointer;transition:all .15s}
-.supp-item.on{background:#e8f5ee;border-color:#81c995}
-.supp-ck{width:22px;height:22px;border-radius:50%;border:2px solid #d1d1d6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
-.supp-item.on .supp-ck{background:#085041;border-color:#085041}
-.supp-nm{font-size:13.5px;font-weight:600;color:#1c1c1e;flex:1}
-.supp-item.on .supp-nm{color:#1b5e20}
-.supp-note{font-size:11px;color:#8e8e93}
-.supp-ashwa-card{border-radius:12px;border:1px solid #e5e5ea;background:#fff;padding:12px 13px;margin-bottom:14px}
-.supp-ashwa-card.warn{border-color:#ffe082;background:#fff8e1}
-.supp-ashwa-card.rest{border-color:#ef9a9a;background:#fce8e6}
-.supp-ashwa-hd{font-size:12px;font-weight:700;color:#1c1c1e;margin-bottom:6px}
-.supp-ashwa-status{font-size:13px;font-weight:600;color:#085041;line-height:1.5}
-.supp-ashwa-card.warn .supp-ashwa-status{color:#e65100}
-.supp-ashwa-card.rest .supp-ashwa-status{color:#b71c1c}
-.supp-ashwa-sub{font-size:11px;color:#8e8e93;margin-top:3px}
-.supp-ashwa-empty{font-size:12px;color:#636366;line-height:1.5;margin-bottom:8px}
-.supp-ashwa-row{display:flex;gap:8px;margin-top:9px}
-.supp-ashwa-input{flex:1;padding:7px 9px;border:1px solid #d1d1d6;border-radius:8px;font-size:13px}
-.supp-ashwa-btn{padding:7px 14px;border:0;border-radius:8px;background:#085041;color:#fff;font-size:12px;font-weight:600;cursor:pointer}
-.supp-foot{font-size:11px;color:#8e8e93;line-height:1.5;margin-top:10px;padding:0 2px}
 
 /* 운동 추가 피커 개선 */
 .wl-picker-title{font-size:11px;font-weight:600;color:var(--color-text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
@@ -633,8 +600,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </style>
 </head>
 <body>
-<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="ts" class="tab-r"><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label><label class="nav-lbl lbl-s" for="ts" onclick="setTimeout(function(){SuppApp.init();},20)">💊 보충제</label></div>
+<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -963,16 +930,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div><!-- plan-wrap -->
 </div><!-- tab-body tab-p -->
 
-<div class="tab-body tab-s">
-<div class="supp-date-bar"><button class="supp-nav-btn" onclick="SuppApp.prevDay()">‹</button><span class="supp-date-txt" id="supp-date-txt">오늘</span><button class="supp-nav-btn" onclick="SuppApp.nextDay()">›</button></div>
-<div class="supp-wrap">
-  <div class="supp-adherence" id="supp-adherence"></div>
-  <div id="supp-ashwa"></div>
-  <div id="supp-list"></div>
-  <div class="supp-foot">체크는 날짜별로 저장됩니다. 타이밍 그룹은 해외 일과가 확정되면 재배치 예정.</div>
-</div>
-</div><!-- tab-body tab-s -->
-
 <script src="exercise-library.js"></script>
 <script>
 if(typeof window.EXERCISE_LIBRARY==='undefined')window.EXERCISE_LIBRARY=[];
@@ -1243,7 +1200,25 @@ const ExLog={
         if(!w)w=this.buildCardEl(name);
         list.appendChild(w); // 기존 노드면 리스트 끝으로 이동(순서 정렬), 없으면 신규 추가
       });
+      this._sortDay(panel); // 전체 운동을 부위별로 재배치
     });
+  },
+  // 하루 운동 전체를 부위(근육)별로 묶어 재배치. 그룹 순서는 기본 카드 등장 순서를 따라 데이별 흐름 유지, 그룹 내부는 기존 순서 보존(안정 정렬).
+  _sortDay(panel){
+    if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
+    const list=panel.querySelector('.ex-list');if(!list)return;
+    const wraps=[...list.children].filter(el=>el.classList&&el.classList.contains('ex-wrap'));
+    if(wraps.length<2)return;
+    const bucketOf=w=>{const n=(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim();const m=PlanApp.muscleOf(n);return m?m.p:'\uFFFF';};
+    const gi={};let gn=0;
+    wraps.forEach(w=>{const b=bucketOf(w);if(!(b in gi))gi[b]=gn++;}); // 그룹 첫 등장 순서
+    const arr=wraps.map((w,i)=>({w,i,g:gi[bucketOf(w)]}));
+    arr.sort((a,b)=>a.g-b.g||a.i-b.i); // (그룹순서, 원래순서) — 안정
+    let changed=false;for(let k=0;k<arr.length;k++)if(arr[k].w!==wraps[k]){changed=true;break;}
+    if(!changed)return; // 이미 정렬됨 → DOM 미변경
+    const frag=document.createDocumentFragment();
+    arr.forEach(o=>frag.appendChild(o.w));
+    list.appendChild(frag); // .ex-list엔 카드만 있음(+추가 행은 panel 직속) → 안전
   },
 
   prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
@@ -1321,7 +1296,7 @@ const ExLog={
     const restoreHtml=hidden.map(n=>this._tagRestoreBtn(n)).join('');
     let list;
     if(!q)list=L.filter(e=>cats.includes(e.cat)&&!shown.has(e.name)&&!hiddenSet.has(e.name));
-    else list=L.filter(e=>!shown.has(e.name)&&!hiddenSet.has(e.name)&&(e.name.toLowerCase().includes(q)||(e.mus||'').toLowerCase().includes(q)));
+    else list=L.filter(e=>!shown.has(e.name)&&!hiddenSet.has(e.name)&&(e.name.toLowerCase().includes(q)||(e.mus||'').toLowerCase().includes(q)||(e.aka||[]).some(a=>a.toLowerCase().includes(q))));
     const libHtml=list.map(e=>this._tagBtn(e.name)).join('');
     el.innerHTML=(restoreHtml+libHtml)||'<span class="wl-picker-empty">'+(q?'결과 없음':'추가할 종목이 없습니다')+'</span>';
   },
@@ -1340,6 +1315,7 @@ const ExLog={
     if([...panel.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name)){this.refresh();return;}
     if(!(p.add||[]).includes(name))(p.add=p.add||[]).push(name);
     list.appendChild(this.buildCardEl(name));
+    this._sortDay(panel);
     this.savePlan();this.refresh();this.injectTargets();augmentCards();
   },
 
@@ -2033,7 +2009,7 @@ const LibApp={
     }
     const q=this.q.trim();
     const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
-    const items=lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||e.name.indexOf(q)>=0||(e.mus||'').indexOf(q)>=0));
+    const items=lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||e.name.indexOf(q)>=0||(e.mus||'').indexOf(q)>=0||(e.aka||[]).some(a=>a.indexOf(q)>=0)));
     if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
     box.innerHTML=items.map(function(e){
       return '<details class="lib-card"><summary><span class="lib-dot" style="background:'+(COL[e.cat]||'#888')+'"></span><span class="lib-nm">'+e.name+'</span><span class="lib-mus">'+(e.mus||'')+'</span><span class="chev">▾</span></summary>'
@@ -2204,82 +2180,6 @@ const InBody={
         })
         .catch(()=>{});
     });
-  }
-};
-// ── 보충제: 일일 체크리스트 + 아슈와간다 사이클 ──
-const SUPP_LIST=[
- {slot:'아침 · 식사',items:[
-   {id:'centrum',name:'센트룸 맨 더블업',note:'종합비타민'},
-   {id:'maca',name:'마카',note:''},
-   {id:'milk',name:'밀크씨슬',note:''},
-   {id:'omega_l',name:'오메가3',note:'2,000mg(점심)'},
-   {id:'dk',name:'D3+K2',note:'75μg'},
-   {id:'carnitine',name:'L-카르니틴',note:''}
- ]},
- {slot:'운동 전',items:[
-   {id:'citrulline',name:'L-시트룰린',note:'6g'},
-   {id:'beta',name:'베타알라닌',note:'4.8g/일 분할'}
- ]},
- {slot:'운동 후',items:[
-   {id:'creatine',name:'크레아틴',note:'3~5g'},
-   {id:'omega_p',name:'오메가3',note:'1,000mg(운동후)'},
-   {id:'whey',name:'웨이 프로틴',note:''}
- ]},
- {slot:'취침 전',items:[
-   {id:'casein',name:'카제인',note:'25g'},
-   {id:'mag',name:'마그네슘',note:'200mg(Albion)'},
-   {id:'ashwa',name:'아슈와간다',note:'600mg'}
- ]}
-];
-const SuppApp={
-  date:null,
-  _key(d){return 'supp_'+d;},
-  async _state(d){try{const r=await window.storage.get(this._key(d));return r?JSON.parse(r.value):{};}catch(_){return{};}},
-  async init(){if(!this.date)this.date=_todayKey();await this.render();},
-  prevDay(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.render();},
-  nextDay(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);this.render();},
-  async toggle(id){
-    const st=await this._state(this.date);st[id]=!st[id];
-    try{await window.storage.set(this._key(this.date),JSON.stringify(st));}catch(_){}
-    await this.render();
-  },
-  async render(){
-    const box=document.getElementById('supp-list');if(!box)return;
-    const dt=document.getElementById('supp-date-txt');
-    if(dt){const today=_todayKey();const s=new Date(this.date+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});dt.textContent=this.date===today?'오늘 ('+s+')':s;}
-    const st=await this._state(this.date);
-    let total=0,done=0,html='';
-    SUPP_LIST.forEach(g=>{
-      html+='<div class="supp-sec">'+g.slot+'</div>';
-      g.items.forEach(it=>{
-        total++;const on=!!st[it.id];if(on)done++;
-        html+='<div class="supp-item'+(on?' on':'')+'" onclick="SuppApp.toggle(\''+it.id+'\')"><span class="supp-ck">'+(on?'✓':'')+'</span><span class="supp-nm">'+it.name+'</span>'+(it.note?'<span class="supp-note">'+it.note+'</span>':'')+'</div>';
-      });
-    });
-    box.innerHTML=html;
-    const bar=document.getElementById('supp-adherence');
-    if(bar){const pct=total?Math.round(done/total*100):0;bar.innerHTML='<div class="supp-adh-top"><span>오늘 섭취</span><span class="supp-adh-pct">'+done+'/'+total+' ('+pct+'%)</span></div><div class="supp-adh-track"><div class="supp-adh-fill" style="width:'+pct+'%"></div></div>';}
-    await this.renderAshwa();
-  },
-  async renderAshwa(){
-    const box=document.getElementById('supp-ashwa');if(!box)return;
-    let start='';try{const r=await window.storage.get('supp_ashwa_start');start=r?r.value:'';}catch(_){}
-    if(!start){
-      box.innerHTML='<div class="supp-ashwa-card"><div class="supp-ashwa-hd">🌙 아슈와간다 사이클</div><div class="supp-ashwa-empty">복용 시작일을 입력하면 8~12주 복용 → 4주 휴지 주기를 추적합니다.</div><div class="supp-ashwa-row"><input type="date" id="supp-ashwa-date" class="supp-ashwa-input"><button class="supp-ashwa-btn" onclick="SuppApp.setAshwaStart()">시작일 저장</button></div></div>';
-      return;
-    }
-    const s=new Date(start+'T12:00:00'),now=new Date(_todayKey()+'T12:00:00');
-    const days=Math.floor((now-s)/864e5),week=Math.floor(days/7)+1;
-    let status,cls;
-    if(week<8){status='복용 '+week+'주차 · 휴지 가능 시점(8주)까지 D-'+Math.max(0,8*7-days);cls='on';}
-    else if(week<=12){status='복용 '+week+'주차 · 휴지 권장 구간(8~12주) · 12주까지 D-'+Math.max(0,12*7-days);cls='warn';}
-    else{status='복용 '+week+'주차 · 12주 초과 — 4주 휴지 권장';cls='rest';}
-    box.innerHTML='<div class="supp-ashwa-card '+cls+'"><div class="supp-ashwa-hd">🌙 아슈와간다 사이클</div><div class="supp-ashwa-status">'+status+'</div><div class="supp-ashwa-sub">시작 '+start+' · '+days+'일 경과</div><div class="supp-ashwa-row"><input type="date" id="supp-ashwa-date" class="supp-ashwa-input" value="'+start+'"><button class="supp-ashwa-btn" onclick="SuppApp.setAshwaStart()">시작일 변경</button></div></div>';
-  },
-  async setAshwaStart(){
-    const inp=document.getElementById('supp-ashwa-date');const v=inp?inp.value:'';if(!v)return;
-    try{await window.storage.set('supp_ashwa_start',v);}catch(_){}
-    await this.renderAshwa();
   }
 };
 document.addEventListener('DOMContentLoaded',()=>{ExLog.init();PlanApp.init();MuscleMap.init();LibApp.render();InBody.render();});
