@@ -950,6 +950,11 @@ try{var m={1:'d1',2:'d2',3:'d3',4:'d4',5:'d5',6:'d6',0:'d7'};var el=document.get
 // ── 로컬 날짜 헬퍼: toISOString()은 UTC라 시간대에 따라 하루 어긋남 → 벽시계(로컬) 날짜로 통일 ──
 function _localKey(d){const t=new Date(d);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);}
 function _todayKey(){return _localKey(new Date());}
+// ── 운동 배치 규칙 ──
+// 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
+const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
+// 고립(isolation) 종목 판정 — 같은 부위 안에서 복합보다 뒤로 보냄
+const ISO_RE=/플라이|펙덱|크로스오버|레이즈|레그\s*레이즈|컬|익스텐션|푸시다운|킥\s*백|킥백|스컬|크런치|플랭크|풀오버|스트레이트\s*암|카프|종아리|슈러그|페이스풀|리스트|어브덕션|어덕션|우드촙|트위스트|롤아웃|데드버그|버드독|할로우|팔로프|V업/;
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 const EL_DAY_EX={Push:["Hammer 벤치 (isolateral)","Watson 인클라인 (isolateral)","Watson 디클라인 (isolateral)","DB 오버헤드프레스","케이블 래터럴 레이즈","딥스 머신","오버헤드 트라이셉스 익스텐션","트라이셉스 익스텐션 머신"],Pull:["바벨 데드리프트","T-바 로우","Hammer ISO 언더 로우","바벨 벤트오버 로우","랫풀다운","스트레이트 암 풀다운","케이블 시티드 로우","덤벨 바이셉스 컬","컨센트레이션 컬"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","사이드 플랭크"],"Push+":["덤벨 숄더프레스","케이블 래터럴 레이즈","페이스풀 (케이블) ⭐필수","덤벨 플라이 / 펙덱","오버헤드 트라이셉스 익스텐션","케이블 트라이셉스 푸시다운","벤치 딥스"],"Pull+":["풀업 (체중)","원암 덤벨 로우","인클라인 덤벨 컬","해머 컬","케이블 바이셉스 컬","데드행"],"Legs+":["불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","레그레이즈","케이블 크런치","플랭크"]};
@@ -1135,6 +1140,7 @@ const ExLog={
       this._transformWrap(wrap,newName);
       wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
     }
+    this._sortDay(panel); // 교체 후에도 부위별 볼륨 보존 순서로 재정렬
     this.savePlan();this.refresh();this.injectTargets();augmentCards();
   },
   injectDeleteBtns(){
@@ -1203,17 +1209,19 @@ const ExLog={
       this._sortDay(panel); // 전체 운동을 부위별로 재배치
     });
   },
-  // 하루 운동 전체를 부위(근육)별로 묶어 재배치. 그룹 순서는 기본 카드 등장 순서를 따라 데이별 흐름 유지, 그룹 내부는 기존 순서 보존(안정 정렬).
+  // 하루 운동 전체를 볼륨 보존 순서로 재배치: 부위는 훈련 우선순위(MUSCLE_SESSION_ORDER), 같은 부위 안에선 복합→고립. 동일 조건은 기존 순서 보존(안정 정렬).
   _sortDay(panel){
     if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
     const list=panel.querySelector('.ex-list');if(!list)return;
     const wraps=[...list.children].filter(el=>el.classList&&el.classList.contains('ex-wrap'));
     if(wraps.length<2)return;
-    const bucketOf=w=>{const n=(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim();const m=PlanApp.muscleOf(n);return m?m.p:'\uFFFF';};
-    const gi={};let gn=0;
-    wraps.forEach(w=>{const b=bucketOf(w);if(!(b in gi))gi[b]=gn++;}); // 그룹 첫 등장 순서
-    const arr=wraps.map((w,i)=>({w,i,g:gi[bucketOf(w)]}));
-    arr.sort((a,b)=>a.g-b.g||a.i-b.i); // (그룹순서, 원래순서) — 안정
+    const nameOf=w=>(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim();
+    const arr=wraps.map((w,i)=>{
+      const n=nameOf(w);const m=PlanApp.muscleOf(n);const b=m?m.p:null;
+      let g=b?MUSCLE_SESSION_ORDER.indexOf(b):-1;if(g<0)g=MUSCLE_SESSION_ORDER.length; // 미상/미등록 부위 → 맨 뒤
+      return{w,i,g,iso:ISO_RE.test(n)?1:0};
+    });
+    arr.sort((a,b)=>a.g-b.g||a.iso-b.iso||a.i-b.i); // (부위 우선순위, 복합0/고립1, 원래순서)
     let changed=false;for(let k=0;k<arr.length;k++)if(arr[k].w!==wraps[k]){changed=true;break;}
     if(!changed)return; // 이미 정렬됨 → DOM 미변경
     const frag=document.createDocumentFragment();
