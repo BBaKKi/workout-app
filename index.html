@@ -119,6 +119,16 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .rest-title{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:10px}
 .rest-desc{font-size:13.5px;color:#3c3c43;line-height:1.9}
 .rest-desc b{color:#1c1c1e;font-weight:600}
+/* 보완 추천 (운동 탭) */
+.day-reco{margin:10px 0 4px;padding:11px 12px;border:1px dashed #b7d8c4;border-radius:12px;background:#f3faf6}
+.reco-hd{font-size:12px;font-weight:700;color:#085041;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.reco-sub{font-size:10.5px;font-weight:500;color:#8e8e93}
+.reco-item{display:flex;align-items:center;gap:9px;padding:9px 10px;background:#fff;border:1px solid #e5e5ea;border-radius:9px;margin-bottom:6px;cursor:pointer;transition:background .15s}
+.reco-item:last-child{margin-bottom:0}
+.reco-item:active{background:#e8f5ee}
+.reco-plus{width:22px;height:22px;border-radius:50%;background:#085041;color:#fff;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.reco-nm{font-size:13px;font-weight:600;color:#1c1c1e;flex:1}
+.reco-why{font-size:11px;color:#c0392b;font-weight:600;white-space:nowrap}
 .tl{display:flex;flex-direction:column}
 .ti{display:flex}
 .t-left{width:70px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;padding-right:12px;padding-top:13px}
@@ -601,7 +611,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -955,6 +965,16 @@ function _todayKey(){return _localKey(new Date());}
 const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
 // 고립(isolation) 종목 판정 — 같은 부위 안에서 복합보다 뒤로 보냄
 const ISO_RE=/플라이|펙덱|크로스오버|레이즈|레그\s*레이즈|컬|익스텐션|푸시다운|킥\s*백|킥백|스컬|크런치|플랭크|풀오버|스트레이트\s*암|카프|종아리|슈러그|페이스풀|리스트|어브덕션|어덕션|우드촙|트위스트|롤아웃|데드버그|버드독|할로우|팔로프|V업/;
+// 기구 부하 tier: 같은 부위·같은 복합 안에서 주력(무거운) 동작을 먼저. 바벨·플레이트/핀 머신=주력(0), 케이블(1), 덤벨(2), 체중·밴드(3).
+function _equipRank(n){
+  if(/체중|맨몸|밴드|어시스트|assist/i.test(n))return 3;
+  if(/덤벨|dumbbell|\bdb\b/i.test(n))return 2;
+  if(/케이블|cable/i.test(n))return 1;
+  return 0; // 바벨·해머·왓슨·V스쿼트·레그프레스 등 플레이트/핀 머신 = 주력 최대부하
+}
+// 보완 추천: 각 날 담당 부위 + 부위별 주간 세트 목표(앱 기준: 권장 10~20, PRI 10 / 중간 8 / 소·보조 6)
+const RECO_CAT={push:['가슴','측면삼각','전면삼각','삼두'],pull:['등','이두','승모'],legs:['대퇴사두','후면사슬','코어','종아리']};
+const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':6,'삼두':8,'이두':8,'승모':6,'대퇴사두':8,'후면사슬':8,'코어':6,'종아리':6};
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 const EL_DAY_EX={Push:["Hammer 벤치 (isolateral)","Watson 인클라인 (isolateral)","Watson 디클라인 (isolateral)","DB 오버헤드프레스","케이블 래터럴 레이즈","딥스 머신","오버헤드 트라이셉스 익스텐션","트라이셉스 익스텐션 머신"],Pull:["바벨 데드리프트","T-바 로우","Hammer ISO 언더 로우","바벨 벤트오버 로우","랫풀다운","스트레이트 암 풀다운","케이블 시티드 로우","덤벨 바이셉스 컬","컨센트레이션 컬"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","사이드 플랭크"],"Push+":["덤벨 숄더프레스","케이블 래터럴 레이즈","페이스풀 (케이블) ⭐필수","덤벨 플라이 / 펙덱","오버헤드 트라이셉스 익스텐션","케이블 트라이셉스 푸시다운","벤치 딥스"],"Pull+":["풀업 (체중)","원암 덤벨 로우","인클라인 덤벨 컬","해머 컬","케이블 바이셉스 컬","데드행"],"Legs+":["불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","레그레이즈","케이블 크런치","플랭크"]};
@@ -1063,6 +1083,7 @@ const ExLog={
     this.injectTargets();
     this.refresh();
     augmentCards();
+    this.injectRecos();
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1141,7 +1162,7 @@ const ExLog={
       wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
     }
     this._sortDay(panel); // 교체 후에도 부위별 볼륨 보존 순서로 재정렬
-    this.savePlan();this.refresh();this.injectTargets();augmentCards();
+    this.savePlan();this.refresh();this.injectTargets();augmentCards();this.injectRecos();
   },
   injectDeleteBtns(){
     document.querySelectorAll('.day-panel .ex-wrap:not(.custom-ex) details.ex-card').forEach(card=>{this._addDelBtn(card);this._addSwapBtn(card);});
@@ -1165,6 +1186,47 @@ const ExLog={
     if(det&&!det.querySelector('.ex-log')){const log=document.createElement('div');log.className='ex-log';log.dataset.exname=name;log.innerHTML=this.makeLogHtml();det.appendChild(log);}
     return wrap;
   },
+  // ── 보완 추천 ──
+  _recoLibIndex(){ // 도감 부위 인덱스 1회 구축(정적) → 재사용
+    if(this._libIdx)return this._libIdx;
+    const idx={};(window.EXERCISE_LIBRARY||[]).forEach(e=>{const mu=(typeof PlanApp!=='undefined'&&PlanApp.muscleOf)?PlanApp.muscleOf(e.name):null;if(mu&&mu.p)(idx[mu.p]=idx[mu.p]||[]).push(e.name);});
+    return this._libIdx=idx;
+  },
+  _weekMuscleSets(){ // renderVolume와 동일 계산(주동근 1·보조근 0.5세트) — 메모리(ExLog.data) 기준
+    const vol={};
+    if(typeof PlanApp==='undefined'||!PlanApp._weekKeys||!PlanApp.muscleOf)return vol;
+    const ks=new Set(PlanApp._weekKeys(0));const data=this.data||{};
+    for(const dk in data){if(!ks.has(dk))continue;
+      (data[dk].exercises||[]).forEach(ex=>{
+        const n=(ex.sets||[]).filter(s=>s.reps>0).length;if(!n)return;
+        const mu=PlanApp.muscleOf(ex.name);if(!mu)return;
+        vol[mu.p]=(vol[mu.p]||0)+n;(mu.s||[]).forEach(sec=>{vol[sec]=(vol[sec]||0)+n*0.5;});
+      });
+    }
+    return vol;
+  },
+  injectRecos(){
+    if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
+    const vol=this._weekMuscleSets();const byMuscle=this._recoLibIndex();
+    document.querySelectorAll('.day-panel').forEach(panel=>{
+      const list=panel.querySelector('.ex-list');if(!list)return;
+      const dpc=[...panel.classList].find(c=>/^dp[1-6]$/.test(c));const nd=dpc?+dpc.slice(2):0;if(!nd)return;
+      const cat=(nd===1||nd===4)?'push':(nd===2||nd===5)?'pull':'legs';
+      const present=new Set([...list.querySelectorAll('.ex-wrap')].map(w=>(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim()));
+      const gaps=RECO_CAT[cat].filter(m=>(vol[m]||0)<(RECO_TARGET[m]||10)).sort((a,b)=>(vol[a]||0)-(vol[b]||0));
+      const recos=[];
+      gaps.forEach(m=>{
+        const take=(gaps.length===1?2:1);
+        (byMuscle[m]||[]).filter(nm=>!present.has(nm)&&!recos.some(r=>r.name===nm)).slice(0,take).forEach(nm=>{if(recos.length<3)recos.push({name:nm,muscle:m,sets:vol[m]||0});});
+      });
+      const old=list.querySelector('.day-reco');if(old)old.remove();
+      if(!recos.length)return;
+      const card=document.createElement('div');card.className='day-reco';
+      card.innerHTML='<div class="reco-hd">💡 이번 주 보완 추천<span class="reco-sub">부족 부위 채우기</span></div>'+
+        recos.map(r=>{const st=(r.sets%1===0?r.sets:r.sets.toFixed(1));return '<div class="reco-item" onclick="ExLog.addEx(\''+r.name.replace(/'/g,"\\'")+'\',this)"><span class="reco-plus">＋</span><span class="reco-nm">'+r.name+'</span><span class="reco-why">'+r.muscle+' · '+st+'세트/주</span></div>';}).join('');
+      list.appendChild(card);
+    });
+  },
   removeEx(btn){
     const wrap=btn.closest('.ex-wrap');const panel=btn.closest('.day-panel');if(!wrap||!panel)return;
     const name=(wrap.querySelector('.ex-nm')?.textContent||wrap.dataset.cname||'').trim();
@@ -1177,7 +1239,7 @@ const ExLog={
       if(!(p.rm||[]).includes(rmName))(p.rm=p.rm||[]).push(rmName);
       wrap.style.display='none';
     }
-    this.savePlan();this.refresh();
+    this.savePlan();this.refresh();this.injectRecos();
   },
   applyPlan(){
     document.querySelectorAll('.day-panel').forEach(panel=>{
@@ -1219,14 +1281,15 @@ const ExLog={
     const arr=wraps.map((w,i)=>{
       const n=nameOf(w);const m=PlanApp.muscleOf(n);const b=m?m.p:null;
       let g=b?MUSCLE_SESSION_ORDER.indexOf(b):-1;if(g<0)g=MUSCLE_SESSION_ORDER.length; // 미상/미등록 부위 → 맨 뒤
-      return{w,i,g,iso:ISO_RE.test(n)?1:0};
+      return{w,i,g,iso:ISO_RE.test(n)?1:0,eq:_equipRank(n)};
     });
-    arr.sort((a,b)=>a.g-b.g||a.iso-b.iso||a.i-b.i); // (부위 우선순위, 복합0/고립1, 원래순서)
+    arr.sort((a,b)=>a.g-b.g||a.iso-b.iso||a.eq-b.eq||a.i-b.i); // (부위 우선순위, 복합0/고립1, 기구부하, 원래순서)
     let changed=false;for(let k=0;k<arr.length;k++)if(arr[k].w!==wraps[k]){changed=true;break;}
     if(!changed)return; // 이미 정렬됨 → DOM 미변경
     const frag=document.createDocumentFragment();
     arr.forEach(o=>frag.appendChild(o.w));
     list.appendChild(frag); // .ex-list엔 카드만 있음(+추가 행은 panel 직속) → 안전
+    const rc=list.querySelector('.day-reco');if(rc)list.appendChild(rc); // 추천 카드는 항상 맨 아래
   },
 
   prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
@@ -1318,13 +1381,13 @@ const ExLog={
     const s=this.session();if(!s.exercises.find(e=>e.name===name)){s.exercises.push({name,sets:[]});this.setSession(s);}
     // 숨겨진 기본 카드면 다시 표시
     const staticW=[...panel.querySelectorAll('.ex-wrap:not(.custom-ex)')].find(w=>{const n=w.querySelector('.ex-nm');return n&&n.textContent.trim()===name;});
-    if(staticW){p.rm=(p.rm||[]).filter(n=>n!==name);staticW.style.display='';this.savePlan();this.refresh();this.injectTargets();return;}
+    if(staticW){p.rm=(p.rm||[]).filter(n=>n!==name);staticW.style.display='';this.savePlan();this.refresh();this.injectTargets();this.injectRecos();return;}
     const list=panel.querySelector('.ex-list');if(!list)return;
     if([...panel.querySelectorAll('.custom-ex')].some(w=>w.dataset.cname===name)){this.refresh();return;}
     if(!(p.add||[]).includes(name))(p.add=p.add||[]).push(name);
     list.appendChild(this.buildCardEl(name));
     this._sortDay(panel);
-    this.savePlan();this.refresh();this.injectTargets();augmentCards();
+    this.savePlan();this.refresh();this.injectTargets();augmentCards();this.injectRecos();
   },
 
   addExternal(name){
