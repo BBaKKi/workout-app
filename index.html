@@ -9,6 +9,20 @@
 <title>🏋️ 운동 루틴</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+/* 앱 전역 팔레트 — var() 199곳이 참조하지만 정의가 없어 테두리·보조색이 무효 처리되던 것 복원 */
+:root{
+ --color-text-primary:#1c1c1e;
+ --color-text-secondary:#48484a;
+ --color-text-tertiary:#8e8e93;
+ --color-border-secondary:#d1d1d6;
+ --color-border-tertiary:#e5e5ea;
+ --color-background-primary:#ffffff;
+ --color-background-secondary:#f2f2f7;
+ --color-background-default:#f2f2f7;
+ --border-radius-md:10px;
+ --border-radius-lg:14px;
+ --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:480px;margin:0 auto;min-height:100vh}
 .tab-r,.day-r,.exck,.sck,.wck,.pck,.hck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
@@ -574,6 +588,50 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-block-items{display:flex;flex-direction:column;gap:4px;border-top:0.5px solid var(--color-border-tertiary);padding-top:10px}
 .plan-block-item{font-size:12px;color:var(--color-text-secondary)}
 /* 주간 체크 */
+/* ── 신규: 카드 접힘 요약 ── */
+.ex-mini{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-mini b{color:#185FA5;font-weight:600}
+/* ── 신규: 세션 비교 ── */
+.sess-cmp{margin-left:6px}
+.sess-cmp.up{color:#3B6D11;font-weight:700}
+.sess-cmp.dn{color:#B3261E;font-weight:700}
+/* ── 신규: 플랜 탭 섹션 점프 칩 ── */
+.plan-nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:8px 2px;margin:0 0 4px;background:var(--color-background-secondary);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.plan-nav::-webkit-scrollbar{display:none}
+.plan-nav-chip{flex:0 0 auto;font-size:12px;font-weight:600;color:var(--color-text-secondary);background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:5px 12px;cursor:pointer}
+.plan-nav-chip:active{background:#e8e8ed}
+/* ── 신규: 주간 목표 볼륨 헤드라인 ── */
+.vol-goal{margin-bottom:10px}
+.vol-goal-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.vol-goal-pct{font-size:17px;font-weight:800;color:#185FA5}
+.vol-goal-pct.hit{color:#3B6D11}
+.vol-goal-sub{font-size:11px;color:var(--color-text-tertiary)}
+.vol-goal-bar{height:7px;background:var(--color-border-tertiary);border-radius:4px;overflow:hidden}
+.vol-goal-fill{height:100%;background:linear-gradient(90deg,#185FA5,#3B6D11);border-radius:4px;transition:width .3s}
+/* ── 신규: e1RM 마일스톤 ── */
+.tr-ms{display:flex;align-items:center;gap:7px;margin-top:4px}
+.tr-ms-txt{font-size:11px;color:var(--color-text-tertiary);flex:0 0 auto}
+.tr-ms-txt b{color:#BA7517}
+.tr-ms-bar{flex:1;height:4px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
+.tr-ms-fill{height:100%;background:#BA7517;border-radius:2px}
+/* ── 신규: 주간 리포트 (REST) ── */
+.wr-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;margin:12px 16px 0;text-align:left}
+.wr-hd{font-size:14px;font-weight:800;color:var(--color-text-primary);margin-bottom:9px}
+.wr-sec{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin:9px 0 4px;letter-spacing:.02em}
+.wr-row{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--color-text-secondary);padding:2.5px 0}
+.wr-row .v{font-weight:700;color:var(--color-text-primary);font-family:var(--font-mono);white-space:nowrap}
+.wr-row .v.pr{color:#3B6D11}
+.wr-row .v.miss{color:#B3261E}
+.wr-empty{font-size:12px;color:var(--color-text-tertiary)}
+/* ── 신규: 데이터 백업 ── */
+.bk-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.bk-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
+.bk-ta{width:100%;height:110px;font-size:11px;font-family:var(--font-mono);border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:8px;resize:vertical;color:var(--color-text-secondary)}
+.bk-btns{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+.bk-btn{font-size:12.5px;font-weight:600;border:none;border-radius:9px;padding:8px 13px;cursor:pointer;background:#185FA5;color:#fff}
+.bk-btn.ghost{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.bk-msg{font-size:11.5px;margin-top:7px;color:#3B6D11;font-weight:600}
+.bk-msg.err{color:#B3261E}
 .plan-week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
 .plan-day-cell{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 3px;text-align:center;cursor:pointer;transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent}
 .plan-day-cell.done{background:#EAF3DE;border-color:#C0DD97}
@@ -611,7 +669,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -717,6 +775,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="cooldown"><b>🧘 쿨다운:</b> 대퇴사두·둔근·햄·고관절 굴근 각 30초. 이번 주 수고하셨습니다!</div>
 </div>
 <div class="day-panel dp7">
+<div id="weekly-report"></div>
 <div class="rest-day">
 <div style="font-size:56px;margin-bottom:16px">😴</div>
 <div class="rest-title">일요일 — 완전 휴식</div>
@@ -800,12 +859,23 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="tab-body tab-p">
 <div class="plan-wrap">
 
+<!-- 섹션 점프 칩 -->
+<div class="plan-nav">
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-ws')">🏆 성과</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-ib')">📊 체성분</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-cal')">🔥 캘린더</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-vol')">💪 볼륨</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-tr')">📈 추세</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-bk')">💾 백업</button>
+</div>
+
 <!-- 이번 주 성과 요약 -->
-<div class="plan-hd">🏆 이번 주 성과</div>
+<div class="plan-hd" id="sec-ws">🏆 이번 주 성과</div>
 <div id="week-summary" class="plan-card"></div>
+<div class="plan-card"><div id="plan-week-grid" class="plan-week-grid"></div><div class="plan-week-note">기록이 있는 날은 자동으로 ✓ 표시됩니다</div></div>
 
 <!-- 체성분 현황 -->
-<div class="plan-hd">📊 체성분 현황</div>
+<div class="plan-hd" id="sec-ib">📊 체성분 현황</div>
 <div id="inbody-cards"></div>
 <div class="plan-inbody-note" id="plan-inbody-note"></div>
 <div id="inbody-projection"></div>
@@ -854,7 +924,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 
 <!-- Phase 타임라인 -->
 <!-- 운동 캘린더 -->
-<div class="plan-hd">🔥 운동 캘린더</div>
+<div class="plan-hd" id="sec-cal">🔥 운동 캘린더</div>
 <div id="plan-calendar" class="plan-card"></div>
 
 <details class="plan-fold"><summary class="plan-hd">🗓 단계별 플랜</summary>
@@ -912,10 +982,10 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </details>
 
 <!-- 체질 프로파일 -->
-<div class="plan-hd">📊 주간 부위별 볼륨</div>
+<div class="plan-hd" id="sec-vol">📊 주간 부위별 볼륨</div>
 <div id="plan-vol" class="plan-card"></div>
 
-<div class="plan-hd">📈 종목별 추세 · 정체</div>
+<div class="plan-hd" id="sec-tr">📈 종목별 추세 · 정체</div>
 <div id="plan-trend" class="plan-card"></div>
 
 <details class="plan-fold"><summary class="plan-hd">🧬 체질 프로파일</summary>
@@ -936,6 +1006,20 @@ details.plan-fold[open]>summary::after{content:'▴'}
   </div>
 </div>
 </details>
+
+<!-- 데이터 백업 -->
+<div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
+<div class="bk-card">
+<div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b></div>
+<textarea class="bk-ta" id="bk-ta" placeholder="[내보내기]를 누르면 여기에 백업 JSON이 채워집니다. 복원하려면 백업 JSON을 붙여넣고 [가져오기]를 누르세요." spellcheck="false"></textarea>
+<div class="bk-btns">
+<button class="bk-btn" onclick="Backup.exportData()">📤 내보내기</button>
+<button class="bk-btn ghost" onclick="Backup.copy()">📋 복사</button>
+<button class="bk-btn ghost" onclick="Backup.download()">💾 파일 저장</button>
+<button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
+</div>
+<div class="bk-msg" id="bk-msg"></div>
+</div>
 
 </div><!-- plan-wrap -->
 </div><!-- tab-body tab-p -->
@@ -1106,7 +1190,7 @@ const ExLog={
 
   dbCardInner(e,name){
     const nm=name||(e&&e.name)||'';
-    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"></div></details>';}
+    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">도감 미등록 종목 — 주동근이 <b>늘어났다 조여지는 느낌</b>에 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">첫 세트는 가볍게 폼 확인 후 증량. 수축 정점 1초·신장 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">날카로운 통증이 느껴지면 즉시 중단. 반동 금지.</div></div></div></div></details>';}
     const stim=e.target||'';const tip=e.tip||e.grip||'';const warn=e.warn||'통증이 느껴지면 즉시 중단.';
     const tags='<span class="tag t-s">'+(e.sets||'')+'</span>'+(e.mus?'<span class="tag t-m">'+e.mus+'</span>':'');
     return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">'+stim+'</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">'+tip+'</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">'+warn+'</div></div></div></div></details>';
@@ -1542,8 +1626,10 @@ const ExLog={
   refresh(){
     const s=this.session();
     let totSets=0,totVol=0;
+    this._miniCacheCheck();                                  // 날짜 바뀌면 '지난 기록' 캐시 무효화
     document.querySelectorAll('.ex-log').forEach(log=>{
       const ex=s.exercises.find(e=>e.name===log.dataset.exname);
+      this._updateMini(log,ex);                              // 접힘 상태 요약(지난 기록·오늘 세트) — 기록 없어도 갱신
       const chips=log.querySelector('.ex-log-chips');
       if(!chips)return;
       if(!ex||!ex.sets.length){chips.innerHTML='<span class="ex-log-empty">기록 없음</span>';return;}
@@ -1566,14 +1652,140 @@ const ExLog={
     const sum=document.getElementById('sess-sum');
     if(sum){
       if(totSets===0){sum.style.display='none';}
-      else{sum.style.display='';sum.innerHTML=`💪 오늘 <b>${totSets}</b>세트 · 볼륨 <b>${Math.round(totVol).toLocaleString()}</b>kg`;}
+      else{
+        // 같은 데이 타입(Push/Pull/…)의 직전 세션 톤수와 비교 — '오늘 하루'가 좋은 날인지 즉시 피드백
+        let cmp='';
+        const pv=this._prevDayTypeVol(s.day||this.dayType(this.date));
+        if(pv&&pv.vol>0){
+          const pct=Math.round((totVol-pv.vol)/pv.vol*100);
+          cmp=pct===0?`<span class="sess-cmp">지난 ${pv.day}와 동일</span>`
+            :`<span class="sess-cmp ${pct>0?'up':'dn'}">지난 ${pv.day} 대비 ${pct>0?'+':''}${pct}% ${pct>0?'↑':'↓'}</span>`;
+        }
+        sum.style.display='';sum.innerHTML=`💪 오늘 <b>${totSets}</b>세트 · 볼륨 <b>${Math.round(totVol).toLocaleString()}</b>kg${cmp}`;
+      }
     }
     const mb=document.getElementById('motiv-bar');
     if(mb){
       const {wk,total}=this.weekStats();
       if(total===0){mb.style.display='none';}
-      else{mb.style.display='';mb.innerHTML=`🔥 이번 주 ${wk}/6일 완료 · 누적 ${total}회 운동`;}
+      else{
+        // 주간 목표 볼륨 달성률 — 보고 있는 날짜가 이번 주일 때만 표시(주간 계산이 현재 주 기준이므로)
+        let goal='';
+        if(typeof PlanApp!=='undefined'&&PlanApp._weekKeys&&PlanApp._weekKeys(0).includes(this.date)){
+          const g=this._weekGoalPct();if(g)goal=` · 목표 볼륨 <b>${g.pct}%</b> (${g.done}/${g.target}세트)`;
+        }
+        mb.style.display='';mb.innerHTML=`🔥 이번 주 ${wk}/6일 완료 · 누적 ${total}회 운동${goal}`;
+      }
     }
+    this.renderWeeklyReport();                               // REST(일요일) 패널 주간 리포트 동기 갱신
+  },
+
+  // ── 접힘 상태 카드 요약: '지난 50×10 · 오늘 2세트' ──
+  _miniCacheCheck(){if(this._miniDate!==this.date){this._miniDate=this.date;this._miniPrev={};}},
+  _prevTopStr(name){
+    if(name in this._miniPrev)return this._miniPrev[name];   // prevSession은 오늘 기록과 무관 → 날짜 단위 캐시
+    const prev=this.prevSession(name);
+    let str=null;
+    if(prev&&prev.sets.length){
+      const top=prev.sets.reduce((a,s)=>(s.weight>a.weight||(s.weight===a.weight&&s.reps>a.reps))?s:a,prev.sets[0]);
+      str=this.isTimed(name)?(top.reps+'초'):(top.weight>0?(top.weight+'×'+top.reps):(top.reps+'회'));
+    }
+    return this._miniPrev[name]=str;
+  },
+  _updateMini(log,ex){
+    const card=log.closest('details.ex-card');if(!card)return;
+    const info=card.querySelector('summary .ex-info');if(!info)return;
+    const parts=[];
+    const prev=this._prevTopStr(log.dataset.exname);
+    if(prev)parts.push('지난 '+prev);
+    const n=ex?ex.sets.filter(s=>s.reps>0).length:0;
+    if(n)parts.push('오늘 <b>'+n+'</b>세트');
+    let mini=info.querySelector('.ex-mini');
+    if(!parts.length){if(mini)mini.remove();return;}
+    if(!mini){mini=document.createElement('div');mini.className='ex-mini';info.appendChild(mini);}
+    mini.innerHTML=parts.join(' · ');
+  },
+
+  // ── 같은 데이 타입의 직전 세션 톤수 ──
+  _prevDayTypeVol(day){
+    if(!day||day==='REST')return null;
+    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
+    for(const k of keys){
+      const ses=this.data[k];if(!ses||ses.day!==day)continue;
+      let v=0,has=false;
+      (ses.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(st.reps>0){has=true;v+=(st.weight||0)*st.reps;}}));
+      if(has)return{vol:v,day,date:k};
+    }
+    return null;
+  },
+
+  // ── 주간 목표 볼륨 달성률: 부위별 목표(RECO_TARGET) 상한으로 캡핑해 과잉 부위가 미달 부위를 상쇄하지 못하게 ──
+  _weekGoalPct(){
+    const vol=this._weekMuscleSets();
+    let done=0,target=0;
+    for(const m in RECO_TARGET){target+=RECO_TARGET[m];done+=Math.min(vol[m]||0,RECO_TARGET[m]);}
+    if(!target)return null;
+    return{pct:Math.round(done/target*100),done:Math.round(done*10)/10,target};
+  },
+
+  // ── 주간 리포트 (REST 패널): PR·최고 리프트·부위 달성·다음 주 도전 ──
+  renderWeeklyReport(){
+    const box=document.getElementById('weekly-report');if(box)box.innerHTML=this._weeklyReportHtml();
+  },
+  _weeklyReportHtml(){
+    if(typeof PlanApp==='undefined'||!PlanApp._weekKeys)return'';
+    const wkKeys=PlanApp._weekKeys(0),wkSet=new Set(wkKeys);
+    // 이번 주 PR — 주간요약(renderWeekSummary)과 동일한 1패스 러닝베스트 방식
+    const prs=[];const best={};let top=null;
+    Object.keys(this.data).sort().forEach(dk=>{
+      const inWeek=wkSet.has(dk);
+      (this.data[dk].exercises||[]).forEach(e=>{
+        const sets=(e.sets||[]).filter(s=>s.reps>0);if(!sets.length)return;
+        let dayMax=-1,dayTopSet=null;
+        sets.forEach(s=>{
+          const cur=s.weight>0?s.weight*(1+s.reps/30):s.reps;
+          if(cur>dayMax){dayMax=cur;dayTopSet=s;}
+          if(inWeek&&s.weight>0){const e1=s.weight*(1+s.reps/30);if(!top||e1>top.e1)top={e1,name:e.name,w:s.weight,r:s.reps};}
+        });
+        if(inWeek){
+          const b=best[e.name];
+          if(b!==undefined&&dayMax>b+0.05&&!prs.some(p=>p.name===e.name))
+            prs.push({name:e.name,txt:dayTopSet.weight>0?(dayTopSet.weight+'×'+dayTopSet.reps):(dayTopSet.reps+'회')});
+        }
+        if(dayMax>(best[e.name]??-Infinity))best[e.name]=dayMax;
+      });
+    });
+    const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&(d.exercises||[]).some(e=>(e.sets||[]).some(s=>s.reps>0));}).length;
+    if(!sessions)return'<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div><div class="wr-empty">이번 주 기록이 아직 없습니다. 세트를 기록하면 일요일에 여기서 한 주를 결산합니다.</div></div>';
+    // 부위별 목표 달성/미달
+    const vol=this._weekMuscleSets();
+    const misses=[];const hits=[];
+    for(const m in RECO_TARGET){const v=vol[m]||0;(v>=RECO_TARGET[m]?hits:misses).push({m,v,t:RECO_TARGET[m]});}
+    misses.sort((a,b)=>(a.v/a.t)-(b.v/b.t));
+    // 다음 주 도전 — 이번 주 수행 종목 중 증량 신호(⬆)가 뜬 것
+    const ups=[];const seenEx=new Set();
+    wkKeys.forEach(dk=>{(this.data[dk]&&this.data[dk].exercises||[]).forEach(e=>{
+      if(seenEx.has(e.name)||!(e.sets||[]).some(s=>s.reps>0))return;seenEx.add(e.name);
+      const sg=this.suggestTarget(e.name);if(sg&&sg.up)ups.push(e.name);
+    });});
+    const g=this._weekGoalPct();
+    let h='<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>';
+    h+='<div class="wr-row"><span>운동 일수</span><span class="v">'+sessions+'/6일</span></div>';
+    if(g)h+='<div class="wr-row"><span>목표 볼륨 달성</span><span class="v'+(g.pct>=100?' pr':'')+'">'+g.pct+'%</span></div>';
+    if(top)h+='<div class="wr-row"><span>최고 리프트</span><span class="v">'+top.name+' '+top.w+'×'+top.r+'</span></div>';
+    h+='<div class="wr-sec">🏆 이번 주 신기록 '+(prs.length?'('+prs.length+')':'')+'</div>';
+    h+=prs.length?prs.slice(0,6).map(p=>'<div class="wr-row"><span>'+p.name+'</span><span class="v pr">'+p.txt+'</span></div>').join('')
+      :'<div class="wr-empty">이번 주 신기록 없음 — 커팅 중엔 유지도 성공입니다.</div>';
+    if(misses.length){
+      h+='<div class="wr-sec">⚠ 목표 미달 부위</div>';
+      h+=misses.slice(0,4).map(x=>'<div class="wr-row"><span>'+x.m+'</span><span class="v miss">'+(x.v%1?x.v.toFixed(1):x.v)+'/'+x.t+'세트</span></div>').join('');
+    }
+    if(ups.length){
+      h+='<div class="wr-sec">⬆ 다음 주 증량 도전</div>';
+      h+=ups.slice(0,5).map(n=>'<div class="wr-row"><span>'+n+'</span><span class="v">준비 완료</span></div>').join('');
+    }
+    h+='</div>';
+    return h;
   },
 
   // ── 도전 무게 자동 산출 ──
@@ -1760,7 +1972,8 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderCalendar();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderCalendar();},
+  jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
     const now=new Date();
@@ -1793,10 +2006,9 @@ const PlanApp={
   renderWeek(){
     const now=new Date();const dow=now.getDay();
     const ws=new Date(now);ws.setDate(now.getDate()-(dow===0?6:dow-1));
-    const wk='plan_wk_'+_localKey(ws);
-    window.storage.get(wk).then(r=>{const done=r?JSON.parse(r.value):{};this._drawWeek(ws,done,wk);}).catch(()=>this._drawWeek(ws,{},wk));
+    this._logData().then(data=>this._drawWeek(ws,data));
   },
-  _drawWeek(ws,done,wk){
+  _drawWeek(ws,data){
     const grid=document.getElementById('plan-week-grid');if(!grid)return;
     const ns=['월','화','수','목','금','토','일'];
     const today=_todayKey();
@@ -1805,18 +2017,14 @@ const PlanApp={
       const d=new Date(ws);d.setDate(ws.getDate()+i);
       const dk=_localKey(d);
       const type=self.DAY_TYPES[(i+1)%7===0?0:(i+1)%7]||'REST';
-      const isToday=dk===today,isRest=type==='REST',isDone=!!done[dk],isPast=d<new Date()&&!isToday;
+      const sets=self._sessionSets(data,dk);                  // 기록에서 자동 판정 — 수동 체크와 이원화되던 것 통일
+      const isToday=dk===today,isRest=type==='REST',isDone=sets>0,isPast=d<new Date()&&!isToday;
       const cls='plan-day-cell'+(isDone?' done':'')+(isToday?' today':'')+(isRest?' rest':'');
-      return '<div class="'+cls+'" data-dk="'+dk+'" data-wk="'+wk+'" '+(isRest?'':'onclick="PlanApp.toggleDayEv(this)"')+'>'
+      return '<div class="'+cls+'" title="'+dk+(isDone?' · '+sets+'세트':'')+'" style="cursor:default">'
         +'<span class="plan-day-nm">'+n+'</span>'
         +'<span class="plan-day-tp" style="color:'+(self.DAY_COLORS[type]||'#888')+'">'+type+'</span>'
         +'<span class="plan-day-ck">'+(isDone?'✓':isRest?'—':isPast?'○':'·')+'</span></div>';
     }).join('');
-  },
-  toggleDayEv(el){this.toggleDay(el.dataset.dk,el.dataset.wk);},
-  async toggleDay(dk,wk){
-    let done={};try{const r=await window.storage.get(wk);if(r)done=JSON.parse(r.value);}catch(_){}
-    done[dk]=!done[dk];await window.storage.set(wk,JSON.stringify(done));this.renderWeek();
   },
   async loadBlood(){
     let checked={};try{const r=await window.storage.get('plan_blood_v1');if(r)checked=JSON.parse(r.value);}catch(_){}
@@ -1843,7 +2051,7 @@ const PlanApp={
   _isTimed(n){return /플랭크|데드행/.test(n||'');},
   muscleOf(name){
     const n=name||'';
-    if(/래터럴|레터럴|사이드\s*레이즈/.test(n))return{p:'측면삼각',s:[]};
+    if(/래터럴|레터럴|사이드\s*레이즈/.test(n)&&!/벤치|프레스|로우|풀다운/.test(n))return{p:'측면삼각',s:[]};
     if(/페이스풀|리어|후면\s*삼각|리버스\s*펙/.test(n))return{p:'등',s:[]};
     if(/숄더\s*프레스|숄더프레스|오버헤드\s*프레스|오버헤드프레스|밀리터리|OHP/i.test(n))return{p:'전면삼각',s:['삼두','측면삼각']};
     if(/리스트\s*컬|손목/.test(n))return{p:'전완',s:[]};
@@ -1881,9 +2089,14 @@ const PlanApp={
     }
     const total=order.reduce((a,m)=>a+vol[m],0);
     if(total===0){box.innerHTML='<div class="plan-vol-empty">이번 주 기록이 없습니다. 운동 탭에서 세트를 기록하면 부위별로 집계됩니다.</div>';return;}
+    // 목표 달성률 헤드라인 — 부위별 목표(RECO_TARGET) 상한 캡핑 합산: 한 부위 과잉이 다른 부위 미달을 못 가림
+    let gDone=0,gTarget=0;
+    for(const m in RECO_TARGET){gTarget+=RECO_TARGET[m];gDone+=Math.min(vol[m]||0,RECO_TARGET[m]);}
+    const gPct=gTarget?Math.round(gDone/gTarget*100):0;
+    const goalHtml='<div class="vol-goal"><div class="vol-goal-top"><span class="vol-goal-pct'+(gPct>=100?' hit':'')+'">'+gPct+'%'+(gPct>=100?' 🎉':'')+'</span><span class="vol-goal-sub">이번 주 목표 볼륨 '+(gDone%1?gDone.toFixed(1):gDone)+'/'+gTarget+'세트</span></div><div class="vol-goal-bar"><div class="vol-goal-fill" style="width:'+Math.min(100,gPct)+'%"></div></div></div>';
     const shown=order.filter(m=>!OPT[m]||vol[m]>0);
     const max=Math.max(10,...shown.map(m=>vol[m]));
-    box.innerHTML='<div class="plan-vol-head">이번 주 누적 세트 · 부위별</div>'+shown.map(m=>{
+    box.innerHTML=goalHtml+'<div class="plan-vol-head">이번 주 누적 세트 · 부위별</div>'+shown.map(m=>{
       const v=vol[m];const w=Math.round(v/max*100);const low=PRI[m]&&v<8;
       const vt=(v%1===0?String(v):v.toFixed(1));
       return '<div class="pv-row"><span class="pv-nm">'+m+(PRI[m]?' ⭐':'')+'</span><div class="pv-track"><div class="pv-fill" style="width:'+w+'%;background:'+COL[m]+'"></div></div><span class="pv-val'+(low?' low':'')+'">'+vt+(low?' ⚠':'')+'</span></div>';
@@ -1918,7 +2131,15 @@ const PlanApp={
       const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
       let plateau=false;
       if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
-      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
+      // e1RM 마일스톤 — 복합 종목만: 역대 최고 e1RM 기준 다음 10kg 단위까지 진행 바 (커팅 중에도 반복수로 움직이는 지표)
+      let ms='';
+      if(typeof ExLog!=='undefined'&&ExLog.isCompound(n)){
+        const best=Math.max.apply(null,arr.map(x=>x.e1));
+        const next=Math.floor(best/10)*10+10;
+        const p=Math.round((best-(next-10))/10*100);
+        ms='<div class="tr-ms"><span class="tr-ms-txt">🏁 <b>'+next+'kg</b>까지 '+(next-best).toFixed(1)+'kg</span><div class="tr-ms-bar"><div class="tr-ms-fill" style="width:'+p+'%"></div></div></div>';
+      }
+      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span> '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+ms+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
     }).join('');
   },
   toggleAlt(btn,name){
@@ -2078,9 +2299,9 @@ const LibApp={
       Object.keys(cats).forEach(c=>{h+='<button class="lib-chip" data-c="'+c+'" onclick="LibApp.setCat(\''+c+'\')">'+cats[c].split(' ')[0]+'</button>';});
       chipWrap.innerHTML=h;chipWrap.dataset.done='1';
     }
-    const q=this.q.trim();
+    const q=this.q.trim().toLowerCase();
     const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
-    const items=lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||e.name.indexOf(q)>=0||(e.mus||'').indexOf(q)>=0||(e.aka||[]).some(a=>a.indexOf(q)>=0)));
+    const items=lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0)));
     if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
     box.innerHTML=items.map(function(e){
       return '<details class="lib-card"><summary><span class="lib-dot" style="background:'+(COL[e.cat]||'#888')+'"></span><span class="lib-nm">'+e.name+'</span><span class="lib-mus">'+(e.mus||'')+'</span><span class="chev">▾</span></summary>'
@@ -2097,7 +2318,7 @@ const LibApp={
     }).join('');
   },
   setCat(c){this.cat=c;document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c===c));this.render();},
-  search(v){this.q=v;this.render();},
+  search(v){this.q=v;clearTimeout(this._t);this._t=setTimeout(()=>this.render(),120);},
   add(btn,name){
     if(ExLog.addExternal(name)){
       btn.textContent='✓ 운동 탭에 추가됨';btn.classList.add('added');btn.disabled=true;
@@ -2106,6 +2327,59 @@ const LibApp={
   }
 };
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90};
+// ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
+const Backup={
+  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url'],
+  PREFIXES:['plan_wk_'],
+  _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
+  _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
+  async _collect(){
+    const out={};
+    for(const k of this.KEYS){try{const r=await window.storage.get(k);if(r&&r.value!=null)out[k]=String(r.value);}catch(_){}}
+    for(const p of this.PREFIXES){
+      try{const r=await window.storage.list(p);
+        for(const k of ((r&&r.keys)||[])){try{const v=await window.storage.get(k);if(v&&v.value!=null)out[k]=String(v.value);}catch(_){}}
+      }catch(_){}
+    }
+    return out;
+  },
+  async exportData(){
+    try{
+      const data=await this._collect();
+      const json=JSON.stringify({app:'fit-tracker',version:1,exported:_todayKey(),data});
+      const ta=document.getElementById('bk-ta');if(ta){ta.value=json;ta.select();}
+      this._msg('✓ 내보내기 완료 — [복사] 또는 [파일 저장]으로 안전한 곳에 보관하세요. ('+Object.keys(data).length+'개 키, '+Math.round(json.length/1024)+'KB)');
+    }catch(e){this._msg('내보내기 실패: '+e.message,true);}
+  },
+  async copy(){
+    const ta=document.getElementById('bk-ta');if(!ta||!ta.value){this._msg('먼저 [내보내기]를 눌러주세요.',true);return;}
+    try{await navigator.clipboard.writeText(ta.value);this._msg('✓ 클립보드에 복사됨');}
+    catch(_){ta.select();try{document.execCommand('copy');this._msg('✓ 클립보드에 복사됨');}catch(e){this._msg('복사 실패 — 텍스트를 길게 눌러 직접 복사하세요.',true);}}
+  },
+  download(){
+    const ta=document.getElementById('bk-ta');if(!ta||!ta.value){this._msg('먼저 [내보내기]를 눌러주세요.',true);return;}
+    try{
+      const blob=new Blob([ta.value],{type:'application/json'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fit-backup-'+_todayKey()+'.json';
+      document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+      this._msg('✓ 파일 다운로드 시작 (환경에 따라 차단될 수 있음 — 실패 시 [복사] 사용)');
+    }catch(e){this._msg('파일 저장 실패 — [복사]로 백업하세요.',true);}
+  },
+  async importData(){
+    const ta=document.getElementById('bk-ta');
+    if(!ta||!ta.value.trim()){this._msg('복원할 백업 JSON을 붙여넣은 뒤 눌러주세요.',true);return;}
+    let obj;
+    try{obj=JSON.parse(ta.value);}catch(_){this._msg('JSON 형식이 아닙니다 — 백업 파일 내용을 그대로 붙여넣어 주세요.',true);return;}
+    if(!obj||obj.app!=='fit-tracker'||typeof obj.data!=='object'||!obj.data){this._msg('이 앱의 백업 파일이 아닙니다.',true);return;}
+    const keys=Object.keys(obj.data).filter(k=>this._allowed(k)&&typeof obj.data[k]==='string');
+    if(!keys.length){this._msg('복원할 데이터가 없습니다.',true);return;}
+    if(!confirm('백업 데이터 '+keys.length+'개 키를 복원합니다.\n현재 기기의 같은 항목을 덮어씁니다. 계속할까요?'))return;
+    let ok=0;
+    for(const k of keys){try{await window.storage.set(k,obj.data[k]);ok++;}catch(_){}}
+    this._msg('✓ '+ok+'/'+keys.length+'개 복원 완료 — 새로고침하여 적용합니다.');
+    setTimeout(()=>location.reload(),900);
+  }
+};
 const IB_SEED=[
   {date:'2026-05-25',wt:88.1,sm:35.0,bf:29.6,ab:0.97},
   {date:'2026-06-06',wt:89.4,sm:36.2,bf:28.5,ab:0.96}
@@ -2207,9 +2481,21 @@ const InBody={
       const perWk=(r.m*7);
       const projStr=proj.toFixed(f.dec)+f.unit;
       const gap=Math.abs(proj-f.goal).toFixed(f.dec);
+      // 필요 페이스: (목표까지 잔여량 ÷ 목표일까지 잔여 주) vs 현재 회귀 기울기 — 이분법(도달/부족) 대신 '얼마나 더'를 수치화
+      const lastVal=log[log.length-1][f.key];
+      const wksLeft=Math.max((goalDate-Date.now())/864e5/7,0.5);
+      const remain=f.dir===1?(f.goal-lastVal):(lastVal-f.goal);          // 목표 방향 기준 잔여량(+면 아직 남음)
+      let paceHtml='';
+      if(remain>0){
+        const need=remain/wksLeft;                                       // 주당 필요 변화량(절대값)
+        const cur=f.dir===1?perWk:-perWk;                                // 목표 방향 기준 현재 변화량
+        const ratio=need>0.0005?Math.max(0,Math.round(cur/need*100)):100;
+        const sign=f.dir===1?'+':'−';
+        paceHtml=' · 필요 '+sign+need.toFixed(f.dec===2?3:2)+f.unit+'/주 <b>(페이스 '+ratio+'%)</b>';
+      }
       const status=reach?'<span class="prj-ok">도달 ✓</span>':'<span class="prj-no">'+gap+f.unit+' 부족</span>';
       const rate=(Math.abs(perWk)<0.001)?'변화 거의 없음':((perWk>0?'+':'')+perWk.toFixed(f.dec===2?3:2)+f.unit+'/주');
-      rows+='<div class="prj-row"><span class="prj-lbl">'+f.lbl+'</span><span class="prj-val">~'+projStr+'</span><span class="prj-arrow">목표 '+f.goal+f.unit+' · '+rate+'</span>'+status+'</div>';
+      rows+='<div class="prj-row"><span class="prj-lbl">'+f.lbl+'</span><span class="prj-val">~'+projStr+'</span><span class="prj-arrow">목표 '+f.goal+f.unit+' · 현재 '+rate+paceHtml+'</span>'+status+'</div>';
     });
     const spanDays=xs[xs.length-1];
     let verdict=onTrack===total?'현재 페이스 유지 시 12월 전 항목 도달 예상.':
