@@ -666,14 +666,14 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-rule{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--color-text-secondary)}
 .plan-rule-n{font-size:11px;font-weight:700;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 /* 기록 연결(별칭) */
-.ex-alias-btn{background:none;border:none;font-size:13px;cursor:pointer;padding:2px 6px;opacity:.55;margin-left:auto}
+.ex-alias-btn{background:none;border:none;font-size:14px;cursor:pointer;padding:7px 10px;margin:-5px 0;opacity:.55;margin-left:auto}
 .ex-alias-btn:hover{opacity:1}
 .ex-log-top .ex-log-add-btn{margin-left:6px}
 .ex-alias-box{background:#F4F1EA;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;margin-top:8px}
 .ex-alias-hd{font-size:11px;color:#6b6b66;line-height:1.5;margin-bottom:8px}
 .ex-alias-linked{margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px}
 .ex-alias-tag{font-size:11px;background:#EAF3DE;color:#3B6D11;border-radius:8px;padding:3px 8px}
-.ex-alias-x{cursor:pointer;margin-left:2px;color:#a33}
+.ex-alias-x{cursor:pointer;margin-left:2px;color:#a33;padding:4px 6px;margin:-4px 0}
 .ex-alias-list{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto}
 .ex-alias-empty{font-size:12px;color:#8e8e93}
 /* 워밍업 램프업 */
@@ -717,7 +717,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .cardio-hd{font-size:11px;font-weight:600;color:#6b6b66;margin-bottom:6px}
 .cardio-list{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
 .cd-item{font-size:12px;color:#4a4a45;background:#F0F6EA;border-radius:8px;padding:5px 9px;display:flex;align-items:center;gap:6px}
-.cd-x{margin-left:auto;color:#a33;cursor:pointer;padding:0 4px}
+.cd-x{margin-left:auto;color:#a33;cursor:pointer;padding:5px 10px;margin:-5px -6px -5px 0}
 .cardio-add{font-size:11px;color:#3B6D11;background:#EAF3DE;border:none;border-radius:var(--border-radius-md);padding:6px 10px;cursor:pointer}
 .cardio-form{display:flex;gap:6px;margin-top:6px;align-items:center}
 .cd-type{font-size:12px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px}
@@ -1016,7 +1016,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="plan-phase-cards">
   <div class="plan-phase-card current">
     <div class="plan-phase-badge" style="background:#3B6D11">Phase 1</div>
-    <div class="plan-phase-kcal">2,300 kcal</div>
+    <div class="plan-phase-kcal">2,400 kcal</div>
     <div class="plan-phase-months">1~3개월</div>
     <div class="plan-phase-focus">적자 확립 · 리컴프</div>
   </div>
@@ -1236,6 +1236,7 @@ const ExLog={
     await this.loadPlan();
     await this.loadAlias();
     await this.loadMeta();
+    if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.injectBar();
     this.injectLogs();
     this.injectAddBtns();
@@ -1246,6 +1247,7 @@ const ExLog={
     augmentCards();
     this.injectRecos();
     this.initWakeLock();
+    this.initDateRollover();
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1268,7 +1270,7 @@ const ExLog={
   startBlock(){
     if(this.block&&this.block.start&&!confirm('새 6주 블록을 오늘부터 시작할까요?\n(현재 블록: '+this.block.start+' 시작, '+this.blockWeek()+'주차)'))return;
     this.block={start:this.date};this.saveBlock();this.refresh();
-    if(typeof PlanApp!=='undefined'&&PlanApp.renderTrends)PlanApp.renderTrends();
+    if(typeof PlanApp!=='undefined'){if(PlanApp.renderTrends)PlanApp.renderTrends();if(PlanApp.renderBlock)PlanApp.renderBlock();}
   },
 
   // ── 기록 연결(별칭): 옛이름 → 새이름 매핑. 장비·짐이 바뀌어 종목명이 달라져도 추세·직전기록·PR이 이어지도록 ──
@@ -1312,6 +1314,22 @@ const ExLog={
     const box=el&&el.closest('.ex-alias-box');if(box)box.remove();
     this.refresh();this.injectTargets();
     if(typeof PlanApp!=='undefined')PlanApp.renderTrends();
+  },
+
+  // ── 자정 롤오버: 앱을 켜둔 채 날짜가 바뀌면, '오늘'을 보고 있던 경우에만 새 오늘로 이동 ──
+  // (사용자가 의도적으로 과거 날짜를 열람 중이면 그대로 둔다)
+  _todaySeen:null,
+  initDateRollover(){
+    this._todaySeen=_todayKey();
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState!=='visible')return;
+      const t=_todayKey();
+      if(t===this._todaySeen)return;
+      const wasOnToday=(this.date===this._todaySeen);
+      this._todaySeen=t;
+      if(wasOnToday){this.date=t;if(this.updateBar)this.updateBar();this.injectTargets();}
+      this.refresh();
+    });
   },
 
   // ── 화면 꺼짐 방지(Wake Lock): 세트 사이 휴식 중 화면 유지. 미지원 브라우저는 조용히 무시 ──
@@ -2253,6 +2271,24 @@ const ExLog={
     this.closeSync();
     await this.syncToSheets(url);
   },
+  _syncRows(){
+    // 시트 upsert용 행 — 리프팅 세트(원본 로직 유지) + 유산소('🏃 ' 접두, reps열=분·weight/vol=0)
+    const rows=[];
+    Object.keys(this.data).sort().forEach(date=>{
+      const s=this.data[date];if(!s)return;
+      (s.exercises||[]).forEach(ex=>{
+        if(!ex.sets?.length)return;
+        ex.sets.forEach((set,i)=>{
+          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null});
+        });
+      });
+      (s.cardio||[]).forEach((c,i)=>{
+        if(!(+c.min>0))return;
+        rows.push({date,day:s.day||'',name:'🏃 '+(c.type||'유산소'),setNo:i+1,weight:0,reps:+c.min,vol:0,ts:c.ts||null});
+      });
+    });
+    return rows;
+  },
   async syncToSheets(url){
     url=url||(await this.getScriptUrl());
     if(!url)return;
@@ -2260,16 +2296,7 @@ const ExLog={
     const btn=document.getElementById('log-sync-btn');
     if(btn){btn.classList.add('syncing');btn.textContent='⏳';}
     try{
-      const rows=[];
-      Object.keys(this.data).sort().forEach(date=>{
-        const s=this.data[date];if(!s.exercises?.length)return;
-        s.exercises.forEach(ex=>{
-          if(!ex.sets?.length)return;
-          ex.sets.forEach((set,i)=>{
-            rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null});
-          });
-        });
-      });
+      const rows=this._syncRows();
       // 안전장치: 보낼 데이터가 없으면 전송하지 않음(빈 스냅샷이 시트를 비우는 사고 방지)
       if(rows.length===0){if(btn){btn.textContent='☁️';btn.classList.remove('syncing');}return;}
       // mode:'upsert' → Apps Script가 (날짜·종목·세트) 키로 시트의 기존 행만 갱신/추가.
@@ -2314,17 +2341,33 @@ const PlanApp={
     });
   },
   renderBlock(){
-    const start=new Date('2026-05-25T00:00:00');
+    // 운동 탭 블록 트래커(ExLog.block)와 단일 소스 — 하드코딩 시작일 제거
+    const fill=document.getElementById('block-fill');
+    const rd=document.getElementById('block-review-date');
+    const dt=document.getElementById('block-days-txt');
+    const rm=document.getElementById('block-remain-txt');
+    const title=document.querySelector('.plan-block-title');
+    const blk=(typeof ExLog!=='undefined')?ExLog.block:null;
+    if(!blk||!blk.start){
+      if(title)title.textContent='블록 미설정';
+      if(fill)fill.style.width='0%';
+      if(rd)rd.textContent='';
+      if(dt)dt.textContent='운동 탭 상단 칩에서 블록을 시작하세요';
+      if(rm)rm.textContent='';
+      return;
+    }
+    const start=new Date(blk.start+'T00:00:00');
     const review=new Date(start);review.setDate(start.getDate()+42);
     const now=new Date();
-    const elapsed=Math.max(0,Math.min(42,Math.floor((now-start)/864e5)));
+    const elapsedRaw=Math.max(0,Math.floor((now-start)/864e5));
+    const elapsed=Math.min(42,elapsedRaw);
     const pct=Math.round(elapsed/42*100);
-    const remain=Math.max(0,42-elapsed);
-    const fill=document.getElementById('block-fill');
+    const wk=Math.floor(elapsedRaw/7)+1;
+    if(title)title.textContent='블록 리뷰 ('+wk+'주차)';
     if(fill)fill.style.width=pct+'%';
-    const rd=document.getElementById('block-review-date');if(rd)rd.textContent=review.toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
-    const dt=document.getElementById('block-days-txt');if(dt)dt.textContent=elapsed+'/42일 ('+pct+'%)';
-    const rm=document.getElementById('block-remain-txt');if(rm)rm.textContent='잔여 '+remain+'일';
+    if(rd)rd.textContent=review.toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
+    if(dt)dt.textContent=elapsed+'/42일 ('+pct+'%)';
+    if(rm)rm.textContent=elapsedRaw>=42?'✅ 리뷰 시점 — 추세 섹션 확인':'잔여 '+(42-elapsedRaw)+'일';
   },
   renderWeek(){
     const now=new Date();const dow=now.getDay();
