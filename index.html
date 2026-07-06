@@ -727,13 +727,67 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .legday-note{font-size:11px;line-height:1.6;color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8;border-radius:var(--border-radius-md);padding:7px 10px;margin:6px 0}
 /* 상대강도 */
 .tr-bw{font-size:10px;color:#6B4FA0;background:#F1EDF8;border-radius:6px;padding:1px 5px}
+/* 기본무게 */
+.ex-base-btn{font-size:11px;color:#555;background:#F1F1EC;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block}
+.ex-base-panel{background:#F7F7F2;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
+.ex-base-hd{color:#6b6b66;line-height:1.5;margin-bottom:8px}
+.ex-base-row{display:flex;gap:6px;align-items:center}
+.ex-base-inp{width:110px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 8px;font-size:13px}
+.ex-base-save{font-size:12px;color:#fff;background:#085041;border:none;border-radius:6px;padding:6px 12px;cursor:pointer}
+.ex-base-clear{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:6px;padding:6px 10px;cursor:pointer}
+/* 종목별 세팅 메모 — 새 헬스장 머신 세팅(시트·핀·발판) 기록 */
+.ex-memo-btn{font-size:11px;color:#4a3f2a;background:#F6F1E3;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.ex-memo-btn.has{color:#6b5518;font-weight:600}
+.ex-memo-panel{background:#FBF8EE;border:0.5px solid #E8E0C8;border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
+.ex-memo-hd{color:#7a6f4e;line-height:1.5;margin-bottom:8px}
+.ex-memo-row{display:flex;gap:6px;align-items:center}
+.ex-memo-inp{flex:1;min-width:0;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;font-size:13px}
+/* RPE 선택 입력 — 세트 입력줄의 작은 셀렉트 */
+.wl-rpe-sel{flex-shrink:0;border:0.5px solid var(--color-border-tertiary);border-radius:8px;background:#fff;font-size:12px;color:#636366;padding:0 2px;height:44px;max-width:64px}
+.chip-rpe{font-style:normal;font-size:9px;opacity:.75;margin-left:2px}
+/* 통증 플래그 */
+.wl-pain-btn{flex-shrink:0;border:none;background:#fdf3e3;color:#b26a00;font-size:15px;width:44px;height:44px;border-radius:10px;cursor:pointer;opacity:.45}
+.wl-pain-btn.on{opacity:1;background:#fbe3c9;box-shadow:inset 0 0 0 1.5px #e09b3d}
+.chip-pain{font-style:normal;margin-left:2px}
+.ex-pain-warn{font-size:11px;line-height:1.5;color:#8a4b00;background:#FDF3E3;border:0.5px solid #F0DCB8;border-radius:var(--border-radius-md);padding:6px 10px;margin-bottom:8px}
+/* Claude 보고용 요약 복사 */
+.copy-report-btn{display:block;width:100%;margin:8px 0 0;padding:11px;background:none;border:1.5px dashed #185FA5;border-radius:12px;font-size:13px;color:#185FA5;font-weight:700;cursor:pointer;letter-spacing:.2px}
+.copy-report-btn.ok{border-color:#3B6D11;color:#3B6D11}
+.wl-total-hint{flex-basis:100%;font-size:11px;color:#085041;padding-top:4px}
+.ex-wu-plate{font-size:10px;color:#8a7340}
+/* 칼로리 조정 신호 */
+.ib-signal{font-size:12px;line-height:1.6;border-radius:var(--border-radius-md);padding:9px 11px;margin-bottom:10px}
+.ib-signal.warn{color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2}
+.ib-signal.ok{color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8}
+/* 컨디션·수면 */
+.cond-row{display:flex;align-items:center;gap:8px;background:#F7F7F2;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 10px;margin-bottom:8px;font-size:12px}
+.cond-lbl{color:#6b6b66;font-size:11px}
+.cond-dots{display:flex;gap:4px}
+.cond-dot{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e8e8e2;color:#9a9a94;font-size:11px;cursor:pointer;font-weight:600}
+.cond-dot.on{background:#3B6D11;color:#fff}
+.cond-sleep{width:66px;margin-left:auto;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:4px 7px;font-size:12px;text-align:center}
+/* 브리핑 */
+.brief-card{background:#EAF1F8;border:0.5px solid #CBDDEE;border-radius:var(--border-radius-md);padding:8px 11px;margin-bottom:8px;font-size:12px;line-height:1.6}
+.brief-hd{font-size:11px;font-weight:600;color:#153A5E;margin-bottom:3px}
+.brief-line{color:#2c4a68}
+.brief-tgt{color:#185FA5;font-size:11px}
+/* PR 보드 */
+.pr-fold summary{cursor:pointer}
+.pr-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.pr-row:last-child{border-bottom:none}
+.pr-row.anchor .pr-nm{font-weight:700}
+.pr-rank{width:20px;text-align:center;color:#BA7517;font-weight:700;font-size:11px}
+.pr-nm{flex:1;color:#333}
+.pr-e1{font-weight:700;color:#085041}
+.pr-meta{font-size:10px;color:#8e8e93}
+.pr-empty{font-size:12px;color:#8e8e93;padding:6px 0}
 /* 디로드 배너 */
 .tr-deload{font-size:12px;line-height:1.6;color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r"><input type="radio" name="day" id="d7" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -936,7 +990,10 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 이번 주 성과 요약 -->
 <div class="plan-hd" id="sec-ws">🏆 이번 주 성과</div>
 <div id="week-summary" class="plan-card"></div>
+<button class="copy-report-btn" onclick="PlanApp.copyReport(this)">📋 Claude 보고용 요약 복사</button>
 <div class="plan-card"><div id="plan-week-grid" class="plan-week-grid"></div><div class="plan-week-note">기록이 있는 날은 자동으로 ✓ 표시됩니다</div></div>
+
+<details class="info-card pr-fold"><summary>🏆 PR 보드 — 역대 최고 기록<span class="ic">▾</span></summary><div class="info-body"><div id="pr-board"></div></div></details>
 
 <!-- 체성분 현황 -->
 <div class="plan-hd" id="sec-ib">📊 체성분 현황</div>
@@ -988,6 +1045,16 @@ details.plan-fold[open]>summary::after{content:'▴'}
         <span class="ib-lbl">내장지방레벨</span>
         <input type="number" id="ib-vf" class="ib-inp" step="0.5" placeholder="선택" inputmode="decimal">
         <div class="ib-unit">목표 ≤10 (선택 입력)</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">위상각</span>
+        <input type="number" id="ib-pa" class="ib-inp" step="0.1" placeholder="선택" inputmode="decimal">
+        <div class="ib-unit">° · 세포 건강 지표 (선택 입력)</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">기초대사량</span>
+        <input type="number" id="ib-bmr" class="ib-inp" step="1" placeholder="선택" inputmode="numeric">
+        <div class="ib-unit">kcal (선택 입력)</div>
       </div>
     </div>
     <div class="ib-btns">
@@ -1236,6 +1303,9 @@ const ExLog={
     await this.loadPlan();
     await this.loadAlias();
     await this.loadMeta();
+    await this.loadBase();
+    await this.loadMemo();
+    document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
     if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.injectBar();
     this.injectLogs();
@@ -1565,7 +1635,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
   },
 
   injectLogs(){
@@ -1587,6 +1657,14 @@ const ExLog={
       row.className='ex-add-row';
       row.innerHTML=`<button class="ex-add-btn" onclick="ExLog.togglePicker(this)">＋ 운동 추가</button><div class="ex-add-picker" style="display:none"></div><div class="ex-custom-area"></div>`;
       panel.appendChild(row);
+    });
+    // 컨디션(1~5)·수면(h) 기록 — 정체·디로드 판단의 회복 맥락 데이터
+    document.querySelectorAll('.day-panel').forEach(panel=>{
+      if(panel.querySelector('.cond-row'))return;
+      const cd=document.createElement('div');
+      cd.className='cond-row';
+      cd.innerHTML='<span class="cond-lbl">😴 컨디션</span><span class="cond-dots">'+[1,2,3,4,5].map(n=>'<b class="cond-dot" data-n="'+n+'" onclick="ExLog.setCond('+n+')">'+n+'</b>').join('')+'</span><input type="number" class="cond-sleep" step="0.5" min="0" max="14" inputmode="decimal" placeholder="수면 h" onchange="ExLog.setSleep(this.value)">';
+      panel.insertBefore(cd,panel.firstChild);
     });
     // 유산소 기록 (내장지방 목표의 두 번째 축 — 근볼륨과 분리 집계)
     document.querySelectorAll('.day-panel').forEach(panel=>{
@@ -1611,6 +1689,28 @@ const ExLog={
   delCardio(i){
     const s=this.session();if(!s.cardio)return;
     s.cardio.splice(i,1);this.setSession(s);this.refresh();if(this._syncSoon)this._syncSoon();
+  },
+  setCond(n){
+    const s=this.session();(s.cond=s.cond||{}).rate=n;this.setSession(s);this.renderCond();if(this._syncSoon)this._syncSoon();
+  },
+  setSleep(v){
+    const h=parseFloat(v);const s=this.session();
+    s.cond=s.cond||{};if(h>0)s.cond.sleep=h;else delete s.cond.sleep;
+    this.setSession(s);if(this._syncSoon)this._syncSoon();
+  },
+  renderCond(){
+    const c=this.session().cond||{};
+    document.querySelectorAll('.cond-row').forEach(row=>{
+      row.querySelectorAll('.cond-dot').forEach(d=>d.classList.toggle('on',+d.dataset.n<=(c.rate||0)));
+      const sl=row.querySelector('.cond-sleep');
+      if(sl&&document.activeElement!==sl)sl.value=c.sleep||'';
+    });
+  },
+  _weekCondAvg(){ // 이번 주 컨디션·수면 평균 (기록된 날만)
+    const ks=(typeof PlanApp!=='undefined'&&PlanApp._weekKeys)?PlanApp._weekKeys(0):[];
+    let rs=0,rn=0,ss=0,sn=0;
+    ks.forEach(dk=>{const c=this.data[dk]&&this.data[dk].cond;if(!c)return;if(c.rate){rs+=c.rate;rn++;}if(c.sleep){ss+=c.sleep;sn++;}});
+    return{rate:rn?rs/rn:null,sleep:sn?ss/sn:null};
   },
   renderCardio(){
     const list=this.session().cardio||[];
@@ -1690,15 +1790,20 @@ const ExLog={
     const sn=log.querySelector('.ex-log-sn');
     log.dataset.editIdx='';                                  // 신규 입력 모드
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
+    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='none';pb.classList.remove('on');}
+    const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(sn)sn.textContent=(ex?.sets.length||0)+1;
     let lastW=ex?.sets.length?ex.sets[ex.sets.length-1].weight:'';
     if(!ex?.sets.length){const prev=this.prevSession(log.dataset.exname);if(prev&&prev.sets.length)lastW=prev.sets[prev.sets.length-1].weight;}
     const wi=inp.querySelector('.wl-kg-input');
-    if(wi)wi.value=lastW||'';
+    const base=this.baseOf(log.dataset.exname);
+    if(wi)wi.value=lastW?(base?Math.max(0,Math.round((lastW-base)*100)/100):lastW):'';  // 기본무게 등록 시 입력칸은 추가 원판
+    if(wi&&base)wi.placeholder='＋원판';
     inp.querySelector('.wl-rp-input').value='';
     inp.style.display='flex';btn.style.display='none';
+    if(wi)this._updateTotalHint(wi);
     setTimeout(()=>wi?.focus(),50);
   },
 
@@ -1714,8 +1819,12 @@ const ExLog={
     if(sn)sn.textContent=(i+1)+' 수정';
     const wi=inp.querySelector('.wl-kg-input');
     const ri=inp.querySelector('.wl-rp-input');
-    if(wi)wi.value=ex.sets[i].weight;
+    const base=this.baseOf(log.dataset.exname);
+    if(wi)wi.value=base?Math.max(0,Math.round((ex.sets[i].weight-base)*100)/100):ex.sets[i].weight;
     if(ri)ri.value=ex.sets[i].reps;
+    if(wi)this._updateTotalHint(wi);
+    const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value=ex.sets[i].rpe?String(ex.sets[i].rpe):'';
+    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='';pb.classList.toggle('on',!!ex.sets[i].pain);}
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
     const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
     inp.style.display='flex';
@@ -1750,16 +1859,21 @@ const ExLog={
   confirmSet(el){
     const inp=el.closest('.ex-log-input');
     const log=inp.closest('.ex-log');
-    const w=parseFloat(inp.querySelector('.wl-kg-input').value)||0;
+    let w=parseFloat(inp.querySelector('.wl-kg-input').value)||0;
     const r=parseInt(inp.querySelector('.wl-rp-input').value)||0;
     if(!w&&!r){this.cancelSet(el);return;}
+    const _base=this.baseOf(log.dataset.exname);
+    if(_base&&(w>0||r>0))w=Math.round((w+_base)*100)/100;   // 입력=추가 원판 → 총 무게로 저장
+    const rpeSel=inp.querySelector('.wl-rpe-sel');
+    const rpe=rpeSel?parseFloat(rpeSel.value)||0:0;          // RPE는 선택 입력 — 있을 때만 세트에 저장
     const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);}
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
-      // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각 보존.
-      ex.sets[+editIdx]={weight:w,reps:r,ts:ex.sets[+editIdx].ts||new Date().toISOString()};
+      // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
+      const old=ex.sets[+editIdx];
+      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},old.pain?{pain:true}:{},rpe?{rpe}:{});
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
@@ -1768,24 +1882,61 @@ const ExLog={
     }
     // 신규 세트
     const isPR=this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push({weight:w,reps:r,ts:new Date().toISOString()});
+    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},rpe?{rpe}:{}));
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
     if(isPR)this.showPR(log.dataset.exname);
-    if(this.date===_todayKey())this.startRest(log.dataset.exname);
+    if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname);}
     this._syncSoon();
+  },
+  // 알림 권한: 사용자 제스처(세트 확정) 시 1회만 요청 — 백그라운드에서 휴식 종료 알림용
+  _notifAsked:false,
+  _askNotify(){
+    if(this._notifAsked)return;this._notifAsked=true;
+    try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}catch(_){}
   },
 
   cancelSet(el){
     const inp=el.closest('.ex-log-input');
     const log=inp.closest('.ex-log');
     inp.querySelector('.wl-rp-input').value='';
+    const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
     inp.style.display='none';
     log.dataset.editIdx='';
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
+    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='none';pb.classList.remove('on');}
     const ab=log.querySelector('.ex-log-add-btn');
     if(ab)ab.style.display='';
+  },
+
+  // ── 통증 플래그: 세트 수정 모드에서 ⚠️ 토글 — '날카로운 통증=중단' 원칙의 기록 수단 ──
+  togglePainSet(el){
+    const inp=el.closest('.ex-log-input');
+    const log=inp.closest('.ex-log');
+    const editIdx=log.dataset.editIdx;
+    if(editIdx===''||editIdx==null)return;                   // 신규 입력 모드에서는 비활성 (버튼 자체가 숨김)
+    const s=this.session();
+    const ex=s.exercises.find(e=>e.name===log.dataset.exname);
+    if(!ex||!ex.sets[+editIdx])return;
+    const next=!ex.sets[+editIdx].pain;
+    if(next)ex.sets[+editIdx].pain=true;else delete ex.sets[+editIdx].pain;
+    this.setSession(s);
+    el.classList.toggle('on',next);
+    this.refresh();
+    this._syncSoon();
+  },
+  // 과거 통증 이력 (canon 기준 최근 1건) — 같은 종목 재도전 시 상기용
+  _lastPain(name){
+    const cn=this.canon(name);let hit=null;
+    for(const dk in this.data){
+      if(dk===this.date)continue;
+      (this.data[dk].exercises||[]).forEach(e=>{
+        if(this.canon(e.name)!==cn)return;
+        (e.sets||[]).forEach(st=>{if(st.pain&&(!hit||dk>hit.date))hit={date:dk,w:st.weight,r:st.reps};});
+      });
+    }
+    return hit;
   },
 
   deleteSet(el){
@@ -1847,7 +1998,9 @@ const ExLog={
         const cls=set.reps>=8?'hit':set.reps>=6?'':'miss';
         totSets++;totVol+=set.weight*set.reps;
         const badge=(i===prIdx)?'<span class="pr-trophy" title="개인 기록 갱신">🏆</span>':'';
-        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${set.weight}×${set.reps}${badge}</span>`;
+        const rpeMk=set.rpe?'<i class="chip-rpe">@'+set.rpe+'</i>':'';
+        const painMk=set.pain?'<i class="chip-pain" title="통증 기록됨">⚠️</i>':'';
+        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${set.weight}×${set.reps}${rpeMk}${painMk}${badge}</span>`;
       }).join('');
     });
     const sum=document.getElementById('sess-sum');
@@ -1894,6 +2047,7 @@ const ExLog={
       else ln.style.display='none';
     }
     this.renderCardio();                                     // 유산소 목록 갱신
+    this.renderCond();                                       // 컨디션·수면 표시 갱신
     this.renderWeeklyReport();                               // REST(일요일) 패널 주간 리포트 동기 갱신
     this.updateGripChips();                                  // 데드 그립 교대 표시 갱신
   },
@@ -2027,6 +2181,10 @@ const ExLog={
     // 유산소 주간 누적 (목표 150분 — LISS 중심, 내장지방 감량 축)
     const cm=this._weekCardioMin();
     h+='<div class="wr-row"><span>유산소</span><span class="v'+(cm>=150?' pr':(cm?'':' miss'))+'">'+cm+'/150분</span></div>';
+    // 컨디션·수면 평균 (기록된 날만)
+    const ca=this._weekCondAvg();
+    if(ca.rate!=null)h+='<div class="wr-row"><span>평균 컨디션</span><span class="v'+(ca.rate<3?' miss':'')+'">'+ca.rate.toFixed(1)+'/5</span></div>';
+    if(ca.sleep!=null)h+='<div class="wr-row"><span>평균 수면</span><span class="v'+(ca.sleep<6?' miss':'')+'">'+ca.sleep.toFixed(1)+'h</span></div>';
     // 세션 시간·세트 간격 (ts 있는 세션만 평균)
     const tms=wkKeys.map(dk=>this._sessionTiming(dk)).filter(Boolean);
     if(tms.length){
@@ -2087,10 +2245,117 @@ const ExLog={
     const allHit=sets.length>=2&&sets.every(s=>s.reps>=cap);
     if(allHit){
       const inc=this.isCompound(name)?2.5:1;
-      return{html:'<span class="wt-prev">지난: '+setStr+'</span> → <b>'+(lastW+inc)+'kg 도전 ⬆</b>',up:true};
+      // RPE 반영: 렙 상단을 채웠어도 마지막 세션 체감 강도가 9.5+면 같은 무게 한 번 더 굳히기
+      const hardest=Math.max.apply(null,sets.map(s=>s.rpe||0));
+      if(hardest>=9.5)return{html:'<span class="wt-prev">지난: '+setStr+'</span> → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)',up:false};
+      const ease=(hardest>0&&hardest<=8)?' (RPE '+hardest+' 여유)':'';
+      return{html:'<span class="wt-prev">지난: '+setStr+'</span> → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease,up:true};
     }
     return{html:'<span class="wt-prev">지난: '+setStr+'</span> → '+lastW+'kg로 '+cap+'회 채우기',up:false};
   },
+  // ── 기본무게: 종목별 장비 자체 무게(바벨 20kg, 스미스 바, 머신 캐리지 등)를 등록하면
+  //    세트 입력은 '추가 원판'만 받고 총 무게(기본+추가)로 저장·집계한다. 기록은 항상 총 무게 기준 ──
+  base:{},
+  async loadBase(){try{const r=await window.storage.get('ex_base');if(r)this.base=JSON.parse(r.value)||{};}catch(_){}},
+  saveBase(){try{window.storage.set('ex_base',JSON.stringify(this.base));}catch(_){}},
+  baseOf(name){const b=+this.base[this.canon(name)];return b>0?b:0;},
+  setBase(name,kg){
+    const cn=this.canon(name);
+    if(kg>0)this.base[cn]=kg;else delete this.base[cn];
+    this.saveBase();
+  },
+  // ── 종목별 세팅 메모: 시트 높이·핀 번호·발판 위치 등 내 몸에 맞춘 기구 세팅 (canon 기준 — 별칭 연결 시 메모 승계) ──
+  memo:{},
+  async loadMemo(){try{const r=await window.storage.get('ex_memo');if(r)this.memo=JSON.parse(r.value)||{};}catch(_){}},
+  saveMemo(){try{window.storage.set('ex_memo',JSON.stringify(this.memo));}catch(_){}},
+  memoOf(name){return this.memo[this.canon(name)]||'';},
+  setMemo(name,txt){
+    const cn=this.canon(name);
+    const t=String(txt||'').trim().slice(0,120);
+    if(t)this.memo[cn]=t;else delete this.memo[cn];
+    this.saveMemo();
+  },
+  toggleMemo(btn){
+    const det=btn.closest('.ex-detail');if(!det)return;
+    let panel=det.querySelector('.ex-memo-panel');
+    if(panel){panel.remove();return;}
+    const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
+    const cur=this.memoOf(name);
+    panel=document.createElement('div');panel.className='ex-memo-panel';
+    panel.innerHTML='<div class="ex-memo-hd">📝 이 기구의 <b>내 세팅</b>을 기록하세요 — 시트 높이·핀 번호·발판 위치·패드 각도 등.</div>'
+      +'<div class="ex-memo-row"><input type="text" class="ex-memo-inp" maxlength="120" placeholder="예: 시트 4번 · 발판 중앙 한 뼘 위" value="'+cur.replace(/"/g,'&quot;')+'" onkeydown="if(event.key===\'Enter\')ExLog.saveMemoFromUI(this)">'
+      +'<button class="ex-base-save" onclick="ExLog.saveMemoFromUI(this)">저장</button>'
+      +(cur?'<button class="ex-base-clear" onclick="ExLog.clearMemoFromUI(this)">삭제</button>':'')+'</div>';
+    btn.insertAdjacentElement('afterend',panel);
+    setTimeout(()=>panel.querySelector('.ex-memo-inp')?.focus(),50);
+  },
+  saveMemoFromUI(el){
+    const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
+    this.setMemo(log.dataset.exname,det.querySelector('.ex-memo-inp').value);
+    det.querySelector('.ex-memo-panel').remove();
+    this.injectTargets();
+  },
+  clearMemoFromUI(el){
+    const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
+    this.setMemo(log.dataset.exname,'');
+    det.querySelector('.ex-memo-panel').remove();
+    this.injectTargets();
+  },
+  // 원판 분해: 한쪽 무게를 표준 원판(25~1.25)으로 그리디 분해
+  _plateSplit(perSide){
+    const PL=[25,20,15,10,5,2.5,1.25];const out=[];let r=perSide;
+    for(const p of PL){while(r>=p-0.001){out.push(p);r-=p;}}
+    return{combo:out,rem:Math.round(r*100)/100};
+  },
+  // 총 무게 힌트: '= 총 60kg · 한쪽 20 (20)' — 기본무게 있을 때 세트 입력 밑에 표시
+  _totalHint(name,addedW){
+    const base=this.baseOf(name);if(!base)return'';
+    const add=+addedW||0;const total=Math.round((base+add)*100)/100;
+    let h='= 총 <b>'+total+'kg</b> <small>(기본 '+base+' + 원판 '+add+')</small>';
+    if(add>0){
+      const ps=add/2;const sp=this._plateSplit(ps);
+      h+=' · 한쪽 '+(Math.round(ps*100)/100)+'kg';
+      if(sp.combo.length&&sp.rem===0)h+=' <small>['+sp.combo.join('+')+']</small>';
+    }
+    return h;
+  },
+  _updateTotalHint(inp){
+    const log=inp.closest('.ex-log');if(!log)return;
+    const name=log.dataset.exname;
+    let hint=log.querySelector('.wl-total-hint');
+    const base=this.baseOf(name);
+    if(!base){if(hint)hint.remove();return;}
+    if(!hint){hint=document.createElement('div');hint.className='wl-total-hint';inp.closest('.ex-log-input').appendChild(hint);}
+    hint.innerHTML=this._totalHint(name,parseFloat(inp.value)||0);
+  },
+  toggleBase(btn){
+    const det=btn.closest('.ex-detail');if(!det)return;
+    let panel=det.querySelector('.ex-base-panel');
+    if(panel){panel.remove();return;}
+    const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
+    const cur=this.baseOf(name);
+    const ph=/바벨|스쿼트|데드리프트|스미스|랜드마인|트랩바|T바|로우/.test(this.canon(name))?'예: 바벨 20':'장비 자체 kg';
+    panel=document.createElement('div');panel.className='ex-base-panel';
+    panel.innerHTML='<div class="ex-base-hd">🏗 기본무게(장비 자체 무게)를 등록하면 세트 입력은 <b>추가 원판만</b> 받고 총 무게로 저장됩니다.</div>'
+      +'<div class="ex-base-row"><input type="number" class="ex-base-inp" step="0.5" inputmode="decimal" placeholder="'+ph+'" value="'+(cur||'')+'">'
+      +'<button class="ex-base-save" onclick="ExLog.saveBaseFromUI(this)">저장</button>'
+      +(cur?'<button class="ex-base-clear" onclick="ExLog.clearBaseFromUI(this)">해제</button>':'')+'</div>';
+    btn.insertAdjacentElement('afterend',panel);
+  },
+  saveBaseFromUI(el){
+    const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');const name=log.dataset.exname;
+    const kg=parseFloat(det.querySelector('.ex-base-inp').value)||0;
+    this.setBase(name,kg);
+    det.querySelector('.ex-base-panel').remove();
+    this.injectTargets();this.refresh();
+  },
+  clearBaseFromUI(el){
+    const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
+    this.setBase(log.dataset.exname,0);
+    det.querySelector('.ex-base-panel').remove();
+    this.injectTargets();this.refresh();
+  },
+
   // ── 데드리프트 오버언더 그립 교대: 세트마다 언더 손을 좌우 교대 (이두 파열 예방 프로토콜) ──
   _gripStartMem:null, // 메모리 우선 + localStorage 영속 시도 (localStorage 불가 환경에서도 세션 내 동작 보장)
   _gripStart(){
@@ -2119,12 +2384,42 @@ const ExLog={
       if(log)ch.innerHTML=this._gripChipHtml(log.dataset.exname);
     });
   },
+  injectBrief(){
+    document.querySelectorAll('.day-panel').forEach(panel=>{
+      let bc=panel.querySelector('.brief-card');
+      const lines=[];
+      panel.querySelectorAll('.ex-log[data-exname]').forEach(log=>{
+        if(lines.length>=3)return;
+        const name=log.dataset.exname;
+        if(!this.isCompound(name)||this.isTimed(name))return;
+        const prev=this.prevSession(name);
+        if(!prev||!prev.sets.length)return;
+        const top=prev.sets.reduce((a,b)=>(b.weight||0)>(a.weight||0)?b:a,prev.sets[0]);
+        const badge=log.closest('.ex-detail')?.querySelector('.ex-week-target');
+        const tgt=badge?badge.textContent.replace(/\s+/g,' ').trim():'';
+        lines.push('<div class="brief-line"><b>'+name+'</b> 직전 '+top.weight+'×'+top.reps+(tgt?' <span class="brief-tgt">'+tgt+'</span>':'')+'</div>');
+      });
+      if(!lines.length){if(bc)bc.remove();return;}
+      if(!bc){
+        bc=document.createElement('div');bc.className='brief-card';
+        const anchor=panel.querySelector('.cond-row');
+        if(anchor)panel.insertBefore(bc,anchor.nextSibling);else panel.insertBefore(bc,panel.firstChild);
+      }
+      bc.innerHTML='<div class="brief-hd">📋 오늘의 앵커</div>'+lines.join('');
+    });
+  },
   _round25(x){return Math.max(0,Math.round(x/2.5)*2.5);},
-  _warmupRows(w){
+  _warmupRows(w,base){
     if(!(w>0))return'<div class="ex-wu-empty">본세트 무게를 입력하면 단계가 계산됩니다.</div>';
+    base=+base||0;
     const steps=[[0.4,8],[0.6,5],[0.8,3]];
-    return steps.map(([p,r],i)=>'<div class="ex-wu-row"><span class="ex-wu-step">'+(i+1)+'단계</span><b>'+this._round25(w*p)+'kg</b> × '+r+'회 <span class="ex-wu-pct">('+Math.round(p*100)+'%)</span></div>').join('')
-      +'<div class="ex-wu-note">세트 간 휴식 짧게(30~60초) → 본세트 '+w+'kg</div>';
+    const plate=t=>{ // 기본무게 있으면 단계별 원판 안내 (총무게 기준 반올림 후 원판 환산)
+      if(!base||t<=base)return'';
+      const ps=(t-base)/2;const sp=this._plateSplit(ps);
+      return' <span class="ex-wu-plate">한쪽 '+(Math.round(ps*100)/100)+(sp.combo.length&&sp.rem===0?' ['+sp.combo.join('+')+']':'')+'</span>';
+    };
+    return steps.map(([p,r],i)=>{const t=this._round25(w*p);return'<div class="ex-wu-row"><span class="ex-wu-step">'+(i+1)+'단계</span><b>'+t+'kg</b> × '+r+'회 <span class="ex-wu-pct">('+Math.round(p*100)+'%)</span>'+plate(t)+'</div>';}).join('')
+      +'<div class="ex-wu-note">세트 간 휴식 짧게(30~60초) → 본세트 '+w+'kg'+plate(w)+'</div>';
   },
   toggleWarmup(btn){
     const det=btn.closest('.ex-detail');if(!det)return;
@@ -2135,12 +2430,14 @@ const ExLog={
     let w=0;const prev=this.prevSession(name);
     if(prev&&prev.sets.length){w=Math.max.apply(null,prev.sets.map(s=>s.weight||0));}
     panel=document.createElement('div');panel.className='ex-warmup';
-    panel.innerHTML='<div class="ex-wu-hd">🔥 워밍업 램프업 <input type="number" class="ex-wu-inp" step="2.5" inputmode="decimal" placeholder="본세트 kg" value="'+(w||'')+'" oninput="ExLog._updateWarmup(this)"></div><div class="ex-wu-body">'+this._warmupRows(w)+'</div>';
+    const wbase=this.baseOf(name);
+    panel.dataset.base=wbase;
+    panel.innerHTML='<div class="ex-wu-hd">🔥 워밍업 램프업 <input type="number" class="ex-wu-inp" step="2.5" inputmode="decimal" placeholder="본세트 총 kg" value="'+(w||'')+'" oninput="ExLog._updateWarmup(this)"></div><div class="ex-wu-body">'+this._warmupRows(w,wbase)+'</div>';
     btn.insertAdjacentElement('afterend',panel);
   },
   _updateWarmup(inp){
-    const body=inp.closest('.ex-warmup').querySelector('.ex-wu-body');
-    body.innerHTML=this._warmupRows(parseFloat(inp.value)||0);
+    const panel=inp.closest('.ex-warmup');
+    panel.querySelector('.ex-wu-body').innerHTML=this._warmupRows(parseFloat(inp.value)||0,+panel.dataset.base||0);
   },
   injectTargets(){
     document.querySelectorAll('.ex-log').forEach(log=>{
@@ -2165,6 +2462,34 @@ const ExLog={
           if(anchor2)det.insertBefore(wuBtn,anchor2.nextSibling);else det.insertBefore(wuBtn,det.firstChild);
         }
       }else if(wuBtn){wuBtn.remove();}
+      // 기본무게 설정 칩 (모든 종목 — 상태를 라벨에 표시)
+      let bb=det.querySelector('.ex-base-btn');
+      if(!bb){
+        bb=document.createElement('button');bb.className='ex-base-btn';bb.type='button';
+        bb.setAttribute('onclick','ExLog.toggleBase(this)');
+        const anchorB=det.querySelector('.ex-warmup-btn')||det.querySelector('.ex-week-target');
+        if(anchorB)det.insertBefore(bb,anchorB.nextSibling);else det.insertBefore(bb,det.firstChild);
+      }
+      const bkg=this.baseOf(name);
+      bb.textContent=bkg?('🏗 기본 '+bkg+'kg · 입력은 ＋원판'):'🏗 기본무게 설정';
+      // 세팅 메모 칩 (모든 종목 — 새 헬스장 기구 세팅 기록)
+      let mb2=det.querySelector('.ex-memo-btn');
+      if(!mb2){
+        mb2=document.createElement('button');mb2.className='ex-memo-btn';mb2.type='button';
+        mb2.setAttribute('onclick','ExLog.toggleMemo(this)');
+        det.insertBefore(mb2,bb.nextSibling);
+      }
+      const mm=this.memoOf(name);
+      mb2.classList.toggle('has',!!mm);
+      mb2.textContent=mm?('📝 '+mm):'📝 세팅 메모';
+      // 통증 이력 경고 (canon 기준 최근 1건 — 재도전 시 상기)
+      let pw=det.querySelector('.ex-pain-warn');
+      const ph2=this._lastPain(name);
+      if(ph2){
+        if(!pw){pw=document.createElement('div');pw.className='ex-pain-warn';det.insertBefore(pw,mb2.nextSibling);}
+        const pd=new Date(ph2.date+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'});
+        pw.innerHTML='⚠️ <b>통증 이력</b> '+pd+' '+(ph2.w>0?ph2.w+'kg':'맨몸')+'×'+ph2.r+' — 워밍업 충분히, 날카로운 통증이면 즉시 중단';
+      }else if(pw){pw.remove();}
       // 프리웨이트 데드리프트 계열: 세트별 언더그립 손 표시 (머신·RDL 제외 — 더블 오버/고정 그립)
       let gc=det.querySelector('.ex-grip-chip');
       const cn=this.canon(name);
@@ -2191,6 +2516,7 @@ const ExLog={
       if(info.w)rows+='<div class="ex-cue-row cue-warn"><span class="lbl">⚠️ 주의</span>'+info.w+'</div>';
       cue.innerHTML='<summary>💡 폼 &amp; 자극점</summary><div class="ex-cue-body">'+rows+'</div>';
     });
+    this.injectBrief();                                      // 목표 배지 주입 후 브리핑 갱신
   },
   weekStats(){
     const today=new Date(this.date+'T12:00:00');
@@ -2210,25 +2536,31 @@ const ExLog={
   startRest(name){
     this.stopRest();
     const total=this.restSec(name);
-    this.rest={name,endAt:Date.now()+total*1000,total,int:setInterval(()=>this.tickRest(),500)};
+    // 활성 타이머 엘리먼트 1회 탐색 후 캐시 — 500ms 틱마다 전체 .ex-log 순회 제거 (stopRest가 나머지를 이미 초기화)
+    let el=null;
+    document.querySelectorAll('.ex-log').forEach(l=>{if(l.dataset.exname===name)el=l.querySelector('.rest-timer')||el;});
+    this.rest={name,endAt:Date.now()+total*1000,total,int:setInterval(()=>this.tickRest(),500),el,notified:false};
     this.tickRest();
   },
   tickRest(){
     const r=this.rest;if(!r.name)return;
     const remain=Math.max(0,Math.round((r.endAt-Date.now())/1000));
-    document.querySelectorAll('.ex-log').forEach(log=>{
-      const t=log.querySelector('.rest-timer');if(!t)return;
-      if(log.dataset.exname===r.name){
-        t.classList.add('active');
-        const mm=Math.floor(remain/60),ss=remain%60;
-        t.querySelector('.rt-time').textContent=mm+':'+String(ss).padStart(2,'0');
-        t.querySelector('.rt-fill').style.width=(r.total?Math.max(0,remain/r.total*100):0)+'%';
-        t.classList.toggle('done',remain<=0);
-      }else{t.classList.remove('active','done');}
-    });
+    const t=r.el;
+    if(t){
+      t.classList.add('active');
+      const mm=Math.floor(remain/60),ss=remain%60;
+      t.querySelector('.rt-time').textContent=mm+':'+String(ss).padStart(2,'0');
+      t.querySelector('.rt-fill').style.width=(r.total?Math.max(0,remain/r.total*100):0)+'%';
+      t.classList.toggle('done',remain<=0);
+    }
     if(remain<=0&&r.int){
       clearInterval(r.int);this.rest.int=null;
       try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(_){}
+      // 화면을 벗어나 있으면 시스템 알림으로 휴식 종료 통지 (권한 있을 때만)
+      if(!r.notified){
+        r.notified=true;
+        try{if(document.hidden&&'Notification' in window&&Notification.permission==='granted')new Notification('⏱ 휴식 끝',{body:'다음 세트: '+r.name,tag:'rest-timer'});}catch(_){}
+      }
       setTimeout(()=>{if(!this.rest.int&&this.rest.name===r.name)this.stopRest();},8000);
     }
   },
@@ -2322,7 +2654,7 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderCalendar();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();},
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
@@ -2589,7 +2921,11 @@ const PlanApp={
     let banner='';
     if(plateauCompounds>=2&&typeof ExLog!=='undefined'&&ExLog._weekGoalPct){
       const wg=ExLog._weekGoalPct();
-      if(wg&&wg.pct>=70)banner='<div class="tr-deload">🛌 <b>디로드 검토</b> — 복합 '+plateauCompounds+'종이 3회 연속 정체 중이고 주간 볼륨은 '+wg.pct+'% 소화 중입니다. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.</div>';
+      if(wg&&wg.pct>=70){
+        let condNote='';
+        try{const ca=ExLog._weekCondAvg();if(ca.rate!=null&&ca.rate<3)condNote=' 이번 주 평균 컨디션 '+ca.rate.toFixed(1)+'/5 — 수면·회복 요인부터 점검하세요.';}catch(_){}
+        banner='<div class="tr-deload">🛌 <b>디로드 검토</b> — 복합 '+plateauCompounds+'종이 3회 연속 정체 중이고 주간 볼륨은 '+wg.pct+'% 소화 중입니다. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.'+condNote+'</div>';
+      }
     }
     box.innerHTML=blockBanner+banner+rowsHtml;
   },
@@ -2612,6 +2948,31 @@ const PlanApp={
   },
   _sessionSets(data,dk){let n=0;(data[dk]&&data[dk].exercises||[]).forEach(e=>{n+=(e.sets||[]).filter(s=>s.reps>0).length;});return n;},
   _weekVolume(data,keys){let v=0;keys.forEach(dk=>{(data[dk]&&data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(s=>{if(s.reps>0)v+=(s.weight||0)*s.reps;});});});return v;},
+  async renderPRBoard(){
+    const box=document.getElementById('pr-board');if(!box)return;
+    const data=await this._logData();
+    const best={}; // canon명 → {e1,w,r,date}
+    for(const dk in data){
+      (data[dk].exercises||[]).forEach(ex=>{
+        const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
+        (ex.sets||[]).forEach(st=>{
+          if(!(st.reps>0&&st.weight>0))return;
+          const e1=st.weight*(1+st.reps/30);
+          if(!best[cn]||e1>best[cn].e1)best[cn]={e1,w:st.weight,r:st.reps,date:dk};
+        });
+      });
+    }
+    const names=Object.keys(best);
+    if(!names.length){box.innerHTML='<div class="pr-empty">아직 기록이 없습니다.</div>';return;}
+    // 복합(앵커) 우선, 그 안에서 e1RM 내림차순 — 상위 12개
+    const isC=n=>(typeof ExLog!=='undefined'&&ExLog.isCompound)?ExLog.isCompound(n):false;
+    names.sort((a,b)=>(isC(b)-isC(a))||(best[b].e1-best[a].e1));
+    box.innerHTML=names.slice(0,12).map((n,i)=>{
+      const b=best[n];
+      const d=new Date(b.date+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
+      return'<div class="pr-row'+(isC(n)?' anchor':'')+'"><span class="pr-rank">'+(i+1)+'</span><span class="pr-nm">'+n+'</span><span class="pr-e1">'+b.e1.toFixed(1)+'kg</span><span class="pr-meta">'+b.w+'×'+b.r+' · '+d+'</span></div>';
+    }).join('');
+  },
   async renderWeekSummary(){
     const box=document.getElementById('week-summary');if(!box)return;
     const data=await this._logData();
@@ -2650,6 +3011,86 @@ const PlanApp={
       +'<div class="ws-cell"><div class="ws-v">D-'+dday+'</div><div class="ws-l">목표(12월)까지</div></div>'
       +'</div>'
       +(bfTrend?'<div class="ws-note">체지방률 추세 '+bfTrend+' · 골격근·체지방은 체성분 현황에서 확인</div>':'');
+  },
+  // ── Claude 보고용 요약: 최근 인바디 + 이번 주 세션·컨디션을 마크다운으로 복사 (일요일 보고 워크플로우) ──
+  _fmtSets(sets){
+    // 같은 무게 연속 세트 압축: 52.5×8, 52.5×8, 52.5×7 → 52.5×8·8·7
+    const parts=[];let curW=null,reps=[];
+    const flush=()=>{if(curW!=null)parts.push((curW>0?curW+'×':'맨몸 ')+reps.join('·'));};
+    sets.forEach(s=>{
+      if(s.weight!==curW){flush();curW=s.weight;reps=[];}
+      reps.push(s.reps+(s.rpe?'@'+s.rpe:'')+(s.pain?'⚠️':''));
+    });
+    flush();return parts.join(', ');
+  },
+  async copyReport(btn){
+    const data=await this._logData();
+    const wkKeys=this._weekKeys(0);
+    const L=[];
+    const fd=d=>new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'});
+    L.push('## 주간 보고 ('+fd(wkKeys[0])+' ~ '+fd(wkKeys[6])+')');
+    // 체성분 — 최근 2회 + 변화량
+    try{
+      if(typeof InBody!=='undefined'&&!InBody._log)await InBody.load();
+      const log=(typeof InBody!=='undefined'&&InBody._log)||[];
+      if(log.length){
+        L.push('','### 체성분');
+        log.slice(-2).forEach(e=>{
+          let s='- '+e.date+': 체중 '+e.wt+' · 골격근 '+e.sm+' · 체지방률 '+e.bf+'% · 복부 '+e.ab;
+          if(e.waist)s+=' · 허리 '+e.waist;if(e.vf)s+=' · 내장지방 '+e.vf;if(e.pa)s+=' · 위상각 '+e.pa;if(e.bmr)s+=' · BMR '+e.bmr;
+          L.push(s);
+        });
+        if(log.length>=2){
+          const a=log[log.length-2],b=log[log.length-1];
+          const dv=(x,y)=>{const d=+(y-x).toFixed(2);return(d>0?'+':'')+d;};
+          L.push('- Δ: 체중 '+dv(a.wt,b.wt)+' · 골격근 '+dv(a.sm,b.sm)+' · 체지방률 '+dv(a.bf,b.bf)+'%p · 복부 '+dv(a.ab,b.ab));
+        }
+      }
+    }catch(_){}
+    // 세션별 상세
+    L.push('','### 세션');
+    let any=false,condS=0,condN=0,slpS=0,slpN=0,cardioMin=0;
+    wkKeys.forEach(dk=>{
+      const d=data[dk];if(!d)return;
+      const exLines=(d.exercises||[]).filter(e=>(e.sets||[]).some(s=>s.reps>0))
+        .map(e=>{
+          const sets=e.sets.filter(s=>s.reps>0);
+          const top=sets.reduce((a,s)=>{const ca=a.weight*(1+a.reps/30),cs=s.weight*(1+s.reps/30);return cs>ca?s:a;},sets[0]);
+          const e1=top.weight>0?' (e1RM '+(top.weight*(1+top.reps/30)).toFixed(1)+')':'';
+          return '  - '+e.name+': '+this._fmtSets(sets)+e1;
+        });
+      const cd=(d.cardio||[]).map(c=>c.type+' '+c.min+'분');
+      (d.cardio||[]).forEach(c=>cardioMin+=(+c.min||0));
+      if(d.cond){if(d.cond.rate){condS+=d.cond.rate;condN++;}if(d.cond.sleep){slpS+=d.cond.sleep;slpN++;}}
+      if(!exLines.length&&!cd.length)return;
+      any=true;
+      let hd='- **'+fd(dk)+' ('+(d.day||'')+')**';
+      if(d.cond&&(d.cond.rate||d.cond.sleep))hd+=' — 컨디션 '+(d.cond.rate||'-')+'/5'+(d.cond.sleep?' · 수면 '+d.cond.sleep+'h':'');
+      L.push(hd);
+      exLines.forEach(x=>L.push(x));
+      if(cd.length)L.push('  - 유산소: '+cd.join(', '));
+    });
+    if(!any)L.push('- 이번 주 기록 없음');
+    // 주간 합계
+    const volT=this._weekVolume(data,wkKeys),volL=this._weekVolume(data,this._weekKeys(-1));
+    let setsT=0;wkKeys.forEach(dk=>setsT+=this._sessionSets(data,dk));
+    const days=wkKeys.filter(dk=>this._sessionSets(data,dk)>0).length;
+    L.push('','### 주간 합계');
+    L.push('- 운동 '+days+'일 · '+setsT+'세트 · 볼륨 '+Math.round(volT).toLocaleString()+'kg'+(volL?' (지난주 대비 '+(volT>=volL?'+':'')+Math.round((volT-volL)/volL*100)+'%)':''));
+    if(cardioMin)L.push('- 유산소 누적 '+cardioMin+'분');
+    if(condN||slpN)L.push('- 컨디션 평균 '+(condN?(condS/condN).toFixed(1):'-')+'/5 · 수면 평균 '+(slpN?(slpS/slpN).toFixed(1)+'h':'-'));
+    const md=L.join('\n');
+    // 복사 (clipboard 실패 시 execCommand 폴백)
+    let ok=false;
+    try{await navigator.clipboard.writeText(md);ok=true;}
+    catch(_){try{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove();}catch(__){}}
+    if(btn){
+      const orig='📋 Claude 보고용 요약 복사';
+      btn.textContent=ok?'✓ 복사됨 — Claude에 붙여넣어 분석 요청하세요':'❌ 복사 실패 — 다시 시도';
+      btn.classList.toggle('ok',ok);
+      setTimeout(()=>{btn.textContent=orig;btn.classList.remove('ok');},3000);
+    }
+    return md;
   },
   async renderCalendar(){
     const box=document.getElementById('plan-calendar');if(!box)return;
@@ -2781,7 +3222,7 @@ const LibApp={
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
-  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup'],
+  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo'],
   PREFIXES:['plan_wk_'],
   _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
@@ -2898,6 +3339,18 @@ const InBody={
         spark(f.key,f.col)+
         '</div>';
     });
+    // 칼로리 조정 신호: 최근 2회 측정 체중 변화 ±0.2kg 이내 = 정체.
+    // 단, 골격근 +0.2kg↑ 동반이면 리컴프 진행 신호 → 조정 불필요로 구분 (잘못된 추가 감량 방지)
+    if(this._log.length>=2){
+      const a=this._log[this._log.length-2],b=this._log[this._log.length-1];
+      const dw=b.wt-a.wt,ds=b.sm-a.sm;
+      if(Math.abs(dw)<=0.2){
+        html=(ds>=0.2
+          ?'<div class="ib-signal ok">🔄 체중 정체 + 골격근 +'+ds.toFixed(1)+'kg — <b>리컴프 진행 중</b>입니다. 칼로리 조정 없이 유지하세요.</div>'
+          :'<div class="ib-signal warn">⚖️ <b>2주 체중 정체</b> ('+(dw>=0?'+':'')+dw.toFixed(1)+'kg) — 근량 변화도 없다면 칼로리 −50~100 kcal 조정을 검토하세요.</div>')
+          +html;
+      }
+    }
     // 선택 지표(허리둘레·내장지방): 기록된 항목만 카드 표시. 스파크라인은 해당 값이 있는 측정만 사용
     const optSpark=(key,col)=>{
       const vals=this._log.filter(e=>e[key]!=null).slice(-8).map(e=>e[key]);
@@ -2910,7 +3363,9 @@ const InBody={
     };
     const OPT_FIELDS=[
       {key:'waist',lbl:'허리둘레',unit:'cm',col:'#8B5E3C',sub:v=>'줄자 측정 · 목표 재확정 예정'},
-      {key:'vf',lbl:'내장지방레벨',unit:'',col:'#A03C3C',goal:IB_GOALS.vf,sub:v=>v<=IB_GOALS.vf?'✓ 목표(≤10) 도달!':'목표 ≤10 · 잔여 −'+(v-IB_GOALS.vf).toFixed(1)}
+      {key:'vf',lbl:'내장지방레벨',unit:'',col:'#A03C3C',goal:IB_GOALS.vf,sub:v=>v<=IB_GOALS.vf?'✓ 목표(≤10) 도달!':'목표 ≤10 · 잔여 −'+(v-IB_GOALS.vf).toFixed(1)},
+      {key:'pa',lbl:'위상각',unit:'°',col:'#2E6E8E',sub:v=>'세포 건강·회복 지표 (상승 = 개선)'},
+      {key:'bmr',lbl:'기초대사량',unit:'kcal',col:'#7A5A12',sub:v=>'근량 증가와 함께 상승하는 게 이상적'}
     ];
     OPT_FIELDS.forEach(f=>{
       const withVal=this._log.filter(e=>e[f.key]!=null);
@@ -2987,7 +3442,7 @@ const InBody={
   openModal(){
     const today=_todayKey();
     document.getElementById('ib-date').value=today;
-    ['wt','sm','bf','ab','waist','vf'].forEach(k=>document.getElementById('ib-'+k).value='');
+    ['wt','sm','bf','ab','waist','vf','pa','bmr'].forEach(k=>document.getElementById('ib-'+k).value='');
     document.getElementById('inbody-modal').style.display='flex';
   },
   closeModal(){document.getElementById('inbody-modal').style.display='none';},
@@ -3004,6 +3459,10 @@ const InBody={
     const entry={date,wt,sm,bf,ab};
     if(!isNaN(waist))entry.waist=waist; // 선택: 줄자 허리둘레
     if(!isNaN(vf))entry.vf=vf;          // 선택: 내장지방레벨 (목표 ≤10)
+    const pa=parseFloat(document.getElementById('ib-pa').value);
+    const bmr=parseFloat(document.getElementById('ib-bmr').value);
+    if(!isNaN(pa))entry.pa=pa;          // 선택: 위상각
+    if(!isNaN(bmr))entry.bmr=bmr;       // 선택: 기초대사량
     const idx=this._log.findIndex(e=>e.date===date);
     if(idx>=0)this._log[idx]=entry;
     else{this._log.push(entry);this._log.sort((a,b)=>a.date.localeCompare(b.date));}
