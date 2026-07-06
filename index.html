@@ -786,6 +786,36 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .hist-empty{padding:24px 20px;font-size:13px;color:#8e8e93;text-align:center}
 .hist-close{display:block;margin:14px auto 0;padding:10px 26px;border:none;border-radius:12px;background:#f2f2f7;color:#1c1c1e;font-size:14px;font-weight:600;cursor:pointer}
 .tr-nm{cursor:pointer}
+/* 코치 노트 */
+.coach-chip{font-size:11.5px;line-height:1.6;color:#1c3a5e;background:#EAF2FB;border:0.5px solid #C9DDF2;border-radius:var(--border-radius-md);padding:8px 11px;margin:6px 0}
+.coach-chip .cn-date{font-size:10px;color:#7a97b5;margin-left:4px}
+.coach-chip .cn-text{margin-top:3px;color:#2b4a6b}
+.coach-edit{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px}
+.coach-ta{width:100%;min-height:84px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.6;font-family:inherit;resize:vertical;box-sizing:border-box}
+.coach-row{display:flex;gap:8px;margin-top:8px;align-items:center}
+.coach-save{font-size:12px;color:#fff;background:#185FA5;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:700}
+.coach-clear{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:8px;padding:8px 12px;cursor:pointer}
+.coach-hint{font-size:10.5px;color:var(--color-text-tertiary);flex:1}
+/* 디로드 */
+.deload-chip{font-size:11.5px;line-height:1.6;color:#5c4a12;background:#FBF4E0;border:0.5px solid #EDDFB8;border-radius:var(--border-radius-md);padding:7px 10px;margin:6px 0}
+.cal-col.deload{background:#FBF4E0;border-radius:4px}
+/* 시간 종목 스톱워치 */
+.ex-sw-btn{font-size:12px;font-weight:700;color:#085041;background:#E8F5EE;border:1px solid #B7DFC9;border-radius:var(--border-radius-md);padding:8px 14px;margin-bottom:8px;cursor:pointer;display:inline-block;font-family:var(--font-mono)}
+.ex-sw-btn.running{background:#085041;color:#fff;border-color:#085041}
+.ex-sw-cancel{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:var(--border-radius-md);padding:8px 12px;margin:0 0 8px 6px;cursor:pointer;display:none}
+.ex-sw-cancel.show{display:inline-block}
+/* 폼 검색 링크 */
+.ex-yt-btn{font-size:11px;color:#8e2f2f;background:#FBEFEF;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:inline-block;text-decoration:none}
+/* 월간 보고 버튼 */
+.copy-report-row{display:flex;gap:8px}
+.copy-report-row .copy-report-btn{margin-top:8px}
+/* 통합 운동 서술 블록 */
+.ex-how{font-size:12.5px;line-height:1.8;color:#3c3c43;background:var(--color-background-secondary,#f7f7f9);border-radius:var(--border-radius-md);padding:11px 13px;margin-bottom:8px;word-break:keep-all}
+.ex-how b{color:#085041;font-weight:800;font-size:11px;letter-spacing:.03em;margin-right:1px}
+.ex-how .how-t{color:#1c1c1e;font-weight:600}
+.ex-how .how-tip{color:#0a5c8e}
+.ex-how .how-warn{color:#8a4b00}
+.ex-how .how-link{color:#6b5518;font-size:11.5px}
 .wl-total-hint{flex-basis:100%;font-size:11px;color:#085041;padding-top:4px}
 .ex-wu-plate{font-size:10px;color:#8a7340}
 /* 칼로리 조정 신호 */
@@ -1023,7 +1053,12 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 이번 주 성과 요약 -->
 <div class="plan-hd" id="sec-ws">🏆 이번 주 성과</div>
 <div id="week-summary" class="plan-card"></div>
-<button class="copy-report-btn" onclick="PlanApp.copyReport(this)">📋 Claude 보고용 요약 복사</button>
+<div class="copy-report-row"><button class="copy-report-btn" onclick="PlanApp.copyReport(this)">📋 주간 보고 복사</button><button class="copy-report-btn" onclick="PlanApp.copyMonthlyReport(this)">📅 4주 보고 복사</button></div>
+<div class="plan-hd">🧭 코치 노트</div>
+<div class="coach-edit">
+  <textarea id="coach-ta" class="coach-ta" maxlength="600" placeholder="주간 분석 후 받은 처방을 붙여넣으세요 — 운동 탭 상단에 주중 내내 표시됩니다. (예: 레그컬 32.5 증량 · 데드 72.5 유지 · 수면 7h 사수)"></textarea>
+  <div class="coach-row"><span class="coach-hint" id="coach-hint"></span><button class="coach-clear" onclick="PlanApp.clearCoachNote()">비우기</button><button class="coach-save" onclick="PlanApp.saveCoachNote()">저장</button></div>
+</div>
 <div class="plan-card"><div id="plan-week-grid" class="plan-week-grid"></div><div class="plan-week-note">기록이 있는 날은 자동으로 ✓ 표시됩니다</div></div>
 
 <details class="info-card pr-fold"><summary>🏆 PR 보드 — 역대 최고 기록<span class="ic">▾</span></summary><div class="info-body"><div id="pr-board"></div></div></details>
@@ -1073,6 +1108,16 @@ details.plan-fold[open]>summary::after{content:'▴'}
         <span class="ib-lbl">허리둘레</span>
         <input type="number" id="ib-waist" class="ib-inp" step="0.1" placeholder="선택" inputmode="decimal">
         <div class="ib-unit">cm · 줄자 측정 (선택 입력)</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">팔 둘레</span>
+        <input type="number" id="ib-arm" class="ib-inp" step="0.1" placeholder="선택" inputmode="decimal">
+        <div class="ib-unit">cm · 줄자, 상완 최대 지점 (선택)</div>
+      </div>
+      <div class="ib-field">
+        <span class="ib-lbl">허벅지 둘레</span>
+        <input type="number" id="ib-thigh" class="ib-inp" step="0.1" placeholder="선택" inputmode="decimal">
+        <div class="ib-unit">cm · 줄자, 대퇴 최대 지점 (선택)</div>
       </div>
       <div class="ib-field">
         <span class="ib-lbl">내장지방레벨</span>
@@ -1341,6 +1386,7 @@ const ExLog={
     await this.loadMemo();
     document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
     if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
+    if(typeof PlanApp!=='undefined'&&PlanApp.renderCoachNote)PlanApp.renderCoachNote(); // 코치 노트 로드 반영
     this.injectBar();
     this.injectLogs();
     this.injectAddBtns();
@@ -1363,6 +1409,29 @@ const ExLog={
   async loadMeta(){
     try{const r=await window.storage.get('block_v1');if(r)this.block=JSON.parse(r.value);}catch(_){}
     try{const r=await window.storage.get('last_backup');if(r)this.lastBackup=r.value;}catch(_){}
+    try{const r=await window.storage.get('coach_note_v1');if(r)this.coachNote=JSON.parse(r.value);}catch(_){}
+    try{const r=await window.storage.get('deload_v1');if(r)this.deload=JSON.parse(r.value)||[];}catch(_){}
+  },
+  // ── 코치 노트: 주간 분석 후 받은 처방을 붙여넣어 주중 내내 상기 (보고 루프의 역방향) ──
+  coachNote:null,
+  saveCoachNote(text){
+    const t=String(text||'').trim().slice(0,600);
+    this.coachNote=t?{text:t,ts:_todayKey()}:null;
+    try{window.storage.set('coach_note_v1',JSON.stringify(this.coachNote));}catch(_){}
+    this.refresh();
+  },
+  // ── 디로드 주간: 시작하면 그 주의 볼륨 목표 55%로 조정 + 캘린더 표시 (이력은 배열로 보존) ──
+  deload:[],
+  _mondayOf(dk){
+    const d=new Date(dk+'T12:00:00');const dow=(d.getDay()+6)%7;
+    d.setDate(d.getDate()-dow);return _localKey(d);
+  },
+  isDeloadWeek(dk){return this.deload.includes(this._mondayOf(dk||_todayKey()));},
+  startDeload(){
+    const mon=this._mondayOf(_todayKey());
+    if(!this.deload.includes(mon)){this.deload.push(mon);try{window.storage.set('deload_v1',JSON.stringify(this.deload));}catch(_){}}
+    this.refresh();
+    if(typeof PlanApp!=='undefined'){if(PlanApp.renderTrends)PlanApp.renderTrends();if(PlanApp.renderCalendar)PlanApp.renderCalendar();}
   },
   saveBlock(){try{window.storage.set('block_v1',JSON.stringify(this.block));}catch(_){}},
   blockWeek(){ // 1부터 시작하는 주차. 블록 미설정/미래 시작일이면 null
@@ -1462,10 +1531,9 @@ const ExLog={
 
   dbCardInner(e,name){
     const nm=name||(e&&e.name)||'';
-    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">도감 미등록 종목 — 주동근이 <b>늘어났다 조여지는 느낌</b>에 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">첫 세트는 가볍게 폼 확인 후 증량. 수축 정점 1초·신장 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">날카로운 통증이 느껴지면 즉시 중단. 반동 금지.</div></div><div class="fb link"><div class="fl">🔍 도감 미연결</div><div class="ft">이름을 도감 표기와 맞추면 폼·세팅 정보와 부위 집계가 연결됩니다. 예전에 다른 이름으로 기록했다면 기록 옆 <b>🔗</b>로 이어 주세요.</div></div></div></div></details>';}
-    const stim=e.target||'';const tip=e.tip||e.grip||'';const warn=e.warn||'통증이 느껴지면 즉시 중단.';
+    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-how"><span class="how-t">🎯 도감 미등록 종목 — 주동근이 <b>늘어났다 조여지는 느낌</b>에 집중.</span><br><span class="how-tip">💡 첫 세트는 가볍게 폼 확인 후 증량. 수축 정점 1초·신장 2초.</span> <span class="how-warn">⚠️ 날카로운 통증이 느껴지면 즉시 중단. 반동 금지.</span><br><span class="how-link">🔍 이름을 도감 표기와 맞추면 폼·세팅 정보와 부위 집계가 연결됩니다. 예전에 다른 이름으로 기록했다면 기록 옆 🔗로 이어 주세요.</span></div></div></details>';}
     const tags='<span class="tag t-s">'+(e.sets||'')+'</span>'+(e.mus?'<span class="tag t-m">'+e.mus+'</span>':'');
-    return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">'+stim+'</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">'+tip+'</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">'+warn+'</div></div></div></div></details>';
+    return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail">'+exHowHtml(e)+'</div></details>';
   },
   _addDelBtn(card,name){
     const sm=card.querySelector('summary');if(!sm||sm.querySelector('.ex-del-btn'))return;
@@ -1947,6 +2015,23 @@ const ExLog={
   _askNotify(){
     if(this._notifAsked)return;this._notifAsked=true;
     try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}catch(_){}
+    this._initAudio();                                       // 오디오 컨텍스트도 제스처 시점에 준비 (자동재생 정책)
+  },
+  _audioCtx:null,
+  _initAudio(){try{if(!this._audioCtx&&(window.AudioContext||window.webkitAudioContext))this._audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(this._audioCtx&&this._audioCtx.state==='suspended')this._audioCtx.resume();}catch(_){}},
+  _beep(){ // 짧은 비프 2회 — 화면이 켜져 있을 때 휴식 종료 청각 신호
+    try{
+      const ctx=this._audioCtx;if(!ctx)return;
+      [0,0.22].forEach(t0=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.type='sine';o.frequency.value=880;
+        g.gain.setValueAtTime(0.001,ctx.currentTime+t0);
+        g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t0+0.14);
+        o.connect(g);g.connect(ctx.destination);
+        o.start(ctx.currentTime+t0);o.stop(ctx.currentTime+t0+0.16);
+      });
+    }catch(_){}
   },
 
   cancelSet(el){
@@ -2081,7 +2166,7 @@ const ExLog={
         // 주간 목표 볼륨 달성률 — 보고 있는 날짜가 이번 주일 때만 표시(주간 계산이 현재 주 기준이므로)
         let goal='';
         if(typeof PlanApp!=='undefined'&&PlanApp._weekKeys&&PlanApp._weekKeys(0).includes(this.date)){
-          const g=this._weekGoalPct();if(g)goal=` · 목표 볼륨 <b>${g.pct}%</b> (${g.done}/${g.target}세트)`;
+          const g=this._weekGoalPct();if(g)goal=` · 목표 볼륨 <b>${g.pct}%</b> (${g.done}/${g.target}세트${g.deload?' · 디로드':''})`;
         }
         mb.style.display='';mb.innerHTML=`🔥 이번 주 ${wk}/6일 완료 · 누적 ${total}회 운동${goal}`;
       }
@@ -2094,11 +2179,28 @@ const ExLog={
       bc.innerHTML=bw?('📆 훈련 블록 <b>'+bw+'/6주차</b>'+(bw>=6?' <span class="bc-due">리뷰 시점 — 플랜 탭 확인</span>':'')+'<span class="bc-act" onclick="ExLog.startBlock()">새 블록</span>')
                     :('📆 6주 블록 미설정<span class="bc-act" onclick="ExLog.startBlock()">오늘부터 시작</span>');
     }
+    // 디로드 주간 칩 (보고 있는 날짜가 디로드 주간일 때)
+    if(mb&&mb.parentNode){
+      let dc=document.getElementById('deload-chip');
+      if(this.isDeloadWeek(this.date)){
+        if(!dc){dc=document.createElement('div');dc.id='deload-chip';dc.className='deload-chip';const bc2=document.getElementById('block-chip');mb.parentNode.insertBefore(dc,(bc2||mb).nextSibling);}
+        dc.innerHTML='🛌 <b>디로드 주간</b> — 중량 유지 · 볼륨 55% 목표 · 회복 우선';
+      }else if(dc){dc.remove();}
+    }
+    // 코치 노트 칩 (주간 처방 상기 — 플랜 탭에서 편집)
+    if(mb&&mb.parentNode){
+      let cc=document.getElementById('coach-chip');
+      if(this.coachNote&&this.coachNote.text){
+        if(!cc){cc=document.createElement('div');cc.id='coach-chip';cc.className='coach-chip';const anchor=document.getElementById('deload-chip')||document.getElementById('block-chip')||mb;mb.parentNode.insertBefore(cc,anchor.nextSibling);}
+        const cd=this.coachNote.ts?new Date(this.coachNote.ts+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'}):'';
+        cc.innerHTML='🧭 <b>코치 노트</b>'+(cd?' <span class="cn-date">'+cd+'</span>':'')+'<div class="cn-text">'+this.coachNote.text.replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</div>';
+      }else if(cc){cc.remove();}
+    }
     // 레그데이 영양 리마인더 (확정된 프로토콜 상기용 — Legs/Legs+ 날짜에만)
     if(mb&&mb.parentNode){
       let ln=document.getElementById('legday-note');
       if(!ln){ln=document.createElement('div');ln.id='legday-note';ln.className='legday-note';ln.style.display='none';const bc2=document.getElementById('block-chip');mb.parentNode.insertBefore(ln,(bc2||mb).nextSibling);}
-      if(/Legs/.test(this.dayType(this.date))){ln.style.display='';ln.innerHTML='🍚 <b>레그데이 영양</b> — 운동 후 탄수 적극(인슐린 민감도↑, 밥 증량 OK) · 23시 카제인에 견과류 한 줌 추가';}
+      if(/Legs/.test(this.dayType(this.date))){ln.style.display='';ln.innerHTML='🍚 <b>레그데이 영양</b> — 운동 후 탄수 적극(인슐린 민감도↑, 밥 증량 OK)';}
       else ln.style.display='none';
     }
     this.renderCardio();                                     // 유산소 목록 갱신
@@ -2201,7 +2303,9 @@ const ExLog={
     let done=0,target=0;
     for(const m in RECO_TARGET){target+=RECO_TARGET[m];done+=Math.min(vol[m]||0,RECO_TARGET[m]);}
     if(!target)return null;
-    return{pct:Math.round(done/target*100),done:Math.round(done*10)/10,target};
+    const dl=this.isDeloadWeek(_todayKey());                 // 디로드 주간: 목표 볼륨 55%
+    if(dl)target=Math.round(target*0.55);
+    return{pct:Math.round(done/target*100),done:Math.round(done*10)/10,target,deload:dl};
   },
 
   // ── 세션 타이밍: ts 있는 세트로 세션 소요시간·세트 간 평균 간격 계산 (구 기록·이상치는 자동 제외) ──
@@ -2325,7 +2429,48 @@ const ExLog={
 
   // ── 도전 무게 자동 산출 ──
   isCompound(name){return /스쿼트|데드|벤치|프레스|로우|풀업|런지|딥스|쓰러스트|스플릿/.test(name);},
-  isTimed(name){return /플랭크|데드행/.test(name);},
+  isTimed(name){return /플랭크|데드행|할로우|버드독|파머스/.test(name);},
+  // ── 시간 종목 스톱워치: 탭 시작 → 다시 탭하면 초가 세트로 자동 기록 (플랭크 중 숫자판 입력 불가 문제 해결) ──
+  _sw:{name:null,start:0,int:null,btn:null},
+  toggleStopwatch(btn){
+    const det=btn.closest('.ex-detail');const log=det.querySelector('.ex-log');
+    if(this._sw.int&&this._sw.btn===btn){this._stopwatchRecord();return;}
+    if(this._sw.int)this.cancelStopwatch();                  // 다른 종목에서 돌던 것은 취소
+    this._sw={name:log.dataset.exname,start:Date.now(),int:setInterval(()=>this._swTick(),500),btn};
+    btn.classList.add('running');
+    const c=det.querySelector('.ex-sw-cancel');if(c)c.classList.add('show');
+    this._swTick();
+  },
+  _swTick(){
+    const s=this._sw;if(!s.int)return;
+    const el=Math.round((Date.now()-s.start)/1000);
+    s.btn.textContent='■ '+Math.floor(el/60)+':'+String(el%60).padStart(2,'0')+' — 멈추고 기록';
+  },
+  _stopwatchRecord(){
+    const s=this._sw;if(!s.int)return;
+    const secs=Math.max(1,Math.round((Date.now()-s.start)/1000));
+    const name=s.name;
+    this.cancelStopwatch();
+    const ses=this.session();
+    let ex=ses.exercises.find(e=>e.name===name);
+    if(!ex){ex={name,sets:[]};ses.exercises.push(ex);}
+    const isPR=this.checkPR(name,0,secs);                    // 시간 종목은 reps=초
+    ex.sets.push({weight:0,reps:secs,ts:new Date().toISOString()});
+    this.setSession(ses);
+    this.refresh();
+    if(isPR)this.showPR(name);
+    if(this.date===_todayKey())this.startRest(name);
+    this._syncSoon();
+  },
+  cancelStopwatch(){
+    const s=this._sw;
+    if(s.int)clearInterval(s.int);
+    if(s.btn){
+      s.btn.classList.remove('running');s.btn.textContent='⏱ 스톱워치';
+      const det=s.btn.closest('.ex-detail');const c=det&&det.querySelector('.ex-sw-cancel');if(c)c.classList.remove('show');
+    }
+    this._sw={name:null,start:0,int:null,btn:null};
+  },
   restSec(name){return this.isCompound(name)?180:90;},
   repCap(name){
     const wt=WEEK_TARGETS[name]||'';
@@ -2592,6 +2737,22 @@ const ExLog={
       const mm=this.memoOf(name);
       mb2.classList.toggle('has',!!mm);
       mb2.textContent=mm?('📝 '+mm):'📝 세팅 메모';
+      // 폼 영상 검색 링크 (새 헬스장 낯선 머신 파악용 — 유튜브 새 탭)
+      let yb=det.querySelector('.ex-yt-btn');
+      if(!yb){
+        yb=document.createElement('a');yb.className='ex-yt-btn';yb.target='_blank';yb.rel='noopener';yb.textContent='▶ 폼 영상';
+        det.insertBefore(yb,mb2.nextSibling);
+      }
+      yb.href='https://www.youtube.com/results?search_query='+encodeURIComponent(name+' 폼');
+      // 시간 종목이면 스톱워치 버튼
+      if(this.isTimed(name)&&!det.querySelector('.ex-sw-btn')){
+        const swb=document.createElement('button');swb.className='ex-sw-btn';swb.type='button';swb.textContent='⏱ 스톱워치';
+        swb.setAttribute('onclick','ExLog.toggleStopwatch(this)');
+        const cxl=document.createElement('button');cxl.className='ex-sw-cancel';cxl.type='button';cxl.textContent='✕ 취소';
+        cxl.setAttribute('onclick','ExLog.cancelStopwatch()');
+        const logEl=det.querySelector('.ex-log');
+        det.insertBefore(swb,logEl);det.insertBefore(cxl,logEl);
+      }
       // 통증 이력 경고 (canon 기준 최근 1건 — 재도전 시 상기)
       let pw=det.querySelector('.ex-pain-warn');
       const ph2=this._lastPain(name);
@@ -2692,6 +2853,7 @@ const ExLog={
     if(remain<=0&&r.int){
       clearInterval(r.int);this.rest.int=null;
       try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(_){}
+      if(!document.hidden)this._beep();                      // 화면 보고 있으면 비프, 아니면 아래 알림
       // 화면을 벗어나 있으면 시스템 알림으로 휴식 종료 통지 (권한 있을 때만)
       if(!r.notified){
         r.notified=true;
@@ -2791,7 +2953,7 @@ const ExLog={
 const PlanApp={
   DAY_TYPES:{1:'Push',2:'Pull',3:'Legs',4:'Push+',5:'Pull+',6:'Legs+',0:'REST'},
   DAY_COLORS:{Push:'#D85A30','Push+':'#BA7517',Pull:'#185FA5','Pull+':'#0C447C',Legs:'#3B6D11','Legs+':'#27500A',REST:'#888'},
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();this.renderCoachNote();},
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
@@ -3063,7 +3225,9 @@ const PlanApp={
       if(wg&&wg.pct>=70){
         let condNote='';
         try{const ca=ExLog._weekCondAvg();if(ca.rate!=null&&ca.rate<3)condNote=' 이번 주 평균 컨디션 '+ca.rate.toFixed(1)+'/5 — 수면·회복 요인부터 점검하세요.';}catch(_){}
-        banner='<div class="tr-deload">🛌 <b>디로드 검토</b> — 복합 '+plateauCompounds+'종이 3회 연속 정체 중이고 주간 볼륨은 '+wg.pct+'% 소화 중입니다. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.'+condNote+'</div>';
+        banner=(typeof ExLog!=='undefined'&&ExLog.isDeloadWeek&&ExLog.isDeloadWeek())
+          ?'<div class="tr-deload">🛌 <b>디로드 진행 중</b> — 이번 주는 중량 유지·볼륨 55% 목표입니다. 회복에 집중하세요.</div>'
+          :'<div class="tr-deload">🛌 <b>디로드 검토</b> — 복합 '+plateauCompounds+'종이 3회 연속 정체 중이고 주간 볼륨은 '+wg.pct+'% 소화 중입니다. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.'+condNote+'<span class="bc-act" onclick="ExLog.startDeload()">디로드 시작</span></div>';
       }
     }
     box.innerHTML=blockBanner+banner+rowsHtml;
@@ -3151,6 +3315,105 @@ const PlanApp={
       +'</div>'
       +(bfTrend?'<div class="ws-note">체지방률 추세 '+bfTrend+' · 골격근·체지방은 체성분 현황에서 확인</div>':'');
   },
+  // ── 코치 노트 편집 (플랜 탭) — 저장 시 운동 탭 칩 갱신 ──
+  renderCoachNote(){
+    const ta=document.getElementById('coach-ta');const hint=document.getElementById('coach-hint');
+    if(!ta)return;
+    const cn=(typeof ExLog!=='undefined')?ExLog.coachNote:null;
+    if(document.activeElement!==ta)ta.value=cn&&cn.text?cn.text:'';
+    if(hint)hint.textContent=cn&&cn.ts?('마지막 저장 '+cn.ts):'';
+  },
+  saveCoachNote(){
+    const ta=document.getElementById('coach-ta');if(!ta)return;
+    ExLog.saveCoachNote(ta.value);
+    this.renderCoachNote();
+  },
+  clearCoachNote(){
+    const ta=document.getElementById('coach-ta');if(ta)ta.value='';
+    ExLog.saveCoachNote('');
+    this.renderCoachNote();
+  },
+  // ── 클립보드 복사 공통 (주간·월간 보고) ──
+  async _copyMd(md,btn,orig){
+    let ok=false;
+    try{await navigator.clipboard.writeText(md);ok=true;}
+    catch(_){try{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove();}catch(__){}}
+    if(btn){
+      btn.textContent=ok?'✓ 복사됨 — Claude에 붙여넣기':'❌ 복사 실패 — 다시 시도';
+      btn.classList.toggle('ok',ok);
+      setTimeout(()=>{btn.textContent=orig;btn.classList.remove('ok');},3000);
+    }
+  },
+  // ── 4주(월간) 보고: 측정 프로토콜의 '4주 누적 추세 분석'·6주 블록 리뷰용 데이터 일괄 ──
+  async copyMonthlyReport(btn){
+    const data=await this._logData();
+    const allKeys=[-3,-2,-1,0].map(o=>this._weekKeys(o));
+    const from=allKeys[0][0],to=allKeys[3][6];
+    const fd=d=>new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'});
+    const L=['## 4주 보고 ('+fd(from)+' ~ '+fd(to)+')'];
+    // 체성분 — 기간 내 측정 전부 + 첫→끝 Δ
+    try{
+      if(typeof InBody!=='undefined'&&!InBody._log)await InBody.load();
+      const log=((typeof InBody!=='undefined'&&InBody._log)||[]).filter(e=>e.date>=from&&e.date<=to);
+      if(log.length){
+        L.push('','### 체성분 (기간 내 '+log.length+'회)');
+        log.forEach(e=>{
+          let x='- '+e.date+': 체중 '+e.wt+' · 골격근 '+e.sm+' · 체지방률 '+e.bf+'% · 복부 '+e.ab;
+          if(e.waist)x+=' · 허리 '+e.waist;if(e.arm)x+=' · 팔 '+e.arm;if(e.thigh)x+=' · 허벅지 '+e.thigh;if(e.vf)x+=' · 내장지방 '+e.vf;if(e.pa)x+=' · 위상각 '+e.pa;if(e.bmr)x+=' · BMR '+e.bmr;
+          L.push(x);
+        });
+        if(log.length>=2){
+          const a=log[0],b=log[log.length-1];
+          const dv=(x,y)=>{const d=+(y-x).toFixed(2);return(d>0?'+':'')+d;};
+          L.push('- 4주 Δ: 체중 '+dv(a.wt,b.wt)+' · 골격근 '+dv(a.sm,b.sm)+' · 체지방률 '+dv(a.bf,b.bf)+'%p · 복부 '+dv(a.ab,b.ab));
+        }
+      }
+    }catch(_){}
+    // 주차별 요약
+    L.push('','### 주차별');
+    allKeys.forEach((ks,i)=>{
+      const days=ks.filter(dk=>this._sessionSets(data,dk)>0).length;
+      let sets=0;ks.forEach(dk=>sets+=this._sessionSets(data,dk));
+      const vol=this._weekVolume(data,ks);
+      let cm=0,cs=0,cn2=0;
+      ks.forEach(dk=>{const d=data[dk];if(!d)return;(d.cardio||[]).forEach(c=>cm+=(+c.min||0));if(d.cond&&d.cond.rate){cs+=d.cond.rate;cn2++;}});
+      const dl=(typeof ExLog!=='undefined'&&ExLog.deload&&ExLog.deload.includes(ks[0]))?' · 디로드':'';
+      L.push('- W'+(i+1)+' ('+fd(ks[0])+'~): 운동 '+days+'일 · '+sets+'세트 · 볼륨 '+Math.round(vol).toLocaleString()+'kg'+(cm?' · 유산소 '+cm+'분':'')+(cn2?' · 컨디션 '+(cs/cn2).toFixed(1):'')+dl);
+    });
+    // 종목별 e1RM 변화 (기간 내 로딩 2회 이상, 복합 우선)
+    const byEx={};
+    Object.keys(data).sort().forEach(dk=>{
+      if(dk<from||dk>to)return;
+      (data[dk].exercises||[]).forEach(ex=>{
+        const sets=(ex.sets||[]).filter(st=>_isWorkSet(st)&&st.weight>0);if(!sets.length)return;
+        const e1=Math.max.apply(null,sets.map(st=>st.weight*(1+st.reps/30)));
+        const cnm=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
+        (byEx[cnm]=byEx[cnm]||[]).push(e1);
+      });
+    });
+    const isC=n=>(typeof ExLog!=='undefined'&&ExLog.isCompound)?ExLog.isCompound(n):false;
+    const exNames=Object.keys(byEx).filter(n=>byEx[n].length>=2).sort((a,b)=>(isC(b)-isC(a))||(byEx[b][byEx[b].length-1]-byEx[a][byEx[a].length-1]));
+    if(exNames.length){
+      L.push('','### 종목별 e1RM 변화 (2회 이상 수행)');
+      exNames.slice(0,12).forEach(n=>{
+        const arr=byEx[n];const d=arr[arr.length-1]-arr[0];
+        L.push('- '+n+': '+arr[0].toFixed(1)+' → '+arr[arr.length-1].toFixed(1)+' ('+(d>=0?'+':'')+d.toFixed(1)+') · '+arr.length+'회'+(isC(n)?' · 복합':''));
+      });
+    }
+    // 통증·메모 모음
+    const pains=[],notes=[];
+    Object.keys(data).sort().forEach(dk=>{
+      if(dk<from||dk>to)return;
+      const d=data[dk];if(!d)return;
+      (d.exercises||[]).forEach(ex=>{(ex.sets||[]).forEach(st=>{if(st.pain)pains.push('- '+fd(dk)+' '+ex.name+' '+(st.weight>0?st.weight+'kg':'맨몸')+'×'+st.reps);});});
+      if(d.note)notes.push('- '+fd(dk)+': '+d.note);
+    });
+    if(pains.length){L.push('','### ⚠️ 통증 기록');pains.forEach(p=>L.push(p));}
+    if(notes.length){L.push('','### 세션 메모');notes.forEach(n=>L.push(n));}
+    const md=L.join('\n');
+    await this._copyMd(md,btn,'📅 4주 보고 복사');
+    return md;
+  },
   // ── 캘린더 셀 → 해당 날짜의 운동 기록으로 점프 ──
   gotoDate(dk){
     if(typeof ExLog==='undefined'||!dk)return;
@@ -3186,7 +3449,7 @@ const PlanApp={
         L.push('','### 체성분');
         log.slice(-2).forEach(e=>{
           let s='- '+e.date+': 체중 '+e.wt+' · 골격근 '+e.sm+' · 체지방률 '+e.bf+'% · 복부 '+e.ab;
-          if(e.waist)s+=' · 허리 '+e.waist;if(e.vf)s+=' · 내장지방 '+e.vf;if(e.pa)s+=' · 위상각 '+e.pa;if(e.bmr)s+=' · BMR '+e.bmr;
+          if(e.waist)s+=' · 허리 '+e.waist;if(e.arm)s+=' · 팔 '+e.arm;if(e.thigh)s+=' · 허벅지 '+e.thigh;if(e.vf)s+=' · 내장지방 '+e.vf;if(e.pa)s+=' · 위상각 '+e.pa;if(e.bmr)s+=' · BMR '+e.bmr;
           L.push(s);
         });
         if(log.length>=2){
@@ -3230,16 +3493,7 @@ const PlanApp={
     if(cardioMin)L.push('- 유산소 누적 '+cardioMin+'분');
     if(condN||slpN)L.push('- 컨디션 평균 '+(condN?(condS/condN).toFixed(1):'-')+'/5 · 수면 평균 '+(slpN?(slpS/slpN).toFixed(1)+'h':'-'));
     const md=L.join('\n');
-    // 복사 (clipboard 실패 시 execCommand 폴백)
-    let ok=false;
-    try{await navigator.clipboard.writeText(md);ok=true;}
-    catch(_){try{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove();}catch(__){}}
-    if(btn){
-      const orig='📋 Claude 보고용 요약 복사';
-      btn.textContent=ok?'✓ 복사됨 — Claude에 붙여넣어 분석 요청하세요':'❌ 복사 실패 — 다시 시도';
-      btn.classList.toggle('ok',ok);
-      setTimeout(()=>{btn.textContent=orig;btn.classList.remove('ok');},3000);
-    }
+    await this._copyMd(md,btn,'📋 주간 보고 복사');
     return md;
   },
   async renderCalendar(){
@@ -3253,6 +3507,7 @@ const PlanApp={
     let cols='';
     for(let w=WEEKS-1;w>=0;w--){
       const ks=this._weekKeys(-w);
+      const isDl=(typeof ExLog!=='undefined'&&ExLog.deload&&ExLog.deload.includes(ks[0]));
       let cells='';
       ks.forEach(dk=>{
         const sets=this._sessionSets(data,dk);
@@ -3260,7 +3515,7 @@ const PlanApp={
         let lv=0;if(sets>=12)lv=4;else if(sets>=8)lv=3;else if(sets>=4)lv=2;else if(sets>=1)lv=1;
         cells+='<div class="cal-cell l'+lv+(fut?' fut':'')+'" title="'+dk+' · '+sets+'세트"'+(fut?'':' style="cursor:pointer" onclick="PlanApp.gotoDate(\''+dk+'\')"')+'></div>';
       });
-      cols+='<div class="cal-col">'+cells+'</div>';
+      cols+='<div class="cal-col'+(isDl?' deload':'')+'"'+(isDl?' title="디로드 주간"':'')+'>'+cells+'</div>';
     }
     box.innerHTML=
       '<div class="cal-top"><div class="cal-streak">🔥 <b>'+streak+'</b>주 연속<span class="cal-sub">(주 4회+)</span></div><div class="cal-month">최근 28일 <b>'+monthDays+'</b>일 훈련</div></div>'
@@ -3311,24 +3566,41 @@ const MuscleMap={
       +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'<div class="mm-noex">현재 루틴에선 복합 종목에서 <b>보조로</b> 단련됩니다. 전용 강화가 필요하면 📚 도감에서 종목을 찾아 추가하세요.</div>');
   }
 };
+// ── 운동 서술 통합: 자극점→세팅→그립→수행→요령→주의를 한 블록으로 (도감·운동탭 공용) ──
+function exHowHtml(e){
+  if(!e)return'';
+  const seg=[];
+  if(e.target)seg.push('<span class="how-t">🎯 '+e.target+'</span>');
+  const mid=[];
+  if(e.setup)mid.push('<b>세팅</b> '+e.setup);
+  if(e.grip)mid.push('<b>그립</b> '+e.grip);
+  if(e.rom)mid.push('<b>수행</b> '+e.rom);
+  if(mid.length)seg.push(mid.join(' '));
+  const tail=[];
+  if(e.tip)tail.push('<span class="how-tip">💡 '+e.tip+'</span>');
+  if(e.warn)tail.push('<span class="how-warn">⚠️ '+e.warn+'</span>');
+  if(tail.length)seg.push(tail.join(' '));
+  return '<div class="ex-how">'+seg.join('<br>')+'</div>';
+}
 function libLookup(){
   if(libLookup._m)return libLookup._m;
   const m={};(window.EXERCISE_LIBRARY||[]).forEach(e=>{m[e.name]=e;(e.aka||[]).forEach(a=>{if(!m[a])m[a]=e;});});
   libLookup._m=m;return m;
 }
 function augmentCards(){
+  // 정적 카드의 3분할 그리드(자극점/요령/주의)와 접힌 그립·세팅을 통합 서술 블록 하나로 교체
   const m=libLookup();
   document.querySelectorAll('details.ex-card').forEach(card=>{
     const nm=card.querySelector('.ex-nm');const det=card.querySelector('.ex-detail');
     if(!nm||!det)return;
     const e=m[nm.textContent.trim()];if(!e)return;
-    if(det.querySelector('.ex-extra'))return;
-    const d=document.createElement('details');d.className='ex-extra';
-    d.innerHTML='<summary>📐 그립 · 세팅</summary><div class="ex-extra-body">'
-      +(e.grip?'<div class="exx-row"><span class="exx-l">그립·힘</span><span>'+e.grip+'</span></div>':'')
-      +(e.setup?'<div class="exx-row"><span class="exx-l">세팅</span><span>'+e.setup+'</span></div>':'')
-      +'</div>';
-    det.appendChild(d);
+    const legacy=det.querySelector('.ex-extra');if(legacy)legacy.remove();
+    if(det.querySelector('.ex-how'))return;                  // 이미 교체됨
+    const grid=det.querySelector('.focus-grid');
+    const div=document.createElement('div');
+    div.innerHTML=exHowHtml(e);
+    if(grid)grid.replaceWith(div.firstChild);
+    else det.insertBefore(div.firstChild,det.firstChild);
   });
 }
 const LibApp={
@@ -3349,12 +3621,7 @@ const LibApp={
     box.innerHTML=items.map(function(e){
       return '<details class="lib-card"><summary><span class="lib-dot" style="background:'+(COL[e.cat]||'#888')+'"></span><span class="lib-nm">'+e.name+'</span><span class="lib-mus">'+(e.mus||'')+'</span><span class="chev">▾</span></summary>'
         +'<div class="lib-body">'
-        +'<div class="lib-r"><span class="lib-l">타겟</span><span>'+(e.target||'')+'</span></div>'
-        +(e.grip?'<div class="lib-r"><span class="lib-l">그립·힘</span><span>'+e.grip+'</span></div>':'')
-        +(e.setup?'<div class="lib-r"><span class="lib-l">세팅</span><span>'+e.setup+'</span></div>':'')
-        +(e.rom?'<div class="lib-r"><span class="lib-l">ROM</span><span>'+e.rom+'</span></div>':'')
-        +(e.tip?'<div class="lib-r"><span class="lib-l tip">요령</span><span>'+e.tip+'</span></div>':'')
-        +(e.warn?'<div class="lib-r"><span class="lib-l warn">주의</span><span>'+e.warn+'</span></div>':'')
+        +exHowHtml(e)
         +(e.sets?'<div class="lib-r"><span class="lib-l">권장</span><span>'+e.sets+'</span></div>':'')
         +'<button class="lib-add" onclick="LibApp.add(this,\''+e.name.replace(/'/g,"\\'")+'\')">＋ 운동에 추가</button>'
         +'</div></details>';
@@ -3372,7 +3639,7 @@ const LibApp={
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
-  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo'],
+  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','coach_note_v1','deload_v1'],
   PREFIXES:['plan_wk_'],
   _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
@@ -3514,6 +3781,8 @@ const InBody={
     const OPT_FIELDS=[
       {key:'waist',lbl:'허리둘레',unit:'cm',col:'#8B5E3C',sub:v=>'줄자 측정 · 목표 재확정 예정'},
       {key:'vf',lbl:'내장지방레벨',unit:'',col:'#A03C3C',goal:IB_GOALS.vf,sub:v=>v<=IB_GOALS.vf?'✓ 목표(≤10) 도달!':'목표 ≤10 · 잔여 −'+(v-IB_GOALS.vf).toFixed(1)},
+      {key:'arm',lbl:'팔 둘레',unit:'cm',col:'#4A6FA0',sub:v=>'상완 최대 지점 · 상승 = 상체 리컴프 신호'},
+      {key:'thigh',lbl:'허벅지 둘레',unit:'cm',col:'#4E7A3C',sub:v=>'대퇴 최대 지점 · 하체 볼륨의 시각 지표'},
       {key:'pa',lbl:'위상각',unit:'°',col:'#2E6E8E',sub:v=>'세포 건강·회복 지표 (상승 = 개선)'},
       {key:'bmr',lbl:'기초대사량',unit:'kcal',col:'#7A5A12',sub:v=>'근량 증가와 함께 상승하는 게 이상적'}
     ];
@@ -3609,6 +3878,10 @@ const InBody={
     const entry={date,wt,sm,bf,ab};
     if(!isNaN(waist))entry.waist=waist; // 선택: 줄자 허리둘레
     if(!isNaN(vf))entry.vf=vf;          // 선택: 내장지방레벨 (목표 ≤10)
+    const arm=parseFloat(document.getElementById('ib-arm').value);
+    const thigh=parseFloat(document.getElementById('ib-thigh').value);
+    if(!isNaN(arm))entry.arm=arm;       // 선택: 팔 둘레 — 리컴프 시각 지표
+    if(!isNaN(thigh))entry.thigh=thigh; // 선택: 허벅지 둘레
     const pa=parseFloat(document.getElementById('ib-pa').value);
     const bmr=parseFloat(document.getElementById('ib-bmr').value);
     if(!isNaN(pa))entry.pa=pa;          // 선택: 위상각

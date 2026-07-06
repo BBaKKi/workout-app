@@ -465,6 +465,126 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     eq(miss.length,0,'미매칭: '+miss.join(','));
   });
 
+  console.log('\n[통합 서술 블록]');
+  await t('정적 카드: focus-grid → ex-how 교체 (자극·세팅·그립·수행·요령·주의 한 블록)',async()=>{
+    const cards=[...d.querySelectorAll('.day-panel details.ex-card')];
+    const withHow=cards.filter(c=>c.querySelector('.ex-how'));
+    ok(withHow.length>30,'교체된 카드 '+withHow.length+'개뿐');
+    const how=withHow[0].querySelector('.ex-how');
+    ok(how.innerHTML.includes('🎯')&&how.innerHTML.includes('세팅')&&how.innerHTML.includes('그립')&&how.innerHTML.includes('수행')&&how.innerHTML.includes('💡')&&how.innerHTML.includes('⚠️'),'구성 요소 누락: '+how.innerHTML.slice(0,120));
+    eq(withHow[0].querySelectorAll('.focus-grid').length,0,'focus-grid 잔존');
+    eq(d.querySelectorAll('.ex-extra').length,0,'ex-extra 잔존');
+  });
+  await t('도감 카드도 통합 블록 사용',async()=>{
+    const LibApp=w.eval('LibApp');LibApp.render();
+    ok(d.querySelector('#lib-list .lib-card .ex-how'),'도감에 ex-how 없음');
+    ok(!d.querySelector('#lib-list .lib-l')||![...d.querySelectorAll('#lib-list .lib-l')].some(x=>['타겟','그립·힘','세팅','ROM'].includes(x.textContent)),'옛 행 라벨 잔존');
+  });
+  await t('exHowHtml: 라이브러리 183개 전부 6요소 모두 렌더',async()=>{
+    const fn=w.eval('exHowHtml');
+    let bad=0;
+    for(const e of LIB){
+      const h=fn(e);
+      if(!(h.includes('🎯')&&h.includes('세팅')&&h.includes('그립')&&h.includes('수행')&&h.includes('💡')&&h.includes('⚠️')))bad++;
+    }
+    eq(bad,0,bad+'개 엔트리 요소 누락');
+  });
+
+  console.log('\n[스톱워치]');
+  await t('시간 종목에 스톱워치 버튼 주입',async()=>{
+    const log=logOf('플랭크');ok(log,'플랭크 로그 없음');
+    const det=log.closest('.ex-detail');
+    ok(det.querySelector('.ex-sw-btn'),'버튼 없음');
+    ok(!logOf('딥스 머신').closest('.ex-detail').querySelector('.ex-sw-btn'),'비시간 종목에 버튼 있음');
+  });
+  await t('시작→기록: 경과 초가 세트로 저장·PR·휴식 시작',async()=>{
+    ExLog.data={};ExLog.date=_todayKey();
+    const det=logOf('플랭크').closest('.ex-detail');
+    const btn=det.querySelector('.ex-sw-btn');
+    ExLog.toggleStopwatch(btn);
+    ok(btn.classList.contains('running'));
+    ok(det.querySelector('.ex-sw-cancel').classList.contains('show'));
+    ExLog._sw.start=Date.now()-65000;                       // 65초 경과 시뮬레이션
+    ExLog.toggleStopwatch(btn);                             // 멈추고 기록
+    const ex=ExLog.session().exercises.find(e=>e.name==='플랭크');
+    ok(ex&&ex.sets.length===1&&ex.sets[0].reps===65&&ex.sets[0].weight===0,'기록 오류: '+JSON.stringify(ex&&ex.sets));
+    ok(!btn.classList.contains('running'));
+    ok(ExLog.rest.name==='플랭크','휴식 미시작');
+    ExLog.stopRest();
+  });
+  await t('취소는 기록 없이 리셋·다른 종목 시작 시 기존 취소',async()=>{
+    const det=logOf('플랭크').closest('.ex-detail');
+    const btn=det.querySelector('.ex-sw-btn');
+    ExLog.toggleStopwatch(btn);
+    ExLog.cancelStopwatch();
+    eq(ExLog.session().exercises.find(e=>e.name==='플랭크').sets.length,1,'취소가 기록됨');
+    eq(ExLog._sw.int,null);
+  });
+
+  console.log('\n[코치 노트]');
+  await t('저장 → 운동 탭 칩 표시·플랜 탭 힌트, 비우면 제거',async()=>{
+    const ta=d.getElementById('coach-ta');ok(ta,'textarea 없음');
+    ta.value='레그컬 32.5 증량 · 데드 72.5 유지';
+    PlanApp.saveCoachNote();
+    ok(ExLog.coachNote&&ExLog.coachNote.text.includes('72.5'));
+    const chip=d.getElementById('coach-chip');
+    ok(chip&&chip.textContent.includes('레그컬 32.5'),'칩 없음');
+    ok(d.getElementById('coach-hint').textContent.includes('마지막 저장'));
+    const st=await w.eval('window.storage').get('coach_note_v1');
+    ok(st&&JSON.parse(st.value).text.includes('데드'));
+    PlanApp.clearCoachNote();
+    ok(!d.getElementById('coach-chip'),'칩 잔존');
+  });
+
+  console.log('\n[디로드 주간]');
+  await t('startDeload → 목표 55%·칩·캘린더 표시·저장',async()=>{
+    ExLog.data={};ExLog.date=_todayKey();ExLog.deload=[];
+    ExLog.startDeload();
+    ok(ExLog.isDeloadWeek(_todayKey()));
+    const g=ExLog._weekGoalPct();
+    ok(g.deload===true&&g.target===Math.round(86*0.55),'목표 55% 아님: '+g.target);
+    ok(d.getElementById('deload-chip'),'디로드 칩 없음');
+    await PlanApp.renderCalendar();
+    ok(d.querySelector('#plan-calendar .cal-col.deload'),'캘린더 표시 없음');
+    const st=await w.eval('window.storage').get('deload_v1');
+    ok(JSON.parse(st.value).length===1);
+    ExLog.deload=[];ExLog.refresh();
+    ok(!d.getElementById('deload-chip'),'해제 후 칩 잔존');
+  });
+  await t('_beep: 오디오 컨텍스트 없어도 예외 없음',async()=>{
+    ExLog._audioCtx=null;ExLog._beep();ok(true);
+  });
+
+  console.log('\n[월간 보고·기타]');
+  await t('copyMonthlyReport: 주차별·e1RM 변화·Δ·통증·메모 포함',async()=>{
+    const wkNow=PlanApp._weekKeys(0),wkPrev=PlanApp._weekKeys(-3);
+    ExLog.data={};
+    ExLog.data[wkPrev[0]]={day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:70,reps:8}]}]};
+    ExLog.data[wkNow[0]]={day:'Pull',note:'새 짐 적응',exercises:[{name:'바벨 데드리프트',sets:[{weight:75,reps:8,pain:true}]}]};
+    InBody._log=[{date:wkPrev[0],wt:89.0,sm:36.3,bf:28.1,ab:0.96},{date:wkNow[0],wt:88.2,sm:36.5,bf:27.4,ab:0.95,arm:33.5}];
+    const md=await PlanApp.copyMonthlyReport(null);
+    ok(md.includes('## 4주 보고'),md.slice(0,60));
+    ok(md.includes('W1')&&md.includes('W4'),'주차별 없음');
+    ok(md.includes('4주 Δ')&&md.includes('-0.8'),'Δ 없음');
+    ok(md.includes('바벨 데드리프트: ')&&md.includes('→')&&md.includes('복합'),'e1RM 변화 없음');
+    ok(md.includes('⚠️ 통증 기록')&&md.includes('75kg'),'통증 없음');
+    ok(md.includes('새 짐 적응'),'메모 없음');
+    ok(md.includes('팔 33.5'),'팔 둘레 없음');
+  });
+  await t('보충제 제거: 레그데이 노트에 카제인 문구 없음',async()=>{
+    ok(!src.includes('카제인'),'카제인 잔존');
+    ok(src.includes('레그데이 영양'),'레그데이 탄수 노트는 유지돼야 함');
+  });
+  await t('인바디 팔·허벅지 입력 필드·백업 키 확장',async()=>{
+    ok(d.getElementById('ib-arm')&&d.getElementById('ib-thigh'));
+    ok(Backup.KEYS.includes('coach_note_v1')&&Backup.KEYS.includes('deload_v1'));
+  });
+  await t('폼 영상 링크: 모든 카드에 인코딩된 유튜브 href',async()=>{
+    const links=[...d.querySelectorAll('.ex-yt-btn')];
+    ok(links.length>30,'링크 '+links.length+'개뿐');
+    ok(links.every(a=>a.href.startsWith('https://www.youtube.com/results?search_query=')&&a.target==='_blank'));
+  });
+
   console.log('\n[회귀 스모크]');
   await t('기존 기능: 기본무게·별칭·prevSession 정상',async()=>{
     ExLog.setBase('벤치프레스 (스미스)',20);
