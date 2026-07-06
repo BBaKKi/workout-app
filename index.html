@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="운동 루틴">
 <meta name="theme-color" content="#085041">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>🏋️ 운동 루틴</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -753,6 +755,37 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* Claude 보고용 요약 복사 */
 .copy-report-btn{display:block;width:100%;margin:8px 0 0;padding:11px;background:none;border:1.5px dashed #185FA5;border-radius:12px;font-size:13px;color:#185FA5;font-weight:700;cursor:pointer;letter-spacing:.2px}
 .copy-report-btn.ok{border-color:#3B6D11;color:#3B6D11}
+/* 스티키 미니 휴식 타이머 — 카드 밖으로 스크롤해도 남은 시간 표시 */
+.rest-mini{display:none;position:fixed;top:42px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:98;background:#0b3d33;color:#fff;padding:7px 14px;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.rest-mini.show{display:flex}
+.rm-nm{font-size:12px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rm-time{font-size:16px;font-weight:800;font-family:var(--font-mono);flex-shrink:0}
+.rm-bar{position:absolute;left:0;bottom:0;height:2.5px;background:#7ee2c3;transition:width .4s linear}
+.rm-btn{flex-shrink:0;font-size:11px;font-weight:700;color:#0b3d33;background:#cfeee2;border:none;border-radius:8px;padding:6px 10px;cursor:pointer}
+/* 워밍업 세트 토글·칩 */
+.wl-wu-btn{flex-shrink:0;width:38px;height:44px;border:1px solid var(--color-border-secondary);border-radius:10px;background:#fff;color:#b0b0b5;font-size:13px;font-weight:800;cursor:pointer}
+.wl-wu-btn.on{background:#FFF4E0;border-color:#E0A93D;color:#B26A00}
+.wl-set-chip.wu{opacity:.55;background:#f5f2ea;border-color:#e0d8c4;color:#8a7a55;text-decoration:none}
+/* 세션 노트 */
+.note-row{padding:0 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
+.sess-note{width:100%;border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:7px 10px;font-size:12.5px;color:var(--color-text-secondary);background:#fafafa}
+.wr-note-row{font-size:11.5px;color:#636366;line-height:1.6;padding:2px 0}
+.wr-note-row b{color:#1c1c1e}
+/* 종목별 전체 히스토리 모달 */
+.ex-mini{cursor:pointer}
+.hist-spark{padding:12px 20px 4px}
+.hist-spark svg{width:100%;height:56px;display:block}
+.hist-stat{display:flex;gap:14px;padding:0 20px 10px;font-size:12px;color:#636366;border-bottom:0.5px solid var(--color-border-tertiary)}
+.hist-stat b{color:#1c1c1e;font-weight:700}
+.hist-rows{padding:6px 20px 0}
+.hist-row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:0.5px solid #f2f2f7}
+.hist-date{font-size:11.5px;color:#8e8e93;width:76px;flex-shrink:0}
+.hist-sets{flex:1;font-size:12.5px;color:#3c3c43;line-height:1.5;word-break:keep-all}
+.hist-e1{font-size:11.5px;font-weight:700;color:#085041;flex-shrink:0}
+.hist-e1.pr::after{content:' 🏆'}
+.hist-empty{padding:24px 20px;font-size:13px;color:#8e8e93;text-align:center}
+.hist-close{display:block;margin:14px auto 0;padding:10px 26px;border:none;border-radius:12px;background:#f2f2f7;color:#1c1c1e;font-size:14px;font-weight:600;cursor:pointer}
+.tr-nm{cursor:pointer}
 .wl-total-hint{flex-basis:100%;font-size:11px;color:#085041;padding-top:4px}
 .ex-wu-plate{font-size:10px;color:#8a7340}
 /* 칼로리 조정 신호 */
@@ -1186,6 +1219,7 @@ try{var m={1:'d1',2:'d2',3:'d3',4:'d4',5:'d5',6:'d6',0:'d7'};var el=document.get
 // ── 로컬 날짜 헬퍼: toISOString()은 UTC라 시간대에 따라 하루 어긋남 → 벽시계(로컬) 날짜로 통일 ──
 function _localKey(d){const t=new Date(d);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);}
 function _todayKey(){return _localKey(new Date());}
+function _isWorkSet(s){return !!s&&s.reps>0&&!s.warmup;} // '본세트' 판정 — 워밍업 세트는 모든 볼륨·PR·추세 집계에서 제외하는 공통 기준
 // ── 운동 배치 규칙 ──
 // 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
 const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
@@ -1520,7 +1554,7 @@ const ExLog={
     const ks=new Set(PlanApp._weekKeys(0));const data=this.data||{};
     for(const dk in data){if(!ks.has(dk))continue;
       (data[dk].exercises||[]).forEach(ex=>{
-        const n=(ex.sets||[]).filter(s=>s.reps>0).length;if(!n)return;
+        const n=(ex.sets||[]).filter(_isWorkSet).length;if(!n)return;
         const mu=PlanApp.muscleOf(ex.name);if(!mu)return;
         vol[mu.p]=(vol[mu.p]||0)+n;(mu.s||[]).forEach(sec=>{vol[sec]=(vol[sec]||0)+n*0.5;});
       });
@@ -1635,7 +1669,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="rest-timer"><span class="rt-time">0:00</span><div class="rt-bar"><div class="rt-fill"></div></div><button class="rt-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rt-btn" onclick="ExLog.skipRest()">스킵</button></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-wu-btn" type="button" onclick="this.classList.toggle('on')" title="워밍업 세트 — 볼륨·PR·추세 집계에서 제외">W</button><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div>`;
   },
 
   injectLogs(){
@@ -1665,6 +1699,11 @@ const ExLog={
       cd.className='cond-row';
       cd.innerHTML='<span class="cond-lbl">😴 컨디션</span><span class="cond-dots">'+[1,2,3,4,5].map(n=>'<b class="cond-dot" data-n="'+n+'" onclick="ExLog.setCond('+n+')">'+n+'</b>').join('')+'</span><input type="number" class="cond-sleep" step="0.5" min="0" max="14" inputmode="decimal" placeholder="수면 h" onchange="ExLog.setSleep(this.value)">';
       panel.insertBefore(cd,panel.firstChild);
+      // 세션 노트 — 컨디션 점수로 못 담는 맥락(통증·특이사항·환경) 한 줄 기록
+      const nr=document.createElement('div');
+      nr.className='note-row';
+      nr.innerHTML='<input type="text" class="sess-note" maxlength="200" placeholder="📝 세션 메모 — 통증·특이사항·환경 (선택)" onchange="ExLog.setNote(this.value)">';
+      panel.insertBefore(nr,cd.nextSibling);
     });
     // 유산소 기록 (내장지방 목표의 두 번째 축 — 근볼륨과 분리 집계)
     document.querySelectorAll('.day-panel').forEach(panel=>{
@@ -1698,12 +1737,21 @@ const ExLog={
     s.cond=s.cond||{};if(h>0)s.cond.sleep=h;else delete s.cond.sleep;
     this.setSession(s);if(this._syncSoon)this._syncSoon();
   },
+  setNote(v){
+    const s=this.session();
+    const t=String(v||'').trim().slice(0,200);
+    if(t)s.note=t;else delete s.note;
+    this.setSession(s);
+  },
   renderCond(){
-    const c=this.session().cond||{};
+    const ses=this.session();const c=ses.cond||{};
     document.querySelectorAll('.cond-row').forEach(row=>{
       row.querySelectorAll('.cond-dot').forEach(d=>d.classList.toggle('on',+d.dataset.n<=(c.rate||0)));
       const sl=row.querySelector('.cond-sleep');
       if(sl&&document.activeElement!==sl)sl.value=c.sleep||'';
+    });
+    document.querySelectorAll('.sess-note').forEach(inp=>{
+      if(document.activeElement!==inp)inp.value=ses.note||'';   // 날짜 이동 시 해당 세션 노트 반영
     });
   },
   _weekCondAvg(){ // 이번 주 컨디션·수면 평균 (기록된 날만)
@@ -1792,6 +1840,7 @@ const ExLog={
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
     const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='none';pb.classList.remove('on');}
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
+    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.remove('on');
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(sn)sn.textContent=(ex?.sets.length||0)+1;
@@ -1824,6 +1873,7 @@ const ExLog={
     if(ri)ri.value=ex.sets[i].reps;
     if(wi)this._updateTotalHint(wi);
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value=ex.sets[i].rpe?String(ex.sets[i].rpe):'';
+    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.toggle('on',!!ex.sets[i].warmup);
     const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='';pb.classList.toggle('on',!!ex.sets[i].pain);}
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
     const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
@@ -1835,7 +1885,7 @@ const ExLog={
   _priorSets(name){
     let arr=[];const cn=this.canon(name);
     for(const dk in this.data){(this.data[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
-    return arr.filter(s=>s.reps>0);
+    return arr.filter(_isWorkSet);
   },
   checkPR(name,w,r){
     const prior=this._priorSets(name);if(!prior.length)return false;
@@ -1866,6 +1916,8 @@ const ExLog={
     if(_base&&(w>0||r>0))w=Math.round((w+_base)*100)/100;   // 입력=추가 원판 → 총 무게로 저장
     const rpeSel=inp.querySelector('.wl-rpe-sel');
     const rpe=rpeSel?parseFloat(rpeSel.value)||0:0;          // RPE는 선택 입력 — 있을 때만 세트에 저장
+    const wuBtn=inp.querySelector('.wl-wu-btn');
+    const wuOn=!!(wuBtn&&wuBtn.classList.contains('on'));    // 워밍업 세트 — 기록은 남기되 집계 제외
     const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
@@ -1873,21 +1925,21 @@ const ExLog={
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
       // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
       const old=ex.sets[+editIdx];
-      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},old.pain?{pain:true}:{},rpe?{rpe}:{});
+      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},old.pain?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
       this._syncSoon();
       return;
     }
-    // 신규 세트
-    const isPR=this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},rpe?{rpe}:{}));
+    // 신규 세트 (워밍업은 PR 판정 대상 아님)
+    const isPR=wuOn?false:this.checkPR(log.dataset.exname,w,r);
+    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},rpe?{rpe}:{},wuOn?{warmup:true}:{}));
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
     if(isPR)this.showPR(log.dataset.exname);
-    if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname);}
+    if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname,wuOn?60:0);} // 워밍업 후 휴식은 짧게(60초)
     this._syncSoon();
   },
   // 알림 권한: 사용자 제스처(세트 확정) 시 1회만 요청 — 백그라운드에서 휴식 종료 알림용
@@ -1902,6 +1954,7 @@ const ExLog={
     const log=inp.closest('.ex-log');
     inp.querySelector('.wl-rp-input').value='';
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
+    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.remove('on');
     inp.style.display='none';
     log.dataset.editIdx='';
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
@@ -1970,7 +2023,7 @@ const ExLog={
       if(k===this.date)continue;
       const ex=this.data[k].exercises?.find(e=>this.canon(e.name)===this.canon(name));
       if(!ex)continue;
-      ex.sets.forEach(st=>{if(st.reps>0){if(st.weight>0){const e1=st.weight*(1+st.reps/30);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
+      ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=st.weight*(1+st.reps/30);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
     }
     return{bestE1,bestReps};
   },
@@ -1987,20 +2040,22 @@ const ExLog={
       if(!ex||!ex.sets.length){chips.innerHTML='<span class="ex-log-empty">기록 없음</span>';return;}
       // 신기록 세트 1개만 강조 — 로딩 종목은 e1RM 최고, 맨몸 종목은 reps 최고가 과거(다른 날) 최고를 넘으면 표시
       const pb=this._priorBest(ex.name);
-      const loadedToday=ex.sets.some(st=>st.weight>0&&st.reps>0);
+      const loadedToday=ex.sets.some(st=>st.weight>0&&_isWorkSet(st));
       let prIdx=-1,prBest=-1;
       ex.sets.forEach((st,i)=>{
-        if(st.reps<=0)return;
+        if(!_isWorkSet(st))return;
         if(loadedToday){if(st.weight>0){const e1=st.weight*(1+st.reps/30);if(pb.bestE1>=0&&e1>pb.bestE1+0.05&&e1>prBest){prBest=e1;prIdx=i;}}}
         else{if(pb.bestReps>=0&&st.reps>pb.bestReps&&st.reps>prBest){prBest=st.reps;prIdx=i;}}
       });
       chips.innerHTML=ex.sets.map((set,i)=>{
-        const cls=set.reps>=8?'hit':set.reps>=6?'':'miss';
-        totSets++;totVol+=set.weight*set.reps;
+        const isWu=!!set.warmup;
+        const cls=isWu?'wu':(set.reps>=8?'hit':set.reps>=6?'':'miss');
+        if(!isWu&&set.reps>0){totSets++;totVol+=set.weight*set.reps;}  // 워밍업은 세트·볼륨 합계 제외
         const badge=(i===prIdx)?'<span class="pr-trophy" title="개인 기록 갱신">🏆</span>':'';
         const rpeMk=set.rpe?'<i class="chip-rpe">@'+set.rpe+'</i>':'';
         const painMk=set.pain?'<i class="chip-pain" title="통증 기록됨">⚠️</i>':'';
-        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${set.weight}×${set.reps}${rpeMk}${painMk}${badge}</span>`;
+        const wuMk=isWu?'W ':'';
+        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${wuMk}${set.weight}×${set.reps}${rpeMk}${painMk}${badge}</span>`;
       }).join('');
     });
     const sum=document.getElementById('sess-sum');
@@ -2070,13 +2125,62 @@ const ExLog={
     const parts=[];
     const prev=this._prevTopStr(log.dataset.exname);
     if(prev)parts.push('지난 '+prev);
-    const n=ex?ex.sets.filter(s=>s.reps>0).length:0;
+    const n=ex?ex.sets.filter(_isWorkSet).length:0;
     if(n)parts.push('오늘 <b>'+n+'</b>세트');
     let mini=info.querySelector('.ex-mini');
     if(!parts.length){if(mini)mini.remove();return;}
-    if(!mini){mini=document.createElement('div');mini.className='ex-mini';info.appendChild(mini);}
+    if(!mini){mini=document.createElement('div');mini.className='ex-mini';info.appendChild(mini);mini.setAttribute('onclick','event.preventDefault();event.stopPropagation();ExLog.showHistory(this.closest(\'.ex-wrap\').querySelector(\'.ex-log\').dataset.exname)');mini.title='탭하면 이 종목 전체 기록';}
     mini.innerHTML=parts.join(' · ');
   },
+
+  // ── 종목별 전체 히스토리: canon 기준 전 기간 날짜별 본세트 + e1RM 곡선 (6주 블록 리뷰·정체 판단 근거) ──
+  showHistory(name){
+    const cn=this.canon(name);
+    const rows=[];                                            // {dk, sets(본세트), e1(그날 최고)}
+    Object.keys(this.data).sort().forEach(dk=>{
+      (this.data[dk].exercises||[]).forEach(e=>{
+        if(this.canon(e.name)!==cn)return;
+        const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
+        let e1=0;sets.forEach(s=>{const v=s.weight>0?s.weight*(1+s.reps/30):0;if(v>e1)e1=v;});
+        rows.push({dk,sets,e1});
+      });
+    });
+    let m=document.getElementById('hist-modal');
+    if(!m){
+      m=document.createElement('div');m.id='hist-modal';m.className='ib-modal';m.style.display='none';
+      m.setAttribute('onclick',"if(event.target===this)ExLog.closeHistory()");
+      m.innerHTML='<div class="ib-modal-box"><div class="ib-modal-handle"></div><div class="ib-modal-hd" id="hist-hd"></div><div class="ib-modal-sub" id="hist-sub"></div><div id="hist-body"></div><button class="hist-close" onclick="ExLog.closeHistory()">닫기</button></div>';
+      document.body.appendChild(m);
+    }
+    document.getElementById('hist-hd').textContent='📈 '+cn;
+    document.getElementById('hist-sub').textContent='전체 기록 '+rows.length+'회 (워밍업 제외 · 별칭 연결 포함)';
+    const body=document.getElementById('hist-body');
+    if(!rows.length){body.innerHTML='<div class="hist-empty">아직 기록이 없습니다.</div>';}
+    else{
+      // e1RM 전체 곡선 (로딩 기록 2회 이상일 때만)
+      const e1s=rows.filter(r=>r.e1>0).map(r=>r.e1);
+      let spark='';
+      if(e1s.length>=2){
+        const mn=Math.min(...e1s),mx=Math.max(...e1s),rng=(mx-mn)||.001;
+        const W=320,H=56,pad=6,step=(W-pad*2)/(e1s.length-1);
+        const pts=e1s.map((v,i)=>(pad+i*step).toFixed(1)+','+(H-pad-(v-mn)/rng*(H-pad*2)).toFixed(1));
+        const last=pts[pts.length-1].split(',');
+        spark='<div class="hist-spark"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#085041" stroke-width="2" stroke-linejoin="round"/><circle cx="'+last[0]+'" cy="'+last[1]+'" r="3" fill="#085041"/></svg></div>';
+      }
+      const bestE1=Math.max(0,...e1s);
+      const first=rows[0],lastR=rows[rows.length-1];
+      const gain=(first.e1>0&&lastR.e1>0)?('<span>변화 <b>'+(lastR.e1-first.e1>=0?'+':'')+(lastR.e1-first.e1).toFixed(1)+'kg</b></span>'):'';
+      const stat='<div class="hist-stat"><span>최고 e1RM <b>'+(bestE1>0?bestE1.toFixed(1)+'kg':'—')+'</b></span>'+gain+'<span>기간 <b>'+first.dk.slice(5).replace('-','/')+'~'+lastR.dk.slice(5).replace('-','/')+'</b></span></div>';
+      const fmt=(typeof PlanApp!=='undefined'&&PlanApp._fmtSets)?PlanApp._fmtSets.bind(PlanApp):(ss=>ss.map(s=>s.weight+'×'+s.reps).join(', '));
+      const list=rows.slice().reverse().map(r=>{
+        const d=new Date(r.dk+'T12:00:00').toLocaleDateString('ko-KR',{year:'2-digit',month:'numeric',day:'numeric'});
+        return '<div class="hist-row"><span class="hist-date">'+d+'</span><span class="hist-sets">'+fmt(r.sets)+'</span><span class="hist-e1'+(r.e1>0&&r.e1>=bestE1-0.05?' pr':'')+'">'+(r.e1>0?r.e1.toFixed(1):'')+'</span></div>';
+      }).join('');
+      body.innerHTML=spark+stat+'<div class="hist-rows">'+list+'</div>';
+    }
+    m.style.display='flex';
+  },
+  closeHistory(){const m=document.getElementById('hist-modal');if(m)m.style.display='none';},
 
   // ── 같은 데이 타입의 직전 세션 톤수 ──
   _prevDayTypeVol(day){
@@ -2085,7 +2189,7 @@ const ExLog={
     for(const k of keys){
       const ses=this.data[k];if(!ses||ses.day!==day)continue;
       let v=0,has=false;
-      (ses.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(st.reps>0){has=true;v+=(st.weight||0)*st.reps;}}));
+      (ses.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(_isWorkSet(st)){has=true;v+=(st.weight||0)*st.reps;}}));
       if(has)return{vol:v,day,date:k};
     }
     return null;
@@ -2146,7 +2250,7 @@ const ExLog={
     Object.keys(this.data).sort().forEach(dk=>{
       const inWeek=wkSet.has(dk);
       (this.data[dk].exercises||[]).forEach(e=>{
-        const sets=(e.sets||[]).filter(s=>s.reps>0);if(!sets.length)return;
+        const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let dayMax=-1,dayTopSet=null;
         sets.forEach(s=>{
           const cur=s.weight>0?s.weight*(1+s.reps/30):s.reps;
@@ -2161,7 +2265,7 @@ const ExLog={
         if(dayMax>(best[e.name]??-Infinity))best[e.name]=dayMax;
       });
     });
-    const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(s=>s.reps>0))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
+    const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
     const remind=this._ibReminderHtml()+this._backupReminderHtml();
     if(!sessions)return'<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind+'<div class="wr-empty">이번 주 기록이 아직 없습니다. 세트를 기록하면 일요일에 여기서 한 주를 결산합니다.</div></div>';
     // 부위별 목표 달성/미달
@@ -2172,7 +2276,7 @@ const ExLog={
     // 다음 주 도전 — 이번 주 수행 종목 중 증량 신호(⬆)가 뜬 것
     const ups=[];const seenEx=new Set();
     wkKeys.forEach(dk=>{(this.data[dk]&&this.data[dk].exercises||[]).forEach(e=>{
-      if(seenEx.has(e.name)||!(e.sets||[]).some(s=>s.reps>0))return;seenEx.add(e.name);
+      if(seenEx.has(e.name)||!(e.sets||[]).some(_isWorkSet))return;seenEx.add(e.name);
       const sg=this.suggestTarget(e.name);if(sg&&sg.up)ups.push(e.name);
     });});
     const g=this._weekGoalPct();
@@ -2185,6 +2289,12 @@ const ExLog={
     const ca=this._weekCondAvg();
     if(ca.rate!=null)h+='<div class="wr-row"><span>평균 컨디션</span><span class="v'+(ca.rate<3?' miss':'')+'">'+ca.rate.toFixed(1)+'/5</span></div>';
     if(ca.sleep!=null)h+='<div class="wr-row"><span>평균 수면</span><span class="v'+(ca.sleep<6?' miss':'')+'">'+ca.sleep.toFixed(1)+'h</span></div>';
+    // 이번 주 세션 노트 — 볼륨·정체 해석의 맥락 (통증·환경 등)
+    const notes=[];wkKeys.forEach(dk=>{const n=this.data[dk]&&this.data[dk].note;if(n)notes.push({dk,n});});
+    if(notes.length){
+      h+='<div class="wr-sec">📝 세션 메모</div>';
+      notes.forEach(x=>{const dd=new Date(x.dk+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'});h+='<div class="wr-note-row"><b>'+dd+'</b> — '+String(x.n).replace(/</g,'&lt;')+'</div>';});
+    }
     // 세션 시간·세트 간격 (ts 있는 세션만 평균)
     const tms=wkKeys.map(dk=>this._sessionTiming(dk)).filter(Boolean);
     if(tms.length){
@@ -2229,8 +2339,8 @@ const ExLog={
     const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
     for(const k of keys){
       const s=this.data[k];if(!s)continue;
-      const ex=s.exercises?.find(e=>this.canon(e.name)===this.canon(name)&&e.sets?.length);
-      if(ex)return{date:k,sets:ex.sets};
+      const ex=s.exercises?.find(e=>this.canon(e.name)===this.canon(name)&&(e.sets||[]).some(_isWorkSet));
+      if(ex)return{date:k,sets:ex.sets.filter(_isWorkSet)};
     }
     return null;
   },
@@ -2372,7 +2482,7 @@ const ExLog={
   _gripChipHtml(name){
     const st=this.session();
     const ex=(st.exercises||[]).find(e=>this.canon(e.name)===this.canon(name));
-    const done=ex?(ex.sets||[]).filter(x=>x.reps>0).length:0;
+    const done=ex?(ex.sets||[]).filter(_isWorkSet).length:0;
     const setNo=done+1;
     const start=this._gripStart();
     const under=(setNo%2===1)?start:(start==='왼'?'오른':'왼');
@@ -2524,7 +2634,7 @@ const ExLog={
     const monday=new Date(today);monday.setDate(today.getDate()-dow);
     let wk=0,total=0;
     for(const k in this.data){
-      if(!this.data[k].exercises?.some(e=>e.sets?.length))continue;
+      if(!this.data[k].exercises?.some(e=>(e.sets||[]).some(_isWorkSet)))continue;
       total++;
       const d=new Date(k+'T12:00:00');
       if(d>=monday&&d<=today)wk++;
@@ -2533,25 +2643,51 @@ const ExLog={
   },
 
   // ── 휴식 타이머 (Date 기준 — 백그라운드에서도 정확) ──
-  startRest(name){
+  startRest(name,secOverride){
     this.stopRest();
-    const total=this.restSec(name);
+    const total=secOverride||this.restSec(name);
     // 활성 타이머 엘리먼트 1회 탐색 후 캐시 — 500ms 틱마다 전체 .ex-log 순회 제거 (stopRest가 나머지를 이미 초기화)
     let el=null;
     document.querySelectorAll('.ex-log').forEach(l=>{if(l.dataset.exname===name)el=l.querySelector('.rest-timer')||el;});
     this.rest={name,endAt:Date.now()+total*1000,total,int:setInterval(()=>this.tickRest(),500),el,notified:false};
     this.tickRest();
   },
+  // 스티키 미니 타이머: 카드 내 타이머가 화면 밖(스크롤·카드 접힘)일 때만 상단에 표시
+  _restMini(){
+    let m=document.getElementById('rest-mini');
+    if(!m){
+      m=document.createElement('div');m.id='rest-mini';m.className='rest-mini';
+      m.innerHTML='<span class="rm-nm"></span><span class="rm-time">0:00</span><button class="rm-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rm-btn" onclick="ExLog.skipRest()">스킵</button><div class="rm-bar"></div>';
+      document.body.appendChild(m);
+    }
+    return m;
+  },
+  _cardTimerVisible(){
+    const el=this.rest.el;if(!el)return false;
+    const r=el.getBoundingClientRect();
+    if(!r.width&&!r.height)return false;                     // 카드 접힘(display:none) → 안 보임
+    return r.bottom>50&&r.top<window.innerHeight;            // 상단 네비(~42px) 아래로 일부라도 보이면 가시
+  },
   tickRest(){
     const r=this.rest;if(!r.name)return;
     const remain=Math.max(0,Math.round((r.endAt-Date.now())/1000));
+    const mm=Math.floor(remain/60),ss=remain%60;
+    const tstr=mm+':'+String(ss).padStart(2,'0');
+    const pct=(r.total?Math.max(0,remain/r.total*100):0)+'%';
     const t=r.el;
     if(t){
       t.classList.add('active');
-      const mm=Math.floor(remain/60),ss=remain%60;
-      t.querySelector('.rt-time').textContent=mm+':'+String(ss).padStart(2,'0');
-      t.querySelector('.rt-fill').style.width=(r.total?Math.max(0,remain/r.total*100):0)+'%';
+      t.querySelector('.rt-time').textContent=tstr;
+      t.querySelector('.rt-fill').style.width=pct;
       t.classList.toggle('done',remain<=0);
+    }
+    const mini=this._restMini();
+    if(this._cardTimerVisible()){mini.classList.remove('show');}
+    else{
+      mini.classList.add('show');
+      mini.querySelector('.rm-nm').textContent='⏱ '+r.name;
+      mini.querySelector('.rm-time').textContent=tstr;
+      mini.querySelector('.rm-bar').style.width=pct;
     }
     if(remain<=0&&r.int){
       clearInterval(r.int);this.rest.int=null;
@@ -2575,6 +2711,7 @@ const ExLog={
     if(this.rest.int)clearInterval(this.rest.int);
     this.rest={name:'',endAt:0,total:0,int:null};
     document.querySelectorAll('.rest-timer').forEach(t=>t.classList.remove('active','done'));
+    const m=document.getElementById('rest-mini');if(m)m.classList.remove('show');
   },
 
   // ── Google Sheets 동기화 ──
@@ -2776,7 +2913,9 @@ const PlanApp={
     if(/컬|바이셉스/.test(n)&&!/레그/.test(n))return{p:'이두',s:[]};
     if(/킥백/.test(n))return /글루트|둔근|힙/.test(n)?{p:'후면사슬',s:[]}:{p:'삼두',s:[]};
     if(/트라이|푸시다운|딥스/.test(n))return{p:'삼두',s:[]};
-    if(/크로스오버|플라이|펙덱/.test(n))return{p:'가슴',s:['삼두']};
+    if(/크로스오버|플라이|펙덱/.test(n))return{p:'가슴',s:['전면삼각']};
+    if(/토르소|로터리/.test(n))return{p:'코어',s:[]};
+    if(/레그\s*?익스텐션|시시/.test(n))return{p:'대퇴사두',s:[]};
     if(/어덕션|내전/.test(n))return{p:'내전근',s:[]};
     if(/굿모닝|풀스루|스윙|백\s*익스텐션|하이퍼|루마니안|RDL|레그\s*?컬|힙\s*?쓰러스트|힙\s*?어브덕션|어브덕터|글루트/.test(n))return{p:'후면사슬',s:[]};
     if(/데드리프트|랙풀/.test(n))return{p:'후면사슬',s:['등']};
@@ -2796,7 +2935,7 @@ const PlanApp={
     for(const dk in data){
       const d=new Date(dk+'T12:00:00');if(d<ws||d>we)continue;
       (data[dk].exercises||[]).forEach(ex=>{
-        const n=(ex.sets||[]).filter(s=>s.reps>0).length;if(!n)return;
+        const n=(ex.sets||[]).filter(_isWorkSet).length;if(!n)return;
         const mu=this.muscleOf(ex.name);if(!mu)return;
         vol[mu.p]=(vol[mu.p]||0)+n;
         (mu.s||[]).forEach(sec=>{vol[sec]=(vol[sec]||0)+n*0.5;});
@@ -2825,7 +2964,7 @@ const PlanApp={
       let wi=-1;for(let i=0;i<4;i++)if(wk4[i].has(dk)){wi=i;break;}
       if(wi<0)continue;
       (data[dk].exercises||[]).forEach(ex=>{
-        const n=(ex.sets||[]).filter(st=>st.reps>0).length;if(!n)return;
+        const n=(ex.sets||[]).filter(_isWorkSet).length;if(!n)return;
         const mu=this.muscleOf(ex.name);if(!mu)return;
         if(v4[mu.p])v4[mu.p][wi]+=n;
         (mu.s||[]).forEach(sec=>{if(v4[sec])v4[sec][wi]+=n*0.5;});
@@ -2860,7 +2999,7 @@ const PlanApp={
     Object.keys(data).sort().forEach(dk=>{
       (data[dk].exercises||[]).forEach(ex=>{
         if(this._isTimed(ex.name))return;
-        const sets=(ex.sets||[]).filter(s=>s.weight>0&&s.reps>0);if(!sets.length)return;
+        const sets=(ex.sets||[]).filter(s=>s.weight>0&&_isWorkSet(s));if(!sets.length)return;
         const e1=Math.max.apply(null,sets.map(s=>this._e1rm(s)));
         const heavy=sets.reduce((a,s)=>s.weight>a.weight?s:a,sets[0]);
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name; // 별칭 연결 시 옛 기록을 같은 추세로 묶음
@@ -2889,7 +3028,7 @@ const PlanApp={
         const p=Math.round((best-(next-10))/10*100);
         ms='<div class="tr-ms"><span class="tr-ms-txt">🏁 <b>'+next+'kg</b>까지 '+(next-best).toFixed(1)+'kg</span><div class="tr-ms-bar"><div class="tr-ms-fill" style="width:'+p+'%"></div></div></div>';
       }
-      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span>'+((bwKg&&typeof ExLog!=='undefined'&&ExLog.isCompound(n))?' <span class="tr-bw">'+(last.e1/bwKg).toFixed(2)+'×BW</span>':'')+' '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+ms+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
+      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm" onclick="ExLog.showHistory(\''+n.replace(/'/g,"\\'")+'\')" title="탭하면 전체 기록">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span>'+((bwKg&&typeof ExLog!=='undefined'&&ExLog.isCompound(n))?' <span class="tr-bw">'+(last.e1/bwKg).toFixed(2)+'×BW</span>':'')+' '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+ms+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
     }).join('');
     // 6주 블록 리뷰: 6주차 도달 시 블록 내 보조 종목 정체를 나열하고 같은 부위 대체 후보 제안
     let blockBanner='';
@@ -2946,8 +3085,8 @@ const PlanApp={
     const keys=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);keys.push(_localKey(d));}
     return keys;
   },
-  _sessionSets(data,dk){let n=0;(data[dk]&&data[dk].exercises||[]).forEach(e=>{n+=(e.sets||[]).filter(s=>s.reps>0).length;});return n;},
-  _weekVolume(data,keys){let v=0;keys.forEach(dk=>{(data[dk]&&data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(s=>{if(s.reps>0)v+=(s.weight||0)*s.reps;});});});return v;},
+  _sessionSets(data,dk){let n=0;(data[dk]&&data[dk].exercises||[]).forEach(e=>{n+=(e.sets||[]).filter(_isWorkSet).length;});return n;},
+  _weekVolume(data,keys){let v=0;keys.forEach(dk=>{(data[dk]&&data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(s=>{if(_isWorkSet(s))v+=(s.weight||0)*s.reps;});});});return v;},
   async renderPRBoard(){
     const box=document.getElementById('pr-board');if(!box)return;
     const data=await this._logData();
@@ -2956,7 +3095,7 @@ const PlanApp={
       (data[dk].exercises||[]).forEach(ex=>{
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
         (ex.sets||[]).forEach(st=>{
-          if(!(st.reps>0&&st.weight>0))return;
+          if(!(_isWorkSet(st)&&st.weight>0))return;
           const e1=st.weight*(1+st.reps/30);
           if(!best[cn]||e1>best[cn].e1)best[cn]={e1,w:st.weight,r:st.reps,date:dk};
         });
@@ -2987,7 +3126,7 @@ const PlanApp={
     allDates.forEach(dk=>{
       const inWeek=thisSet.has(dk);
       (data[dk]&&data[dk].exercises||[]).forEach(e=>{
-        const sets=(e.sets||[]).filter(s=>s.reps>0);if(!sets.length)return;
+        const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let dayMax=-1;                               // 이 날짜의 최고값 (best 갱신용 — 같은 날 세트끼리는 PR로 안 침)
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(e.name):e.name; // 별칭 기준 PR 연속성
         sets.forEach(s=>{
@@ -3011,6 +3150,16 @@ const PlanApp={
       +'<div class="ws-cell"><div class="ws-v">D-'+dday+'</div><div class="ws-l">목표(12월)까지</div></div>'
       +'</div>'
       +(bfTrend?'<div class="ws-note">체지방률 추세 '+bfTrend+' · 골격근·체지방은 체성분 현황에서 확인</div>':'');
+  },
+  // ── 캘린더 셀 → 해당 날짜의 운동 기록으로 점프 ──
+  gotoDate(dk){
+    if(typeof ExLog==='undefined'||!dk)return;
+    if(new Date(dk+'T12:00:00')>new Date())return;           // 미래 셀 무시
+    ExLog.date=dk;
+    const tw=document.getElementById('tw');if(tw)tw.checked=true; // 운동 탭으로 전환 (라디오 → CSS 표시 전환)
+    ExLog.updateBar();ExLog.injectTargets();ExLog.refresh();
+    if(ExLog.injectRecos)setTimeout(()=>ExLog.injectRecos(),20);  // 탭 라벨 클릭과 동일한 후처리
+    window.scrollTo({top:0,behavior:'smooth'});
   },
   // ── Claude 보고용 요약: 최근 인바디 + 이번 주 세션·컨디션을 마크다운으로 복사 (일요일 보고 워크플로우) ──
   _fmtSets(sets){
@@ -3052,9 +3201,9 @@ const PlanApp={
     let any=false,condS=0,condN=0,slpS=0,slpN=0,cardioMin=0;
     wkKeys.forEach(dk=>{
       const d=data[dk];if(!d)return;
-      const exLines=(d.exercises||[]).filter(e=>(e.sets||[]).some(s=>s.reps>0))
+      const exLines=(d.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet))
         .map(e=>{
-          const sets=e.sets.filter(s=>s.reps>0);
+          const sets=e.sets.filter(_isWorkSet);
           const top=sets.reduce((a,s)=>{const ca=a.weight*(1+a.reps/30),cs=s.weight*(1+s.reps/30);return cs>ca?s:a;},sets[0]);
           const e1=top.weight>0?' (e1RM '+(top.weight*(1+top.reps/30)).toFixed(1)+')':'';
           return '  - '+e.name+': '+this._fmtSets(sets)+e1;
@@ -3062,11 +3211,12 @@ const PlanApp={
       const cd=(d.cardio||[]).map(c=>c.type+' '+c.min+'분');
       (d.cardio||[]).forEach(c=>cardioMin+=(+c.min||0));
       if(d.cond){if(d.cond.rate){condS+=d.cond.rate;condN++;}if(d.cond.sleep){slpS+=d.cond.sleep;slpN++;}}
-      if(!exLines.length&&!cd.length)return;
+      if(!exLines.length&&!cd.length&&!d.note)return;
       any=true;
       let hd='- **'+fd(dk)+' ('+(d.day||'')+')**';
       if(d.cond&&(d.cond.rate||d.cond.sleep))hd+=' — 컨디션 '+(d.cond.rate||'-')+'/5'+(d.cond.sleep?' · 수면 '+d.cond.sleep+'h':'');
       L.push(hd);
+      if(d.note)L.push('  - 메모: '+d.note);
       exLines.forEach(x=>L.push(x));
       if(cd.length)L.push('  - 유산소: '+cd.join(', '));
     });
@@ -3108,7 +3258,7 @@ const PlanApp={
         const sets=this._sessionSets(data,dk);
         const fut=new Date(dk)>new Date();
         let lv=0;if(sets>=12)lv=4;else if(sets>=8)lv=3;else if(sets>=4)lv=2;else if(sets>=1)lv=1;
-        cells+='<div class="cal-cell l'+lv+(fut?' fut':'')+'" title="'+dk+' · '+sets+'세트"></div>';
+        cells+='<div class="cal-cell l'+lv+(fut?' fut':'')+'" title="'+dk+' · '+sets+'세트"'+(fut?'':' style="cursor:pointer" onclick="PlanApp.gotoDate(\''+dk+'\')"')+'></div>';
       });
       cols+='<div class="cal-col">'+cells+'</div>';
     }
@@ -3483,6 +3633,8 @@ const InBody={
   }
 };
 document.addEventListener('DOMContentLoaded',()=>{ExLog.init();PlanApp.init();MuscleMap.init();LibApp.render();InBody.render();});
+// PWA: 서비스워커 등록 (network-first — 배포하면 온라인 시 항상 최신, 오프라인만 캐시)
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>
 <!-- 동기화 설정 모달 -->
 <div class="sync-modal" id="sync-modal" onclick="if(event.target===this)ExLog.closeSync()">
