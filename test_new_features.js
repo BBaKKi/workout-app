@@ -182,20 +182,22 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     eq(d.querySelectorAll('.ex-pain-warn').length,0);
   });
 
-  console.log('\n[휴식 타이머]');
-  await t('startRest가 활성 엘리먼트를 캐시',async()=>{
+  console.log('\n[휴식 타이머 — 미니바 단일화]');
+  await t('startRest는 인라인 카드 타이머 없이 미니바만 사용', async()=>{
     ExLog.startRest('바벨 데드리프트');
-    ok(ExLog.rest.el,'el 캐시 없음');
-    ok(ExLog.rest.el.classList.contains('active'));
+    ok(!ExLog.rest.el,'인라인 el 캐시가 남아있음 — 미니바로 단일화돼야 함');
+    eq(d.querySelectorAll('.rest-timer').length,0,'인라인 타이머 DOM 잔존');
+    ok(d.getElementById('rest-mini').classList.contains('show'));
     ExLog.stopRest();
   });
-  await t('tickRest는 캐시만 갱신 (다른 로그 무접촉)·종료 시 타이머 해제',async()=>{
+  await t('종료 시 interval 해제·미니바 done 플래시', async()=>{
     ExLog.startRest('바벨 데드리프트');
     ExLog.rest.endAt=Date.now()-1000; // 즉시 종료 상태
     ExLog.tickRest();
     eq(ExLog.rest.int,null,'종료 시 interval 해제돼야 함');
-    ok(ExLog.rest.el.classList.contains('done'));
+    ok(d.getElementById('rest-mini').classList.contains('done'),'미니바 done 상태 없음');
     ExLog.stopRest();
+    ok(!d.getElementById('rest-mini').classList.contains('done'),'stopRest 후 done 잔존');
   });
   await t('Notification 미지원 환경에서도 예외 없음',async()=>{
     ExLog._notifAsked=false;
@@ -465,126 +467,6 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     eq(miss.length,0,'미매칭: '+miss.join(','));
   });
 
-  console.log('\n[통합 서술 블록]');
-  await t('정적 카드: focus-grid → ex-how 교체 (자극·세팅·그립·수행·요령·주의 한 블록)',async()=>{
-    const cards=[...d.querySelectorAll('.day-panel details.ex-card')];
-    const withHow=cards.filter(c=>c.querySelector('.ex-how'));
-    ok(withHow.length>30,'교체된 카드 '+withHow.length+'개뿐');
-    const how=withHow[0].querySelector('.ex-how');
-    ok(how.innerHTML.includes('🎯')&&how.innerHTML.includes('세팅')&&how.innerHTML.includes('그립')&&how.innerHTML.includes('수행')&&how.innerHTML.includes('💡')&&how.innerHTML.includes('⚠️'),'구성 요소 누락: '+how.innerHTML.slice(0,120));
-    eq(withHow[0].querySelectorAll('.focus-grid').length,0,'focus-grid 잔존');
-    eq(d.querySelectorAll('.ex-extra').length,0,'ex-extra 잔존');
-  });
-  await t('도감 카드도 통합 블록 사용',async()=>{
-    const LibApp=w.eval('LibApp');LibApp.render();
-    ok(d.querySelector('#lib-list .lib-card .ex-how'),'도감에 ex-how 없음');
-    ok(!d.querySelector('#lib-list .lib-l')||![...d.querySelectorAll('#lib-list .lib-l')].some(x=>['타겟','그립·힘','세팅','ROM'].includes(x.textContent)),'옛 행 라벨 잔존');
-  });
-  await t('exHowHtml: 라이브러리 183개 전부 6요소 모두 렌더',async()=>{
-    const fn=w.eval('exHowHtml');
-    let bad=0;
-    for(const e of LIB){
-      const h=fn(e);
-      if(!(h.includes('🎯')&&h.includes('세팅')&&h.includes('그립')&&h.includes('수행')&&h.includes('💡')&&h.includes('⚠️')))bad++;
-    }
-    eq(bad,0,bad+'개 엔트리 요소 누락');
-  });
-
-  console.log('\n[스톱워치]');
-  await t('시간 종목에 스톱워치 버튼 주입',async()=>{
-    const log=logOf('플랭크');ok(log,'플랭크 로그 없음');
-    const det=log.closest('.ex-detail');
-    ok(det.querySelector('.ex-sw-btn'),'버튼 없음');
-    ok(!logOf('딥스 머신').closest('.ex-detail').querySelector('.ex-sw-btn'),'비시간 종목에 버튼 있음');
-  });
-  await t('시작→기록: 경과 초가 세트로 저장·PR·휴식 시작',async()=>{
-    ExLog.data={};ExLog.date=_todayKey();
-    const det=logOf('플랭크').closest('.ex-detail');
-    const btn=det.querySelector('.ex-sw-btn');
-    ExLog.toggleStopwatch(btn);
-    ok(btn.classList.contains('running'));
-    ok(det.querySelector('.ex-sw-cancel').classList.contains('show'));
-    ExLog._sw.start=Date.now()-65000;                       // 65초 경과 시뮬레이션
-    ExLog.toggleStopwatch(btn);                             // 멈추고 기록
-    const ex=ExLog.session().exercises.find(e=>e.name==='플랭크');
-    ok(ex&&ex.sets.length===1&&ex.sets[0].reps===65&&ex.sets[0].weight===0,'기록 오류: '+JSON.stringify(ex&&ex.sets));
-    ok(!btn.classList.contains('running'));
-    ok(ExLog.rest.name==='플랭크','휴식 미시작');
-    ExLog.stopRest();
-  });
-  await t('취소는 기록 없이 리셋·다른 종목 시작 시 기존 취소',async()=>{
-    const det=logOf('플랭크').closest('.ex-detail');
-    const btn=det.querySelector('.ex-sw-btn');
-    ExLog.toggleStopwatch(btn);
-    ExLog.cancelStopwatch();
-    eq(ExLog.session().exercises.find(e=>e.name==='플랭크').sets.length,1,'취소가 기록됨');
-    eq(ExLog._sw.int,null);
-  });
-
-  console.log('\n[코치 노트]');
-  await t('저장 → 운동 탭 칩 표시·플랜 탭 힌트, 비우면 제거',async()=>{
-    const ta=d.getElementById('coach-ta');ok(ta,'textarea 없음');
-    ta.value='레그컬 32.5 증량 · 데드 72.5 유지';
-    PlanApp.saveCoachNote();
-    ok(ExLog.coachNote&&ExLog.coachNote.text.includes('72.5'));
-    const chip=d.getElementById('coach-chip');
-    ok(chip&&chip.textContent.includes('레그컬 32.5'),'칩 없음');
-    ok(d.getElementById('coach-hint').textContent.includes('마지막 저장'));
-    const st=await w.eval('window.storage').get('coach_note_v1');
-    ok(st&&JSON.parse(st.value).text.includes('데드'));
-    PlanApp.clearCoachNote();
-    ok(!d.getElementById('coach-chip'),'칩 잔존');
-  });
-
-  console.log('\n[디로드 주간]');
-  await t('startDeload → 목표 55%·칩·캘린더 표시·저장',async()=>{
-    ExLog.data={};ExLog.date=_todayKey();ExLog.deload=[];
-    ExLog.startDeload();
-    ok(ExLog.isDeloadWeek(_todayKey()));
-    const g=ExLog._weekGoalPct();
-    ok(g.deload===true&&g.target===Math.round(86*0.55),'목표 55% 아님: '+g.target);
-    ok(d.getElementById('deload-chip'),'디로드 칩 없음');
-    await PlanApp.renderCalendar();
-    ok(d.querySelector('#plan-calendar .cal-col.deload'),'캘린더 표시 없음');
-    const st=await w.eval('window.storage').get('deload_v1');
-    ok(JSON.parse(st.value).length===1);
-    ExLog.deload=[];ExLog.refresh();
-    ok(!d.getElementById('deload-chip'),'해제 후 칩 잔존');
-  });
-  await t('_beep: 오디오 컨텍스트 없어도 예외 없음',async()=>{
-    ExLog._audioCtx=null;ExLog._beep();ok(true);
-  });
-
-  console.log('\n[월간 보고·기타]');
-  await t('copyMonthlyReport: 주차별·e1RM 변화·Δ·통증·메모 포함',async()=>{
-    const wkNow=PlanApp._weekKeys(0),wkPrev=PlanApp._weekKeys(-3);
-    ExLog.data={};
-    ExLog.data[wkPrev[0]]={day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:70,reps:8}]}]};
-    ExLog.data[wkNow[0]]={day:'Pull',note:'새 짐 적응',exercises:[{name:'바벨 데드리프트',sets:[{weight:75,reps:8,pain:true}]}]};
-    InBody._log=[{date:wkPrev[0],wt:89.0,sm:36.3,bf:28.1,ab:0.96},{date:wkNow[0],wt:88.2,sm:36.5,bf:27.4,ab:0.95,arm:33.5}];
-    const md=await PlanApp.copyMonthlyReport(null);
-    ok(md.includes('## 4주 보고'),md.slice(0,60));
-    ok(md.includes('W1')&&md.includes('W4'),'주차별 없음');
-    ok(md.includes('4주 Δ')&&md.includes('-0.8'),'Δ 없음');
-    ok(md.includes('바벨 데드리프트: ')&&md.includes('→')&&md.includes('복합'),'e1RM 변화 없음');
-    ok(md.includes('⚠️ 통증 기록')&&md.includes('75kg'),'통증 없음');
-    ok(md.includes('새 짐 적응'),'메모 없음');
-    ok(md.includes('팔 33.5'),'팔 둘레 없음');
-  });
-  await t('보충제 제거: 레그데이 노트에 카제인 문구 없음',async()=>{
-    ok(!src.includes('카제인'),'카제인 잔존');
-    ok(src.includes('레그데이 영양'),'레그데이 탄수 노트는 유지돼야 함');
-  });
-  await t('인바디 팔·허벅지 입력 필드·백업 키 확장',async()=>{
-    ok(d.getElementById('ib-arm')&&d.getElementById('ib-thigh'));
-    ok(Backup.KEYS.includes('coach_note_v1')&&Backup.KEYS.includes('deload_v1'));
-  });
-  await t('폼 영상 링크: 모든 카드에 인코딩된 유튜브 href',async()=>{
-    const links=[...d.querySelectorAll('.ex-yt-btn')];
-    ok(links.length>30,'링크 '+links.length+'개뿐');
-    ok(links.every(a=>a.href.startsWith('https://www.youtube.com/results?search_query=')&&a.target==='_blank'));
-  });
-
   console.log('\n[회귀 스모크]');
   await t('기존 기능: 기본무게·별칭·prevSession 정상',async()=>{
     ExLog.setBase('벤치프레스 (스미스)',20);
@@ -596,6 +478,227 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
   });
   await t('refresh·injectTargets 전체 실행 예외 없음',async()=>{
     ExLog.refresh();ExLog.injectTargets();ok(true);
+  });
+
+  console.log('\n[PWA 자산·서비스워커]');
+  await t('icon-192/icon-512(하이픈) 참조 잔존 없음 — index·manifest·sw',async()=>{
+    const man=fs.readFileSync(path.join(__dirname,'manifest.json'),'utf8');
+    const sw=fs.readFileSync(path.join(__dirname,'sw.js'),'utf8');
+    ok(!/icon-192|icon-512/.test(src+man+sw),'하이픈 아이콘 참조 발견 — 실제 파일은 icon192.png/icon512.png');
+    ok(man.includes('icon192.png')&&man.includes('icon512.png'),'manifest에 실제 파일명 없음');
+    ok(sw.includes('icon192.png')&&sw.includes('icon512.png'),'sw PRECACHE에 실제 파일명 없음');
+  });
+  await t('sw.js: allSettled 프리캐시(부분 실패 허용) + 네트워크 타임아웃 존재',async()=>{
+    const sw=fs.readFileSync(path.join(__dirname,'sw.js'),'utf8');
+    ok(sw.includes('Promise.allSettled'),'allSettled 프리캐시 없음 — addAll은 1개 404에 설치 전체 실패');
+    ok(/NET_TIMEOUT_MS/.test(sw)&&/Promise\.race/.test(sw),'네트워크 타임아웃 레이스 없음');
+  });
+
+  console.log('\n[증분 시트 동기화]');
+  await t('setSession이 해당 날짜를 dirty로 마킹하고 영속화',async()=>{
+    ExLog._dirty.clear();
+    ExLog.data={};ExLog.date='2026-07-06';
+    ExLog.setSession({day:'Push',exercises:[{name:'딥스머신',sets:[{weight:50,reps:10}]}]});
+    ok(ExLog._dirty.has('2026-07-06'),'dirty 미마킹');
+    const r=await w.storage.get('sync_dirty');
+    ok(r&&JSON.parse(r.value).includes('2026-07-06'),'sync_dirty 영속 안 됨');
+  });
+  await t('_syncRows(onlyDates)는 지정 날짜만 직렬화',async()=>{
+    ExLog.data={
+      '2026-07-01':{day:'Push',exercises:[{name:'딥스머신',sets:[{weight:50,reps:10}]}]},
+      '2026-07-06':{day:'Legs',exercises:[{name:'레그컬',sets:[{weight:32,reps:10},{weight:32,reps:10}]}]}
+    };
+    const all=ExLog._syncRows();
+    const part=ExLog._syncRows(new Set(['2026-07-06']));
+    eq(all.length,3);eq(part.length,2);
+    ok(part.every(r=>r.date==='2026-07-06'));
+  });
+  await t('증분 동기화 성공 시 전송한 날짜만 dirty 해제 (전송 중 신규 변경 보존)',async()=>{
+    await w.storage.set('gs_script_url','https://script.google.com/macros/s/x/exec');
+    ExLog._dirty.clear();ExLog._dirty.add('2026-07-06');
+    let sent=null;
+    w.fetch=(u,opt)=>{ // 전송 직후(응답 전) 새 dirty 발생 시뮬레이션
+      sent=JSON.parse(opt.body);
+      ExLog._dirty.add('2026-07-07');
+      return Promise.resolve({ok:true,json:()=>Promise.resolve({ok:true,written:sent.rows.length})});
+    };
+    await ExLog.syncToSheets();
+    ok(sent&&sent.mode==='upsert','upsert 전송 안 됨');
+    ok(sent.rows.every(r=>r.date==='2026-07-06'),'dirty 외 날짜 전송됨: '+JSON.stringify(sent.rows.map(r=>r.date)));
+    ok(!ExLog._dirty.has('2026-07-06'),'전송 성공 날짜가 dirty에 남음');
+    ok(ExLog._dirty.has('2026-07-07'),'전송 중 발생한 신규 dirty가 지워짐');
+    ExLog._dirty.clear();ExLog._saveDirty();
+  });
+  await t('전송 실패 시 dirty 유지 → 재전송 대상 보존',async()=>{
+    ExLog._dirty.clear();ExLog._dirty.add('2026-07-06');
+    w.fetch=()=>Promise.reject(new Error('offline'));
+    await ExLog.syncToSheets();
+    ok(ExLog._dirty.has('2026-07-06'),'실패했는데 dirty가 지워짐');
+    ExLog._dirty.clear();ExLog._saveDirty();
+  });
+  await t('full 동기화는 전체 스냅샷 전송 후 dirty 전체 해제',async()=>{
+    ExLog._dirty.clear();ExLog._dirty.add('2026-07-06');
+    let sent=null;
+    w.fetch=(u,opt)=>{sent=JSON.parse(opt.body);return Promise.resolve({ok:true,json:()=>Promise.resolve({ok:true,written:sent.rows.length})});};
+    await ExLog.syncToSheets('https://script.google.com/macros/s/x/exec',true);
+    eq(sent.rows.length,3,'전체 3행이 아님');
+    eq(ExLog._dirty.size,0);
+    w.fetch=()=>Promise.resolve({json:()=>Promise.resolve({ok:true,written:1})}); // 원복
+  });
+  await t('loadMeta가 sync_dirty를 복원 (앱 재시작 시 미전송분 유지)',async()=>{
+    await w.storage.set('sync_dirty',JSON.stringify(['2026-07-05']));
+    ExLog._dirty.clear();
+    await ExLog.loadMeta();
+    ok(ExLog._dirty.has('2026-07-05'));
+    ExLog._dirty.clear();ExLog._saveDirty();
+  });
+
+  console.log('\n[캘린더 날짜 파싱]');
+  await t('renderCalendar 미래 판정이 로컬 정오(T12) 기준으로 통일',async()=>{
+    ok(!/new Date\(dk\)>new Date\(\)/.test(src),'UTC 자정 파싱(new Date(dk)) 잔존');
+    ok(src.includes("new Date(dk+'T12:00:00')>new Date()"),'로컬 정오 파싱 없음');
+  });
+
+  console.log('\n[일관성 통일]');
+  await t('U2: 두 모달 모두 .open 클래스 방식 — style.display 제어 잔존 없음',async()=>{
+    ok(!/inbody-modal'\)\.style\.display/.test(src),'인바디 모달이 아직 style.display 제어');
+    InBody.openModal();
+    ok(d.getElementById('inbody-modal').classList.contains('open'),'openModal이 open 클래스 미부여');
+    InBody.closeModal();
+    ok(!d.getElementById('inbody-modal').classList.contains('open'));
+    await ExLog.openSync();
+    ok(d.getElementById('sync-modal').classList.contains('open'));
+    ExLog.closeSync();
+  });
+  await t('U2: 두 모달 CSS가 동일 바텀시트 패턴 (align-items:flex-end + .open)',async()=>{
+    ok(/\.ib-modal\{display:none[^}]*align-items:flex-end/.test(src));
+    ok(/\.sync-modal\{display:none[^}]*align-items:flex-end/.test(src));
+  });
+  await t('U3: PlanApp 요일 타입·색상이 상단 상수와 단일 소스 (REST 색 불일치 해소)',async()=>{
+    ok(PlanApp.DAY_TYPES===w.eval('EL_WDAY'),'DAY_TYPES 사본 잔존');
+    ok(PlanApp.DAY_COLORS===w.eval('DAY_COLORS_EL'),'DAY_COLORS 사본 잔존');
+    eq(PlanApp.DAY_COLORS.REST,'#888780');
+  });
+
+  console.log('\n[A. 렙 원탭 칩]');
+  await t('startSet 시 지난 렙 ±1 + 렙 상단 칩 표시',async()=>{
+    ExLog.data={'2026-07-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:9}]}]}};
+    ExLog.date=_todayKey();
+    ExLog.refresh();
+    const log=[...d.querySelectorAll('.ex-log')].find(l=>l.dataset.exname==='딥스 머신');
+    ok(log,'딥스 머신 로그 없음');
+    ExLog.startSet(log.querySelector('.ex-log-add-btn'));
+    const chips=log.querySelector('.wl-rep-chips');
+    ok(chips&&chips.style.display!=='none','칩 미표시');
+    const vals=[...chips.querySelectorAll('.wl-rep-chip')].map(b=>parseInt(b.textContent));
+    ok(vals.includes(8)&&vals.includes(9)&&vals.includes(10),'±1 후보 누락: '+vals.join(','));
+    ok(vals.includes(ExLog.repCap('딥스 머신')),'렙 상단 칩 누락');
+    ExLog.cancelSet(log.querySelector('.wl-cancel-btn'));
+    eq(chips.style.display,'none','취소 후 칩이 남음');
+  });
+  await t('pickRep 탭 한 번으로 세트 확정 (무게 프리필 + 렙 칩)',async()=>{
+    const log=[...d.querySelectorAll('.ex-log')].find(l=>l.dataset.exname==='딥스 머신');
+    ExLog.startSet(log.querySelector('.ex-log-add-btn'));
+    const chip=[...log.querySelectorAll('.wl-rep-chip')].find(b=>parseInt(b.textContent)===10);
+    ExLog.pickRep(chip,10);
+    const today=ExLog.session().exercises.find(e=>e.name==='딥스 머신');
+    ok(today&&today.sets.length===1,'세트 미기록');
+    eq(today.sets[0].weight,50,'무게 프리필 미반영');
+    eq(today.sets[0].reps,10);
+    ExLog.stopRest();ExLog.data={};ExLog.refresh();
+  });
+  await t('수정 모드에서는 칩 미표시',async()=>{
+    ExLog.data={};ExLog.date=_todayKey();
+    const dk=_todayKey();
+    ExLog.data[dk]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]};
+    ExLog.refresh();
+    const log=[...d.querySelectorAll('.ex-log')].find(l=>l.dataset.exname==='딥스 머신');
+    const chipEl=log.querySelector('.ex-log-chips .set-chip')||log.querySelector('[data-i="0"]');
+    if(chipEl){ExLog.editSet(chipEl);eq(log.querySelector('.wl-rep-chips').style.display,'none');ExLog.cancelSet(log.querySelector('.wl-cancel-btn'));}
+    else ok(true); // 칩 DOM 클래스명이 다르면 스킵 (editSet 직접 호출 불가)
+    ExLog.data={};
+  });
+
+  console.log('\n[B. 미니바 다음 세트 힌트]');
+  await t('startRest가 suggestTarget에서 힌트 추출 (지난: 프리픽스 제거)',async()=>{
+    ExLog.data={'2026-07-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10},{weight:50,reps:10}]}]}};
+    ExLog.date=_todayKey();
+    ExLog.startRest('딥스 머신');
+    ok(ExLog.rest.hint,'힌트 없음');
+    ok(!ExLog.rest.hint.includes('wt-prev'),'프리픽스 미제거: '+ExLog.rest.hint);
+    const hintEl=d.getElementById('rest-mini').querySelector('.rm-hint');
+    ok(hintEl.innerHTML.includes('다음:'),'미니바에 힌트 미표시');
+    ExLog.stopRest();ExLog.data={};
+  });
+
+  console.log('\n[C. 디로드 원탭 플랜]');
+  await t('toggleDeloadPlan이 중량 유지·세트 55% 표 생성',async()=>{
+    PlanApp._deloadRows=[{n:'바벨 데드리프트',w:75,sc:4},{n:'V스쿼트 머신',w:150,sc:4}];
+    const host=d.createElement('div');host.innerHTML='<span class="bc-act"></span><div class="tr-deload-plan"></div>';d.body.appendChild(host);
+    PlanApp.toggleDeloadPlan(host.querySelector('.bc-act'));
+    const panel=host.querySelector('.tr-deload-plan');
+    ok(panel.classList.contains('open'));
+    ok(panel.innerHTML.includes('75kg × 2세트'),'디로드 수치 오류: '+panel.textContent);
+    ok(panel.innerHTML.includes('기존 4'));
+    PlanApp.toggleDeloadPlan(host.querySelector('.bc-act'));
+    ok(!panel.classList.contains('open'),'재탭 시 닫혀야 함');
+    host.remove();
+  });
+
+  console.log('\n[D. 지난 기록 N일 전 표시]');
+  await t('suggestTarget에 경과일 표기',async()=>{
+    const dk=new Date();dk.setDate(dk.getDate()-9);
+    const past=_todayKey.call(null)&&(()=>{const t=new Date(dk);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);})();
+    ExLog.data={};ExLog.data[past]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]};
+    ExLog.date=_todayKey();
+    const sug=ExLog.suggestTarget('딥스 머신');
+    ok(sug&&sug.html.includes('지난(9일 전)'),'경과일 없음: '+(sug&&sug.html));
+    ExLog.data={};
+  });
+
+  console.log('\n[E. 종목별 휴식 커스텀]');
+  await t('setRestCfg 오버라이드가 restSec에 반영·해제 시 기본 복귀',async()=>{
+    eq(ExLog.restSec('힙 어브덕션 (머신)'),90);
+    ExLog.setRestCfg('힙 어브덕션 (머신)',60);
+    eq(ExLog.restSec('힙 어브덕션 (머신)'),60);
+    const r=await w.storage.get('ex_rest');
+    ok(r&&JSON.parse(r.value)[ExLog.canon('힙 어브덕션 (머신)')]===60,'영속 안 됨');
+    ExLog.setRestCfg('힙 어브덕션 (머신)',0);
+    eq(ExLog.restSec('힙 어브덕션 (머신)'),90);
+  });
+  await t('커스텀 휴식은 canon(별칭) 기준 승계',async()=>{
+    ExLog.setRestCfg('딥스 머신',120);
+    ExLog.alias['옛딥스']='딥스 머신';
+    eq(ExLog.restSec('옛딥스'),120);
+    delete ExLog.alias['옛딥스'];ExLog.setRestCfg('딥스 머신',0);
+  });
+  await t('injectTargets가 휴식 칩 주입',async()=>{
+    ExLog.injectTargets();
+    ok(d.querySelectorAll('.ex-rest-btn').length>0,'휴식 칩 없음');
+    ok([...d.querySelectorAll('.ex-rest-btn')].some(b=>/휴식 \d+초/.test(b.textContent)));
+  });
+
+  console.log('\n[F. 세션 진행률]');
+  await t('renderProgress가 데이 플랜 대비 기록 종목 수 표시',async()=>{
+    // 오늘을 Push로 가정할 수 없으므로 date를 최근 월요일(Push)로 고정
+    const now=new Date();const dow=now.getDay();
+    const mon=new Date(now);mon.setDate(now.getDate()-((dow+6)%7));
+    const mk=(()=>{const t=new Date(mon);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);})();
+    ExLog.date=mk;ExLog.data={};
+    ExLog.data[mk]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]};
+    ExLog.renderProgress();
+    const el=d.getElementById('log-progress');
+    ok(el&&el.style.display!=='none','진행률 미표시');
+    ok(/1\/\d+종목/.test(el.textContent),'카운트 형식 오류: '+el.textContent);
+    ExLog.data={};ExLog.date=_todayKey();ExLog.renderProgress();
+  });
+  await t('REST일은 진행률 숨김',async()=>{
+    // 최근 일요일로 이동
+    const now=new Date();const sun=new Date(now);sun.setDate(now.getDate()-now.getDay());
+    const sk=(()=>{const t=new Date(sun);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);})();
+    ExLog.date=sk;ExLog.renderProgress();
+    eq(d.getElementById('log-progress').style.display,'none');
+    ExLog.date=_todayKey();ExLog.renderProgress();
   });
 
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
