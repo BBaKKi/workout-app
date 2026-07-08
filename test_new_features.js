@@ -879,6 +879,141 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
   });
 
+  console.log('\n[콜드 스타트 복원 배너]');
+  await t('빈 저장소 부팅 → 배너 표시 (버튼 3종·rb-msg)',async()=>{
+    const b=d.querySelector('.tab-body.tab-w .restore-banner');
+    ok(b,'배너 없음 — 테스트 부트는 빈 저장소이므로 표시돼야 함');
+    eq(b.querySelectorAll('.rb-btn').length,3);
+    ok(b.querySelector('#rb-msg'),'rb-msg 없음');
+  });
+  await t('jumpToBackup: 플랜 탭 전환',async()=>{
+    ExLog.jumpToBackup();
+    ok(d.getElementById('tp').checked,'플랜 탭 라디오 미체크');
+    d.getElementById('tw').checked=true; // 원복
+  });
+  await t('pullFromSheets 성공 → {ok:true} 반환 + 배너 버튼 제거·닫음 영속',async()=>{
+    await w.eval('window.storage').set('gs_script_url','https://script.google.com/macros/s/test/exec');
+    ExLog.data={};
+    const oldFetch=w.fetch;
+    w.fetch=()=>Promise.resolve({json:()=>Promise.resolve({ok:true,mode:'export',rows:[{date:'2026-07-04',day:'Push',name:'벤치',setNo:1,weight:60,reps:8,flag:''}],inbody:[]})});
+    const r=await ExLog.restoreFromBanner();
+    w.fetch=oldFetch;
+    eq(ExLog.data['2026-07-04'].exercises[0].sets[0].weight,60);
+    const b=d.querySelector('.restore-banner');
+    ok(b&&!b.querySelector('.rb-btns'),'성공 후 버튼이 남아 있음');
+    const seen=await w.eval('window.storage').get('restore_hint_seen');
+    eq(seen&&seen.value,'1','닫음 플래그 미영속');
+    ExLog.data={};ExLog.refresh();
+  });
+  await t('dismissRestoreBanner: 요소 제거 + 재부팅 시 미표시 (플래그 확인)',async()=>{
+    if(ExLog._restoreBannerEl)ExLog.dismissRestoreBanner();
+    ok(!d.querySelector('.restore-banner'),'배너가 남아 있음');
+    // 플래그가 있으면 initRestoreBanner가 재삽입하지 않아야 함
+    await ExLog.initRestoreBanner();
+    ok(!d.querySelector('.restore-banner'),'닫은 뒤에도 재삽입됨');
+  });
+  await t('데이터가 있으면 배너 미표시',async()=>{
+    await w.eval('window.storage').delete('restore_hint_seen'); // 플래그 제거 후에도
+    ExLog.data={'2026-07-06':{day:'Push',exercises:[]}};
+    await ExLog.initRestoreBanner();
+    ok(!d.querySelector('.restore-banner'),'데이터 있는데 배너 표시');
+    ExLog.data={};
+  });
+
+  console.log('\n[도감 보강 — 제네릭 머신 aka·데드행 vol]');
+  await t('제네릭 이름으로 브랜드 머신 도감 매칭 (새 짐 장비 대응)',async()=>{
+    eq(ExLog.libByName('핵 스쿼트').name,'Watson 핵 스쿼트');
+    eq(ExLog.libByName('펜듈럼 스쿼트').name,'Watson 펜듈럼 스쿼트');
+    eq(ExLog.libByName('벨트 스쿼트').name,'Watson 벨트 스쿼트');
+    eq(ExLog.libByName('하이 로우').name,'Hammer ISO-하이 로우');
+    eq(ExLog.libByName('머신 풀오버').name,'Nautilus 풀오버');
+    eq(ExLog.libByName('머신 래터럴 레이즈').name,'Nautilus 래터럴 레이즈 머신');
+    eq(ExLog.libByName('힙 쓰러스트 머신').name,'Booty Builder 힙 쓰러스트');
+    eq(ExLog.libByName('크런치 머신').name,'Nautilus 압도미널 크런치');
+    eq(ExLog.libByName('리버스 런지').name,'런지');
+    eq(ExLog.libByName('어시스티드 딥스').name,'딥스');
+  });
+  await t('데드행 vol 부여 — 부위 볼륨 집계 연결',async()=>{
+    const e=w.eval('window.EXERCISE_LIBRARY').find(x=>x.name==='데드행');
+    ok(e.vol&&e.vol.p==='전완','vol 누락');
+    ok(e.vol.s.includes('등'));
+  });
+  await t('전 엔트리 vol 완비 — 볼륨 집계 누락 종목 없음',async()=>{
+    const miss=w.eval('window.EXERCISE_LIBRARY').filter(e=>!e.vol||!e.vol.p);
+    eq(miss.length,0,'vol 누락: '+miss.map(e=>e.name).join(','));
+  });
+
+  console.log('\n[시트 pull 복원]');
+  await t('_setFlag/_parseFlag 왕복 (W·RPE·통증)',async()=>{
+    eq(ExLog._setFlag({warmup:true,rpe:9,pain:true}),'W;RPE9;P');
+    eq(ExLog._setFlag({weight:50,reps:10}),'');
+    const s=ExLog._parseFlag('W;RPE8.5;P',{weight:40,reps:8});
+    ok(s.warmup===true&&s.rpe===8.5&&s.pain===true,'파싱 누락');
+    const s2=ExLog._parseFlag('',{weight:40,reps:8});
+    ok(!s2.warmup&&!s2.rpe&&!s2.pain,'빈 플래그 오염');
+  });
+  await t('_syncRows가 flag 필드 포함 (W·RPE)',async()=>{
+    ExLog.data={'2026-07-07':{day:'Push',exercises:[{name:'벤치',sets:[{weight:40,reps:8,warmup:true},{weight:60,reps:8,rpe:9}]}]}};
+    const rows=ExLog._syncRows();
+    eq(rows[0].flag,'W');eq(rows[1].flag,'RPE9');
+  });
+  await t('_mergePulled: 빈 로컬 전체 복원 — setNo 정렬·워밍업 플래그·유산소 라우팅',async()=>{
+    ExLog.data={};
+    const r=ExLog._mergePulled([
+      {date:'2026-07-01',day:'Push',name:'벤치',setNo:2,weight:60,reps:8,flag:''},
+      {date:'2026-07-01',day:'Push',name:'벤치',setNo:1,weight:40,reps:8,flag:'W'},
+      {date:'2026-07-01',day:'Push',name:'🏃 러닝',setNo:1,weight:0,reps:20,flag:''}
+    ],[]);
+    const s=ExLog.data['2026-07-01'];
+    eq(s.day,'Push');
+    eq(s.exercises[0].sets.length,2);
+    ok(s.exercises[0].sets[0].warmup===true,'setNo 정렬 또는 워밍업 복원 실패');
+    eq(s.exercises[0].sets[1].weight,60);
+    eq(s.cardio[0].type,'러닝');eq(s.cardio[0].min,20);
+    eq(r.addedSets,3);
+  });
+  await t('_mergePulled: 로컬 우선 — 기존 종목 유지·없는 종목만 추가',async()=>{
+    ExLog.data={'2026-07-02':{day:'Pull',exercises:[{name:'데드리프트',sets:[{weight:75,reps:5}]}]}};
+    const r=ExLog._mergePulled([
+      {date:'2026-07-02',day:'Pull',name:'데드리프트',setNo:1,weight:70,reps:5,flag:''},
+      {date:'2026-07-02',day:'Pull',name:'랫풀다운',setNo:1,weight:50,reps:10,flag:''}
+    ],[]);
+    eq(ExLog.data['2026-07-02'].exercises[0].sets[0].weight,75,'로컬 값이 시트 값에 덮였음');
+    eq(ExLog.data['2026-07-02'].exercises[1].name,'랫풀다운');
+    eq(r.keptEx,1);eq(r.addedSets,1);
+  });
+  await t('_mergePulled: 인바디 — 없는 날짜만 추가·날짜순 정렬',async()=>{
+    InBody._log=[{date:'2026-06-06',wt:89.4,sm:36.2,bf:28.5,ab:0.96}];
+    const r=ExLog._mergePulled([],[
+      {date:'2026-06-06',wt:89.4,sm:36.2,bf:28.5,ab:0.96},
+      {date:'2026-05-25',wt:88.1,sm:35.0,bf:29.6,ab:0.97}
+    ]);
+    eq(r.addedIb,1,'중복 날짜 스킵 실패');
+    eq(InBody._log.length,2);
+    eq(InBody._log[0].date,'2026-05-25','날짜순 정렬 안 됨');
+  });
+  await t('pullFromSheets: 옛 배포(export 미지원) 응답 시 데이터 불변',async()=>{
+    await w.eval('window.storage').set('gs_script_url','https://script.google.com/macros/s/test/exec');
+    ExLog.data={'2026-07-05':{day:'Push',exercises:[]}};
+    const snap=JSON.stringify(ExLog.data);
+    const oldFetch=w.fetch;
+    w.fetch=()=>Promise.resolve({json:()=>Promise.resolve({ok:true,alive:true,dataRows:3})});
+    await ExLog.pullFromSheets();
+    w.fetch=oldFetch;
+    eq(JSON.stringify(ExLog.data),snap,'옛 배포 응답에 데이터가 변함');
+  });
+  await t('pullFromSheets: export 응답 병합·저장·렌더 예외 없음 + mode=export 쿼리',async()=>{
+    ExLog.data={};
+    const oldFetch=w.fetch;
+    let sawQuery=false;
+    w.fetch=(u)=>{sawQuery=String(u).includes('mode=export');return Promise.resolve({json:()=>Promise.resolve({ok:true,mode:'export',rows:[{date:'2026-07-03',day:'Legs',name:'레그프레스',setNo:1,weight:100,reps:10,flag:''}],inbody:[]})});};
+    await ExLog.pullFromSheets();
+    w.fetch=oldFetch;
+    ok(sawQuery,'mode=export 쿼리 미포함');
+    eq(ExLog.data['2026-07-03'].exercises[0].sets[0].weight,100);
+    ExLog.data={};ExLog.refresh();
+  });
+
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
   process.exit(fail?1:0);
 })().catch(e=>{console.error('부트 실패:',e);process.exit(1);});

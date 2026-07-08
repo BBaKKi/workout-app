@@ -503,6 +503,15 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .wr-row .v.pr{color:#3B6D11}
 .wr-row .v.miss{color:#B3261E}
 .wr-empty{font-size:12px;color:var(--color-text-tertiary)}
+/* ── 콜드 스타트 복원 배너: 저장소가 비어 있을 때 시트/JSON 복원 유도 ── */
+.restore-banner{margin:10px 12px 0;padding:12px;border-radius:12px;background:#FFF9E8;border:1px solid #E8D9A8}
+.rb-t{font-size:13px;font-weight:700;color:#6b5510;margin-bottom:4px}
+.rb-d{font-size:11.5px;color:#7a6a30;line-height:1.5;margin-bottom:8px}
+.rb-btns{display:flex;gap:6px;flex-wrap:wrap}
+.rb-btn{font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;border:0;background:#085041;color:#fff;cursor:pointer}
+.rb-btn.ghost{background:transparent;border:1px solid #c9b878;color:#6b5510}
+.rb-msg{font-size:11px;color:#6b5510;margin-top:6px}
+.rb-msg.err{color:#a33}
 /* ── 신규: 데이터 백업 ── */
 .bk-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .bk-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
@@ -1113,13 +1122,14 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 데이터 백업 -->
 <div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
 <div class="bk-card">
-<div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b></div>
+<div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b> 운동·인바디 기록은 [☁️ 시트에서 불러오기]로 시트에서 직접 복원할 수도 있습니다.</div>
 <textarea class="bk-ta" id="bk-ta" placeholder="[내보내기]를 누르면 여기에 백업 JSON이 채워집니다. 복원하려면 백업 JSON을 붙여넣고 [가져오기]를 누르세요." spellcheck="false"></textarea>
 <div class="bk-btns">
 <button class="bk-btn" onclick="Backup.exportData()">📤 내보내기</button>
 <button class="bk-btn ghost" onclick="Backup.copy()">📋 복사</button>
 <button class="bk-btn ghost" onclick="Backup.download()">💾 파일 저장</button>
 <button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
+<button class="bk-btn ghost" onclick="ExLog.pullFromSheets()">☁️ 시트에서 불러오기</button>
 </div>
 <div class="bk-msg" id="bk-msg"></div>
 </div>
@@ -1282,6 +1292,7 @@ const ExLog={
     this.injectRecos();
     this.initWakeLock();
     this.initDateRollover();
+    this.initRestoreBanner(); // 콜드 스타트: 모든 load 완료 후 빈 저장소면 복원 안내
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1365,6 +1376,49 @@ const ExLog={
       if(wasOnToday){this.date=t;if(this.updateBar)this.updateBar();this.injectTargets();}
       this.refresh();
     });
+  },
+
+  // ── 콜드 스타트 복원 배너: 저장소가 비어 있으면(기기 변경·초기화) 시트 pull·JSON 복원으로 유도.
+  //    시트 URL(gs_script_url)도 localStorage와 함께 사라지므로, URL이 없으면 입력 모달부터 연다.
+  //    '닫기'는 영속(restore_hint_seen) — 진짜 첫 사용자를 다시 귀찮게 하지 않는다. ──
+  _restoreBannerEl:null,
+  async initRestoreBanner(){
+    try{
+      if(Object.keys(this.data).length)return;              // 기록이 있으면 불필요
+      const seen=await window.storage.get('restore_hint_seen');
+      if(seen&&seen.value==='1')return;
+    }catch(_){return;}
+    const host=document.querySelector('.tab-body.tab-w');
+    if(!host||host.querySelector('.restore-banner'))return;
+    const div=document.createElement('div');
+    div.className='restore-banner';
+    div.innerHTML='<div class="rb-t">📂 저장된 기록이 없습니다</div>'
+      +'<div class="rb-d">기기 변경이나 저장소 초기화 후라면 Google 시트 또는 JSON 백업에서 기록을 복원할 수 있어요. 처음 시작한다면 닫아도 됩니다.</div>'
+      +'<div class="rb-btns">'
+      +'<button type="button" class="rb-btn" onclick="ExLog.restoreFromBanner()">☁️ 시트에서 불러오기</button>'
+      +'<button type="button" class="rb-btn ghost" onclick="ExLog.jumpToBackup()">📥 JSON 가져오기</button>'
+      +'<button type="button" class="rb-btn ghost" onclick="ExLog.dismissRestoreBanner()">닫기</button>'
+      +'</div><div class="rb-msg" id="rb-msg"></div>';
+    host.insertBefore(div,host.firstChild);
+    this._restoreBannerEl=div;
+  },
+  async restoreFromBanner(){
+    const url=await this.getScriptUrl();
+    if(!url){this.openSync();return;}                        // URL 미설정 → 기존 입력 모달 재사용
+    const r=await this.pullFromSheets();                     // 진행·결과 메시지는 pullFromSheets가 #rb-msg에도 표시
+    if(r&&r.ok&&this._restoreBannerEl){
+      const btns=this._restoreBannerEl.querySelector('.rb-btns');if(btns)btns.remove(); // 성공 → 버튼 제거, 결과 메시지만 남김
+      try{window.storage.set('restore_hint_seen','1');}catch(_){}
+    }
+  },
+  jumpToBackup(){
+    const r=document.getElementById('tp');if(r)r.checked=true; // 플랜 탭으로 전환(라디오 기반 탭)
+    const el=document.getElementById('sec-bk');
+    if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  },
+  dismissRestoreBanner(){
+    try{window.storage.set('restore_hint_seen','1');}catch(_){}
+    if(this._restoreBannerEl){this._restoreBannerEl.remove();this._restoreBannerEl=null;}
   },
 
   // ── 화면 꺼짐 방지(Wake Lock): 세트 사이 휴식 중 화면 유지. 미지원 브라우저는 조용히 무시 ──
@@ -2849,6 +2903,74 @@ const ExLog={
     this.closeSync();
     await this.syncToSheets(url,true); // 수동 동기화는 전체 스냅샷 — 시트 복구·초기 적재용
   },
+  // ── 시트 → 앱 복원(pull): 시트가 원본(source of truth), localStorage는 언제 지워져도 되는 캐시.
+  //    병합 규칙: (날짜·종목) 단위 로컬 우선 — 미전송 로컬 수정을 보호하고, 시트는 빈 곳만 채운다.
+  //    복원된 날짜는 dirty로 표시하지 않음(시트에서 온 데이터를 시트로 재전송할 이유가 없음). ──
+  _setFlag(set){const p=[];if(set.warmup)p.push('W');if(set.rpe)p.push('RPE'+set.rpe);if(set.pain)p.push('P');return p.join(';');}, // 세트 상태 → 시트 '비고' (_parseFlag와 쌍)
+  _parseFlag(flag,set){String(flag||'').split(';').forEach(t=>{if(t==='W')set.warmup=true;else if(t==='P')set.pain=true;else if(t.startsWith('RPE')){const v=parseFloat(t.slice(3));if(v>0)set.rpe=v;}});return set;},
+  _mergePulled(rows,inbodyRows){
+    // 순수 병합 로직(테스트 단위) — export rows를 날짜→종목/유산소로 조립 후 로컬에 없는 것만 채움
+    const byDate={};
+    (rows||[]).forEach(r=>{
+      if(!r||!r.date||!r.name)return;
+      const d=byDate[r.date]||(byDate[r.date]={day:r.day||'',ex:{},cardio:[]});
+      if(!d.day&&r.day)d.day=r.day;
+      const m=String(r.name).match(/^🏃\s*(.*)$/); // 유산소는 '🏃 ' 접두로 직렬화됨 → cardio로 복귀
+      if(m){d.cardio.push({no:+r.setNo||0,type:m[1]||'유산소',min:+r.reps||0,ts:r.ts||undefined});return;}
+      const e=d.ex[r.name]||(d.ex[r.name]=[]);
+      e.push(Object.assign({no:+r.setNo||0},this._parseFlag(r.flag,{weight:+r.weight||0,reps:+r.reps||0,ts:r.ts||undefined})));
+    });
+    let addedSets=0,keptEx=0;
+    Object.keys(byDate).forEach(date=>{
+      const src=byDate[date];
+      let s=this.data[date];
+      if(!s){s=this.data[date]={day:src.day,exercises:[]};}
+      else if(!s.day&&src.day)s.day=src.day;
+      if(!Array.isArray(s.exercises))s.exercises=[];
+      Object.keys(src.ex).forEach(name=>{
+        const local=s.exercises.find(e=>e.name===name);
+        if(local&&(local.sets||[]).length){keptEx++;return;} // 로컬 우선
+        const sets=src.ex[name].sort((a,b)=>a.no-b.no).map(x=>{const{no,...set}=x;return set;});
+        if(local)local.sets=sets;else s.exercises.push({name,sets});
+        addedSets+=sets.length;
+      });
+      if(src.cardio.length&&!(s.cardio||[]).length){
+        s.cardio=src.cardio.sort((a,b)=>a.no-b.no).map(x=>({type:x.type,min:x.min,ts:x.ts}));
+        addedSets+=s.cardio.length;
+      }
+    });
+    // 인바디: 로컬에 없는 날짜만 추가 (시트 밖 확장 필드는 JSON 백업 몫)
+    let addedIb=0;
+    if(Array.isArray(inbodyRows)&&typeof InBody!=='undefined'&&Array.isArray(InBody._log)){
+      const have=new Set(InBody._log.map(e=>String(e.date).slice(0,10)));
+      inbodyRows.forEach(e=>{
+        if(!e||!e.date||have.has(String(e.date).slice(0,10)))return;
+        InBody._log.push({date:String(e.date).slice(0,10),wt:e.wt,sm:e.sm,bf:e.bf,ab:e.ab!=null?e.ab:undefined});
+        addedIb++;
+      });
+      if(addedIb)InBody._log.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+    }
+    return{addedSets,keptEx,addedIb};
+  },
+  async pullFromSheets(){
+    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);const rb=document.getElementById('rb-msg');if(rb){rb.textContent=t;rb.classList.toggle('err',!!err);}};
+    const url=await this.getScriptUrl();
+    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return null;}
+    msg('⏳ 시트에서 불러오는 중…');
+    try{
+      const res=await fetch(url+(url.includes('?')?'&':'?')+'mode=export',{redirect:'follow'});
+      const json=await res.json();
+      if(!json||json.ok===false||json.mode!=='export'){msg('서버가 export를 지원하지 않습니다 — Apps Script를 새 코드로 재배포(배포 관리 > 편집 > 새 버전)했는지 확인하세요.',true);return null;}
+      if(typeof InBody!=='undefined')await InBody.load(); // _log 준비 후 병합
+      const r=this._mergePulled(json.rows,json.inbody);
+      await this.save();
+      if(r.addedIb&&typeof InBody!=='undefined'){await InBody._save();InBody.render();}
+      this.refresh();this.injectTargets();
+      if(typeof PlanApp!=='undefined')PlanApp.init();
+      msg('✓ 복원 완료 — 세트·유산소 '+r.addedSets+'건, 인바디 '+r.addedIb+'건 추가 (로컬 우선으로 유지된 종목 '+r.keptEx+'개)');
+      return Object.assign({ok:true},r);
+    }catch(err){msg('불러오기 실패: '+err.message,true);return null;}
+  },
   _syncRows(onlyDates){
     // 시트 upsert용 행 — 리프팅 세트(원본 로직 유지) + 유산소('🏃 ' 접두, reps열=분·weight/vol=0)
     // onlyDates(Set)가 주어지면 그 날짜들만 직렬화 — 증분 동기화 시 전체 기록 재전송 방지
@@ -2859,7 +2981,7 @@ const ExLog={
       (s.exercises||[]).forEach(ex=>{
         if(!ex.sets?.length)return;
         ex.sets.forEach((set,i)=>{
-          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null});
+          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null,flag:this._setFlag(set)});
         });
       });
       (s.cardio||[]).forEach((c,i)=>{
