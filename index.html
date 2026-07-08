@@ -74,16 +74,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chev{font-size:14px;color:#c7c7cc;transition:transform .2s;flex-shrink:0}
 .ex-card[open] .chev{transform:rotate(180deg)}
 .ex-detail{border-top:1px solid #f2f2f7}
-.focus-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 12px}
+.focus-grid{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 12px} /* 세로 스택 — 3단은 폰에서 컬럼당 ~110px라 읽기 어려움 */
 .fb{border-radius:8px;padding:9px;border:.5px solid}
 .fb.stim{background:#e8f5ee;border-color:#81c995}
 .fb.tip{background:#e8f0fe;border-color:#90caf9}
 .fb.warn{background:#fce8e6;border-color:#ef9a9a}
-.fl{font-size:9px;font-weight:700;margin-bottom:3px}
+.fl{font-size:10px;font-weight:700;margin-bottom:3px}
 .fb.stim .fl{color:#1b5e20}
 .fb.tip .fl{color:#0d47a1}
 .fb.warn .fl{color:#b71c1c}
-.ft{font-size:10.5px;line-height:1.55}
+.ft{font-size:12px;line-height:1.55}
 .fb.stim .ft{color:#2e7d32}
 .fb.tip .ft{color:#1565c0}
 .fb.warn .ft{color:#c62828}
@@ -512,6 +512,15 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .rb-btn.ghost{background:transparent;border:1px solid #c9b878;color:#6b5510}
 .rb-msg{font-size:11px;color:#6b5510;margin-top:6px}
 .rb-msg.err{color:#a33}
+/* ── 운동일 변경 피커: 날짜바의 데이 배지 탭 → 이 날짜의 운동일 오버라이드 ── */
+.log-day-badge{cursor:pointer}
+.log-day-badge::after{content:'▾';font-size:8px;margin-left:3px;opacity:.85}
+.day-ov-picker{margin:8px 12px 0;padding:10px;border-radius:12px;background:#fff;border:1px solid #e0e0e4}
+.dov-hd{font-size:11px;color:#666;line-height:1.5;margin-bottom:8px}
+.dov-chips{display:flex;gap:6px;flex-wrap:wrap}
+.dov-chip{font-size:12px;font-weight:700;padding:6px 12px;border-radius:16px;border:1.5px solid var(--c,#888);color:var(--c,#888);background:#fff;cursor:pointer}
+.dov-chip.on{background:var(--c,#888);color:#fff}
+.dov-chip.reset{border-color:#aaa;color:#666;font-weight:600}
 /* ── 신규: 데이터 백업 ── */
 .bk-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .bk-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
@@ -632,7 +641,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-memo-inp{flex:1;min-width:0;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;font-size:13px}
 /* RPE 선택 입력 — 세트 입력줄의 작은 셀렉트 */
 .wl-rpe-sel{flex-shrink:0;border:0.5px solid var(--color-border-tertiary);border-radius:8px;background:#fff;font-size:12px;color:#636366;padding:0 2px;height:44px;max-width:64px}
-.chip-rpe{font-style:normal;font-size:9px;opacity:.75;margin-left:2px}
+.chip-rpe{font-style:normal;font-size:10px;opacity:.75;margin-left:2px}
+.wl-set-chip,.tr-stat,.hist-stat,.lb-item{font-variant-numeric:tabular-nums}
 /* 통증 플래그 */
 .wl-pain-btn{flex-shrink:0;border:none;background:#fdf3e3;color:#b26a00;font-size:15px;width:44px;height:44px;border-radius:10px;cursor:pointer;opacity:.45}
 .wl-pain-btn.on{opacity:1;background:#fbe3c9;box-shadow:inset 0 0 0 1.5px #e09b3d}
@@ -1279,6 +1289,7 @@ const ExLog={
     await this.loadBase();
     await this.loadMemo();
     await this.loadRestCfg();
+    await this.loadDayOv();
     document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
     if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.injectBar();
@@ -1293,6 +1304,7 @@ const ExLog={
     this.initWakeLock();
     this.initDateRollover();
     this.initRestoreBanner(); // 콜드 스타트: 모든 load 완료 후 빈 저장소면 복원 안내
+    this.syncDayPanel(); // 오늘 오버라이드가 있으면 부팅 라디오(요일 기본)를 교정
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1430,7 +1442,11 @@ const ExLog={
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();});
   },
 
-  dayType(d){return EL_WDAY[new Date(d+'T12:00:00').getDay()]||'REST';},
+  // 운동일 결정: 날짜별 오버라이드(dayOv) 우선, 없으면 요일 기본값 — 짐 휴무·일정 밀림 시 하루 단위 시프트
+  dayOv:{},
+  async loadDayOv(){try{const r=await window.storage.get('day_ov');if(r)this.dayOv=JSON.parse(r.value)||{};}catch(_){}},
+  saveDayOv(){try{window.storage.set('day_ov',JSON.stringify(this.dayOv));}catch(_){}},
+  dayType(d){return this.dayOv[d]||EL_WDAY[new Date(d+'T12:00:00').getDay()]||'REST';},
   fmt(d){const today=_todayKey();const s=new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});return d===today?'오늘 ('+s+')':s;},
   session(){return this.data[this.date]||{day:this.dayType(this.date),exercises:[]};},
   _dirty:new Set(), // 시트 미전송 변경 날짜 — 증분 동기화용 (전송 성공 시 해당 날짜만 비움)
@@ -1636,8 +1652,34 @@ const ExLog={
     const rc=list.querySelector('.day-reco');if(rc)list.appendChild(rc); // 추천 카드는 항상 맨 아래
   },
 
-  prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
-  next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
+  // ── 운동일 시프트: 배지 탭 → 피커. 기본값 선택은 오버라이드 해제와 동일(저장 안 함) ──
+  toggleDayPicker(){
+    const p0=document.getElementById('day-ov-picker');
+    if(p0){p0.remove();return;}
+    const bar=document.getElementById('ex-log-bar');if(!bar)return;
+    const cur=this.dayType(this.date);
+    const def=EL_WDAY[new Date(this.date+'T12:00:00').getDay()]||'REST';
+    const p=document.createElement('div');p.id='day-ov-picker';p.className='day-ov-picker';
+    p.innerHTML='<div class="dov-hd">'+this.fmt(this.date)+'의 운동일 변경 — 짐 휴무·일정 밀림 대응. 기록·볼륨·시트 요일이 함께 반영됩니다.</div>'
+      +'<div class="dov-chips">'+this.PANEL_DAY.map(t=>'<button type="button" class="dov-chip'+(t===cur?' on':'')+'" style="--c:'+(DAY_COLORS_EL[t]||'#888')+'" onclick="ExLog.setDayOv(\''+t+'\')">'+t+'</button>').join('')
+      +(this.dayOv[this.date]?'<button type="button" class="dov-chip reset" onclick="ExLog.setDayOv(null)">기본('+def+')으로</button>':'')+'</div>';
+    bar.insertAdjacentElement('afterend',p);
+  },
+  setDayOv(t){
+    const def=EL_WDAY[new Date(this.date+'T12:00:00').getDay()]||'REST';
+    if(!t||t===def)delete this.dayOv[this.date];else this.dayOv[this.date]=t;
+    this.saveDayOv();
+    if(this.data[this.date]){const s=this.data[this.date];s.day=this.dayType(this.date);this.setSession(s);} // 기록된 세션의 요일 라벨 갱신 + dirty(다음 동기화 때 시트 요일 열 반영)
+    const p=document.getElementById('day-ov-picker');if(p)p.remove();
+    this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();
+  },
+  syncDayPanel(){ // 보이는 데이 패널을 현재 날짜의 운동일에 맞춤 (jumpToEx와 동일 방식)
+    const idx=this.PANEL_DAY.indexOf(this.dayType(this.date));
+    if(idx<0)return;
+    const r=document.getElementById('d'+(idx+1));if(r)r.checked=true;
+  },
+  prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);(function(){const p=document.getElementById('day-ov-picker');if(p)p.remove();})();this.updateBar();this.injectTargets();this.refresh();},
+  next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);(function(){const p=document.getElementById('day-ov-picker');if(p)p.remove();})();this.updateBar();this.injectTargets();this.refresh();},
 
   injectBar(){
     const tabW=document.querySelector('.tab-body.tab-w');
@@ -1645,7 +1687,7 @@ const ExLog={
     const bar=document.createElement('div');
     bar.className='log-date-bar';bar.id='ex-log-bar';
     const day=this.dayType(this.date);
-    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><span class="log-day-badge" id="log-day-badge" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</span></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
+    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><span class="log-day-badge" id="log-day-badge" onclick="ExLog.toggleDayPicker()" title="이 날짜의 운동일 변경" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</span></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
     const ds=tabW.querySelector('.day-sel');if(ds)ds.insertAdjacentElement('afterend',bar);else tabW.insertBefore(bar,tabW.firstChild);
     const prog=document.createElement('div');prog.className='log-progress';prog.id='log-progress';
     bar.insertAdjacentElement('afterend',prog);
@@ -2351,6 +2393,15 @@ const ExLog={
     }catch(_){return'';}
   },
 
+  // 혈액검사 리마인더: Phase 시작(26-05-25) 후 6개월 창(170~215일)에 주간 리포트로 안내
+  _bloodReminderHtml(daysOverride){
+    try{
+      const days=(daysOverride!=null)?daysOverride:Math.round((new Date(_todayKey()+'T12:00:00')-new Date('2026-05-25T12:00:00'))/86400000);
+      if(days<170||days>215)return'';
+      return'<div class="wr-remind">🩸 <b>6개월 혈액검사 시점</b> ('+days+'일 경과) — 공복 오전 채혈: 총·유리 테스토스테론 · E2 · 공복혈당·인슐린(HOMA-IR) · SHBG. 완료하면 플랜 탭 체크리스트에 표시하세요.</div>';
+    }catch(_){return'';}
+  },
+
   // ── 주간 리포트 (REST 패널): PR·최고 리프트·부위 달성·다음 주 도전 ──
   renderWeeklyReport(){
     const box=document.getElementById('weekly-report');if(box)box.innerHTML=this._weeklyReportHtml();
@@ -2379,7 +2430,7 @@ const ExLog={
       });
     });
     const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
-    const remind=this._ibReminderHtml()+this._backupReminderHtml();
+    const remind=this._ibReminderHtml()+this._backupReminderHtml()+this._bloodReminderHtml();
     if(!sessions)return'<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind+'<div class="wr-empty">이번 주 기록이 아직 없습니다. 세트를 기록하면 일요일에 여기서 한 주를 결산합니다.</div></div>';
     // 부위별 목표 달성/미달
     const vol=this._weekMuscleSets();
@@ -3648,7 +3699,7 @@ const LibApp={
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
-  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest'],
+  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','day_ov'],
   PREFIXES:[], // 레거시 프리픽스 화이트리스트 제거 — 현 코드가 쓰지도 읽지도 않음
   _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},

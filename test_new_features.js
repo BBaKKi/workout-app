@@ -879,6 +879,53 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
   });
 
+  console.log('\n[운동일 시프트(Day 오버라이드)·혈액검사 리마인더]');
+  await t('dayType: 오버라이드 우선, 해제 시 요일 기본 복귀',async()=>{
+    eq(ExLog.dayType('2026-07-06'),'Push'); // 월요일
+    ExLog.dayOv['2026-07-06']='Legs';
+    eq(ExLog.dayType('2026-07-06'),'Legs');
+    delete ExLog.dayOv['2026-07-06'];
+    eq(ExLog.dayType('2026-07-06'),'Push');
+  });
+  await t('setDayOv: 영속·세션 day 갱신·dirty·패널 전환',async()=>{
+    const keep=ExLog.date;
+    ExLog.date='2026-07-06';
+    ExLog.data={'2026-07-06':{day:'Push',exercises:[{name:'벤치',sets:[{weight:60,reps:8}]}]}};
+    ExLog._dirty.clear();
+    ExLog.setDayOv('Pull');
+    eq(ExLog.dayType('2026-07-06'),'Pull');
+    eq(ExLog.data['2026-07-06'].day,'Pull','세션 day 라벨 미갱신');
+    ok(ExLog._dirty.has('2026-07-06'),'dirty 미마킹 — 시트 요일 열이 안 바뀜');
+    ok(d.getElementById('d2').checked,'Pull 패널 미전환');
+    const saved=await w.eval('window.storage').get('day_ov');
+    ok(saved&&JSON.parse(saved.value)['2026-07-06']==='Pull','오버라이드 영속 실패');
+    ExLog.setDayOv(null);
+    eq(ExLog.dayType('2026-07-06'),'Push');
+    ExLog.data={};ExLog._dirty.clear();ExLog._saveDirty();ExLog.date=keep;ExLog.refresh();
+  });
+  await t('setDayOv(요일 기본값 선택) = 오버라이드 미저장',async()=>{
+    const keep=ExLog.date;
+    ExLog.date='2026-07-06';
+    ExLog.setDayOv('Push'); // 월요일 기본이 Push
+    ok(!('2026-07-06' in ExLog.dayOv),'기본값인데 오버라이드가 저장됨');
+    ExLog.date=keep;
+  });
+  await t('toggleDayPicker: 열기·현재 타입 on·재탭 닫기 + 백업 KEYS 포함',async()=>{
+    ExLog.toggleDayPicker();
+    const p=d.getElementById('day-ov-picker');
+    ok(p,'피커 없음');
+    ok(p.querySelector('.dov-chip.on'),'현재 운동일 미표시');
+    eq(p.querySelectorAll('.dov-chip:not(.reset)').length,7);
+    ExLog.toggleDayPicker();
+    ok(!d.getElementById('day-ov-picker'),'재탭 닫기 실패');
+    ok(Backup.KEYS.includes('day_ov'),'day_ov 백업 화이트리스트 누락');
+  });
+  await t('혈액검사 리마인더: 6개월 창 안/밖',async()=>{
+    ok(ExLog._bloodReminderHtml(180).includes('혈액검사'),'창 안(180일)인데 미표시');
+    eq(ExLog._bloodReminderHtml(44),'','창 밖(44일)인데 표시');
+    eq(ExLog._bloodReminderHtml(240),'','창 지남(240일)인데 표시');
+  });
+
   console.log('\n[콜드 스타트 복원 배너]');
   await t('빈 저장소 부팅 → 배너 표시 (버튼 3종·rb-msg)',async()=>{
     const b=d.querySelector('.tab-body.tab-w .restore-banner');
