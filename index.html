@@ -26,7 +26,7 @@
  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:480px;margin:0 auto;min-height:100vh}
-.tab-r,.day-r,.exck,.sck,.wck,.pck,.hck{display:none}
+.tab-r,.day-r,.exck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .nav-lbl{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:#8e8e93;cursor:pointer;border-bottom:2.5px solid transparent}
 #tw:checked~.top-nav .lbl-w,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
@@ -80,18 +80,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fb.tip{background:#e8f0fe;border-color:#90caf9}
 .fb.warn{background:#fce8e6;border-color:#ef9a9a}
 .fl{font-size:9px;font-weight:700;margin-bottom:3px}
-.fb.stim .fl{color:#1b5e20}.fb.tip .fl{color:#0d47a1}.fb.warn .fl{color:#b71c1c}
+.fb.stim .fl{color:#1b5e20}
+.fb.tip .fl{color:#0d47a1}
+.fb.warn .fl{color:#b71c1c}
 .ft{font-size:10.5px;line-height:1.55}
-.fb.stim .ft{color:#2e7d32}.fb.tip .ft{color:#1565c0}.fb.warn .ft{color:#c62828}
+.fb.stim .ft{color:#2e7d32}
+.fb.tip .ft{color:#1565c0}
+.fb.warn .ft{color:#c62828}
 .ft b{font-weight:600}
-.flow-sec{padding:0 12px 10px}
 .flow-d{padding:0 12px 10px}
 .flow-d>summary{font-size:12px;font-weight:700;color:#636366;cursor:pointer;list-style:none;padding:2px 0}
 .flow-d>summary::-webkit-details-marker{display:none}
 .flow-d>summary::after{content:" ▾";color:#b0b0b5;font-size:10px}
 .flow-d[open]>summary::after{content:" ▴"}
 .flow-d>.flow-steps{margin-top:7px}
-.flow-lbl{font-size:10px;font-weight:700;color:#8e8e93;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
 .flow-steps{display:flex;flex-direction:column;gap:5px}
 .fstep{display:flex;align-items:flex-start;gap:8px}
 .snum{width:18px;height:18px;border-radius:50%;background:#f2f2f7;border:.5px solid #d1d1d6;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#636366;flex-shrink:0;margin-top:1px}
@@ -115,20 +117,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .wu-num{width:18px;height:18px;border-radius:50%;background:#fff8e1;border:.5px solid #ffe082;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#e65100;flex-shrink:0;margin-top:1px}
 .wu-txt{color:#636366;line-height:1.5}
 .wu-txt b{color:#1c1c1e;font-weight:600}
-.rpe-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 13px}
-.rpe-box{border-radius:8px;padding:9px 10px;border:.5px solid}
-.r6{background:#e8f5e9;border-color:#a5d6a7}.r6 .rn,.r6 .rl{color:#1b5e20}
-.r7{background:#e3f2fd;border-color:#90caf9}.r7 .rn,.r7 .rl{color:#0d47a1}
-.r8{background:#fff8e1;border-color:#ffe082}.r8 .rn,.r8 .rl{color:#e65100}
-.r9{background:#fce8e6;border-color:#ef9a9a}.r9 .rn,.r9 .rl{color:#b71c1c}
 .rn{font-size:15px;font-weight:700;margin-bottom:2px}
-.rl{font-size:10px;font-weight:600;margin-bottom:3px}
 .rd{font-size:10.5px;color:#636366;line-height:1.5}
-.rest-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 13px 10px}
-.rg{border-radius:8px;padding:9px 10px;border:.5px solid #e5e5ea;background:#f9f9f9}
-.rg-t{font-size:10px;font-weight:700;color:#1c1c1e;margin-bottom:2px}
-.rg-v{font-size:15px;font-weight:700;color:#085041}
-.rg-e{font-size:10px;color:#636366;margin-top:2px;line-height:1.4}
 .cooldown{margin:8px 16px;padding:10px 13px;background:#fff;border-radius:10px;border:.5px solid #e5e5ea;font-size:12px;color:#636366;line-height:1.6;margin-bottom:16px}
 .cooldown b{color:#1c1c1e;font-weight:600}
 .rest-day{padding:50px 24px;text-align:center}
@@ -146,141 +136,19 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .reco-nm{font-size:13px;font-weight:600;color:#1c1c1e;flex:1}
 .reco-why{font-size:11px;color:#c0392b;font-weight:600;white-space:nowrap}
 .tl{display:flex;flex-direction:column}
-.ti{display:flex}
-.t-left{width:70px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;padding-right:12px;padding-top:13px}
-.t-time{font-size:12px;font-weight:700;color:#1c1c1e;text-align:right;line-height:1.2}
-.t-sub{font-size:10px;color:#8e8e93;text-align:right;margin-top:1px}
-.t-axis{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
-.t-dot{width:12px;height:12px;border-radius:50%;border:2.5px solid;margin-top:13px;flex-shrink:0}
-.t-line{width:2px;flex:1;min-height:8px;margin-top:2px;opacity:.25}
-.t-right{flex:1;padding:10px 0 16px 13px}
-.t-name{font-size:13px;font-weight:600;color:#1c1c1e;margin-bottom:5px}
-.t-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px}
 .sp{font-size:10.5px;padding:3px 8px;border-radius:20px;border:.5px solid;white-space:nowrap}
-.sp-v{background:#e8f5ee;border-color:#5DCAA5;color:#085041}
-.sp-p{background:#f0eeff;border-color:#c5bef5;color:#4a3ab0}
-.sp-pr{background:#e3f2fd;border-color:#90caf9;color:#0d47a1}
-.sp-c{background:#fff8e1;border-color:#ffe082;color:#e65100}
-.sp-b{background:#f2f2f7;border-color:#d1d1d6;color:#1c1c1e}
-.t-note{font-size:11.5px;color:#636366;line-height:1.65}
-.t-note b{color:#1c1c1e;font-weight:600}
-.t-alert{margin-top:5px;padding:6px 10px 6px 12px;border-radius:6px;border-left:3px solid;font-size:11px;line-height:1.55}
-.t-alert.r{background:#fce8e6;border-color:#E24B4A;color:#b71c1c}
-.t-alert.g{background:#e8f5e9;border-color:#3B6D11;color:#1b5e20}
-.t-alert.a{background:#fff8e1;border-color:#e65100;color:#bf360c}
-.t-alert b{font-weight:600}
-.chg{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px;background:#fff3e0;border:.5px solid #ffb74d;color:#e65100;margin-left:5px;vertical-align:middle}
-.c-am{border-color:#EF9F27;background:#FAEEDA}.l-am{background:#FAC775}
-.c-pre{border-color:#639922;background:#EAF3DE}.l-pre{background:#C0DD97}
-.c-lu{border-color:#639922;background:#EAF3DE}.l-lu{background:#C0DD97}
-.c-cof{border-color:#BA7517;background:#EF9F27}.l-cof{background:#FAC775}
-.c-pw{border-color:#534AB7;background:#EEEDFE}.l-pw{background:#AFA9EC}
-.c-dn{border-color:#185FA5;background:#E6F1FB}.l-dn{background:#85B7EB}
-.c-mg{border-color:#1D9E75;background:#E1F5EE}.l-mg{background:#5DCAA5}
-.c-bd{border-color:#5F5E5A;background:#D3D1C7}
 /* 체크리스트 */
-.cl-wrap,.water-wrap,.prot-wrap,.hab-wrap{border-radius:12px;border:1px solid #e5e5ea;overflow:hidden;margin-bottom:8px;background:#fff}
-.cl-hd,.hab-hd{padding:11px 14px;font-size:13px;font-weight:600;background:#f2f2f7;color:#1c1c1e}
-.water-hd{padding:11px 14px;font-size:13px;font-weight:600;background:#e3f2fd;color:#0d47a1;display:flex;align-items:center;justify-content:space-between}
-.prot-hd{padding:11px 14px;font-size:13px;font-weight:600;background:#e8f5e9;color:#1b5e20}
-.cl-body,.water-body,.prot-body,.hab-body{padding:8px 14px}
-.cl-row,.hab-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid #f5f5f5}
-.cl-row:last-child,.hab-row:last-child{border-bottom:none}
-.cl-lbl,.hab-lbl{display:flex;align-items:center;gap:10px;cursor:pointer;width:100%}
-.chk-box{width:22px;height:22px;border-radius:6px;border:1.5px solid #d1d1d6;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.chk-ic{display:none;color:#fff;font-size:12px;font-weight:700}
-.sck:checked+.cl-lbl .chk-box,.hck:checked+.hab-lbl .chk-box{background:#085041;border-color:#085041}
-.sck:checked+.cl-lbl .chk-ic,.hck:checked+.hab-lbl .chk-ic{display:block}
-.sck:checked+.cl-lbl .cl-txt,.hck:checked+.hab-lbl .hab-txt{text-decoration:line-through;color:#8e8e93}
-.cl-txt,.hab-txt{font-size:13px;color:#1c1c1e;line-height:1.4}
-.cl-txt small,.hab-txt small{display:block;font-size:11px;color:#8e8e93;margin-top:1px}
-.tm-b{margin-left:auto;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;background:#f2f2f7;border:.5px solid #d1d1d6;color:#636366;flex-shrink:0;white-space:nowrap}
-.water-cups{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
-.w-lbl{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-.w-cup{font-size:28px;opacity:.3;transition:opacity .2s;line-height:1}
-.w-ml{font-size:10px;color:#8e8e93;font-weight:500}
-.wck:checked+.w-lbl .w-cup{opacity:1}
-.wck:checked+.w-lbl .w-ml{color:#0d47a1;font-weight:700}
-.w-done{display:none;text-align:center;padding:8px;background:#e3f2fd;border-radius:8px;font-size:12px;color:#0d47a1;font-weight:600}
-.water-wrap:has(#w5:checked) .w-done{display:block}
-.prot-meals{display:flex;flex-direction:column;gap:6px}
-.p-lbl{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 10px;border-radius:8px;border:.5px solid #e5e5ea;background:#f9f9f9;transition:all .2s}
-.pck:checked+.p-lbl{background:#e8f5e9;border-color:#a5d6a7}
-.p-chk{width:20px;height:20px;border-radius:50%;border:1.5px solid #d1d1d6;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.p-ci{display:none;font-size:11px;font-weight:700;color:#fff}
-.pck:checked+.p-lbl .p-chk{background:#1b5e20;border-color:#1b5e20}
-.pck:checked+.p-lbl .p-ci{display:block}
-.pck:checked+.p-lbl .p-mn{text-decoration:line-through;color:#8e8e93}
-.p-info{flex:1}
-.p-mn{font-size:13px;font-weight:600;color:#1c1c1e}
-.p-gm{font-size:11px;color:#2e7d32;font-weight:500;margin-top:1px}
-.p-tip{font-size:10.5px;color:#636366;margin-top:1px}
-.p-done{display:none;margin-top:8px;padding:8px 10px;background:#e8f5e9;border-radius:8px;text-align:center;font-size:12px;color:#1b5e20;font-weight:600}
-.prot-wrap:has(.pck:checked):not(:has(.pck:not(:checked))) .p-done{display:block}
-.chg-card{border-radius:10px;border:.5px solid #ffb74d;background:#fff3e0;padding:11px 13px;margin-bottom:12px}
-.chg-row{display:flex;gap:8px;padding:5px 0;border-bottom:.5px solid #ffe0b2;align-items:flex-start}
-.chg-row:last-child{border-bottom:none}
-.chg-b{font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;background:#e65100;color:#fff;flex-shrink:0;margin-top:2px}
-.chg-t{font-size:11.5px;color:#4e342e;line-height:1.55}
-.chg-t b{color:#bf360c;font-weight:600}
 /* 플랜 탭 */
 .plan-wrap{padding:14px 16px 80px}
-.plan-sec{font-size:11px;font-weight:700;color:#8e8e93;letter-spacing:.07em;text-transform:uppercase;margin:14px 0 8px}
-.plan-sec:first-child{margin-top:0}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
 .stat{border-radius:10px;padding:10px;border:.5px solid;text-align:center}
 .stat.cur{background:#fff8e1;border-color:#ffe082}
 .stat.tgt{background:#e8f5e9;border-color:#a5d6a7}
-.stat.dif{background:#e8f0fe;border-color:#90caf9}
 .sl{font-size:10px;margin-bottom:2px}
-.stat.cur .sl{color:#e65100}.stat.tgt .sl{color:#1b5e20}.stat.dif .sl{color:#0d47a1}
-.sv{font-size:15px;font-weight:700}
-.stat.cur .sv{color:#e65100}.stat.tgt .sv{color:#1b5e20}.stat.dif .sv{color:#1565c0}
+.stat.cur .sl{color:#e65100}
+.stat.tgt .sl{color:#1b5e20}
 .ss{font-size:10px;color:#aaa;margin-top:1px}
-.phase-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
-.phase{border-radius:12px;border:.5px solid;overflow:hidden}
-.phd{padding:10px 13px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.phase.p1{border-color:#ffe082}.phase.p1 .phd{background:#fff8e1}
-.phase.p2{border-color:#a5d6a7}.phase.p2 .phd{background:#e8f5e9}
-.phase.p3{border-color:#90caf9}.phase.p3 .phd{background:#e8f0fe}
 .pb{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;color:#fff}
-.p1 .pb{background:#e65100}.p2 .pb{background:#1b5e20}.p3 .pb{background:#0d47a1}
-.pt{font-size:12.5px;font-weight:600}
-.p1 .pt{color:#e65100}.p2 .pt{color:#1b5e20}.p3 .pt{color:#0d47a1}
-.pbd{padding:10px 13px;background:#fff}
-.pg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:7px}
-.pi{font-size:11.5px;color:#636366;line-height:1.6}
-.pi b{color:#1c1c1e;font-weight:600}
-.pn{font-size:11px;padding:7px 10px;border-radius:7px;border-left:3px solid;line-height:1.6}
-.p1 .pn{background:#fff8e1;border-color:#e65100;color:#bf360c}
-.p2 .pn{background:#e8f5e9;border-color:#1b5e20;color:#1b5e20}
-.p3 .pn{background:#e8f0fe;border-color:#0d47a1;color:#0d47a1}
-.pn b{font-weight:600}
-.warn-plan{border-radius:10px;padding:11px 13px;background:#fce8e6;border:.5px solid #ef9a9a;font-size:11.5px;color:#b71c1c;line-height:1.7;margin-bottom:12px}
-.warn-plan b{font-weight:600}
-.pbar-wrap{background:#fff;border-radius:10px;padding:12px 14px;border:.5px solid #e5e5ea;margin-bottom:12px}
-.pbar-t{font-size:11px;font-weight:700;color:#8e8e93;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
 .pr{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.prl{font-size:11px;color:#636366;width:75px;flex-shrink:0}
-.prb{flex:1;height:6px;border-radius:3px;background:#e5e5ea;overflow:hidden}
-.prf{height:100%;border-radius:3px}
-.prv{font-size:11px;font-weight:700;width:35px;text-align:right;flex-shrink:0}
-.rule-list{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.rule{display:flex;gap:9px;padding:9px 12px;border-radius:9px;background:#fff;border:.5px solid #e5e5ea;align-items:flex-start}
-.rule-n{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px}
-.rule-t{font-size:12px;color:#636366;line-height:1.6}
-.rule-t b{color:#1c1c1e;font-weight:600}
-
-.wl-history-section{margin-top:16px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
-.wl-history-title{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;padding:0 16px}
-.wl-hist-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary)}
-.wl-hist-item:hover{background:var(--color-background-secondary)}
-.wl-hist-badge{font-size:10px;font-weight:600;color:#fff;border-radius:20px;padding:2px 8px;white-space:nowrap}
-.wl-hist-date{font-size:12px;color:var(--color-text-secondary);flex:1}
-.wl-hist-count{font-size:11px;color:var(--color-text-tertiary)}
-.wl-empty{text-align:center;padding:32px 16px;color:var(--color-text-tertiary);font-size:13px}
-
-
 /* 로그 날짜 바 */
 .log-date-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--color-background-default,#f2f2f7);border-bottom:0.5px solid var(--color-border-tertiary);position:sticky;top:96px;z-index:8}
 .log-nav-btn{background:none;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);width:32px;height:32px;cursor:pointer;font-size:20px;color:var(--color-text-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
@@ -329,8 +197,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-swap-pick{flex-shrink:0;font-size:12px;font-weight:700;color:#fff;background:#185FA5;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:32px}
 .ex-swap-pick:active{background:#124a82}
 .wl-picker-empty{font-size:12px;color:#9aa0a6;padding:6px 2px;display:block}
-
-
 /* 운동 추가 피커 개선 */
 .wl-picker-title{font-size:11px;font-weight:600;color:var(--color-text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
 .wl-picker-tags{display:flex;flex-direction:column;gap:3px;max-height:180px;overflow-y:auto;margin-bottom:10px}
@@ -384,7 +250,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .cue-cue .lbl{color:#3B6D11}
 .cue-warn{color:#b3402a}
 .cue-warn .lbl{color:#b3402a}
-
 /* 플랜 탭 */
 .plan-wrap{padding:12px 16px 80px}
 .plan-hd{font-size:13px;font-weight:800;color:var(--color-text-primary);margin:24px 0 12px;padding:9px 12px;background:var(--color-background-secondary,#ebedef);border-left:3px solid #3B6D11;border-radius:8px;line-height:1.3}
@@ -409,7 +274,9 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .tr-spark{flex-shrink:0}
 .tr-stat{font-size:11px;color:var(--color-text-secondary)}
 .tr-e1{font-weight:700;color:var(--color-text-primary)}
-.tr-up{color:#3B6D11;font-weight:700}.tr-dn{color:#E24B4A;font-weight:700}.tr-eq{color:#999}
+.tr-up{color:#3B6D11;font-weight:700}
+.tr-dn{color:#E24B4A;font-weight:700}
+.tr-eq{color:#999}
 .tr-set{color:var(--color-text-tertiary)}
 .tr-alt-btn{font-size:10px;font-weight:700;color:#185FA5;background:none;border:0.5px solid #185FA5;border-radius:8px;padding:2px 8px;cursor:pointer;margin-left:2px}
 .tr-alt{display:none;margin-top:8px;padding-top:8px;border-top:0.5px dashed var(--color-border-tertiary)}
@@ -425,7 +292,19 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mm-svg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto;color:var(--color-text-secondary)}
 .mm-sil *{fill:var(--color-border-tertiary,#dadde0);opacity:.45;stroke:none}
 .mz{stroke:#fff;stroke-width:1;cursor:pointer;fill-opacity:.5;transition:fill-opacity .15s}
-.mz[data-m="가슴"]{fill:#D85A30}.mz[data-m="등"]{fill:#185FA5}.mz[data-m="측면삼각"]{fill:#BA7517}.mz[data-m="전면삼각"]{fill:#E0922F}.mz[data-m="삼두"]{fill:#0C447C}.mz[data-m="이두"]{fill:#3B6D11}.mz[data-m="대퇴사두"]{fill:#27500A}.mz[data-m="후면사슬"]{fill:#6B4FA0}.mz[data-m="코어"]{fill:#888}.mz[data-m="전완"]{fill:#5B8A2A}.mz[data-m="승모"]{fill:#7A6F2E}.mz[data-m="후면삼각"]{fill:#C46A2A}.mz[data-m="종아리"]{fill:#3E2E66}
+.mz[data-m="가슴"]{fill:#D85A30}
+.mz[data-m="등"]{fill:#185FA5}
+.mz[data-m="측면삼각"]{fill:#BA7517}
+.mz[data-m="전면삼각"]{fill:#E0922F}
+.mz[data-m="삼두"]{fill:#0C447C}
+.mz[data-m="이두"]{fill:#3B6D11}
+.mz[data-m="대퇴사두"]{fill:#27500A}
+.mz[data-m="후면사슬"]{fill:#6B4FA0}
+.mz[data-m="코어"]{fill:#888}
+.mz[data-m="전완"]{fill:#5B8A2A}
+.mz[data-m="승모"]{fill:#7A6F2E}
+.mz[data-m="후면삼각"]{fill:#C46A2A}
+.mz[data-m="종아리"]{fill:#3E2E66}
 .mm-sep{stroke:#fff;stroke-width:1.3;opacity:.5;fill:none}
 .mz.sel{fill-opacity:.95;stroke:#085041;stroke-width:1.5}
 .mm-vlbl{font-size:10px;fill:var(--color-text-tertiary);text-anchor:middle}
@@ -443,7 +322,9 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mm-sc{display:flex;flex-direction:column;gap:8px;margin-bottom:11px}
 .mm-scr{display:flex;gap:8px;font-size:12px;line-height:1.5}
 .mm-scr .tg{font-weight:800;flex-shrink:0;width:48px}
-.mm-scr.stretch .tg{color:#185FA5}.mm-scr.contract .tg{color:#D85A30}.mm-scr.cue .tg{color:#3B6D11}
+.mm-scr.stretch .tg{color:#185FA5}
+.mm-scr.contract .tg{color:#D85A30}
+.mm-scr.cue .tg{color:#3B6D11}
 .mm-scr .tx{color:var(--color-text-secondary)}
 .mm-exs-lbl{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:6px}
 .mm-exs{display:flex;flex-wrap:wrap;gap:6px}
@@ -530,7 +411,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-border-tertiary,#e5e5ea);border-radius:12px;overflow:hidden}
 .ws-cell{background:var(--color-background-primary,#fff);padding:13px 12px;text-align:center}
 .ws-v{font-size:23px;font-weight:800;color:var(--color-text-primary);line-height:1.1}
-.ws-v.up,.ws-v.pr{color:#3B6D11}.ws-v.dn{color:#D85A30}
+.ws-v.up,.ws-v.pr{color:#3B6D11}
+.ws-v.dn{color:#D85A30}
 .ws-u{font-size:13px;font-weight:600;color:var(--color-text-tertiary)}
 .ws-l{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
 .ws-note{font-size:11px;color:var(--color-text-tertiary);margin-top:9px;text-align:center}
@@ -545,7 +427,10 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .cal-grid{display:flex;gap:3px;flex:1}
 .cal-col{display:flex;flex-direction:column;gap:3px;flex:1}
 .cal-cell{aspect-ratio:1;border-radius:2px;background:var(--color-border-tertiary,#ebedf0)}
-.cal-cell.l1{background:#c6e48b}.cal-cell.l2{background:#7bc96f}.cal-cell.l3{background:#49a13a}.cal-cell.l4{background:#196127}
+.cal-cell.l1{background:#c6e48b}
+.cal-cell.l2{background:#7bc96f}
+.cal-cell.l3{background:#49a13a}
+.cal-cell.l4{background:#196127}
 .cal-cell.fut{background:transparent;border:0.5px dashed var(--color-border-tertiary,#e5e5ea)}
 .cal-legend{display:flex;align-items:center;gap:3px;justify-content:flex-end;font-size:10px;color:var(--color-text-tertiary);margin-top:9px}
 .cal-legend .cal-cell{width:11px;height:11px;aspect-ratio:auto;display:inline-block}
@@ -627,6 +512,10 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .bk-btn.ghost{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
 .bk-msg{font-size:11.5px;margin-top:7px;color:#3B6D11;font-weight:600}
 .bk-msg.err{color:#B3261E}
+.plan-week-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+.pw-nav{width:30px;height:30px;border:0.5px solid var(--color-border-secondary);border-radius:8px;background:var(--color-background-primary,#fff);font-size:15px;color:#185FA5;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pw-nav:disabled{opacity:.3;cursor:default}
+.pw-lbl{font-size:12px;font-weight:700;color:var(--color-text-primary);min-width:120px;text-align:center}
 .plan-week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
 .plan-day-cell{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 3px;text-align:center;cursor:pointer;transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent}
 .plan-day-cell.done{background:#EAF3DE;border-color:#C0DD97}
@@ -637,10 +526,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-day-ck{font-size:14px;display:block;margin-top:2px}
 .plan-week-note{font-size:11px;color:var(--color-text-tertiary);text-align:center}
 /* 단백질 분배 */
-.prot-bar-wrap{display:flex;flex-direction:column;gap:5px}
-.prot-bar{display:flex;align-items:center;gap:8px}
-.prl{font-size:11px;font-weight:600;color:#fff;border-radius:20px;padding:3px 10px;min-width:90px;text-align:center}
-.prg{font-size:12px;font-weight:600;font-family:var(--font-mono);color:var(--color-text-secondary)}
 /* 체질 프로파일 */
 .plan-body-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .plan-badge{font-size:10px;font-weight:600;color:#fff;border-radius:20px;padding:2px 8px}
@@ -657,9 +542,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-blood-name{font-size:12px;font-weight:500;color:var(--color-text-primary)}
 .plan-blood-why{font-size:11px;color:var(--color-text-secondary);margin-top:2px;line-height:1.5}
 /* 규칙 */
-.plan-rules{display:flex;flex-direction:column;gap:8px}
-.plan-rule{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--color-text-secondary)}
-.plan-rule-n{font-size:11px;font-weight:700;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 /* 기록 연결(별칭) */
 .ex-alias-btn{background:none;border:none;font-size:14px;cursor:pointer;padding:7px 10px;margin:-5px 0;opacity:.55;margin-left:auto}
 .ex-alias-btn:hover{opacity:1}
@@ -762,6 +644,23 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .rm-time{font-size:16px;font-weight:800;font-family:var(--font-mono);flex-shrink:0}
 .rm-bar{position:absolute;left:0;bottom:0;height:2.5px;background:#7ee2c3;transition:width .4s linear}
 .rm-btn{flex-shrink:0;font-size:11px;font-weight:700;color:#0b3d33;background:#cfeee2;border:none;border-radius:8px;padding:6px 10px;cursor:pointer}
+/* 오늘의 브리핑 — 남은 도전·채우기 목표 (탭하면 해당 카드로 점프) */
+.log-brief{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 16px 9px;background:#fff;border-bottom:1px solid #f0f0f0}
+.lb-lbl{font-size:10px;font-weight:700;color:var(--color-text-tertiary);flex-shrink:0}
+.lb-lbl.up{color:#3B6D11}
+.lb-item{font-size:11px;color:#1c1c1e;background:#f4f6f4;border:0.5px solid #e0e5e0;border-radius:20px;padding:4px 10px;cursor:pointer;white-space:nowrap}
+.lb-item b{color:#085041}
+.lb-item:active{background:#e4ebe4}
+/* 세션 결산 토스트 */
+.done-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:#0b3d33;color:#fff;border-radius:14px;padding:12px 18px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:all .3s ease;z-index:200;max-width:88%}
+.done-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.dn-emoji{font-size:24px}
+.dn-t1{font-size:14px;font-weight:800}
+.dn-t2{font-size:12px;opacity:.9;margin-top:2px}
+.dn-t3{font-size:11px;color:#7ee2c3;margin-top:2px}
+/* 워밍업 램프 원탭 기록 버튼 */
+.ex-wu-log{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;color:#fff;background:#085041;border:none;border-radius:7px;padding:5px 10px;cursor:pointer}
+.ex-wu-log:disabled{background:#9fbfb5;cursor:default}
 /* 세션 진행률 — 날짜 바 아래 얇은 바 (기록 기반 자동) */
 .log-progress{display:none;align-items:center;gap:8px;padding:5px 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
 .lp-bar{flex:1;height:4px;background:#eceef0;border-radius:2px;overflow:hidden}
@@ -1041,13 +940,25 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="plan-hd" id="sec-ws">🏆 이번 주 성과</div>
 <div id="week-summary" class="plan-card"></div>
 <button class="copy-report-btn" onclick="PlanApp.copyReport(this)">📋 Claude 보고용 요약 복사</button>
-<div class="plan-card"><div id="plan-week-grid" class="plan-week-grid"></div><div class="plan-week-note">기록이 있는 날은 자동으로 ✓ 표시됩니다</div></div>
+<div class="plan-card"><div class="plan-week-nav"><button class="pw-nav" onclick="PlanApp.shiftWeek(-1)">‹</button><span class="pw-lbl" id="plan-week-lbl">이번 주</span><button class="pw-nav" id="pw-next" onclick="PlanApp.shiftWeek(1)" disabled>›</button></div><div id="plan-week-grid" class="plan-week-grid"></div><div class="plan-week-note">기록이 있는 날은 자동으로 ✓ 표시됩니다</div></div>
 
 <details class="info-card pr-fold"><summary>🏆 PR 보드 — 역대 최고 기록<span class="ic">▾</span></summary><div class="info-body"><div id="pr-board"></div></div></details>
 
 <!-- 체성분 현황 -->
 <div class="plan-hd" id="sec-ib">📊 체성분 현황</div>
 <div id="inbody-cards"></div>
+
+<details class="info-card blood-fold"><summary>🩸 혈액검사 체크 — 6개월 시점 (안드로이드 체지방 → 호르몬 프로필 확인)<span class="ic">▾</span></summary><div class="info-body">
+<div class="plan-blood-note">복부 지방 집중형은 호르몬·인슐린 축 확인이 우선순위. 공복 오전 채혈 기준.</div>
+<div class="plan-blood-list">
+<div class="plan-blood-item" data-key="tt" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">총 테스토스테론</span><span class="plan-blood-why"> — 근합성·지방분해 기본 축</span></span></div>
+<div class="plan-blood-item" data-key="ft" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">유리 테스토스테론</span><span class="plan-blood-why"> — 실제 가용량 (SHBG와 함께 해석)</span></span></div>
+<div class="plan-blood-item" data-key="e2" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">에스트라디올 (E2)</span><span class="plan-blood-why"> — 복부지방↑ 시 아로마타제 전환 확인</span></span></div>
+<div class="plan-blood-item" data-key="glu" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">공복혈당</span><span class="plan-blood-why"> — 인슐린 저항성 1차 지표</span></span></div>
+<div class="plan-blood-item" data-key="ins" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">공복 인슐린 (HOMA-IR)</span><span class="plan-blood-why"> — 혈당과 세트로 계산</span></span></div>
+<div class="plan-blood-item" data-key="shbg" onclick="PlanApp.toggleBlood(this)"><span class="plan-blood-cb"><span class="plan-blood-ck"></span></span><span><span class="plan-blood-name">SHBG</span><span class="plan-blood-why"> — 유리 테스토스테론 해석의 열쇠</span></span></div>
+</div>
+</div></details>
 <div class="plan-inbody-note" id="plan-inbody-note"></div>
 <div id="inbody-projection"></div>
 <button class="inbody-open-btn" onclick="InBody.openModal()">＋ 인바디 입력</button>
@@ -1237,6 +1148,7 @@ try{var m={1:'d1',2:'d2',3:'d3',4:'d4',5:'d5',6:'d6',0:'d7'};var el=document.get
 function _localKey(d){const t=new Date(d);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);}
 function _todayKey(){return _localKey(new Date());}
 function _isWorkSet(s){return !!s&&s.reps>0&&!s.warmup;} // '본세트' 판정 — 워밍업 세트는 모든 볼륨·PR·추세 집계에서 제외하는 공통 기준
+function _e1Of(w,r){return w*(1+r/30);} // 추정 1RM(Epley) — 단일 소스. 공식 교체·고반복 보정 시 여기 한 곳만 수정
 // ── 운동 배치 규칙 ──
 // 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
 const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
@@ -1683,6 +1595,46 @@ const ExLog={
     const ds=tabW.querySelector('.day-sel');if(ds)ds.insertAdjacentElement('afterend',bar);else tabW.insertBefore(bar,tabW.firstChild);
     const prog=document.createElement('div');prog.className='log-progress';prog.id='log-progress';
     bar.insertAdjacentElement('afterend',prog);
+    const brief=document.createElement('div');brief.className='log-brief';brief.id='log-brief';
+    prog.insertAdjacentElement('afterend',brief);
+  },
+  // ── 오늘의 브리핑: 카드를 펼치지 않아도 오늘의 도전(증량)·채우기 목표가 보이게. 기록된 종목은 목록에서 빠져 '남은 목표'로 동작 ──
+  renderBrief(){
+    const el=document.getElementById('log-brief');if(!el)return;
+    const day=this.dayType(this.date);
+    const idx=this.PANEL_DAY.indexOf(day);
+    const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;
+    if(!panel||day==='REST'){el.style.display='none';el.innerHTML='';return;}
+    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>x.textContent.trim()))];
+    const s=this.session();
+    const logged=new Set((s.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
+    const chal=[],fill=[];
+    names.forEach(n=>{
+      if(logged.has(this.canon(n)))return;                    // 이미 기록한 종목은 제외 → 남은 목표 리스트
+      let sug=null;try{sug=this.suggestTarget(n);}catch(_){}
+      if(!sug)return;
+      if(sug.up&&sug.nextW)chal.push({n,w:sug.nextW});
+      else if(sug.fillW!=null&&sug.cap)fill.push({n,w:sug.fillW,cap:sug.cap});
+    });
+    if(!chal.length&&!fill.length){el.style.display='none';el.innerHTML='';return;}
+    const short=n=>n.length>11?n.slice(0,10)+'…':n;
+    const esc=n=>n.replace(/'/g,"\'");
+    const item=(n,txt)=>'<span class="lb-item" onclick="ExLog.jumpToEx(\''+esc(n)+'\')">'+short(n)+' <b>'+txt+'</b></span>';
+    let h='';
+    if(chal.length)h+='<span class="lb-lbl up">⬆ 도전</span>'+chal.map(c=>item(c.n,c.w+'kg')).join('');
+    if(fill.length)h+='<span class="lb-lbl">🎯 채우기</span>'+fill.slice(0,3).map(f=>item(f.n,f.w+'×'+f.cap)).join('');
+    el.style.display='flex';el.innerHTML=h;
+  },
+  // 브리핑 항목 탭 → 해당 요일 패널로 전환 후 그 종목 카드로 스크롤·펼침
+  jumpToEx(name){
+    const day=this.dayType(this.date);
+    const idx=this.PANEL_DAY.indexOf(day);if(idx<0)return;
+    const radio=document.getElementById('d'+(idx+1));if(radio)radio.checked=true;
+    const panel=document.querySelector('.day-panel.dp'+(idx+1));if(!panel)return;
+    const wrap=[...panel.querySelectorAll('.ex-wrap')].find(w=>(w.querySelector('.ex-nm')?.textContent.trim())===name);
+    if(!wrap)return;
+    const det=wrap.querySelector('details');if(det)det.open=true;
+    if(wrap.scrollIntoView)wrap.scrollIntoView({behavior:'smooth',block:'start'});
   },
   // 세션 진행률: 보고 있는 날짜의 데이 플랜 종목 중 본세트가 기록된 종목 수 — 수동 체크가 아닌 기록 기반(주간 그리드와 동일 원칙)
   renderProgress(){
@@ -1942,7 +1894,7 @@ const ExLog={
     setTimeout(()=>ri?.focus(),50);
   },
 
-  _prE1(s){return s.weight*(1+s.reps/30);},
+  _prE1(s){return _e1Of(s.weight,s.reps);},
   _priorSets(name){
     let arr=[];const cn=this.canon(name);
     for(const dk in this.data){(this.data[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
@@ -1953,7 +1905,7 @@ const ExLog={
     if(w>0){
       const loaded=prior.filter(s=>s.weight>0);if(!loaded.length)return true;
       const best=Math.max.apply(null,loaded.map(s=>this._prE1(s)));
-      return w*(1+r/30)>best+0.05;
+      return _e1Of(w,r)>best+0.05;
     }else{
       const bw=prior.filter(s=>s.weight===0);if(!bw.length)return false;
       return r>Math.max.apply(null,bw.map(s=>s.reps));
@@ -2001,7 +1953,50 @@ const ExLog={
     this.refresh();
     if(isPR)this.showPR(log.dataset.exname);
     if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname,wuOn?60:0);} // 워밍업 후 휴식은 짧게(60초)
+    this._maybeSessionDone();
     this._syncSoon();
+  },
+  // ── 세션 결산: 오늘 데이 플랜의 마지막 종목이 기록되는 순간 1회 — 세트·볼륨·시간·PR·지난 같은 요일 대비 ──
+  _doneShown:'',
+  _maybeSessionDone(){
+    if(this.date!==_todayKey()||this._doneShown===this.date)return;
+    const day=this.dayType(this.date);if(day==='REST')return;
+    const idx=this.PANEL_DAY.indexOf(day);
+    const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;if(!panel)return;
+    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>this.canon(x.textContent.trim())))];
+    if(!names.length)return;
+    const s=this.session();
+    const logged=new Set((s.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
+    if(!names.every(n=>logged.has(n)))return;
+    this._doneShown=this.date;
+    // 통계: 본세트·볼륨·소요시간(ts)·오늘 PR 종목 수
+    let sets=0,vol=0;const tss=[];
+    (s.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(st.ts)tss.push(st.ts);if(_isWorkSet(st)){sets++;vol+=(st.weight||0)*st.reps;}}));
+    let dur='';if(tss.length>=2){tss.sort();const m=Math.round((new Date(tss[tss.length-1])-new Date(tss[0]))/60000);if(m>0&&m<300)dur=' · '+m+'분';}
+    let prs=0;
+    (s.exercises||[]).forEach(e=>{
+      const ws=(e.sets||[]).filter(_isWorkSet);if(!ws.length)return;
+      const cn=this.canon(e.name);
+      let today=-1;ws.forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>today)today=v;});
+      let prior=-1;
+      Object.keys(this.data).forEach(dk=>{if(dk>=this.date)return;
+        (this.data[dk].exercises||[]).forEach(pe=>{if(this.canon(pe.name)!==cn)return;
+          (pe.sets||[]).filter(_isWorkSet).forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>prior)prior=v;});});});
+      if(prior>=0&&today>prior+0.05)prs++;
+    });
+    // 지난 같은 요일 세션 대비 볼륨
+    let cmp='';
+    const prevK=Object.keys(this.data).filter(k=>k<this.date&&this.data[k].day===day).sort().reverse()[0];
+    if(prevK){
+      let pv=0;(this.data[prevK].exercises||[]).forEach(e=>(e.sets||[]).filter(_isWorkSet).forEach(st=>{pv+=(st.weight||0)*st.reps;}));
+      if(pv>0){const p=Math.round((vol-pv)/pv*100);cmp='<div class="dn-t3">지난 '+day+' 대비 볼륨 '+(p>=0?'+':'')+p+'%</div>';}
+    }
+    let t=document.getElementById('done-toast');
+    if(!t){t=document.createElement('div');t.id='done-toast';t.className='done-toast';document.body.appendChild(t);}
+    t.innerHTML='<span class="dn-emoji">✅</span><div class="dn-txt"><div class="dn-t1">'+day+' 세션 완료!</div><div class="dn-t2">'+sets+'세트 · '+Math.round(vol).toLocaleString()+'kg'+dur+(prs?' · PR '+prs+'개 🎉':'')+'</div>'+cmp+'</div>';
+    t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
+    try{navigator.vibrate&&navigator.vibrate(120);}catch(_){}
+    clearTimeout(this._dnTimer);this._dnTimer=setTimeout(function(){t.classList.remove('show');},6000);
   },
   // 알림 권한: 사용자 제스처(세트 확정) 시 1회만 요청 — 백그라운드에서 휴식 종료 알림용
   _notifAsked:false,
@@ -2085,7 +2080,7 @@ const ExLog={
       if(k===this.date)continue;
       const ex=this.data[k].exercises?.find(e=>this.canon(e.name)===this.canon(name));
       if(!ex)continue;
-      ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=st.weight*(1+st.reps/30);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
+      ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
     }
     return{bestE1,bestReps};
   },
@@ -2093,6 +2088,7 @@ const ExLog={
   refresh(){
     const s=this.session();
     this.renderProgress();
+    this.renderBrief();
     let totSets=0,totVol=0;
     this._miniCacheCheck();                                  // 날짜 바뀌면 '지난 기록' 캐시 무효화
     document.querySelectorAll('.ex-log').forEach(log=>{
@@ -2107,7 +2103,7 @@ const ExLog={
       let prIdx=-1,prBest=-1;
       ex.sets.forEach((st,i)=>{
         if(!_isWorkSet(st))return;
-        if(loadedToday){if(st.weight>0){const e1=st.weight*(1+st.reps/30);if(pb.bestE1>=0&&e1>pb.bestE1+0.05&&e1>prBest){prBest=e1;prIdx=i;}}}
+        if(loadedToday){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(pb.bestE1>=0&&e1>pb.bestE1+0.05&&e1>prBest){prBest=e1;prIdx=i;}}}
         else{if(pb.bestReps>=0&&st.reps>pb.bestReps&&st.reps>prBest){prBest=st.reps;prIdx=i;}}
       });
       chips.innerHTML=ex.sets.map((set,i)=>{
@@ -2204,7 +2200,7 @@ const ExLog={
       (this.data[dk].exercises||[]).forEach(e=>{
         if(this.canon(e.name)!==cn)return;
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
-        let e1=0;sets.forEach(s=>{const v=s.weight>0?s.weight*(1+s.reps/30):0;if(v>e1)e1=v;});
+        let e1=0;sets.forEach(s=>{const v=s.weight>0?_e1Of(s.weight,s.reps):0;if(v>e1)e1=v;});
         rows.push({dk,sets,e1});
       });
     });
@@ -2316,9 +2312,9 @@ const ExLog={
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let dayMax=-1,dayTopSet=null;
         sets.forEach(s=>{
-          const cur=s.weight>0?s.weight*(1+s.reps/30):s.reps;
+          const cur=s.weight>0?_e1Of(s.weight,s.reps):s.reps;
           if(cur>dayMax){dayMax=cur;dayTopSet=s;}
-          if(inWeek&&s.weight>0){const e1=s.weight*(1+s.reps/30);if(!top||e1>top.e1)top={e1,name:e.name,w:s.weight,r:s.reps};}
+          if(inWeek&&s.weight>0){const e1=_e1Of(s.weight,s.reps);if(!top||e1>top.e1)top={e1,name:e.name,w:s.weight,r:s.reps};}
         });
         if(inWeek){
           const b=best[e.name];
@@ -2459,11 +2455,11 @@ const ExLog={
       const inc=this.isCompound(name)?2.5:1;
       // RPE 반영: 렙 상단을 채웠어도 마지막 세션 체감 강도가 9.5+면 같은 무게 한 번 더 굳히기
       const hardest=Math.max.apply(null,sets.map(s=>s.rpe||0));
-      if(hardest>=9.5)return{html:prevLbl+' → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)',up:false};
+      if(hardest>=9.5)return{html:prevLbl+' → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)',up:false,fillW:lastW,cap};
       const ease=(hardest>0&&hardest<=8)?' (RPE '+hardest+' 여유)':'';
-      return{html:prevLbl+' → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease,up:true};
+      return{html:prevLbl+' → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease,up:true,nextW:lastW+inc};
     }
-    return{html:prevLbl+' → '+lastW+'kg로 '+cap+'회 채우기',up:false};
+    return{html:prevLbl+' → '+lastW+'kg로 '+cap+'회 채우기',up:false,fillW:lastW,cap};
   },
   // ── 기본무게: 종목별 장비 자체 무게(바벨 20kg, 스미스 바, 머신 캐리지 등)를 등록하면
   //    세트 입력은 '추가 원판'만 받고 총 무게(기본+추가)로 저장·집계한다. 기록은 항상 총 무게 기준 ──
@@ -2630,8 +2626,23 @@ const ExLog={
       const ps=(t-base)/2;const sp=this._plateSplit(ps);
       return' <span class="ex-wu-plate">한쪽 '+(Math.round(ps*100)/100)+(sp.combo.length&&sp.rem===0?' ['+sp.combo.join('+')+']':'')+'</span>';
     };
-    return steps.map(([p,r],i)=>{const t=this._round25(w*p);return'<div class="ex-wu-row"><span class="ex-wu-step">'+(i+1)+'단계</span><b>'+t+'kg</b> × '+r+'회 <span class="ex-wu-pct">('+Math.round(p*100)+'%)</span>'+plate(t)+'</div>';}).join('')
+    return steps.map(([p,r],i)=>{const t=this._round25(w*p);return'<div class="ex-wu-row"><span class="ex-wu-step">'+(i+1)+'단계</span><b>'+t+'kg</b> × '+r+'회 <span class="ex-wu-pct">('+Math.round(p*100)+'%)</span>'+plate(t)+'<button type="button" class="ex-wu-log" onclick="ExLog.logWarmup(this,'+t+','+r+')">기록</button></div>';}).join('')
       +'<div class="ex-wu-note">세트 간 휴식 짧게(30~60초) → 본세트 '+w+'kg'+plate(w)+'</div>';
+  },
+  // 램프 단계 원탭 기록 — W 플래그 세트로 저장 + 60초 짧은 휴식 시작 (계산만 하고 수동 입력하던 흐름 제거)
+  logWarmup(btn,wt,reps){
+    const det=btn.closest('.ex-detail');if(!det)return;
+    const log=det.querySelector('.ex-log');if(!log)return;
+    const name=log.dataset.exname;
+    const s=this.session();
+    let ex=s.exercises.find(e=>e.name===name);
+    if(!ex){ex={name,sets:[]};s.exercises.push(ex);}
+    ex.sets.push({weight:wt,reps,ts:new Date().toISOString(),warmup:true});
+    this.setSession(s);
+    this.refresh();
+    if(this.date===_todayKey()){this._askNotify();this.startRest(name,60);}
+    this._syncSoon();
+    btn.textContent='✓';btn.disabled=true;
   },
   toggleWarmup(btn){
     const det=btn.closest('.ex-detail');if(!det)return;
@@ -2900,7 +2911,7 @@ const PlanApp={
   // 요일→타입·타입→색은 상단 EL_WDAY·DAY_COLORS_EL을 단일 소스로 참조 — 사본 유지 시 REST 색(#888 vs #888780)처럼 어긋난다
   DAY_TYPES:EL_WDAY,
   DAY_COLORS:DAY_COLORS_EL,
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();this.loadBlood();},
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
@@ -2947,9 +2958,21 @@ const PlanApp={
     if(dt)dt.textContent=elapsed+'/42일 ('+pct+'%)';
     if(rm)rm.textContent=elapsedRaw>=42?'✅ 리뷰 시점 — 추세 섹션 확인':'잔여 '+(42-elapsedRaw)+'일';
   },
+  _wkOff:0, // 0=이번 주, -1=지난주 … (미래 불가) — 그리드·주간 요약·보고 복사가 공유
+  shiftWeek(d){
+    this._wkOff=Math.min(0,this._wkOff+d);
+    this.renderWeek();this.renderWeekSummary();
+  },
   renderWeek(){
-    const now=new Date();const dow=now.getDay();
-    const ws=new Date(now);ws.setDate(now.getDate()-(dow===0?6:dow-1));
+    const keys=this._weekKeys(this._wkOff);
+    const ws=new Date(keys[0]+'T12:00:00');ws.setHours(0,0,0,0);
+    // 네비 라벨·미래 버튼 비활성
+    const lbl=document.getElementById('plan-week-lbl');const nx=document.getElementById('pw-next');
+    if(lbl){
+      const fd=k=>{const d=new Date(k+'T12:00:00');return (d.getMonth()+1)+'.'+d.getDate();};
+      lbl.textContent=this._wkOff===0?'이번 주':(this._wkOff===-1?'지난주':(-this._wkOff)+'주 전')+' ('+fd(keys[0])+'~'+fd(keys[6])+')';
+    }
+    if(nx)nx.disabled=this._wkOff>=0;
     this._logData().then(data=>this._drawWeek(ws,data));
   },
   _drawWeek(ws,data){
@@ -3094,10 +3117,12 @@ const PlanApp={
       }).join('')
       +'<div class="v4-note">막대 4개 = 3주 전 → 이번 주. 진한 색 = 주간 목표 달성.</div></div></details>';
   },
-  _e1rm(s){return s.weight*(1+s.reps/30);},
+  _e1rm(s){return _e1Of(s.weight,s.reps);},
   _spark(vals){
-    const w=84,h=26,pad=4;const mn=Math.min(...vals),mx=Math.max(...vals);const rng=mx-mn||1;
-    const v=vals.slice(-6);const step=v.length>1?(w-pad*2)/(v.length-1):0;
+    const w=84,h=26,pad=4;
+    const v=vals.slice(-6);                                      // 표시 창 먼저 자르고
+    const mn=Math.min(...v),mx=Math.max(...v);const rng=mx-mn||1; // 창 기준 정규화 — 전체 이력 기준이면 초기 저중량에 눌려 최근 변화가 평평하게 왜곡됨
+    const step=v.length>1?(w-pad*2)/(v.length-1):0;
     const pts=v.map((x,i)=>(pad+i*step).toFixed(1)+','+(h-pad-(x-mn)/rng*(h-pad*2)).toFixed(1));
     const lp=pts[pts.length-1].split(',');const top=v[v.length-1]>=mx-0.01;
     return '<svg class="tr-spark" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linejoin="round"/><circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="2.3" fill="'+(top?'#3B6D11':'#888')+'"/></svg>';
@@ -3224,7 +3249,7 @@ const PlanApp={
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
         (ex.sets||[]).forEach(st=>{
           if(!(_isWorkSet(st)&&st.weight>0))return;
-          const e1=st.weight*(1+st.reps/30);
+          const e1=_e1Of(st.weight,st.reps);
           if(!best[cn]||e1>best[cn].e1)best[cn]={e1,w:st.weight,r:st.reps,date:dk};
         });
       });
@@ -3243,7 +3268,8 @@ const PlanApp={
   async renderWeekSummary(){
     const box=document.getElementById('week-summary');if(!box)return;
     const data=await this._logData();
-    const thisWk=this._weekKeys(0),lastWk=this._weekKeys(-1);
+    const off=this._wkOff||0;
+    const thisWk=this._weekKeys(off),lastWk=this._weekKeys(off-1); // 보는 주 기준 — 전주 대비도 그 주의 '전주'로
     const days=thisWk.filter(dk=>this._sessionSets(data,dk)>0).length;
     const volT=this._weekVolume(data,thisWk),volL=this._weekVolume(data,lastWk);
     const volPct=volL?Math.round((volT-volL)/volL*100):0;
@@ -3258,7 +3284,7 @@ const PlanApp={
         let dayMax=-1;                               // 이 날짜의 최고값 (best 갱신용 — 같은 날 세트끼리는 PR로 안 침)
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(e.name):e.name; // 별칭 기준 PR 연속성
         sets.forEach(s=>{
-          const cur=s.weight>0?s.weight*(1+s.reps/30):s.reps;
+          const cur=s.weight>0?_e1Of(s.weight,s.reps):s.reps;
           if(inWeek){const b=best[cn]; if(b!==undefined&&cur>b+0.05&&!seen[cn]){prCount++;seen[cn]=1;}}
           if(cur>dayMax)dayMax=cur;
         });
@@ -3272,9 +3298,9 @@ const PlanApp={
     const volStr=volL?((volPct>=0?'+':'')+volPct+'%'):'기준 주';
     box.innerHTML=
       '<div class="ws-grid">'
-      +'<div class="ws-cell"><div class="ws-v">'+days+'<span class="ws-u">/6일</span></div><div class="ws-l">이번 주 운동</div></div>'
-      +'<div class="ws-cell"><div class="ws-v '+(volPct>0?'up':(volPct<0?'dn':''))+'">'+volStr+'</div><div class="ws-l">볼륨 vs 지난주</div></div>'
-      +'<div class="ws-cell"><div class="ws-v '+(prCount>0?'pr':'')+'">'+(prCount>0?'🎉 '+prCount:'0')+'</div><div class="ws-l">이번 주 신기록</div></div>'
+      +'<div class="ws-cell"><div class="ws-v">'+days+'<span class="ws-u">/6일</span></div><div class="ws-l">'+(off===0?'이번 주':'해당 주')+' 운동</div></div>'
+      +'<div class="ws-cell"><div class="ws-v '+(volPct>0?'up':(volPct<0?'dn':''))+'">'+volStr+'</div><div class="ws-l">볼륨 vs 전주</div></div>'
+      +'<div class="ws-cell"><div class="ws-v '+(prCount>0?'pr':'')+'">'+(prCount>0?'🎉 '+prCount:'0')+'</div><div class="ws-l">'+(off===0?'이번 주':'해당 주')+' 신기록</div></div>'
       +'<div class="ws-cell"><div class="ws-v">D-'+dday+'</div><div class="ws-l">목표(12월)까지</div></div>'
       +'</div>'
       +(bfTrend?'<div class="ws-note">체지방률 추세 '+bfTrend+' · 골격근·체지방은 체성분 현황에서 확인</div>':'');
@@ -3302,7 +3328,7 @@ const PlanApp={
   },
   async copyReport(btn){
     const data=await this._logData();
-    const wkKeys=this._weekKeys(0);
+    const wkKeys=this._weekKeys(this._wkOff||0); // 과거 주를 보는 중이면 그 주를 보고로 복사
     const L=[];
     const fd=d=>new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'});
     L.push('## 주간 보고 ('+fd(wkKeys[0])+' ~ '+fd(wkKeys[6])+')');
@@ -3332,8 +3358,8 @@ const PlanApp={
       const exLines=(d.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet))
         .map(e=>{
           const sets=e.sets.filter(_isWorkSet);
-          const top=sets.reduce((a,s)=>{const ca=a.weight*(1+a.reps/30),cs=s.weight*(1+s.reps/30);return cs>ca?s:a;},sets[0]);
-          const e1=top.weight>0?' (e1RM '+(top.weight*(1+top.reps/30)).toFixed(1)+')':'';
+          const top=sets.reduce((a,s)=>{return _e1Of(s.weight,s.reps)>_e1Of(a.weight,a.reps)?s:a;},sets[0]);
+          const e1=top.weight>0?' (e1RM '+_e1Of(top.weight,top.reps).toFixed(1)+')':'';
           return '  - '+e.name+': '+this._fmtSets(sets)+e1;
         });
       const cd=(d.cardio||[]).map(c=>c.type+' '+c.min+'분');
@@ -3501,7 +3527,7 @@ const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
   KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest'],
-  PREFIXES:['plan_wk_'],
+  PREFIXES:[], // 레거시 프리픽스 화이트리스트 제거 — 현 코드가 쓰지도 읽지도 않음
   _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
   async _collect(){

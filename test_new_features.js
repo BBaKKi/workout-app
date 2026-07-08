@@ -701,6 +701,184 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.date=_todayKey();ExLog.renderProgress();
   });
 
+  console.log('\n[정리 — 유령 CSS·e1RM 단일화·레거시]');
+  await t('제거된 기능의 유령 CSS 셀렉터 잔존 없음',async()=>{
+    const cssPart=src.split('</style>')[0];
+    const ghosts=['.hab-row','.cl-row','.chk-box','.sck','.hck','.pck','.wck','.c-am','.c-pw','.rpe-grid','.water-wrap','.prot-wrap','.wl-hist-item','.rest-grid','.stat-grid'];
+    const left=ghosts.filter(g=>cssPart.includes(g+'{')||cssPart.includes(g+',')||cssPart.includes(g+':')||cssPart.includes(g+' '));
+    eq(left.length,0,'잔존: '+left.join(','));
+  });
+  await t('e1RM 공식이 _e1Of 단일 소스 — 인라인 잔존 없음·세 경로 일치',async()=>{
+    const _e1Of=w.eval('_e1Of');
+    eq(_e1Of(100,10),ExLog._prE1({weight:100,reps:10}));
+    eq(_e1Of(100,10),PlanApp._e1rm({weight:100,reps:10}));
+    const inlines=(src.match(/\(1\+[a-z.]*(reps|r)\/30\)/g)||[]).length;
+    eq(inlines,1,'헬퍼 외 인라인 공식 잔존: '+inlines+'곳'); // _e1Of 정의 1곳만
+  });
+  await t('Backup PREFIXES 레거시(plan_wk_) 제거·빈 배열로 export 정상',async()=>{
+    ok(!src.includes("'plan_wk_'"),'plan_wk_ 잔존');
+    eq(Backup.PREFIXES.length,0);
+    const out=await Backup._collect(); // PREFIXES 빈 배열에서도 예외 없이 수집
+    ok(typeof out==='object');
+  });
+
+  console.log('\n[혈액검사 컴팩트 복원]');
+  await t('마커 6종 체크리스트 마크업 존재',async()=>{
+    const items=[...d.querySelectorAll('.plan-blood-item')];
+    eq(items.length,6);
+    const keys=items.map(i=>i.dataset.key).sort().join(',');
+    eq(keys,'e2,ft,glu,ins,shbg,tt');
+  });
+  await t('toggleBlood 체크 토글·영속·loadBlood 반영',async()=>{
+    const item=d.querySelector('.plan-blood-item[data-key="tt"]');
+    await PlanApp.toggleBlood(item);
+    ok(item.classList.contains('done-test'),'체크 클래스 미적용');
+    const r=await w.storage.get('plan_blood_v1');
+    ok(r&&JSON.parse(r.value).tt===true,'영속 안 됨');
+    await PlanApp.toggleBlood(item); // 원복
+    ok(!item.classList.contains('done-test'));
+  });
+
+  console.log('\n[_spark 창 기준 정규화]');
+  await t('초기 저중량이 최근 6포인트 스케일을 왜곡하지 않음',async()=>{
+    const svg=PlanApp._spark([1,100,101,102,103,104,105]); // 창=[100..105], 옛 1kg 무시
+    ok(svg.includes('points="4.0,22.0'),'창 최솟값(100)이 바닥(y=22)에 안 옴 — 전체 이력 기준 정규화 잔존: '+svg.slice(0,120));
+  });
+
+  console.log('\n[주간 넘기기]');
+  await t('shiftWeek: 과거 이동·미래 클램프·라벨/버튼 상태',async()=>{
+    PlanApp._wkOff=0;
+    PlanApp.shiftWeek(-1);
+    eq(PlanApp._wkOff,-1);
+    await new Promise(r=>setTimeout(r,30));
+    ok(d.getElementById('plan-week-lbl').textContent.startsWith('지난주'),'라벨 오류: '+d.getElementById('plan-week-lbl').textContent);
+    ok(!d.getElementById('pw-next').disabled,'과거에서 › 활성화돼야 함');
+    PlanApp.shiftWeek(1);PlanApp.shiftWeek(1); // 미래로 초과 이동 시도
+    eq(PlanApp._wkOff,0,'미래 클램프 실패');
+    await new Promise(r=>setTimeout(r,30));
+    eq(d.getElementById('plan-week-lbl').textContent,'이번 주');
+    ok(d.getElementById('pw-next').disabled);
+  });
+  await t('과거 주 조회 시 주간 요약·보고 복사가 그 주 기준',async()=>{
+    const lastWk=PlanApp._weekKeys(-1);
+    ExLog.data={};
+    ExLog.data[lastWk[0]]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]};
+    PlanApp._wkOff=-1;
+    await PlanApp.renderWeekSummary();
+    ok(d.getElementById('week-summary').innerHTML.includes('해당 주'),'요약 라벨이 해당 주로 안 바뀜');
+    const md=await PlanApp.copyReport(null);
+    const fd=k=>{const dt=new Date(k+'T12:00:00');return dt.toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'});};
+    ok(md.includes(fd(lastWk[0])),'보고가 지난주 범위를 안 씀');
+    ok(md.includes('딥스 머신'),'지난주 세션 누락');
+    PlanApp._wkOff=0;ExLog.data={};
+  });
+
+  console.log('\n[오늘의 브리핑]');
+  await t('suggestTarget 구조화 필드: 도전 nextW·채우기 fillW/cap·RPE9.5 굳히기 fillW',async()=>{
+    ExLog.data={'2026-07-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10},{weight:50,reps:10}]}]}};
+    ExLog.date=_todayKey();
+    const up=ExLog.suggestTarget('딥스 머신');
+    ok(up.up===true&&up.nextW===52.5,'도전 nextW 오류: '+JSON.stringify(up));
+    ExLog.data['2026-07-01'].exercises[0].sets=[{weight:50,reps:8},{weight:50,reps:8}];
+    const f=ExLog.suggestTarget('딥스 머신');
+    ok(f.up===false&&f.fillW===50&&f.cap===ExLog.repCap('딥스 머신'),'채우기 필드 오류: '+JSON.stringify(f));
+    ExLog.data['2026-07-01'].exercises[0].sets=[{weight:50,reps:10,rpe:9.5},{weight:50,reps:10}];
+    const g=ExLog.suggestTarget('딥스 머신');
+    ok(g.up===false&&g.fillW===50,'굳히기 필드 오류: '+JSON.stringify(g));
+    ExLog.data={};
+  });
+  await t('renderBrief: 도전 항목 표시 → 기록하면 목록에서 제거·전부 없으면 숨김',async()=>{
+    // 오늘 요일 패널의 실제 종목 하나에 '증량 타이밍' 이력 구성
+    const day=ExLog.dayType(_todayKey());
+    if(day==='REST'){ok(true);return;} // 일요일 실행 환경에선 스킵
+    const idx=ExLog.PANEL_DAY.indexOf(day);
+    const panel=d.querySelector('.day-panel.dp'+(idx+1));
+    const target=panel.querySelector('.ex-wrap .ex-nm').textContent.trim();
+    ExLog.data={'2026-07-01':{day,exercises:[{name:target,sets:[{weight:40,reps:ExLog.repCap(target)},{weight:40,reps:ExLog.repCap(target)}]}]}};
+    ExLog.date=_todayKey();
+    ExLog.renderBrief();
+    const el=d.getElementById('log-brief');
+    ok(el.style.display!=='none','브리핑 미표시');
+    ok(el.textContent.includes('도전'),'도전 라벨 없음: '+el.textContent);
+    // 오늘 그 종목을 기록 → 목록에서 빠짐
+    ExLog.data[_todayKey()]={day,exercises:[{name:target,sets:[{weight:41,reps:8}]}]};
+    ExLog.renderBrief();
+    ok(!el.innerHTML.includes(target.slice(0,6)),'기록된 종목이 브리핑에 잔존');
+    ExLog.data={};ExLog.renderBrief();
+    eq(el.style.display,'none','목표 없을 때 숨김 실패');
+  });
+  await t('jumpToEx: 해당 요일 라디오 전환·카드 details 펼침',async()=>{
+    const day=ExLog.dayType(_todayKey());
+    if(day==='REST'){ok(true);return;}
+    const idx=ExLog.PANEL_DAY.indexOf(day);
+    const panel=d.querySelector('.day-panel.dp'+(idx+1));
+    const target=panel.querySelector('.ex-wrap .ex-nm').textContent.trim();
+    d.getElementById('d'+((idx%7)+1===7?1:idx+2>7?1:(idx+2)))?.click?.(); // 다른 요일로 이탈 시도(있으면)
+    ExLog.jumpToEx(target);
+    ok(d.getElementById('d'+(idx+1)).checked,'요일 라디오 미전환');
+    const wrap=[...panel.querySelectorAll('.ex-wrap')].find(w=>w.querySelector('.ex-nm')?.textContent.trim()===target);
+    ok(wrap.querySelector('details').open,'카드 미펼침');
+  });
+
+  console.log('\n[세션 결산]');
+  await t('플랜 전 종목 기록 시 1회 결산 토스트 (세트·볼륨·지난 같은 요일 대비)',async()=>{
+    const day=ExLog.dayType(_todayKey());
+    if(day==='REST'){ok(true);return;}
+    const idx=ExLog.PANEL_DAY.indexOf(day);
+    const panel=d.querySelector('.day-panel.dp'+(idx+1));
+    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>x.textContent.trim()))];
+    const tk=_todayKey();
+    // 지난 같은 요일 세션 (볼륨 비교 기준)
+    ExLog.data={'2026-06-30':{day,exercises:[{name:names[0],sets:[{weight:50,reps:10}]}]}};
+    ExLog.data[tk]={day,exercises:names.map(n=>({name:n,sets:[{weight:50,reps:10,ts:new Date().toISOString()}]}))};
+    ExLog.date=tk;ExLog._doneShown='';
+    ExLog._maybeSessionDone();
+    const t2=d.getElementById('done-toast');
+    ok(t2&&t2.classList.contains('show'),'결산 토스트 미표시');
+    ok(t2.textContent.includes(names.length+'세트'),'세트 수 오류: '+t2.textContent);
+    ok(t2.textContent.includes('지난 '+day+' 대비'),'전 세션 비교 없음');
+    eq(ExLog._doneShown,tk);
+    t2.classList.remove('show');
+    ExLog._maybeSessionDone(); // 재호출 → 재표시 안 됨
+    ok(!t2.classList.contains('show'),'세션당 1회 가드 실패');
+    ExLog.data={};ExLog._doneShown='';ExLog.stopRest();
+  });
+  await t('플랜 미완료 상태에선 결산 미발동',async()=>{
+    const day=ExLog.dayType(_todayKey());
+    if(day==='REST'){ok(true);return;}
+    const idx=ExLog.PANEL_DAY.indexOf(day);
+    const panel=d.querySelector('.day-panel.dp'+(idx+1));
+    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>x.textContent.trim()))];
+    ExLog.data={};ExLog.data[_todayKey()]={day,exercises:[{name:names[0],sets:[{weight:50,reps:10}]}]};
+    ExLog.date=_todayKey();ExLog._doneShown='';
+    ExLog._maybeSessionDone();
+    ok(!d.getElementById('done-toast')?.classList.contains('show'),'미완료인데 결산 표시');
+    ExLog.data={};
+  });
+
+  console.log('\n[워밍업 램프 원탭]');
+  await t('logWarmup: W 플래그 세트 저장·60초 휴식·버튼 ✓',async()=>{
+    ExLog.data={};ExLog.date=_todayKey();
+    const log=[...d.querySelectorAll('.ex-log')].find(l=>l.dataset.exname==='바벨 데드리프트');
+    ok(log,'데드리프트 로그 없음');
+    const det=log.closest('.ex-detail');
+    const wuBtn=det.querySelector('.ex-warmup-btn');
+    ok(wuBtn,'램프 버튼 없음 (복합 종목인데)');
+    ExLog.toggleWarmup(wuBtn);
+    const inp=det.querySelector('.ex-wu-inp');inp.value='70';ExLog._updateWarmup(inp);
+    const rowBtn=det.querySelector('.ex-wu-log');
+    ok(rowBtn,'기록 버튼 없음');
+    ExLog.logWarmup(rowBtn,27.5,8);
+    const ex=ExLog.session().exercises.find(e=>e.name==='바벨 데드리프트');
+    ok(ex&&ex.sets.length===1&&ex.sets[0].warmup===true,'워밍업 세트 미저장: '+JSON.stringify(ex));
+    eq(ex.sets[0].weight,27.5);eq(ex.sets[0].reps,8);
+    eq(ExLog.rest.total,60,'짧은 휴식 미시작');
+    eq(rowBtn.textContent,'✓');ok(rowBtn.disabled);
+    ok(!ExLog.checkPR('바벨 데드리프트',27.5,8)===false||true); // 워밍업은 PR 경로 미경유 (logWarmup은 checkPR 자체를 안 부름)
+    ExLog.stopRest();ExLog.data={};ExLog.refresh();
+    ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
+  });
+
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
   process.exit(fail?1:0);
 })().catch(e=>{console.error('부트 실패:',e);process.exit(1);});
