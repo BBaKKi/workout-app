@@ -1140,6 +1140,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <button class="bk-btn ghost" onclick="Backup.download()">💾 파일 저장</button>
 <button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
 <button class="bk-btn ghost" onclick="ExLog.pullFromSheets()">☁️ 시트에서 불러오기</button>
+<button class="bk-btn ghost" onclick="ExLog.dedupeSheet()">🧹 시트 중복 정리</button>
 </div>
 <div class="bk-msg" id="bk-msg"></div>
 </div>
@@ -2964,12 +2965,12 @@ const ExLog={
     const byDate={};
     (rows||[]).forEach(r=>{
       if(!r||!r.date||!r.name)return;
-      const d=byDate[r.date]||(byDate[r.date]={day:r.day||'',ex:{},cardio:[]});
+      const d=byDate[r.date]||(byDate[r.date]={day:r.day||'',ex:{},cardio:{}}); // ex/cardio 모두 setNo 키 맵 — 시트 중복 행은 마지막 값 우선
       if(!d.day&&r.day)d.day=r.day;
       const m=String(r.name).match(/^🏃\s*(.*)$/); // 유산소는 '🏃 ' 접두로 직렬화됨 → cardio로 복귀
-      if(m){d.cardio.push({no:+r.setNo||0,type:m[1]||'유산소',min:+r.reps||0,ts:r.ts||undefined});return;}
-      const e=d.ex[r.name]||(d.ex[r.name]=[]);
-      e.push(Object.assign({no:+r.setNo||0},this._parseFlag(r.flag,{weight:+r.weight||0,reps:+r.reps||0,ts:r.ts||undefined})));
+      if(m){d.cardio[+r.setNo||0]={type:m[1]||'유산소',min:+r.reps||0,ts:r.ts||undefined};return;}
+      const e=d.ex[r.name]||(d.ex[r.name]={});
+      e[+r.setNo||0]=this._parseFlag(r.flag,{weight:+r.weight||0,reps:+r.reps||0,ts:r.ts||undefined});
     });
     let addedSets=0,keptEx=0;
     Object.keys(byDate).forEach(date=>{
@@ -2981,12 +2982,13 @@ const ExLog={
       Object.keys(src.ex).forEach(name=>{
         const local=s.exercises.find(e=>e.name===name);
         if(local&&(local.sets||[]).length){keptEx++;return;} // 로컬 우선
-        const sets=src.ex[name].sort((a,b)=>a.no-b.no).map(x=>{const{no,...set}=x;return set;});
+        const sets=Object.keys(src.ex[name]).sort((a,b)=>a-b).map(no=>src.ex[name][no]);
         if(local)local.sets=sets;else s.exercises.push({name,sets});
         addedSets+=sets.length;
       });
-      if(src.cardio.length&&!(s.cardio||[]).length){
-        s.cardio=src.cardio.sort((a,b)=>a.no-b.no).map(x=>({type:x.type,min:x.min,ts:x.ts}));
+      const cNos=Object.keys(src.cardio);
+      if(cNos.length&&!(s.cardio||[]).length){
+        s.cardio=cNos.sort((a,b)=>a-b).map(no=>src.cardio[no]);
         addedSets+=s.cardio.length;
       }
     });
@@ -3002,6 +3004,21 @@ const ExLog={
       if(addedIb)InBody._log.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
     }
     return{addedSets,keptEx,addedIb};
+  },
+  // 시트 중복 정리: 서버 cleanupDuplicates 호출 — (날짜·종목·세트) 키당 마지막 행만 보존
+  async dedupeSheet(){
+    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);};
+    const url=await this.getScriptUrl();
+    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return null;}
+    if(typeof confirm==='function'&&!confirm('시트에서 (날짜·종목·세트)가 같은 중복 행을 정리합니다.\n각 키의 마지막 행(최신 값)만 남습니다. 진행할까요?'))return null;
+    msg('⏳ 시트 중복 정리 중…');
+    try{
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'dedupe'}),redirect:'follow'});
+      const json=await res.json();
+      if(!json||json.ok===false||json.mode!=='dedupe'){msg('서버가 dedupe를 지원하지 않습니다 — Apps Script를 새 버전으로 재배포했는지 확인하세요.',true);return null;}
+      msg('✓ 정리 완료 — 중복/빈 행 '+json.deduped+'행 삭제');
+      return json;
+    }catch(err){msg('정리 실패: '+err.message,true);return null;}
   },
   async pullFromSheets(){
     const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);const rb=document.getElementById('rb-msg');if(rb){rb.textContent=t;rb.classList.toggle('err',!!err);}};
@@ -3065,6 +3082,7 @@ const ExLog={
       let okFlag=true,sawServer=false,stale=false;
       try{
         const json=await res.json();sawServer=true;okFlag=json.ok!==false;
+        if(json.added!=null)console.log('[sync] 추가 '+json.added+' · 갱신 '+json.updated+(full&&json.added>0?' ⚠ 전체 재동기화에서 추가>0 — 키 불일치(중복) 의심':''));
         // 새 서버는 응답에 written 키를 돌려줌. 없으면 옛 배포가 실행 중(이전 코드는 inbody/upsert를 모름).
         if(json.written===undefined)stale=true;
       }catch(_){okFlag=res.ok;}   // 응답 본문을 못 읽으면(CORS 등) 판단 보류 — 오탐 방지

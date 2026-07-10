@@ -879,6 +879,38 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
   });
 
+  console.log('\n[시트 중복 대응]');
+  await t('_mergePulled: 시트에 중복 행이 있어도 setNo당 마지막 값 1개만 반영',async()=>{
+    ExLog.data={};
+    const r=ExLog._mergePulled([
+      {date:'2026-07-08',day:'Legs',name:'바벨 데드리프트',setNo:3,weight:80,reps:5,flag:''},
+      {date:'2026-07-08',day:'Legs',name:'바벨 데드리프트',setNo:3,weight:90,reps:5,flag:'RPE9'}, // 정정본(뒤 행)
+      {date:'2026-07-08',day:'Legs',name:'🏃 러닝',setNo:1,weight:0,reps:20,flag:''},
+      {date:'2026-07-08',day:'Legs',name:'🏃 러닝',setNo:1,weight:0,reps:20,flag:''}
+    ],[]);
+    const s=ExLog.data['2026-07-08'];
+    eq(s.exercises[0].sets.length,1,'중복 세트가 불어남');
+    eq(s.exercises[0].sets[0].weight,90,'마지막 값(정정본)이 아님');
+    eq(s.exercises[0].sets[0].rpe,9);
+    eq(s.cardio.length,1,'유산소 중복');
+    ExLog.data={};
+  });
+  await t('dedupeSheet: mode:dedupe 호출·삭제 수 메시지·미지원 서버 감지',async()=>{
+    await w.eval('window.storage').set('gs_script_url','https://script.google.com/macros/s/test/exec');
+    const oldFetch=w.fetch,oldConfirm=w.confirm;
+    w.confirm=()=>true;
+    let sentMode=null;
+    w.fetch=(u,opt)=>{sentMode=JSON.parse(opt.body).mode;return Promise.resolve({json:()=>Promise.resolve({ok:true,deduped:698,mode:'dedupe'})});};
+    const r=await ExLog.dedupeSheet();
+    eq(sentMode,'dedupe');
+    eq(r.deduped,698);
+    // 옛 배포(모름) 응답 → null 반환
+    w.fetch=()=>Promise.resolve({json:()=>Promise.resolve({ok:true,written:0,mode:'upsert'})});
+    const r2=await ExLog.dedupeSheet();
+    eq(r2,null,'미지원 서버인데 성공 처리');
+    w.fetch=oldFetch;w.confirm=oldConfirm;
+  });
+
   console.log('\n[운동일 시프트(Day 오버라이드)·혈액검사 리마인더]');
   await t('dayType: 오버라이드 우선, 해제 시 요일 기본 복귀',async()=>{
     eq(ExLog.dayType('2026-07-06'),'Push'); // 월요일
