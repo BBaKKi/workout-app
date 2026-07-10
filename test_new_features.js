@@ -879,6 +879,114 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
   });
 
+  console.log('\n[순환 모드(요일 무관 로테이션)]');
+  await t('rotation(6순번): 지난 운동의 다음 순번 — 하루 밀려도 시퀀스 유지',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='6';
+    // 수: Legs 수행 → 목 쉼(기록 없음) → 금·토·일 모두 "Push+"가 떠야 함 (요일 무관)
+    ExLog.data={'2026-07-08':{day:'Legs',exercises:[{name:'스쿼트',sets:[{weight:60,reps:8}]}]}};
+    eq(ExLog.dayType('2026-07-09'),'Push+');
+    eq(ExLog.dayType('2026-07-10'),'Push+','쉬고 난 다음날에도 다음 순번 유지돼야');
+    eq(ExLog.dayType('2026-07-12'),'Push+','일요일에도 요일 무관하게 다음 순번');
+    // Push+ 기록하면 그 다음은 Pull+
+    ExLog.data['2026-07-10']={day:'Push+',exercises:[{name:'벤치',sets:[{weight:60,reps:8}]}]};
+    eq(ExLog.dayType('2026-07-11'),'Pull+');
+    // Legs+ 다음은 Push로 순환
+    ExLog.data={'2026-07-08':{day:'Legs+',exercises:[{name:'스쿼트',sets:[{weight:60,reps:8}]}]}};
+    eq(ExLog.dayType('2026-07-09'),'Push');
+    ExLog.data={};ExLog.dayMode='weekday';ExLog.daySeq='3';
+  });
+  await t('rotation 우선순위: 오버라이드 > 기록값 > 순환 > 요일',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='6';
+    ExLog.data={'2026-07-08':{day:'Legs',exercises:[{name:'스쿼트',sets:[{weight:60,reps:8}]}]}};
+    // 기록된 날짜는 저장된 타입
+    eq(ExLog.dayType('2026-07-08'),'Legs');
+    // 오버라이드가 최우선
+    ExLog.dayOv['2026-07-09']='Pull';
+    eq(ExLog.dayType('2026-07-09'),'Pull');
+    delete ExLog.dayOv['2026-07-09'];
+    // 워밍업만 있는 날은 순환 기준점이 아님
+    ExLog.data['2026-07-09']={day:'Push+',exercises:[{name:'벤치',sets:[{weight:20,reps:10,warmup:true}]}]};
+    eq(ExLog.dayType('2026-07-10'),'Push+','워밍업만 있는 날이 순환을 전진시키면 안 됨');
+    // 기록이 하나도 없으면 요일 기본
+    ExLog.data={};
+    eq(ExLog.dayType('2026-07-06'),'Push');
+    ExLog.dayMode='weekday';ExLog.daySeq='3';
+  });
+  await t('setDayMode: 영속 + 피커 토글 표시 + 백업 KEYS',async()=>{
+    ExLog.setDayMode(true);
+    const saved=await w.eval('window.storage').get('day_mode');
+    eq(saved&&saved.value,'rotation');
+    ExLog.toggleDayPicker();
+    const cb=d.querySelector('#day-ov-picker .dov-mode input');
+    ok(cb&&cb.checked,'피커에 순환 모드 체크 상태 미반영');
+    ExLog.toggleDayPicker();
+    ExLog.setDayMode(false);
+    ok(Backup.KEYS.includes('day_mode'),'day_mode 백업 화이트리스트 누락');
+  });
+
+  console.log('\n[3분할 순환·추천 강화]');
+  await t('daySeq=3: Push→Pull→Legs 순환 + 과거 Push+ 기록을 Push로 정규화',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='3';
+    ExLog.data={'2026-07-08':{day:'Legs',exercises:[{name:'스쿼트',sets:[{weight:60,reps:8}]}]}};
+    eq(ExLog.dayType('2026-07-09'),'Push','Legs 다음은 Push');
+    ExLog.data={'2026-07-08':{day:'Push+',exercises:[{name:'벤치',sets:[{weight:60,reps:8}]}]}};
+    eq(ExLog.dayType('2026-07-09'),'Pull','Push+ 기록은 Push로 취급 → 다음 Pull');
+    ExLog.daySeq='6';
+    eq(ExLog.dayType('2026-07-09'),'Pull+','6순번에선 Push+ 다음 Pull+');
+    ExLog.data={};ExLog.dayMode='weekday';ExLog.daySeq='3';
+  });
+  await t('setDaySeq: 영속 + 피커에 3/6 선택 표시 + 백업 KEYS',async()=>{
+    ExLog.setDayMode(true);
+    ExLog.toggleDayPicker(); // 피커를 연 상태에서 시퀀스 변경 → 재구성
+    ExLog.setDaySeq('6');
+    let saved=await w.eval('window.storage').get('day_seq');
+    eq(saved&&saved.value,'6');
+    const p=d.getElementById('day-ov-picker');
+    ok(p&&p.querySelectorAll('.dov-seq input').length===2,'피커에 3/6 라디오 없음');
+    ok(p.querySelector('.dov-seq input[value="6"]').checked,'6분할 선택 미반영');
+    ExLog.setDaySeq('3');
+    saved=await w.eval('window.storage').get('day_seq');
+    eq(saved&&saved.value,'3');
+    const p2=d.getElementById('day-ov-picker');if(p2)p2.remove();
+    ExLog.setDayMode(false);
+    ok(Backup.KEYS.includes('day_seq'),'day_seq 백업 화이트리스트 누락');
+  });
+  await t('injectRecos: 3분할 순환 시 기본 패널에 B변형 통합 제안 표시',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='3';
+    ExLog.injectRecos();
+    const card=d.querySelector('.day-panel.dp1 .day-reco');
+    ok(card,'dp1 추천 카드 없음');
+    ok(card.textContent.includes('B변형 통합'),'통합 제안 섹션 없음');
+    // 제안 종목은 dp4(Push+)에 있고 dp1(Push)에 없는 이름이어야 함
+    const dp1names=new Set([...d.querySelectorAll('.day-panel.dp1 .ex-wrap .ex-nm')].map(x=>x.textContent.trim()));
+    const suggested=[...card.querySelectorAll('.reco-item .reco-nm')].map(x=>x.textContent.trim());
+    ok(suggested.length>0,'제안 항목 없음');
+    // 통합 섹션의 항목 중 dp1에 이미 있는 이름이 없어야
+    const mergeItems=suggested.filter(nm=>!dp1names.has(nm));
+    ok(mergeItems.length>0,'전부 중복 이름');
+    ExLog.dayMode='weekday';ExLog.injectRecos();
+  });
+  await t('injectRecos: 6순번/요일 모드에선 통합 제안 미표시',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='6';
+    ExLog.injectRecos();
+    const card=d.querySelector('.day-panel.dp1 .day-reco');
+    ok(!card||!card.textContent.includes('B변형 통합'),'6순번인데 통합 제안 표시');
+    ExLog.daySeq='3';ExLog.dayMode='weekday';ExLog.injectRecos();
+  });
+  await t('injectRecos: 오래 쉰 종목(10일+) 섹션',async()=>{
+    // dp1 패널의 실제 종목 하나를 20일 전 기록으로 설정
+    const nm=d.querySelector('.day-panel.dp1 .ex-wrap .ex-nm').textContent.trim();
+    const old=new Date(_todayKey()+'T12:00:00');old.setDate(old.getDate()-20);
+    const ok_=old.toISOString().slice(0,10);
+    ExLog.data={};ExLog.data[ok_]={day:'Push',exercises:[{name:nm,sets:[{weight:40,reps:8}]}]};
+    ExLog._miniPrev={}; // prevSession 캐시 무효화
+    ExLog.injectRecos();
+    const card=d.querySelector('.day-panel.dp1 .day-reco');
+    ok(card&&card.textContent.includes('오래 쉰 종목'),'오래 쉰 섹션 없음');
+    ok(card.textContent.includes('20일 전'),'경과일 미표시: '+(card?card.textContent.slice(0,200):''));
+    ExLog.data={};ExLog._miniPrev={};ExLog.injectRecos();
+  });
+
   console.log('\n[증분 기본 동기화]');
   await t('saveAndSync: 같은 URL 재동기화=증분, URL 변경=전체(초기 적재)',async()=>{
     const st=w.eval('window.storage');
