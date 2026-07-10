@@ -36,6 +36,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .day-sel::-webkit-scrollbar{display:none}
 .day-lbl{flex-shrink:0;width:44px;height:50px;border-radius:10px;border:1.5px solid #d1d1d6;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative}
 .day-lbl span{display:block;text-align:center}
+/* 3분할 순환(seq3): A/B 탭 숨김 — 패널·플랜·기록은 보존 */
+body.seq3 .day-lbl.lbl-d4,body.seq3 .day-lbl.lbl-d5,body.seq3 .day-lbl.lbl-d6{display:none}
 .dn{font-size:9px;font-weight:600;color:#8e8e93}
 .dl{font-size:11px;font-weight:700;color:#1c1c1e}
 .dw{font-size:9px;color:#8e8e93}
@@ -1315,7 +1317,8 @@ const ExLog={
     this.initWakeLock();
     this.initDateRollover();
     this.initRestoreBanner(); // 콜드 스타트: 모든 load 완료 후 빈 저장소면 복원 안내
-    this.syncDayPanel(); // 오늘 오버라이드가 있으면 부팅 라디오(요일 기본)를 교정
+    this.applySeqUI(); // 3분할 순환이면 탭 UI 접기
+    this.syncDayPanel(); // 오늘 운동일에 맞춰 부팅 라디오(요일 기본 선택값)를 교정
   },
 
   async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
@@ -1456,13 +1459,13 @@ const ExLog={
   // 운동일 결정 우선순위: ① 날짜별 오버라이드 ② 기록된 세션의 저장값 ③ 순환 모드(지난 운동의 다음 순번) ④ 요일 기본
   // 순환 모드: 요일과 무관하게 마지막 본세트 기록일의 타입 다음 순번을 표시 — 하루 밀려도 시퀀스가 자동으로 따라옴
   dayOv:{},
-  dayMode:'weekday', // 'weekday'(요일 고정) | 'rotation'(순환)
+  dayMode:'rotation', // 'rotation'(순환 — 기본) | 'weekday'(요일 고정, 피커에서 전환 가능)
   daySeq:'3', // '3'(Push→Pull→Legs — 매 회차 같은 종목, 증량 주기 2배) | '6'(A/B 교차)
   DAY_SEQ:['Push','Pull','Legs','Push+','Pull+','Legs+'],
   DAY_SEQ3:['Push','Pull','Legs'],
   async loadDayOv(){
     try{const r=await window.storage.get('day_ov');if(r)this.dayOv=JSON.parse(r.value)||{};}catch(_){}
-    try{const r=await window.storage.get('day_mode');if(r)this.dayMode=(r.value==='rotation')?'rotation':'weekday';}catch(_){}
+    try{const r=await window.storage.get('day_mode');if(r)this.dayMode=(r.value==='weekday')?'weekday':'rotation';}catch(_){} // 저장값 없으면 순환이 기본
     try{const r=await window.storage.get('day_seq');if(r)this.daySeq=(r.value==='6')?'6':'3';}catch(_){}
   },
   saveDayOv(){try{window.storage.set('day_ov',JSON.stringify(this.dayOv));}catch(_){}},
@@ -1470,15 +1473,26 @@ const ExLog={
     this.dayMode=on?'rotation':'weekday';
     try{window.storage.set('day_mode',this.dayMode);}catch(_){}
     this._reopenPicker(); // 순환을 켜면 3/6분할 선택지가 보이도록 피커 재구성
-    this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
+    this.applySeqUI();this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
   },
   setDaySeq(v){
     this.daySeq=(v==='6')?'6':'3';
     try{window.storage.set('day_seq',this.daySeq);}catch(_){}
     this._reopenPicker();
-    this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
+    this.applySeqUI();this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
   },
   _reopenPicker(){const p=document.getElementById('day-ov-picker');if(p){p.remove();this.toggleDayPicker();}},
+  applySeqUI(){ // 3분할 순환이면 A/B 탭(Day4~6)을 숨기고 Day7을 '리포트'로 — 패널은 DOM에 보존(기록 매칭·통합 제안 소스)
+    const on=(this.dayMode==='rotation'&&this.daySeq!=='6');
+    document.body.classList.toggle('seq3',on);
+    const d7=document.querySelector('.day-lbl.lbl-d7');
+    if(d7){
+      const dn=d7.querySelector('.dn'),dl=d7.querySelector('.dl'),dw=d7.querySelector('.dw');
+      if(dn)dn.textContent=on?'주간':'Day7';
+      if(dl)dl.textContent=on?'📊 리포트':'REST';
+      if(dw)dw.textContent=on?'':'일';
+    }
+  },
   _nextRotation(d){
     // d 이전 마지막 '본세트가 있는' 날의 타입 다음 순번. 기록 날짜 수가 수백 수준이라 매 호출 정렬해도 무시 가능한 비용.
     const seq=(this.daySeq==='6')?this.DAY_SEQ:this.DAY_SEQ3;
@@ -1495,7 +1509,7 @@ const ExLog={
   },
   _dayTypeFresh(d){ // 세션 저장값을 배제한 계산 — setDayOv가 s.day를 재산정할 때 순환 참조 방지
     if(this.dayOv[d])return this.dayOv[d];
-    if(this.dayMode==='rotation'){const t=this._nextRotation(d);if(t)return t;}
+    if(this.dayMode==='rotation'){return this._nextRotation(d)||'Push';} // 기준 기록 없으면 Push부터 시작
     return EL_WDAY[new Date(d+'T12:00:00').getDay()]||'REST';
   },
   dayType(d){

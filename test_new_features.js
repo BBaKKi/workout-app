@@ -696,9 +696,9 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     // 최근 일요일로 이동
     const now=new Date();const sun=new Date(now);sun.setDate(now.getDate()-now.getDay());
     const sk=(()=>{const t=new Date(sun);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);})();
-    ExLog.date=sk;ExLog.renderProgress();
+    ExLog.dayMode='weekday';ExLog.date=sk;ExLog.renderProgress(); // REST는 요일 모드 개념 — 순환 기본값과 분리해 검증
     eq(d.getElementById('log-progress').style.display,'none');
-    ExLog.date=_todayKey();ExLog.renderProgress();
+    ExLog.dayMode='rotation';ExLog.date=_todayKey();ExLog.renderProgress();
   });
 
   console.log('\n[정리 — 유령 CSS·e1RM 단일화·레거시]');
@@ -788,7 +788,8 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.data={};
   });
   await t('renderBrief: 도전 항목 표시 → 기록하면 목록에서 제거·전부 없으면 숨김',async()=>{
-    // 오늘 요일 패널의 실제 종목 하나에 '증량 타이밍' 이력 구성
+    // 오늘 요일 패널의 실제 종목 하나에 '증량 타이밍' 이력 구성 (요일 모드 고정 — 주입 데이터가 순환 기준점을 옮기지 않게)
+    ExLog.dayMode='weekday';
     const day=ExLog.dayType(_todayKey());
     if(day==='REST'){ok(true);return;} // 일요일 실행 환경에선 스킵
     const idx=ExLog.PANEL_DAY.indexOf(day);
@@ -806,8 +807,10 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(!el.innerHTML.includes(target.slice(0,6)),'기록된 종목이 브리핑에 잔존');
     ExLog.data={};ExLog.renderBrief();
     eq(el.style.display,'none','목표 없을 때 숨김 실패');
+    ExLog.dayMode='rotation';
   });
   await t('jumpToEx: 해당 요일 라디오 전환·카드 details 펼침',async()=>{
+    ExLog.dayMode='weekday'; // 요일 패널 매핑 전제 검증 후 원복
     const day=ExLog.dayType(_todayKey());
     if(day==='REST'){ok(true);return;}
     const idx=ExLog.PANEL_DAY.indexOf(day);
@@ -818,6 +821,7 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(d.getElementById('d'+(idx+1)).checked,'요일 라디오 미전환');
     const wrap=[...panel.querySelectorAll('.ex-wrap')].find(w=>w.querySelector('.ex-nm')?.textContent.trim()===target);
     ok(wrap.querySelector('details').open,'카드 미펼침');
+    ExLog.dayMode='rotation';
   });
 
   console.log('\n[세션 결산]');
@@ -985,6 +989,21 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(card&&card.textContent.includes('오래 쉰 종목'),'오래 쉰 섹션 없음');
     ok(card.textContent.includes('20일 전'),'경과일 미표시: '+(card?card.textContent.slice(0,200):''));
     ExLog.data={};ExLog._miniPrev={};ExLog.injectRecos();
+  });
+
+  await t('applySeqUI: 3분할 순환이면 Day4~6 탭 숨김 + Day7=리포트, 6순번이면 복귀',async()=>{
+    ExLog.dayMode='rotation';ExLog.daySeq='3';ExLog.applySeqUI();
+    ok(d.body.classList.contains('seq3'),'seq3 클래스 없음');
+    eq(d.querySelector('.day-lbl.lbl-d7 .dl').textContent,'📊 리포트');
+    ExLog.daySeq='6';ExLog.applySeqUI();
+    ok(!d.body.classList.contains('seq3'),'6순번인데 seq3 유지');
+    eq(d.querySelector('.day-lbl.lbl-d7 .dl').textContent,'REST');
+    ExLog.daySeq='3';ExLog.applySeqUI();
+  });
+  await t('순환 기본값: 저장값 없으면 rotation + 기준 기록 없으면 Push부터',async()=>{
+    await w.eval('window.storage').delete('day_mode');
+    ExLog.dayMode='rotation';ExLog.data={};
+    eq(ExLog.dayType('2026-07-12'),'Push','기록 없는 일요일도 Push (REST 폴백 아님)');
   });
 
   console.log('\n[증분 기본 동기화]');
