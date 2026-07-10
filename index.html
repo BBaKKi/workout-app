@@ -517,6 +517,15 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .rb-msg{font-size:11px;color:#6b5510;margin-top:6px}
 .rb-msg.err{color:#a33}
 .bk-group-lbl{flex-basis:100%;font-size:10.5px;font-weight:700;color:#8e8e93;margin:6px 0 2px}
+/* ── 목표 항로: 마감까지 주당 필요 변화량 vs 최근 실적 ── */
+.ib-pace{margin-top:10px;padding:11px 12px;border-radius:12px;background:#f6f9f7;border:0.5px solid #d8e5dc}
+.ib-pace-hd{font-size:12px;font-weight:700;color:#085041;margin-bottom:7px}
+.ib-pace-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:5px 0;border-top:0.5px solid #e6eee9;font-variant-numeric:tabular-nums}
+.ip-lbl{font-size:11px;font-weight:700;color:#3a3a3c;min-width:44px}
+.ip-path{font-size:11.5px;font-weight:600;color:#085041}
+.ip-rate{font-size:10.5px;color:#6e6e73;flex:1;min-width:150px}
+.ip-st{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
+.ip-on{background:#E4F2E7;color:#1b5e20}.ip-near{background:#FFF4DC;color:#8a6d00}.ip-off{background:#FBE7E5;color:#B3261E}.ip-done{background:#E4F2E7;color:#1b5e20}
 /* ── 운동일 변경 피커: 날짜바의 데이 배지 탭 → 이 날짜의 운동일 오버라이드 ── */
 .log-day-badge{cursor:pointer}
 .log-day-badge::after{content:'▾';font-size:8px;margin-left:3px;opacity:.85}
@@ -3897,6 +3906,47 @@ const InBody={
     if(!this._log){this._log=[...IB_SEED];await this._save();}
   },
   async _save(){try{await window.storage.set('inbody_log',JSON.stringify(this._log));}catch(_){}},
+  GOAL_DATE:'2026-12-31', // 목표 시한 — Phase 3 종료와 정렬. IB_GOALS와 함께 여기만 수정
+  _goalPace(){ // 순수 계산(테스트 단위): 마지막 측정 기준, 목표까지 '주당 필요 변화량' vs 최근 3~6주 실적
+    const log=this._log||[];if(!log.length)return null;
+    const last=log[log.length-1];
+    const day=s=>new Date(String(s).slice(0,10)+'T12:00:00');
+    const now=day(last.date),end=day(this.GOAL_DATE);
+    const wksLeft=(end-now)/6048e5;
+    if(wksLeft<=0)return null;
+    let past=null; // 실적 기준점: 마지막 측정에서 21~42일 전 사이의 가장 최근 측정
+    for(let i=log.length-2;i>=0;i--){
+      const dd=(now-day(log[i].date))/864e5;
+      if(dd>=21&&dd<=42){past=log[i];break;}
+      if(dd>42)break;
+    }
+    const wksSpan=past?(now-day(past.date))/6048e5:0;
+    const rows=[];
+    [['체중','wt',IB_GOALS.wt,'kg'],['골격근','sm',IB_GOALS.sm,'kg'],['체지방','bf',IB_GOALS.bf,'%']].forEach(([lbl,k,goal,unit])=>{
+      const cur=last[k];if(cur==null)return;
+      const need=(goal-cur)/wksLeft;
+      const act=(past&&past[k]!=null&&wksSpan>0)?(cur-past[k])/wksSpan:null;
+      let st=null; // on(궤도)/near(근접)/off(이탈)/done(달성권)
+      if(Math.abs(goal-cur)<=0.3)st='done';
+      else if(act!=null){
+        const r=need!==0?act/need:1; // 같은 방향으로 얼마나 내고 있나
+        st=(r>=0.9)?'on':(r>=0.5?'near':'off');
+      }
+      rows.push({lbl,cur,goal,unit,need,act,st});
+    });
+    return{wksLeft,hasPast:!!past,rows};
+  },
+  _goalPaceHtml(){
+    const g=this._goalPace();if(!g||!g.rows.length)return'';
+    const f=(v,d)=>(v>0?'+':'')+v.toFixed(d);
+    const MK={on:'🟢 궤도 위',near:'🟡 근접',off:'🔴 이탈',done:'✅ 달성권'};
+    return '<div class="ib-pace"><div class="ib-pace-hd">🎯 목표 항로 — '+this.GOAL_DATE.slice(5).replace('-','/')+'까지 <b>'+Math.round(g.wksLeft)+'주</b></div>'
+      +g.rows.map(r=>{
+        const rate='주당 '+f(r.need,2)+(r.unit==='%'?'%p':r.unit)+' 필요'
+          +(r.act!=null?' · 최근 '+f(r.act,2)+(r.unit==='%'?'%p':r.unit):' · 실적 데이터 수집 중(4주 간격 측정 2회 필요)');
+        return '<div class="ib-pace-row"><span class="ip-lbl">'+r.lbl+'</span><span class="ip-path">'+r.cur+' → '+r.goal+r.unit+'</span><span class="ip-rate">'+rate+'</span>'+(r.st?'<span class="ip-st ip-'+r.st+'">'+MK[r.st]+'</span>':'')+'</div>';
+      }).join('')+'</div>';
+  },
   async render(){
     await this.load();
     const log=this._log;const last=log[log.length-1];
@@ -3992,6 +4042,7 @@ const InBody={
         +'</div>';
     });
     html+='</div>';
+    html+=this._goalPaceHtml(); // 목표 항로 — 현황 카드 아래
     box.innerHTML=html;
     if(note){const d=new Date(last.date+'T12:00:00');note.textContent='📅 최근 측정: '+d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'})+' · '+log.length+'회 누적';}
     this.renderProjection();

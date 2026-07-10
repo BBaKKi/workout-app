@@ -1006,6 +1006,42 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     eq(ExLog.dayType('2026-07-12'),'Push','기록 없는 일요일도 Push (REST 폴백 아님)');
   });
 
+  console.log('\n[목표 항로]');
+  await t('_goalPace: 주당 필요 변화량·최근 실적·궤도 판정',async()=>{
+    InBody._log=[
+      {date:'2026-06-08',wt:92.3,sm:36.0,bf:31.5,ab:0.95},
+      {date:'2026-07-06',wt:91.6,sm:36.2,bf:30.3,ab:0.92}
+    ];
+    const g=InBody._goalPace();
+    ok(g&&g.hasPast,'실적 기준점(28일 전) 미탐지');
+    ok(g.wksLeft>24&&g.wksLeft<27,'잔여 주 계산 이상: '+g.wksLeft);
+    const bf=g.rows.find(r=>r.lbl==='체지방');
+    ok(bf.need<-0.35&&bf.need>-0.45,'체지방 필요 변화율 이상: '+bf.need);
+    ok(Math.abs(bf.act-(-0.3))<0.02,'체지방 실적 이상: '+bf.act);
+    eq(bf.st,'near','30.3→20, 실적 -0.3 vs 필요 -0.4 → 근접이어야');
+    const sm=g.rows.find(r=>r.lbl==='골격근');
+    ok(sm.need>0,'골격근은 증가 방향');
+  });
+  await t('_goalPace: 실적 기준점 없으면 필요량만·판정 없음, 목표 지나면 null',async()=>{
+    InBody._log=[{date:'2026-07-06',wt:91.6,sm:36.2,bf:30.3}];
+    const g=InBody._goalPace();
+    ok(g&&!g.hasPast);
+    ok(g.rows.every(r=>r.act===null&&(r.st===null||r.st==='done')),'실적 없는데 판정 존재');
+    InBody._log=[{date:'2027-01-15',wt:85,sm:37.5,bf:22}];
+    eq(InBody._goalPace(),null,'목표 시한 경과인데 null 아님');
+  });
+  await t('render: 목표 항로 카드 표시', async()=>{
+    InBody._log=[
+      {date:'2026-06-08',wt:92.3,sm:36.0,bf:31.5,ab:0.95},
+      {date:'2026-07-06',wt:91.6,sm:36.2,bf:30.3,ab:0.92}
+    ];
+    await InBody.render();
+    const box=d.getElementById('inbody-cards');
+    ok(box.innerHTML.includes('목표 항로'),'항로 카드 없음');
+    ok(box.innerHTML.includes('주당'),'주당 필요량 없음');
+    InBody._log=null;await InBody.load();
+  });
+
   console.log('\n[증분 기본 동기화]');
   await t('saveAndSync: 같은 URL 재동기화=증분, URL 변경=전체(초기 적재)',async()=>{
     const st=w.eval('window.storage');
