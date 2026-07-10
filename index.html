@@ -1141,6 +1141,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
 <button class="bk-btn ghost" onclick="ExLog.pullFromSheets()">☁️ 시트에서 불러오기</button>
 <button class="bk-btn ghost" onclick="ExLog.dedupeSheet()">🧹 시트 중복 정리</button>
+<button class="bk-btn ghost" onclick="ExLog.fullResync()">⬆ 전체 재업로드</button>
 </div>
 <div class="bk-msg" id="bk-msg"></div>
 </div>
@@ -2951,9 +2952,10 @@ const ExLog={
     if(!url||!url.startsWith('https://script.google.com')){
       alert('올바른 Apps Script URL을 입력해주세요.');return;
     }
+    const prevUrl=await this.getScriptUrl(); // URL이 새로 설정/변경될 때만 전체 스냅샷(초기 적재), 이후 수동 동기화는 증분
     await window.storage.set('gs_script_url',url);
     this.closeSync();
-    await this.syncToSheets(url,true); // 수동 동기화는 전체 스냅샷 — 시트 복구·초기 적재용
+    await this.syncToSheets(url,url!==prevUrl);
   },
   // ── 시트 → 앱 복원(pull): 시트가 원본(source of truth), localStorage는 언제 지워져도 되는 캐시.
   //    병합 규칙: (날짜·종목) 단위 로컬 우선 — 미전송 로컬 수정을 보호하고, 시트는 빈 곳만 채운다.
@@ -3004,6 +3006,16 @@ const ExLog={
       if(addedIb)InBody._log.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
     }
     return{addedSets,keptEx,addedIb};
+  },
+  // 전체 재업로드: 로컬 전체 스냅샷을 시트로 upsert — 시트 복구 등 예외 상황 전용(평소엔 증분으로 충분)
+  async fullResync(){
+    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);};
+    const url=await this.getScriptUrl();
+    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return;}
+    if(typeof confirm==='function'&&!confirm('로컬의 전체 기록을 시트로 재업로드합니다.\n기존 행은 갱신되고 삭제되지 않습니다. 평소에는 자동 증분 동기화로 충분합니다.\n진행할까요?'))return;
+    msg('⏳ 전체 재업로드 중…');
+    await this.syncToSheets(url,true);
+    msg('✓ 전체 재업로드 요청 완료 — 결과는 ☁️ 아이콘과 콘솔 [sync] 로그로 확인하세요.');
   },
   // 시트 중복 정리: 서버 cleanupDuplicates 호출 — (날짜·종목·세트) 키당 마지막 행만 보존
   async dedupeSheet(){

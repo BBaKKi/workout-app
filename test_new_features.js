@@ -879,6 +879,39 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.toggleWarmup(wuBtn); // 패널 닫기 (다른 테스트 오염 방지)
   });
 
+  console.log('\n[증분 기본 동기화]');
+  await t('saveAndSync: 같은 URL 재동기화=증분, URL 변경=전체(초기 적재)',async()=>{
+    const st=w.eval('window.storage');
+    await st.set('gs_script_url','https://script.google.com/macros/s/OLD/exec');
+    const inp=d.getElementById('sync-url-inp');
+    ok(inp,'sync-url-inp 없음');
+    const calls=[];
+    const orig=ExLog.syncToSheets;
+    ExLog.syncToSheets=async(u,full)=>{calls.push({u,full:!!full});};
+    inp.value='https://script.google.com/macros/s/OLD/exec';
+    await ExLog.saveAndSync();
+    inp.value='https://script.google.com/macros/s/NEW/exec';
+    await ExLog.saveAndSync();
+    ExLog.syncToSheets=orig;
+    eq(calls[0].full,false,'같은 URL인데 전체 스냅샷');
+    eq(calls[1].full,true,'새 URL인데 증분');
+    await st.set('gs_script_url','https://script.google.com/macros/s/test/exec');
+  });
+  await t('fullResync: confirm 후 전체 스냅샷 호출·URL 없으면 중단',async()=>{
+    const st=w.eval('window.storage');
+    const oldConfirm=w.confirm;w.confirm=()=>true;
+    const calls=[];
+    const orig=ExLog.syncToSheets;
+    ExLog.syncToSheets=async(u,full)=>{calls.push(!!full);};
+    await ExLog.fullResync();
+    eq(calls.length,1);ok(calls[0]===true,'전체 스냅샷 아님');
+    await st.delete('gs_script_url');
+    await ExLog.fullResync();
+    eq(calls.length,1,'URL 없는데 동기화 시도');
+    await st.set('gs_script_url','https://script.google.com/macros/s/test/exec');
+    ExLog.syncToSheets=orig;w.confirm=oldConfirm;
+  });
+
   console.log('\n[시트 중복 대응]');
   await t('_mergePulled: 시트에 중복 행이 있어도 setNo당 마지막 값 1개만 반영',async()=>{
     ExLog.data={};
