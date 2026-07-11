@@ -36,8 +36,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .day-sel::-webkit-scrollbar{display:none}
 .day-lbl{flex-shrink:0;width:44px;height:50px;border-radius:10px;border:1.5px solid #d1d1d6;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative}
 .day-lbl span{display:block;text-align:center}
-/* 3분할 순환(seq3): A/B 탭 숨김 — 패널·플랜·기록은 보존 */
-body.seq3 .day-lbl.lbl-d4,body.seq3 .day-lbl.lbl-d5,body.seq3 .day-lbl.lbl-d6{display:none}
 .dn{font-size:9px;font-weight:600;color:#8e8e93}
 .dl{font-size:11px;font-weight:700;color:#1c1c1e}
 .dw{font-size:9px;color:#8e8e93}
@@ -76,16 +74,16 @@ body.seq3 .day-lbl.lbl-d4,body.seq3 .day-lbl.lbl-d5,body.seq3 .day-lbl.lbl-d6{di
 .chev{font-size:14px;color:#c7c7cc;transition:transform .2s;flex-shrink:0}
 .ex-card[open] .chev{transform:rotate(180deg)}
 .ex-detail{border-top:1px solid #f2f2f7}
-.focus-grid{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 12px} /* 세로 스택 — 3단은 폰에서 컬럼당 ~110px라 읽기 어려움 */
+.focus-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 12px}
 .fb{border-radius:8px;padding:9px;border:.5px solid}
 .fb.stim{background:#e8f5ee;border-color:#81c995}
 .fb.tip{background:#e8f0fe;border-color:#90caf9}
 .fb.warn{background:#fce8e6;border-color:#ef9a9a}
-.fl{font-size:10px;font-weight:700;margin-bottom:3px}
+.fl{font-size:9px;font-weight:700;margin-bottom:3px}
 .fb.stim .fl{color:#1b5e20}
 .fb.tip .fl{color:#0d47a1}
 .fb.warn .fl{color:#b71c1c}
-.ft{font-size:12px;line-height:1.55}
+.ft{font-size:10.5px;line-height:1.55}
 .fb.stim .ft{color:#2e7d32}
 .fb.tip .ft{color:#1565c0}
 .fb.warn .ft{color:#c62828}
@@ -129,8 +127,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .rest-desc b{color:#1c1c1e;font-weight:600}
 /* 보완 추천 (운동 탭) */
 .day-reco{margin:10px 0 4px;padding:11px 12px;border:1px dashed #b7d8c4;border-radius:12px;background:#f3faf6}
-.day-reco .reco-hd~.reco-hd{margin-top:9px;padding-top:8px;border-top:0.5px solid #d8e8dd}
-.reco-item.reco-info{cursor:default;opacity:.85}
 .reco-hd{font-size:12px;font-weight:700;color:#085041;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .reco-sub{font-size:10.5px;font-weight:500;color:#8e8e93}
 .reco-item{display:flex;align-items:center;gap:9px;padding:9px 10px;background:#fff;border:1px solid #e5e5ea;border-radius:9px;margin-bottom:6px;cursor:pointer;transition:background .15s}
@@ -217,6 +213,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 @keyframes rmflash{0%,100%{background:#7f1d1d}50%{background:#a03c3c}}
 .sess-sum{margin:10px 16px 0;padding:9px 13px;background:#eef3f7;border:1px solid #cdd9e3;border-radius:10px;font-size:13px;color:#33415c;text-align:center}
 .sess-sum b{color:#185FA5}
+.sess-pace{display:block;margin-top:4px;font-size:11px;color:#5b6b7c}
 .wl-set-chip .pr-trophy{margin-left:2px}
 .wl-set-chip{cursor:pointer;transition:filter .1s}
 .wl-set-chip:active{filter:brightness(.9)}
@@ -448,6 +445,11 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ib-spark svg{display:block;width:100%;height:32px}
 .ib-no-data{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:12px 0;border:0.5px dashed var(--color-border-tertiary);border-radius:8px}
 .plan-inbody-note{font-size:11px;color:var(--color-text-tertiary);text-align:center;padding:4px 0}
+.ib-advice{margin:8px 0;padding:9px 12px;border-radius:10px;font-size:12px;line-height:1.5;text-align:left}
+.ib-advice.plateau{background:#FFF6E5;border:1px solid #EED9A8;color:#7A5A12}
+.ib-advice.fast{background:#FDEEEE;border:1px solid #EFC1C1;color:#8E2F2F}
+.ib-advice.recomp{background:#EAF3DE;border:1px solid #C9DCB0;color:#3B6D11}
+.plan-block-deload{margin-top:8px;padding:8px 11px;border-radius:10px;background:#FFF6E5;border:1px solid #EED9A8;color:#7A5A12;font-size:11.5px;line-height:1.5}
 /* Phase */
 .plan-phase-track{margin-bottom:10px}
 .plan-phase-bar{display:flex;height:8px;background:var(--color-border-tertiary);border-radius:5px;overflow:hidden;margin-bottom:5px}
@@ -507,38 +509,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .wr-row .v.pr{color:#3B6D11}
 .wr-row .v.miss{color:#B3261E}
 .wr-empty{font-size:12px;color:var(--color-text-tertiary)}
-/* ── 콜드 스타트 복원 배너: 저장소가 비어 있을 때 시트/JSON 복원 유도 ── */
-.restore-banner{margin:10px 12px 0;padding:12px;border-radius:12px;background:#FFF9E8;border:1px solid #E8D9A8}
-.rb-t{font-size:13px;font-weight:700;color:#6b5510;margin-bottom:4px}
-.rb-d{font-size:11.5px;color:#7a6a30;line-height:1.5;margin-bottom:8px}
-.rb-btns{display:flex;gap:6px;flex-wrap:wrap}
-.rb-btn{font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;border:0;background:#085041;color:#fff;cursor:pointer}
-.rb-btn.ghost{background:transparent;border:1px solid #c9b878;color:#6b5510}
-.rb-msg{font-size:11px;color:#6b5510;margin-top:6px}
-.rb-msg.err{color:#a33}
-.bk-group-lbl{flex-basis:100%;font-size:10.5px;font-weight:700;color:#8e8e93;margin:6px 0 2px}
-/* ── 목표 항로: 마감까지 주당 필요 변화량 vs 최근 실적 ── */
-.ib-pace{margin-top:10px;padding:11px 12px;border-radius:12px;background:#f6f9f7;border:0.5px solid #d8e5dc}
-.ib-pace-hd{font-size:12px;font-weight:700;color:#085041;margin-bottom:7px}
-.ib-pace-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:5px 0;border-top:0.5px solid #e6eee9;font-variant-numeric:tabular-nums}
-.ip-lbl{font-size:11px;font-weight:700;color:#3a3a3c;min-width:44px}
-.ip-path{font-size:11.5px;font-weight:600;color:#085041}
-.ip-rate{font-size:10.5px;color:#6e6e73;flex:1;min-width:150px}
-.ip-st{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
-.ip-on{background:#E4F2E7;color:#1b5e20}.ip-near{background:#FFF4DC;color:#8a6d00}.ip-off{background:#FBE7E5;color:#B3261E}.ip-done{background:#E4F2E7;color:#1b5e20}
-/* ── 운동일 변경 피커: 날짜바의 데이 배지 탭 → 이 날짜의 운동일 오버라이드 ── */
-.log-day-badge{cursor:pointer}
-.log-day-badge::after{content:'▾';font-size:8px;margin-left:3px;opacity:.85}
-.day-ov-picker{margin:8px 12px 0;padding:10px;border-radius:12px;background:#fff;border:1px solid #e0e0e4}
-.dov-hd{font-size:11px;color:#666;line-height:1.5;margin-bottom:8px}
-.dov-chips{display:flex;gap:6px;flex-wrap:wrap}
-.dov-chip{font-size:12px;font-weight:700;padding:6px 12px;border-radius:16px;border:1.5px solid var(--c,#888);color:var(--c,#888);background:#fff;cursor:pointer}
-.dov-chip.on{background:var(--c,#888);color:#fff}
-.dov-chip.reset{border-color:#aaa;color:#666;font-weight:600}
-.dov-mode{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:#555;line-height:1.5;margin-top:9px;padding-top:8px;border-top:0.5px solid #eee}
-.dov-mode input{margin-top:1px}
-.dov-seq{display:flex;flex-direction:column;gap:4px;font-size:11px;color:#555;margin-top:6px;padding-left:20px}
-.dov-seq label{display:flex;align-items:center;gap:5px}
+.wr-insight{font-size:11.5px;color:#5b6b7c;padding:7px 0 2px;border-top:0.5px dashed #e0e0dc;margin-top:7px;line-height:1.5}
 /* ── 신규: 데이터 백업 ── */
 .bk-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .bk-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
@@ -659,8 +630,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-memo-inp{flex:1;min-width:0;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;font-size:13px}
 /* RPE 선택 입력 — 세트 입력줄의 작은 셀렉트 */
 .wl-rpe-sel{flex-shrink:0;border:0.5px solid var(--color-border-tertiary);border-radius:8px;background:#fff;font-size:12px;color:#636366;padding:0 2px;height:44px;max-width:64px}
-.chip-rpe{font-style:normal;font-size:10px;opacity:.75;margin-left:2px}
-.wl-set-chip,.tr-stat,.hist-stat,.lb-item{font-variant-numeric:tabular-nums}
+.chip-rpe{font-style:normal;font-size:9px;opacity:.75;margin-left:2px}
 /* 통증 플래그 */
 .wl-pain-btn{flex-shrink:0;border:none;background:#fdf3e3;color:#b26a00;font-size:15px;width:44px;height:44px;border-radius:10px;cursor:pointer;opacity:.45}
 .wl-pain-btn.on{opacity:1;background:#fbe3c9;box-shadow:inset 0 0 0 1.5px #e09b3d}
@@ -685,6 +655,10 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .log-brief{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 16px 9px;background:#fff;border-bottom:1px solid #f0f0f0}
 .lb-lbl{font-size:10px;font-weight:700;color:var(--color-text-tertiary);flex-shrink:0}
 .lb-lbl.up{color:#3B6D11}
+.lb-ready{display:block;width:100%;box-sizing:border-box;font-size:11px;line-height:1.45;margin-bottom:6px;padding:6px 9px;border-radius:8px}
+.lb-ready.low{background:#FDEEEE;color:#8E2F2F}
+.lb-ready.mid{background:#FFF6E5;color:#7A5A12}
+.lb-ready.high{background:#EAF3DE;color:#3B6D11}
 .lb-item{font-size:11px;color:#1c1c1e;background:#f4f6f4;border:0.5px solid #e0e5e0;border-radius:20px;padding:4px 10px;cursor:pointer;white-space:nowrap}
 .lb-item b{color:#085041}
 .lb-item:active{background:#e4ebe4}
@@ -787,103 +761,90 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <label class="day-lbl lbl-d7" for="d7"><span class="dn">Day7</span><span class="dl">REST</span><span class="dw">일</span></label>
 </div>
 <div class="day-panel dp1">
-<div class="day-header"><span class="hbadge" style="background:#D85A30">Day 1 — Push</span><div class="hinfo">가슴·어깨·삼두 · 복합 2~3분 / 고립 60~90초 <span style="color:#D85A30;font-weight:700"> | 1주차: 벤치·OHP 50/20kg×8 목표</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 어깨 회전</b> — 전면·후면 각 10회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>가슴 스트레칭</b> — 문틀 잡고 30초 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>빈 바벨 벤치프레스</b> — 15회 × 2세트 관절 활성화</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>어깨 팬들럼</b> — 팔 늘어뜨려 원 그리기 20회</div></div></div></details>
-<div class="done-banner"><div class="di">🎉</div><div class="dt">Day 1 완료!</div><div class="ds">수고했습니다 💪 운동 후 30분 이내 단백질+탄수화물 섭취하세요.</div></div>
+<div class="day-header"><span class="hbadge" style="background:#D85A30">Day 1 — Push A</span><div class="hinfo">가슴·어깨·삼두 · 복합 3분 / 고립 2분 / 펌프성 90초 <span style="color:#D85A30;font-weight:700"> | 이번 블록: 벤치 76.4×8×2 정착 → +2.5</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 외회전</b> — 팔꿈치 90도 고정 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>숄더 서클·월 슬라이드</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>가슴 스트레칭</b> — 문틀 30초 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>첫 종목 램프업</b> — 본세트 50%×10 → 75%×5</div></div></div></details>
+<div class="done-banner"><div class="di">💪</div><div class="dt">Day 1 완료!</div><div class="ds">Push A 완주! 단백질 40g + 크레아틴. 내일 Pull — 데드리프트는 무게 욕심 없이 기립근 회복 우선.</div></div>
 <div class="ex-list">
-<div class="ex-wrap"><input type="checkbox" id="c1_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer 벤치 (isolateral)</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">대흉근 중부·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">바를 <b>유두선 아래</b>로 내려야 대흉근 전체 동원.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>견갑골 뒤로 모아 고정</b>. 팔꿈치 45~75도.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 90도 완전 벌어짐 → <b>어깨 부상</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">견갑 고정·흡기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">유두선으로 2~3초 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">닿기 직전 1초 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">폭발적으로 밀기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">완전신전 직전 멈춤</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Watson 인클라인 (isolateral)</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">WATSON</span><span class="tag t-m">대흉근 상부·전면삼각</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>30~45도</b>에서 상부 가슴 최대 자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">올릴 때 <b>살짝 앞 방향</b>으로.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨가 앞으로 말리는 순간 즉시 멈춤.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">견갑 고정·가슴 열기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">양 옆으로 천천히 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">상부 스트레칭 느끼며 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">가슴으로 밀어올려 정점 수축 1초</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_7" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_7" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Watson 디클라인 (isolateral)</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">WATSON</span><span class="tag t-m">대흉근 하부</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>대흉근 하부</b> — 가슴 아랫부분. 양쪽 독립(isolateral)이라 좌우 균형 자극 가능.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">내릴 때 가슴 하부가 <b>길게 늘어나는 느낌</b>. 올릴 때 가슴 중앙을 조이며 수축. 정점 1초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨가 앞으로 말리지 않도록. <b>견갑 고정</b> 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">등받이 밀착·견갑 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 45~60도로 내리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">가슴 하부 스트레칭 느끼기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">가슴 중앙 조이며 밀어올리기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">정점 1초 수축</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">DB 오버헤드프레스</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">전면·측면삼각·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">전면삼각 70%+측면 30%. <b>어깨 전체 수직 압축</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">바가 이마 지날 때 <b>머리 살짝 뒤로</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>허리 과신전 절대 금지</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">복압·엉덩이 수축</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">바 이마 앞으로 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">머리 빼며 밀어올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">정수리 위 완전신전·1초</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 래터럴 레이즈</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-s" style="background:#FAECE7;color:#8B3A20">⚠️ 스킵 주의</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">측면삼각근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>새끼손가락 방향</b>으로 회전해 올리면 격리.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>팔꿈치로 옆을 민다</b>는 느낌.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>반동 절대 금지</b>. 2~3초 내리기.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치를 손목보다 높게</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">새끼손가락 방향으로 올리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">어깨 높이 1초 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2~3초 천천히 하강</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">딥스 머신</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">WATSON / Arsenal</span><span class="tag t-m">삼두 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>직립 자세</b>에서 삼두 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치 90도까지. <b>삼두로 민다</b>는 느낌.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 통증 즉시 중단.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">직립 자세 유지</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 90도까지 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">삼두로 밀어올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c1_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">오버헤드 트라이셉스 익스텐션</div><div class="ex-meta"><span class="tag t-s">3×12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">삼두 장두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">삼두 <b>장두 최대 스트레칭</b>. 팔 뒤쪽 두께.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치를 <b>귀 옆에 고정</b>하고 전완만.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 옆으로 벌어지면 효과 감소.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">덤벨 양손으로 머리 위</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 귀 옆 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">전완만 뒤로 내리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">삼두로 밀어올리기·1초</div></div></div></details></div></details></div>
-
-
+<div class="ex-wrap"><input type="checkbox" id="c1_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-호라이즌털 벤치프레스</div><div class="ex-meta"><span class="tag t-s">4×6~9</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">대흉근 중부·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">견갑 모아 고정, 밀 때 <b>가슴 중앙을 모은다</b>. isolateral — 약한 쪽 기준 좌우 동일 중량.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">내릴 때 2~3초, 닿기 직전 1초 정지 후 폭발적으로. e1RM 99 도달 — <b>76.4×8 두 세트 정착이 다음 관문</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 45~75도. 어깨 앞 통증 시 시트 높이 조정.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트·그립 높이 세팅(세팅 메모 활용)</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 고정·흡기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">2~3초 하강·1초 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">가슴 모으며 밀기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">완전신전 직전 멈춤</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-인클라인 프레스</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">대흉근 상부·전면삼각</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>가슴 위쪽</b>이 늘었다 조이는 느낌. 손잡이는 쇄골 라인.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">57.2×10 상단 도달 — RPE 9 이하로 두 세션 유지되면 +2.5.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 과아치 금지 — 엉덩이 시트 밀착.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트 높이: 손잡이가 쇄골 라인</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">2초 하강</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">상부 가슴으로 밀기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Watson 디클라인 (isolateral)</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">Watson</span><span class="tag t-m">대흉근 하부</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">하부 가슴이 <b>아래·안쪽으로 모이는</b> 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">하부 가슴이 조이는 지점까지 밀고 1초 수축. 좌우 동일 중량(약한 쪽 기준). 증량 타이밍은 상단 🎯 자동 목표를 따르세요.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 앞으로 말리지 않게. 반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">패드 밀착·견갑 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">2초 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">하부 가슴 수축으로 밀기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">머신 숄더 프레스</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">머신</span><span class="tag t-m">전면·측면삼각·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">팔꿈치 살짝 앞(스캡션 각)에서 수직으로.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">27.5×10 두 세트 @9 — 10회 3세트 채우면 +2.5.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 젖혀 밀기 금지 — 등 전체 시트 밀착.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트: 손잡이 귀 높이</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압·등 밀착</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 완전신전 직전 멈춤</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 하강</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Nautilus 래터럴 레이즈 머신</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">Nautilus</span><span class="tag t-m">측면삼각</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>팔꿈치로 옆을 민다</b>는 느낌. 어깨 넓이의 핵심 — 안드로이드 체형 상체 프레임 보정 1순위.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">정점 1초. 12~15 펌프 반복 — 휴식 90초 유지 OK(펌프성).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">승모 으쓱 금지 — 어깨 끌어내린 상태.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트·패드 위치 세팅</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">어깨 내리고 시작</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">팔꿈치 주도로 올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">정점 1초·천천히</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">딥스 머신</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">머신</span><span class="tag t-m">삼두 전체·하부 가슴</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">직립 자세에서 <b>삼두로 민다</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">52.5~55 정착 중 — 55×10 3세트 후 57.5. 휴식 2분 이상 확보(최근 정체 원인).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 통증 즉시 중단.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">직립 자세</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 90도 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">삼두로 밀기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">완전 신전</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c1_7" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_7" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">트라이셉스 익스텐션 머신</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">삼두(장두)</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">팔꿈치 고정, 삼두가 <b>늘었다 조이는</b> 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치 패드 고정, 완전 신전 후 정점 수축. 휴식 2분 확보(짧은 휴식은 RPE만 올림). 증량은 🎯 자동 목표 기준.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 벌어짐·어깨 개입 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 패드 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">천천히 신장 2초</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 수축</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 가슴·어깨 정적 스트레칭 30초씩 × 3부위.</div>
 </div>
 <div class="day-panel dp2">
-<div class="day-header"><span class="hbadge" style="background:#185FA5">Day 2 — Pull</span><div class="hinfo">등·이두 · 세트 간 3분 <span style="color:#185FA5;font-weight:700"> | 1주차: 데드 72.5kg / 로우 50kg×8×3세트 목표</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>폼롤러 등 풀기</b> — 흉추 30초 × 3구간</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>데드리프트 워밍업</b> — 50% 무게 8회 × 1세트</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>고양이-소 스트레칭</b> — 10회</div></div></div></details>
-<div class="done-banner"><div class="di">🎉</div><div class="dt">Day 2 완료!</div><div class="ds">수고했습니다 💪 광배 스트레칭 꼭 해주세요.</div></div>
-
+<div class="day-header"><span class="hbadge" style="background:#185FA5">Day 2 — Pull A</span><div class="hinfo">등 두께·광배 · 복합 3분 / 고립 2분 / 펌프성 90초 · 수축 1초/신장 2~3초 <span style="color:#185FA5;font-weight:700"> | 데드 90 동결(신전 교정) · 랫풀 47×10 회복</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2 (그립·광배 활성)</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>캣카우·힙힌지 드릴</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>데드 램프업</b> — 40×8 → 60×5 → 75×3</div></div></div></details>
+<div class="done-banner"><div class="di">🎯</div><div class="dt">Day 2 완료!</div><div class="ds">Pull A 완주! 등 볼륨 확보 완료. 데드 옆모습 영상 확인했나요? 락아웃이 중립에서 끝났다면 성공.</div></div>
 <div class="ex-list">
-
-<div class="ex-wrap"><input type="checkbox" id="c2_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바벨 데드리프트</div><div class="ex-meta"><span class="tag t-s">4×5</span><span class="tag t-e">WATSON 파워랙</span><span class="tag t-m">척추기립근·햄스트링·둔근 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">허리·등 전체 후면사슬 복합. <b>발뒤꿈치로 땅을 민다</b>는 느낌으로 드라이브.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">바를 종아리에 붙여 당기기. <b>악력 한계 → 오버언더 그립</b>(한 손 오버·한 손 언더) 전환.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 라운딩 절대 금지. <b>세트 간 3분</b> 휴식. 80kg에서 기립근 통증 발생 이력 — <b>75kg 안정화 후 증량</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발 어깨너비·바 정강이 바로 앞</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">힙 힌지로 내려가 바 그립·복압</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">발뒤꿈치 밀면서 엉덩이와 어깨 동시에 올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">직립 후 엉덩이 앞으로 마무리</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">바 천천히 내리며 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바벨 벤트오버 로우</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">WATSON</span><span class="tag t-m">광배·중부등·이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>배꼽 방향</b>으로 당기면 광배 하부.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">상체 <b>45~60도</b>. <b>팔꿈치로 당긴다</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체 반동 금지. <b>허리 중립</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">상체 45~60도·척추 중립</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 뒤로 당기며 복부로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">견갑 모아 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">랫풀다운 / 풀업</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">광배 너비·이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>팔꿈치를 엉덩이 방향</b>으로 내릴 때 광배 수축.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">가슴을 살짝 앞으로 내밀기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">목 뒤로 당기면 <b>경추 부상</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 살짝 앞으로·팔 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 엉덩이 방향 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">가슴 도달 시 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_9" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_9" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">T-바 로우</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">T-바 머신</span><span class="tag t-m">중하 승모·능형근·광배</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>등 중앙 두께</b> 담당. 가슴 패드 지지로 기립근 부담 적어 데드리프트와 병행에 유리.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치를 몸통에 붙여 당기면 광배, 벌려 당기면 능형근·후면삼각. <b>정점 1초 등 중앙 조이기</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지. 가슴이 패드에서 떨어지면 무게 과함. <b>2초 신장</b> 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 패드 밀착·발 단단히 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 모으며 팔꿈치로 당기기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 — 등 중앙 조이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_8" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_8" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO 언더 로우</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">광배·후면삼각·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>광배근+후면삼각</b> 동시. 팔꿈치를 귀 방향으로 당기는 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">양측 독립(isolateral) → 약한 쪽 집중 가능. <b>정점 1초 수축·견갑 모으기</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동으로 상체 흔들기 금지. <b>등받이에 등 밀착</b> 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">착석·등받이 완전 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">핸들을 팔꿈치로 귀 방향으로 당기기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 수축·견갑 모으기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 시티드 로우</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">중부등·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="0" y="28" width="14" height="55" rx="3" fill="currentColor" opacity="0.3"/><circle cx="7" cy="55" r="6" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.4"/><line x1="14" y1="55" x2="72" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/><rect x="108" y="75" width="48" height="8" rx="2" fill="currentColor" opacity="0.25"/><rect x="152" y="50" width="7" height="35" rx="2" fill="currentColor" opacity="0.25"/><line x1="130" y1="30" x2="130" y2="75" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="130" cy="19" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="130" y1="55" x2="85" y2="58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="85" y1="58" x2="80" y2="64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><ellipse cx="136" cy="52" rx="9" ry="17" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><text x="158" y="52" font-size="9" fill="#D85A30" font-family="sans-serif">등 중부</text><text x="50" y="40" font-size="9" fill="currentColor" font-family="sans-serif" opacity="0.6">팔꿈치 옆구리로</text><line x1="80" y1="45" x2="86" y2="56" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.4"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>등 중부(능형근·중하 승모)</b> — 어깨뼈 두 개를 등 중앙으로 모으는 느낌이 정자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔이 아니라 <b>등으로 당겨</b> 당긴 끝에서 견갑 1~2초 수축.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체 <b>반동 금지</b>. 팔꿈치를 옆구리 방향으로(너무 벌리면 등 상부만).</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 머신 앞 벤치 착석, 발 패드에 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">핸들 잡고 팔 완전 신전 (등 스트레칭)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">상체 90도 직립 유지 (반동 금지)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">팔꿈치를 뒤-아래로 당기며 명치 높이로</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">견갑 모아 1~2초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">덤벨 바이셉스 컬</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">올릴 때 손목 <b>바깥으로 회외</b>하면 피크.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>팔꿈치 몸 옆 고정</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>상체 반동 금지</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 고정·전완 완전 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">전완 올리며 손목 회외</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 내리기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c2_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">컨센트레이션 컬</div><div class="ex-meta"><span class="tag t-s">3×12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 피크</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 105" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="80" y="80" width="50" height="8" rx="2" fill="currentColor" opacity="0.25"/><line x1="105" y1="35" x2="95" y2="80" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="108" cy="24" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="95" y1="80" x2="72" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="80" x2="118" y2="102" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="60" x2="74" y2="74" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="74" y1="74" x2="62" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="74" cy="74" r="5" stroke="#D85A30" stroke-width="2" fill="none"/><rect x="53" y="42" width="18" height="6" rx="3" fill="currentColor" opacity="0.5"/><ellipse cx="68" cy="61" rx="8" ry="14" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5" transform="rotate(-25,68,61)"/><text x="130" y="60" font-size="9" fill="#D85A30" font-family="sans-serif">이두근</text><text x="28" y="100" font-size="9" fill="#D85A30" font-family="sans-serif">팔꿈치 고정!</text><line x1="74" y1="68" x2="85" y2="78" stroke="#D85A30" stroke-width="1.5" stroke-dasharray="2,2"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>이두 단두(피크)</b> — 이두 안쪽이 솟는 부분. 완전 고립이라 수축이 선명해야.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">올리며 새끼손가락 쪽으로 <b>살짝 외회전</b> → 정점 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치가 허벅지에서 떨어지거나 상체를 들썩이면 고립이 풀림 — <b>무게보다 팔꿈치 고정 우선</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">벤치 끝에 걸터앉아 다리 약간 벌리기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">한쪽 팔꿈치를 같은쪽 허벅지 안쪽에 압박 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">덤벨 완전 신전 (팔 쭉 내리기)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 올리며 새끼손가락 방향 외회전</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">이두 완전 수축 정점 2초 유지</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">3초에 걸쳐 천천히 완전 신전 — 반대쪽 반복</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바벨 데드리프트</div><div class="ex-meta"><span class="tag t-s">4×5~8</span><span class="tag t-e">파워랙</span><span class="tag t-m">후면사슬 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발뒤꿈치로 땅을 민다는 느낌. 허리·등 전체 복합.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">바를 정강이에 붙여 당기기. <b>오버언더 그립: 언더 팔꿈치 완전 신전·세트마다 좌우 교대</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>락아웃 과신전 금지</b> — 둔근 스퀴즈+갈비뼈 다운으로 중립에서 끝. 어깨가 뒤로 넘어가면 초과. <b>75kg 정착 전 증량 금지</b>(80kg 기립근 통증 이력). 락아웃 중립은 옆모습 영상으로 수시 확인, 뻐근함 지속 시 무게 하향.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발 어깨너비·바 정강이 앞</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">힙 힌지로 그립·복압</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">발뒤꿈치 밀며 엉덩이·어깨 동시에</div></div><div class="fstep"><div class="snum">4</div><div class="stxt"><b>둔근 스퀴즈로 직립 — 뒤로 젖히지 않기</b></div></div><div class="fstep"><div class="snum">5</div><div class="stxt">천천히 내리기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">T-바 로우</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">T-바</span><span class="tag t-m">광배·능형근·중부 승모</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">배꼽 쪽으로 당기고 견갑 모으기 — <b>정점 1초</b>(두께).</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">45×10 3세트 @9 — RPE 8대로 안정되면 47.5.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 중립 유지. 상체 반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">힙힌지 45도·가슴 패드</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">배꼽 쪽으로 당김</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 견갑 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">신장 2초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">랫풀다운</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">케이블</span><span class="tag t-m">광배(너비)</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">팔꿈치를 <b>아래로 내린다</b>는 느낌으로 광배 시작. 신장 2~3초(너비).</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>휴식 3분 필수</b> — 지난 세션 RPE 8→10 급락은 휴식 부족이 원인. 47×10×3 회복이 이번 목표, 그다음 50.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">이두로 당기거나 과하게 눕지 않기.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">무릎 패드 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">가슴 살짝 들고 쇄골 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">팔꿈치 주도 하강</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">신장 2~3초 광배 스트레치</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-하이 로우</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">광배 상부·대원근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">위→아래 당김, 팔꿈치는 골반 쪽.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">61.8×10 @9 좋은 출발 — 8~10 정착 후 증량.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지, 가슴 패드 밀착.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 패드 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 골반 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">신장 2~3초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 시티드 로우</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">케이블</span><span class="tag t-m">중부 등·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">견갑을 모으며 <b>정점 1초</b> — 두께 마무리.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">32.5×12 정착 → 35×12 목표. 휴식 2분.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 반동으로 당기지 않기.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 펴고 앉기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">배꼽 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 신장</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c2_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바이셉스 컬 머신</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">팔꿈치 패드 고정, <b>MMC 집중</b> — 안드로이드 체형 상체 고립 핵심.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>25kg 유지</b> — RPE 10은 증량 신호 아님. 휴식 2분 확보 후 12회 3세트 @9 이하로 재평가.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">손목 꺾임·반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 패드 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">정점 1초 수축</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">신장 2초 천천히</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 광배 오버헤드 스트레칭·흉추 회전 각 30초.</div>
 </div>
 <div class="day-panel dp3">
-<div class="day-header"><span class="hbadge" style="background:#3B6D11">Day 3 — Legs</span><div class="hinfo">하체 전체 · 복합 2~3분 / 고립 60~90초 <span style="color:#3B6D11;font-weight:700"> | 1주차: 스쿼트 50kg×8 목표</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>고관절 회전</b> — 무릎으로 원 그리기 10회 × 양쪽</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>레그 스윙</b> — 벽 잡고 앞뒤·옆 각 15회</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>고블릿 스쿼트</b> — 가볍게 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>햄스트링 스트레칭</b> — 30초 × 양쪽</div></div></div></details>
-<div class="done-banner"><div class="di">🎉</div><div class="dt">Day 3 완료!</div><div class="ds">하체 완료 💪 충분한 단백질 섭취 잊지 마세요.</div></div>
+<div class="day-header"><span class="hbadge" style="background:#3B6D11">Day 3 — Legs A</span><div class="hinfo">하체 전체 · 복합 3분 / 고립 2분 / 펌프성 90초 · 운동 후 탄수 보충 OK <span style="color:#3B6D11;font-weight:700"> | V스쿼트 152.5 도전 · 레그컬 34</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>고관절 오프너</b> — 90/90·월드 그레이티스트 각 8회</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>레그프레스 램프</b> — 60×12 → 100×8 → 140×5</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>둔근 활성</b> — 밴드 사이드워크 15보 × 2</div></div></div></details>
+<div class="done-banner"><div class="di">🦵</div><div class="dt">Day 3 완료!</div><div class="ds">Legs A 완주! 인슐린 민감도 상승 구간 — 식사에서 밥 증량 OK. 23:00 카제인에 견과류 한 줌.</div></div>
 <div class="ex-list">
-<div class="ex-wrap"><input type="checkbox" id="c3_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">V스쿼트 머신</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">BootyBuilder V-Squat</span><span class="tag t-m">대퇴사두·둔근·햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>대퇴사두 70%+둔근·햄 30%</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>가슴 앞으로 내밀며</b> 허리 중립.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>니인(무릎 안쪽 무너짐) 절대 금지</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">바벨 승모 위 안정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발 어깨너비·발끝 바깥</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 흡기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">엉덩이 뒤로 빼며 하강</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">허벅지 평행 이하까지</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">지면 밀며 일어서기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">루마니안 데드리프트</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">WATSON</span><span class="tag t-m">햄스트링·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="130" y1="55" x2="130" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="140" y1="55" x2="142" y2="96" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><ellipse cx="134" cy="75" rx="9" ry="20" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5"/><line x1="25" y1="48" x2="130" y2="56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="16" cy="44" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="65" y1="51" x2="68" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="78" y1="52" x2="80" y2="94" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="58" y="92" width="30" height="4" rx="2" fill="currentColor" opacity="0.6"/><circle cx="58" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><circle cx="88" cy="94" r="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/><path d="M155,38 Q168,25 172,45" stroke="#D85A30" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/><text x="155" y="22" font-size="9" fill="#D85A30" font-family="sans-serif">힙 힌지</text><text x="148" y="78" font-size="9" fill="#D85A30" font-family="sans-serif">햄스트링</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text><text x="175" y="98" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">무릎 살짝 굽힘</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">햄스트링이 <b>길게 늘어나는 느낌</b>이 핵심. 무릎을 굽히는 게 아니라 엉덩이를 뒤로 빼는 <b>힙 힌지</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">바를 허벅지에 스치듯 내리고, <b>뒤꿈치로 땅을 밀며</b> 둔근으로 일어서기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎은 살짝만(많이 굽으면 스쿼트). <b>허리가 굽으면 즉시 중단</b> — 골반 중립.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨너비 스탠스, 발끝 정면</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 가슴 펴기 (등 일직선)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 뒤로 밀며 상체 45~90도 숙이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">허벅지 뒤 당김 느끼며 2~3초 버티기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">둔근·햄스트링 수축하며 천천히 직립</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">직립 시 엉덩이를 앞으로 밀며 마무리</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">시티드 레그프레스</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">Arsenal / Matrix</span><span class="tag t-m">대퇴사두·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발 위치로 자극 조절. <b>발 높이→햄·둔근</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">무릎 <b>완전히 펴지 말고</b> 약간 남기기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>허리가 벤치에서 뜨면 중단</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발판에 발 어깨너비</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">무릎 90도 이하로 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">허리 벤치 유지하며 밀기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">완전신전 직전 멈춤</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그컬 (머신)</div><div class="ex-meta"><span class="tag t-s">3×8~12</span><span class="tag t-e">CYBEX / Matrix</span><span class="tag t-m">햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">허벅지 뒤쪽이 <b>쥐어짜이는</b> 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">엉덩이 <b>들리지 않게</b> 고정.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동으로 차는 동작 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">복부 벤치에 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">햄스트링으로 당기기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">최대 수축 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_7" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_7" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그 익스텐션</div><div class="ex-meta"><span class="tag t-s">4×10~12</span><span class="tag t-e">레그 익스텐션 머신</span><span class="tag t-m">대퇴사두 완전 고립</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>대퇴사두근 완전 고립</b>. 정점에서 허벅지 앞이 단단히 수축하는 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">발끝을 정강이 쪽으로 당긴 채 올리면 수축이 강해집니다. <b>정점 1~2초 유지</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎 완전 잠금(과신전) 금지. <b>내릴 때 천천히</b>(2~3초) 신장성 수축.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">등받이·좌석 위치 조정 (무릎이 패드 축과 일치)</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발끝 정강이 방향, 복압 잡기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">천천히 올리며 정점 1~2초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2~3초 천천히 내리기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙 어브덕션 (머신)</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">Arsenal / Matrix</span><span class="tag t-m">둔근 중간부·외전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><rect x="25" y="28" width="170" height="65" rx="5" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.25"/><rect x="85" y="68" width="50" height="7" rx="2" fill="currentColor" opacity="0.25"/><line x1="110" y1="32" x2="110" y2="68" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><circle cx="110" cy="22" r="10" stroke="currentColor" stroke-width="2" fill="none"/><line x1="110" y1="50" x2="82" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="110" y1="50" x2="138" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="103" y1="68" x2="55" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="117" y1="68" x2="165" y2="92" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="73" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><ellipse cx="147" cy="74" rx="11" ry="9" fill="#D85A30" fill-opacity="0.3" stroke="#D85A30" stroke-width="1.5"/><line x1="55" y1="85" x2="38" y2="92" stroke="#D85A30" stroke-width="1.5"/><line x1="165" y1="85" x2="182" y2="92" stroke="#D85A30" stroke-width="1.5"/><text x="62" y="99" font-size="9" fill="#D85A30" font-family="sans-serif">둔근 중간부</text><text x="5" y="10" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">정면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>중둔근(엉덩이 옆)</b> — 약하면 스쿼트·데드 때 무릎이 안으로 무너짐. 넓은 골반 체형에 특히 중요.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">발끝을 살짝 안쪽으로, <b>2초에 걸쳐 천천히</b> 벌리며 옆 엉덩이 수축.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체가 기울면 허리가 대신 일함 — <b>몸통 수직 고정</b>. 무거우면 반동 생기니 가볍게.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">머신에 앉아 등 등받이에 완전 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발끝 살짝 안쪽, 무릎 살짝 구부림</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 골반 고정 (상체 흔들림 없이)</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초에 걸쳐 다리 천천히 벌리기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">최대 외전 지점에서 1초 수축</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">2초에 걸쳐 천천히 원위치</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c3_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">사이드 플랭크</div><div class="ex-meta"><span class="tag t-s">3×45초 (각)</span><span class="tag t-e">맨몸</span><span class="tag t-m">복사근·코어</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="ex-diagram"><svg viewBox="0 0 220 100" style="width:100%;height:85px;display:block;margin-bottom:8px"><line x1="10" y1="95" x2="210" y2="95" stroke="currentColor" stroke-width="1" opacity="0.2"/><line x1="30" y1="95" x2="52" y2="70" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="52" y1="70" x2="160" y2="46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><line x1="160" y1="46" x2="188" y2="95" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><line x1="95" y1="62" x2="95" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="43" cy="59" r="10" stroke="currentColor" stroke-width="2" fill="none"/><ellipse cx="108" cy="57" rx="28" ry="10" fill="#D85A30" fill-opacity="0.25" stroke="#D85A30" stroke-width="1.5" transform="rotate(-12,108,57)"/><line x1="40" y1="50" x2="28" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><text x="90" y="35" font-size="9" fill="#D85A30" font-family="sans-serif">복사근</text><text x="155" y="35" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.5">몸 일직선</text><line x1="52" y1="45" x2="162" y2="38" stroke="currentColor" stroke-width="1" stroke-dasharray="3,2" opacity="0.3"/><text x="5" y="12" font-size="8" fill="currentColor" font-family="sans-serif" opacity="0.45">측면</text></svg></div><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>복사근(옆구리)</b>·코어 측면 안정. 복부지방률 개선에 기여하는 코어 종목.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치는 어깨 바로 아래. 처음엔 30초→매주 5초씩(무릎 굽힌 변형으로 시작 가능).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>발→어깨 일직선</b> 유지 — 엉덩이가 처지면 허리 부담. 목은 정면.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">한쪽 팔꿈치를 어깨 바로 아래에 지지</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발을 겹치거나 앞뒤로 놓기 (편한 쪽)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">엉덩이를 들어올려 몸 일직선 만들기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">위쪽 손은 허리에 or 하늘을 향해</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">45초(목표) 버티기 — 처음엔 30초도 OK</div></div><div class="fstep"><div class="snum">6</div><div class="stxt">반대쪽도 동일하게 수행</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">시티드 레그프레스</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">플레이트 로드</span><span class="tag t-m">대퇴사두·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발판 <b>중상단·어깨너비</b> = 둔근·햄 개입↑ (안드로이드 체형 하체 우선순위).</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">무릎 90도 이상 깊게, 잠금 직전 멈춤. 하체 날 후 탄수 보충 OK.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리·골반이 시트에서 뜨면 ROM 줄이기.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발판 중상단·어깨너비</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">무릎 90도 이상 깊게</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">허리 시트 유지하며 밀기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">잠금 직전 멈춤</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">V스쿼트 머신</div><div class="ex-meta"><span class="tag t-s">4×6~8</span><span class="tag t-e">V-Squat</span><span class="tag t-m">대퇴사두·둔근·햄</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">글루트·햄 강조 스탠스 — 허리 부담 낮은 스쿼트 대체.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">150×8 @9 확인 — <b>이번 주 152.5 도전</b>. 실패해도 150 정착이면 성공.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎이 발끝 방향 유지. 상체 과도 숙임 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨 패드·발 위치 세팅</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">둔근으로 밀어올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">잠금 직전 멈춤</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그 익스텐션</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">대퇴사두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">정점 1초 <b>쥐어짜기</b> — 사두 고립.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">68×10 @9.5 — <b>68 정착</b>(3세트 10회) 후 72. 휴식 2분.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동으로 차올리지 않기.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">등받이: 무릎이 축과 일치</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">정점 1초 수축</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">2초 하강</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그컬 (머신)</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>발끝 몸쪽(도르시플렉션)</b> 유지 — 햄 고립 핵심 큐.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">32×10 @8.5 — 이번 주 <b>34 증량</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">엉덩이 들리면 무게 과함.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발목 도르시플렉션</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">골반 패드 밀착</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">신장 2초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c3_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙 어브덕션 (머신)</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">머신</span><span class="tag t-m">중둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">골반 안정·힙 라인 — 정점 1초.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">96×15 상단 도달 — 다음 핀(100.5 부근)으로 증량.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">상체 반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트 깊게 앉기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">천천히 벌리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 복귀</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 대퇴사두·햄스트링·둔근 각 30초. 폼롤러 IT밴드 권장.</div>
 </div>
 <div class="day-panel dp4">
-<div class="day-header"><span class="hbadge" style="background:#BA7517">Day 4 — Push+</span><div class="hinfo">어깨·팔 · 복합 2분 / 고립 60~90초 <span style="color:#BA7517;font-weight:700"> | 1주차: 벤치·OHP 50/20kg×8 목표</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 외회전</b> — 팔꿈치 90도 고정 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>덤벨 숄더 워밍업</b> — 가볍게 15회 × 1세트</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>팔꿈치 원 그리기</b> — 앞·뒤 각 10회</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>가슴 스트레칭</b> — 문틀 잡고 30초 × 2</div></div></div></details>
-<div class="done-banner"><div class="di">🎉</div><div class="dt">Day 4 완료!</div><div class="ds">어깨·팔 집중 완료 💪 내일은 Pull+!</div></div>
+<div class="day-header"><span class="hbadge" style="background:#BA7517">Day 4 — Push B</span><div class="hinfo">가슴·어깨(측/후면)·삼두 · 복합 3분 / 고립 2분 / 펌프성 90초 <span style="color:#BA7517;font-weight:700"> | RPE 8~9 상한 — 볼륨 동결 주간 · 페이스풀 ⭐</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 외회전</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>페이스풀 경량</b> — 15회 × 1 (후면 활성)</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>첫 종목 램프업</b> — 50%×10 → 75%×5</div></div></div></details>
+<div class="done-banner"><div class="di">🔥</div><div class="dt">Day 4 완료!</div><div class="ds">Push B 완주! 주간 프레스 볼륨 확보. 내일 Pull B — 풀업 데이.</div></div>
 <div class="ex-list">
-<div class="ex-wrap"><input type="checkbox" id="c4_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">덤벨 숄더프레스</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">전면·측면삼각·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>독립 움직임</b>으로 좌우 균형 교정.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">정점에서 <b>덤벨 약간 모아</b> 수축.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">과도한 무게로 허리 젖히기 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">덤벨 귀 옆·팔꿈치 90도</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 위로 밀기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 덤벨 모아 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 귀 옆으로</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c4_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 래터럴 레이즈</div><div class="ex-meta"><span class="tag t-s">4×12~15</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">측면삼각근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">Day1보다 1세트 추가. <b>케이블 일정 장력</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">몸 반대편 케이블 → <b>더 긴 가동범위</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 높이 이상 → 승모 개입.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 낮은 위치 세팅</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 먼저 옆으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">어깨 높이 1초 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 하강</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c4_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">페이스풀 (케이블) ⭐필수</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">후면삼각·회전근개</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>후면삼각과 회전근개</b>. 부상 예방 핵심.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">로프를 <b>귀 옆으로</b> 당기며 팔꿈치 높게.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">빼면 절대 안 됨. <b>가볍게 고반복</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 높은 위치</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 어깨 높이로 들기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">로프를 귀 양쪽으로</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">외회전 느끼며 1초 수축</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c4_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">덤벨 플라이 / 펙덱</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">Arsenal Strength</span><span class="tag t-m">대흉근 고립</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">가슴 <b>신장성 수축 극대화</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치 <b>약간 구부린 상태</b>. 포옹하듯.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">너무 무거우면 어깨 관절 충돌.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">양팔 넓히기·가슴 스트레칭</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">가슴 안쪽으로 모으며 수축</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 넓히기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c4_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">벤치 딥스</div><div class="ex-meta"><span class="tag t-s">3×15</span><span class="tag t-e">WATSON 벤치</span><span class="tag t-m">삼두 하부 가슴</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">체중으로 삼두 <b>마무리 고립</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">다리 <b>멀리 뻗을수록</b> 강도 증가.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 통증 즉시 중단.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">손을 벤치 끝에 짚기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">엉덩이 내리며 팔꿈치 90도</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">삼두로 밀어올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c4_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 트라이셉스 푸시다운</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">삼두 외측두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">완전 신전 시 <b>삼두 외측두 최대 수축</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>팔꿈치 위치 고정</b>이 핵심.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 앞으로 나오면 자극 소실.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 몸 옆 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">전완만 아래로 밀기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">완전 신전 시 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 원위치</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-호라이즌털 벤치프레스</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">대흉근 중부·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">B세션은 <b>A 대비 -10% 중량·반복 상단</b> — 같은 종목, 다른 자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">66.4~70×8~10 @8 권장. 주 2회 빈도로 기술 누적.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">금요일 피로 누적 주의 — RPE 9 초과 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트 세팅 동일</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">2~3초 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">가슴 모으며 밀기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">머신 숄더 프레스</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">머신</span><span class="tag t-m">전면·측면삼각</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">주 2회 어깨 프레스 — 프레임 보정.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">25~27.5 반복 상단 채우기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 젖힘 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">손잡이 귀 높이</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압·등 밀착</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 직전 멈춤</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">펙덱 플라이</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">대흉근(스트레치)</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">가슴이 <b>늘어나는 지점</b>까지 열고 모아서 1초.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">40×12 첫 세트 후 급락 — 36~38로 낮춰 3세트 균일하게.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 말림 금지 — 견갑 고정.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 살짝 굽힘 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">천천히 열기(스트레치)</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">모아서 1초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">업라이트 로우</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">바벨/케이블</span><span class="tag t-m">측면삼각·승모 상부</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">와이드 그립, <b>팔꿈치가 손보다 높게</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">25×12~15 @8.5 — 15회 3세트 후 27.5.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">명치 높이까지만 — 어깨 충돌 방지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">와이드 그립</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 주도 상승</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">명치 높이 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 하강</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">페이스풀 (케이블) ⭐필수</div><div class="ex-meta"><span class="tag t-s">3×15~20</span><span class="tag t-e">케이블</span><span class="tag t-m">후면삼각·외회전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>어깨 건강 보험</b> — 얼굴 쪽으로 당기며 외회전. 프레스 볼륨의 균형추.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">가볍게 15~20회. 매 Push B 고정 — 최근 누락 주의(마지막 7/2).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무게 욕심 금지 — 폼이 전부.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">로프 얼굴 높이</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">얼굴 쪽으로 당기며 외회전</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초 견갑 후인</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">딥스 머신</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">머신</span><span class="tag t-m">삼두·하부 가슴</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">직립 — 삼두 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">A세션과 동일 진행 공유(52.5~55).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 통증 즉시 중단.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">직립 자세</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">90도 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">삼두로 밀기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c4_7" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c4_7" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">트라이셉스 익스텐션 머신</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">삼두(장두)</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">팔꿈치 고정 신장·수축.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">17.5~20 균일 3세트.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 벌어짐 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">신장 2초</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 어깨 크로스바디·후면삼각 스트레칭 각 30초.</div>
 </div>
 <div class="day-panel dp5">
-<div class="day-header"><span class="hbadge" style="background:#0C447C">Day 5 — Pull+</span><div class="hinfo">등·이두·전완 · 복합 2분 / 고립 60~90초 <span style="color:#0C447C;font-weight:700"> | 1주차: 풀업 어시스트 +65kg 도전</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행 30초</b> — 광배 신장 + 악력 준비</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>가벼운 랫풀다운</b> — 50% 12회 × 1세트</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>손목 회전 스트레칭</b> — 전완 부상 예방 20회</div></div></div></details>
-<div class="done-banner"><div class="di">🎉</div><div class="dt">Day 5 완료!</div><div class="ds">등·팔 집중 완료 💪 내일은 Legs+ 마지막!</div></div>
+<div class="day-header"><span class="hbadge" style="background:#0C447C">Day 5 — Pull B</span><div class="hinfo">등 너비·후면 · 복합 3분 / 고립 2분 / 펌프성 90초 · 신장 2~3초 강조 <span style="color:#0C447C;font-weight:700"> | 풀업 정착 · 페이스풀 ⭐</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>어시스트 풀업 램프</b> — 강한 어시스트로 8회 × 1</div></div></div></details>
+<div class="done-banner"><div class="di">🎯</div><div class="dt">Day 5 완료!</div><div class="ds">Pull B 완주! 주간 등 볼륨 완성. 내일 Legs B — 둔근·햄 집중.</div></div>
 <div class="ex-list">
-<div class="ex-wrap"><input type="checkbox" id="c5_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">풀업 (체중)</div><div class="ex-meta"><span class="tag t-s">4×최대</span><span class="tag t-e">WATSON / Arsenal 철봉</span><span class="tag t-m">광배·이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">광배 <b>너비+두께</b> 동시.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>가슴을 바에 가져간다</b>는 느낌.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 없이 <b>컨트롤 위주</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨 약간 넓게 그립</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">광배 활성화하며 매달리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">가슴을 바 방향으로 당기기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c5_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">원암 덤벨 로우</div><div class="ex-meta"><span class="tag t-s">3×10 (각)</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">광배·이두·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">한 쪽씩 집중해서 <b>광배 수축감</b> 극대화.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>등으로 당긴다</b>는 느낌.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 회전 최소화. <b>골반 고정</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">한 손·무릎을 벤치에 짚기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">덤벨 완전 신전</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">팔꿈치 위로 당겨 올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">광배 수축 1초·천천히 내리기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c5_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">인클라인 덤벨 컬</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">WATSON</span><span class="tag t-m">이두 완전 신장</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">이두 <b>완전 신장 상태</b>에서 수축.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">상체 완전히 기대고 <b>팔꿈치 고정</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지. <b>매우 천천히</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">인클라인 벤치 45~60도</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">등 기대고 팔 자연스럽게</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">팔꿈치 고정하며 천천히 올리기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">정점 1초·천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c5_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">해머 컬</div><div class="ex-meta"><span class="tag t-s">2×12</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">이두 장두·전완</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>이두 장두</b>와 전완 굴근 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>중립 그립 그대로</b> 올리기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>팔꿈치 고정</b> 동일.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">중립 그립으로 팔 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 고정하며 올리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c5_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 바이셉스 컬</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">이두 전체·일정 장력</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">케이블 <b>일정 장력</b>으로 전가동범위 내내 이두 자극. 덤벨보다 정점 수축이 강함.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치 몸 옆 고정. <b>정점 1초 수축</b>이 핵심.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 앞으로 나오면 자극 분산. <b>팔꿈치 고정</b> 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 낮게 설정·언더그립</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 몸 옆 고정</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">전완 올리며 정점 1초 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2초 천천히 완전 신전</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c5_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">데드행</div><div class="ex-meta"><span class="tag t-s">3×30~45초</span><span class="tag t-e">철봉</span><span class="tag t-m">전완·악력·광배</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">전완과 <b>악력 강화</b>. 척추 감압.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>어깨 내리며</b> 광배 활성화.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">그립 미끄러지면 즉시 내려옴.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">철봉을 어깨너비로 잡기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발이 바닥에서 떨어지도록</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">어깨 내리며 광배 활성화</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">30~45초 버티기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">풀업 (체중/어시스트)</div><div class="ex-meta"><span class="tag t-s">4×6~10</span><span class="tag t-e">풀업 바</span><span class="tag t-m">광배(너비)·상완</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">가슴을 바 쪽으로 — 팔꿈치를 골반으로 내리는 느낌.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">현 체중에선 어시스트로 6~10회 풀 ROM 확보가 정답 — 감량 진행 자체가 풀업 프로그레션. 어시스트 무게를 줄여가는 게 증량.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">키핑(반동) 금지 — 컨트롤 하강 2~3초.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">견갑 하강으로 시작</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">가슴 바 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2~3초 하강</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">머신 로우 (체스트 서포티드)</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">머신</span><span class="tag t-m">중부 등·능형근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">가슴 패드 지지 — 허리 부담 없이 등 두께.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">42.5×8 @8.5 — 10회 채우면 45.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 패드 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">배꼽 쪽 당김</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">신장 2초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-프론트 풀다운</div><div class="ex-meta"><span class="tag t-s">3×8~10</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">광배</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">수직 당김 보조 — 랫풀다운과 각도 차이로 보완.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">31.5×8에서 재개 — 8~10 정착 후 증량.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">가슴 패드 밀착·반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">패드 밀착</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">팔꿈치 아래로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">신장 2~3초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 시티드 로우</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">케이블</span><span class="tag t-m">중부 등</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">정점 1초 두께 마무리.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">A세션과 진행 공유(32.5~35).</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">가슴 펴고</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">배꼽 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">페이스풀 (케이블) ⭐필수</div><div class="ex-meta"><span class="tag t-s">3×15~20</span><span class="tag t-e">케이블</span><span class="tag t-m">후면삼각·외회전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">자세 교정·어깨 균형 — 주 2회 고정.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">15~20회 가볍게, 폼 우선.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무게 욕심 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">로프 얼굴 높이</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">당기며 외회전</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c5_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바이셉스 컬 머신</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">이두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">MMC 집중 — 정점 1초·신장 2초.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">팔꿈치 고정·정점 1초 수축, 휴식 2분 확보 후 수행 재평가. 증량은 🎯 자동 목표 기준.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치 패드 고정</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">신장 2초</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 광배·이두·전완 스트레칭. 충분한 수면.</div>
 </div>
 <div class="day-panel dp6">
-<div class="day-header"><span class="hbadge" style="background:#27500A">Day 6 — Legs+</span><div class="hinfo">하체+코어 · 복합 2분 / 고립·코어 45~60초 <span style="color:#27500A;font-weight:700"> | 1주차: 스쿼트 50kg×8 목표</span></div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>고관절 굴근 스트레칭</b> — 런지 자세 30초 × 양쪽</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>글루트 브릿지</b> — 맨몸 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 사이드워크</b> — 좌우 각 10걸음 × 2세트</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>불가리안 스쿼트 맨몸</b> — 10회 × 1세트</div></div></div></details>
-<div class="done-banner"><div class="di">🏆</div><div class="dt">Day 6 완료!</div><div class="ds">6일 모두 완주했습니다! 🎉 내일 일요일은 완전 휴식.</div></div>
+<div class="day-header"><span class="hbadge" style="background:#27500A">Day 6 — Legs B</span><div class="hinfo">둔근·햄 후면 집중 · 복합 3분 / 고립 2분 / 펌프성 90초 <span style="color:#27500A;font-weight:700"> | 복부지방 대응 — 후면사슬·대근육 EPOC 극대화</span></div></div>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>고관절 오프너</b> — 90/90 각 8회</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>둔근 활성</b> — 밴드 사이드워크·글루트 브릿지 15회 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>V스쿼트 램프</b> — 60×10 → 100×6</div></div></div></details>
+<div class="done-banner"><div class="di">🏆</div><div class="dt">Day 6 완료!</div><div class="ds">6일 완주! 🎉 내일 일요일 완전 휴식 + 20:00 인바디(식후 2~3h·같은 복장·측정 전 땀 흘리는 활동 금지).</div></div>
 <div class="ex-list">
-<div class="ex-wrap"><input type="checkbox" id="c6_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">불가리안 스플릿 스쿼트</div><div class="ex-meta"><span class="tag t-s">4×8~10 (각)</span><span class="tag t-e">WATSON 덤벨·벤치</span><span class="tag t-m">대퇴사두·둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>좌우 불균형 교정</b>에 가장 효과적.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">앞발 충분히. <b>무릎 발끝 안 넘도록</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">처음엔 체중만으로. <b>균형 잡기</b> 먼저.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">뒷발을 벤치 위에 올리기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">앞발은 충분히 앞으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">상체 직립하며 천천히 하강</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">앞 무릎 90도 1초</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">앞 발로 밀며 일어서기</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c6_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙쓰러스트</div><div class="ex-meta"><span class="tag t-s">4×12~15</span><span class="tag t-e">BootyBuilder</span><span class="tag t-m">둔근 집중</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">둔근 <b>최대 수축</b>. 정점에서 쥐어짜기.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">발뒤꿈치로 <b>지면을 밀어내는</b> 느낌. 정점 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 과신전 금지. <b>골반 후방경사</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">어깨를 벤치에 기대기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">발은 무릎 바로 아래</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 엉덩이 들기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">정점 엉덩이 쥐어짜기 2초</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">천천히 하강</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c6_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">워킹 런지</div><div class="ex-meta"><span class="tag t-s">3×12 (각)</span><span class="tag t-e">WATSON 덤벨</span><span class="tag t-m">대퇴사두·둔근·햄</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>동적 균형과 하체 전체</b> 자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>상체 직립</b> 유지.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎이 안쪽으로 무너지지 않도록.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">덤벨 양손에 들고 서기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">한 발 크게 앞으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">뒷 무릎 거의 바닥에 닿도록</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">앞발로 밀며 다음 발 앞으로</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c6_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그레이즈</div><div class="ex-meta"><span class="tag t-s">3×15</span><span class="tag t-e">맨몸 / 딥스 스테이션</span><span class="tag t-m">하복부·장요근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>하복부</b> 집중. 골반이 말리도록.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">내릴 때 <b>바닥에 닿지 않게</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 과도한 아치 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">벤치에 누워 다리 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 다리 90도까지</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">골반 말리며 복부 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">천천히 내리기·바닥 직전 정지</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c6_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">케이블 크런치</div><div class="ex-meta"><span class="tag t-s">3×15~20</span><span class="tag t-e">CYBEX / Lexco</span><span class="tag t-m">복직근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>상복부 복직근</b> 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">엉덩이 <b>고정한 상태</b>에서 상체만 말기.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 굽힘이 아닌 <b>복부로 마는 것</b>.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">케이블 로프 목 뒤로 잡기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">무릎 꿇기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복부 수축하며 상체 숙이기</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">팔꿈치 무릎 닿을 때 1초</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">천천히 원위치</div></div></div></details></div></details></div>
-<div class="ex-wrap"><input type="checkbox" id="c6_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">플랭크</div><div class="ex-meta"><span class="tag t-s">3×60초</span><span class="tag t-e">맨몸</span><span class="tag t-m">코어 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>복직근·복횡근·척추기립근</b> 동시.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>배꼽을 당기는 느낌</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">엉덩이 올라가거나 처지면 안 됨.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">팔꿈치·발끝으로 지지</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">몸 일직선 유지</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">복압 잡고 호흡 유지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">60초 버티기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">V스쿼트 머신</div><div class="ex-meta"><span class="tag t-s">4×8~10</span><span class="tag t-e">V-Squat</span><span class="tag t-m">둔근·햄·대퇴사두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">B세션: <b>발 반 보 앞</b>(글루트 스탠스) — 둔근·햄 강조.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">130~140×8~10 @8 — A세션(152.5 도전)과 자극 분리.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무릎 발끝 방향. 상체 과숙임 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발 반 보 앞 세팅</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">깊게 하강</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">둔근으로 밀기</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_2" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_2" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">시티드 레그프레스</div><div class="ex-meta"><span class="tag t-s">3×12~15</span><span class="tag t-e">플레이트 로드</span><span class="tag t-m">둔근·햄</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발판 <b>최상단</b> — 고반복 펌프로 후면 자극.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">140~160×12~15 @8. A세션과 무게 분리.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 뜨면 ROM 축소.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발판 최상단</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">고반복 리듬</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">잠금 금지</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_3" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_3" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그컬 (머신)</div><div class="ex-meta"><span class="tag t-s">4×10~12</span><span class="tag t-e">머신</span><span class="tag t-m">햄스트링</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">B세션 4세트 — 햄 볼륨 주간 보강. 도르시플렉션 유지.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">25~32 피라미드 — 마지막 세트만 @9.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">엉덩이 들림 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">도르시플렉션</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">신장 2초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_4" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_4" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Booty Builder 힙 쓰러스트</div><div class="ex-meta"><span class="tag t-s">3×10~12</span><span class="tag t-e">Booty Builder</span><span class="tag t-m">둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">정점 <b>둔근 스퀴즈 1~2초</b> — 데드 락아웃 교정 훈련도 겸함(둔근으로 힙 신전 마무리하는 패턴 각인).</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">시작 무게는 🎯 자동 목표(최근 기록 기준) 참조 — 패드 위치·시트 세팅은 📝 세팅 메모에 기록.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 신전으로 마무리 금지 — 갈비뼈 다운.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">견갑 벤치·턱 당김</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">골반 후방경사</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1~2초 스퀴즈</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_5" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_5" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">힙 어브덕션 (머신)</div><div class="ex-meta"><span class="tag t-s">3×15~20</span><span class="tag t-e">머신</span><span class="tag t-m">중둔근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">고반복 마무리 — 힙 라인.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">89~96×15~20.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">반동 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">깊게 앉기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">천천히 벌리기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
+<div class="ex-wrap"><input type="checkbox" id="c6_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c6_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">레그레이즈</div><div class="ex-meta"><span class="tag t-s">3×15</span><span class="tag t-e">맨몸</span><span class="tag t-m">하복부</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">골반이 <b>말리도록</b> — 하복부 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">내릴 때 바닥에 닿지 않게.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">허리 과아치 금지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">다리 신전</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">복압 잡고 90도</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">골반 말며 수축</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">바닥 직전 정지</div></div></div></details></div></details></div>
 </div>
-<div class="cooldown"><b>🧘 쿨다운:</b> 대퇴사두·둔근·햄·고관절 굴근 각 30초. 이번 주 수고하셨습니다!</div>
 </div>
 <div class="day-panel dp7">
 <div id="weekly-report"></div>
 <div class="rest-day">
 <div style="font-size:56px;margin-bottom:16px">😴</div>
 <div class="rest-title">일요일 — 완전 휴식</div>
-<div class="rest-desc">근육은 <b>휴식 중에 성장</b>합니다.<br><br>✔ 수분 2.5~3L<br>✔ 단백질 180g 이상<br>✔ 24:00 이전 취침 사수<br>✔ 가벼운 스트레칭<br><br><b>내일 월요일 Day 1 Push 💪</b></div>
+<div class="rest-desc">근육은 <b>휴식 중에 성장</b>합니다.<br><br>✔ 수분 2.5~3L<br>✔ 단백질 170~180g<br>✔ <b>20:00 인바디</b> — 식후 2~3h·같은 복장·직전 땀 활동 금지<br>✔ 24:00 이전 취침 사수<br>✔ 가벼운 스트레칭<br><br><b>내일 월요일 Day 1 Push 💪</b></div>
 </div>
 </div>
 </div>
@@ -997,6 +958,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 </div></details>
 <div class="plan-inbody-note" id="plan-inbody-note"></div>
+<div id="inbody-advice"></div>
 <div id="inbody-projection"></div>
 <button class="inbody-open-btn" onclick="InBody.openModal()">＋ 인바디 입력</button>
 
@@ -1112,6 +1074,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
     <span id="block-days-txt"></span>
     <span id="block-remain-txt"></span>
   </div>
+  <div class="plan-block-deload" id="block-deload-note" style="display:none"></div>
   <div class="plan-block-items">
     <div class="plan-block-item">📊 체성분 4주 추세 분석</div>
     <div class="plan-block-item">💪 핵심 6종목 증량 상태 검토</div>
@@ -1150,18 +1113,13 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 데이터 백업 -->
 <div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
 <div class="bk-card">
-<div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b> 운동·인바디 기록은 [☁️ 시트에서 불러오기]로 시트에서 직접 복원할 수도 있습니다.</div>
+<div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b></div>
 <textarea class="bk-ta" id="bk-ta" placeholder="[내보내기]를 누르면 여기에 백업 JSON이 채워집니다. 복원하려면 백업 JSON을 붙여넣고 [가져오기]를 누르세요." spellcheck="false"></textarea>
 <div class="bk-btns">
-<div class="bk-group-lbl">📱 로컬 JSON — 설정 포함 전체 스냅샷</div>
 <button class="bk-btn" onclick="Backup.exportData()">📤 내보내기</button>
 <button class="bk-btn ghost" onclick="Backup.copy()">📋 복사</button>
 <button class="bk-btn ghost" onclick="Backup.download()">💾 파일 저장</button>
 <button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
-<div class="bk-group-lbl">☁️ Google 시트 — 운동·인바디 원본</div>
-<button class="bk-btn ghost" onclick="ExLog.pullFromSheets()">📥 시트에서 복원</button>
-<button class="bk-btn ghost" onclick="ExLog.dedupeSheet()">🧹 중복 정리</button>
-<button class="bk-btn ghost" onclick="ExLog.fullResync()">⬆ 전체 재업로드</button>
 </div>
 <div class="bk-msg" id="bk-msg"></div>
 </div>
@@ -1182,6 +1140,9 @@ if(!window.storage||typeof window.storage.get!=='function'){
     list:async(prefix='')=>{const keys=Object.keys(localStorage).filter(k=>k.startsWith(prefix));return{keys};}
   };
 }
+// 영속 저장 요청: 승인되면 저장공간 부족 시 브라우저가 이 사이트 데이터를 자동 정리(eviction)하는 대상에서 제외된다.
+// PWA 설치 여부와 무관한 1회성 보험 — 미지원 브라우저는 조용히 무시.
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});}catch(_){}
 
 try{var m={1:'d1',2:'d2',3:'d3',4:'d4',5:'d5',6:'d6',0:'d7'};var el=document.getElementById(m[new Date().getDay()]);if(el)el.checked=true;}catch(e){}
 
@@ -1211,48 +1172,15 @@ const DAY_COLORS_EL={Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0
 const EL_DAY_EX={Push:["Hammer 벤치 (isolateral)","Watson 인클라인 (isolateral)","Watson 디클라인 (isolateral)","DB 오버헤드프레스","케이블 래터럴 레이즈","딥스 머신","오버헤드 트라이셉스 익스텐션","트라이셉스 익스텐션 머신"],Pull:["바벨 데드리프트","T-바 로우","Hammer ISO 언더 로우","바벨 벤트오버 로우","랫풀다운","스트레이트 암 풀다운","케이블 시티드 로우","덤벨 바이셉스 컬","컨센트레이션 컬"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","사이드 플랭크"],"Push+":["덤벨 숄더프레스","케이블 래터럴 레이즈","페이스풀 (케이블) ⭐필수","덤벨 플라이 / 펙덱","오버헤드 트라이셉스 익스텐션","케이블 트라이셉스 푸시다운","벤치 딥스"],"Pull+":["풀업 (체중)","원암 덤벨 로우","인클라인 덤벨 컬","해머 컬","케이블 바이셉스 컬","데드행"],"Legs+":["불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","레그레이즈","케이블 크런치","플랭크"]};
 const EL_WDAY={1:"Push",2:"Pull",3:"Legs",4:"Push+",5:"Pull+",6:"Legs+",0:"REST"};
 
-const WEEK_TARGETS={
-  'Hammer 벤치 (isolateral)':'각 33kg × 8 전세트 굳히기 → 35 (탑세트 33.2×8 달성)',
-  'Watson 인클라인 (isolateral)':'각 42.5kg × 6~8 ⬆ (40 전세트 달성)',
-  'Watson 디클라인 (isolateral)':'각 32kg × 6~8 굳히기 → 34 (32×8 달성)',
-  'DB 오버헤드프레스':'각 12kg × 8·8·8 (지난주 8·7·6)',
-  '케이블 래터럴 레이즈':'⚠️ 2주 연속 스킵 — OHP 직후 우선 수행',
-  '딥스 머신':'50kg × 8~10 전세트 굳히기 → 52.5 (50×10 달성)',
-  '오버헤드 트라이셉스 익스텐션':'기준 확인 중',
-  '트라이셉스 익스텐션 머신':'20kg × 10~12 ⬆ (15×10·6/18 20 달성)',
-  '바벨 데드리프트':'72.5kg × 8·8 — 기립근 회복 우선·오버언더 그립',
-  'T-바 로우':'25kg × 6~8 ⬆ (22.5 전세트 달성)',
-  'Hammer ISO 언더 로우':'각 22.5kg × 6~8 ⬆ (20 전세트 달성)',
-  '바벨 벤트오버 로우':'기준 확인 중 (T-바 로우와 택1)',
-  '랫풀다운':'42.5kg × 6~8 ⬆ (40 전세트 달성)',
-  '케이블 시티드 로우':'30kg × 8·8·8 (30×8 1세트 달성)',
-  '덤벨 바이셉스 컬':'25kg × 8·8 (25×8 달성)',
-  '컨센트레이션 컬':'기준 확인 중',
-  'V스쿼트 머신':'150kg × 6~8 ⬆ (130~150×8 달성·신규 기준)',
-  '시티드 레그프레스':'105kg × 10~12 ⬆ (100×10 달성)',
-  '레그컬 (머신)':'32.5kg × 8~12 (32×10 달성, 12회 채운 뒤 증량) — 발목 배측굴곡 유지',
-  '레그 익스텐션':'54kg × 10·10·10 굳히기 → 이후 56 (54×10 2세트 달성)',
-  '힙 어브덕션 (머신)':'96kg × 12~15 ⬆ (89×15·96×12 달성)',
+// ── 종목별 고정 주의 문구 ──
+// 이전의 WEEK_TARGETS(주간 목표 하드코딩 문자열)는 제거 — 목표는 suggestTarget()이 최근 기록 + 더블 프로그레션
+// 규칙(+RPE 보정)으로 자동 생성하므로 매주 소스를 수동 편집할 필요가 없다.
+// 여기에는 숫자와 무관해 낡지 않는 안전·수행 주의만 남기고, 자동 목표 문구 뒤에 덧붙인다.
+const TARGET_NOTES={
+  '바벨 데드리프트':'⚠️ 기립근 회복 우선 — 75kg 정착 전 증량 금지 · 오버언더 그립 좌우 교대',
+  '케이블 래터럴 레이즈':'OHP 직후 우선 수행 (스킵 잦은 종목)',
   '루마니안 데드리프트':'데드 다음날 — 가볍게 폼 우선',
-  '풀업 (체중)':'어시스트 +65kg × 8 (지난 +70kg)',
-  '스트레이트 암 풀다운':'12~15회 — 광배 집중, 팔꿈치 편 채 · 첫 세션 기준 잡기',
-  '덤벨 숄더프레스':'8~10회 — 삼각근 전면, 풀 ROM · 첫 세션 기준 잡기',
-  '페이스풀 (케이블) ⭐필수':'15~20회 — 후면삼각근·외회전, 가볍게 고반복 ⭐',
-  '덤벨 플라이 / 펙덱':'12~15회 — 가슴 신장 강조, 천천히 · 첫 세션 기준 잡기',
-  '케이블 트라이셉스 푸시다운':'12~15회 — 팔꿈치 고정 · 첫 세션 기준 잡기',
-  '벤치 딥스':'12~15회 — 체중, 가슴 말리지 않게',
-  '원암 덤벨 로우':'8~10회 — 광배, 팔꿈치 골반쪽으로 · 첫 세션 기준 잡기',
-  '인클라인 덤벨 컬':'10~12회 — 이두 신장 위치 강조 · 첫 세션 기준 잡기',
-  '해머 컬':'10~12회 — 상완근·전완 · 첫 세션 기준 잡기',
-  '케이블 바이셉스 컬':'12~15회 — 지속 장력 · 첫 세션 기준 잡기',
-  '데드행':'최대 시간 — 악력·척추 감압, 시간 늘리기',
-  '불가리안 스플릿 스쿼트':'각 10~12회 — 균형·단일다리 · 첫 세션 기준 잡기',
-  '힙쓰러스트':'10~12회 — 정점 1초 수축, 둔근 · 첫 세션 기준 잡기',
-  '워킹 런지':'각 12걸음 — 보폭 길게 · 첫 세션 기준 잡기',
-  '레그레이즈':'12~15회 — 하복부, 반동 없이',
-  '케이블 크런치':'12~15회 — 복직근 수축 · 첫 세션 기준 잡기',
-  '플랭크':'최대 시간 — 코어, 시간 늘리기',
-  '사이드 플랭크':'각 45초+ — 측면 코어, 시간 늘리기',
+  '레그컬 (머신)':'발목 배측굴곡(발끝 정강이 쪽) 유지 — 비복근 개입 차단',
 };
 const EX_CUES={
   'Hammer 벤치 (isolateral)':{t:'대흉근(중앙·하부), 삼두 보조',c:'견갑 후인·하강 고정, 가슴 내밀기. 가슴 중앙 높이로 밀고 정점에서 대흉근 쥐어짜기.',w:'팔꿈치 과도하게 벌리지 않기(45~60도). 어깨 앞 통증 시 손잡이 각도 조정.'},
@@ -1263,8 +1191,18 @@ const EX_CUES={
   '딥스 머신':{t:'대흉근 하부, 삼두',c:'가슴 타깃이면 상체 앞으로·팔꿈치 벌림, 삼두 타깃이면 상체 수직.',w:'어깨가 귀로 올라가지 않게, 과하게 깊이 내리지 않기.'},
   '오버헤드 트라이셉스 익스텐션':{t:'삼두(장두)',c:'팔꿈치 머리 옆에 고정, 신장 위치에서 장두 늘림 강조, 천천히.',w:'팔꿈치 벌어지면 효과 감소·관절 부담.'},
   '트라이셉스 익스텐션 머신':{t:'삼두',c:'팔꿈치 패드에 고정, 완전 신전 후 살짝 굽혀 장력 유지.',w:'반동 금지.'},
-  '바벨 데드리프트':{t:'척추기립근, 둔근, 햄스트링, 광배',c:'오버언더 그립(우세손 오버, 매 세트 교대). 바 정강이 가까이·가슴 펴고 등 중립. 1초 정점 수축(두께) + 2~3초 천천히 내리기(너비).',w:'★비우세팔 팔꿈치 항상 편 채(이두 파열 방지). 둔한 뻐근=정상, 날카로운 통증=즉시 중단. 75kg 안정 후 진행.'},
+  '바벨 데드리프트':{t:'척추기립근, 둔근, 햄스트링, 광배',c:'오버언더 그립(우세손 오버, 매 세트 교대). 바 정강이 가까이·가슴 펴고 등 중립. 1초 정점 수축(두께) + 2~3초 천천히 내리기(너비).',w:'라운딩·락아웃 과신전 금지 — 둔근 스퀴즈+갈비뼈 다운으로 중립 마무리. 75kg 정착 전 증량 금지(80kg 기립근 통증 이력). 오버언더 그립 시 언더 팔꿈치 완전 신전·좌우 교대.'},
   'T-바 로우':{t:'광배, 능형근, 중부 승모',c:'힙힌지 상체 45도, 배꼽 쪽으로 당기고 견갑 모으기, 정점 1초.',w:'허리 둥글지 않게 중립 유지.'},
+  'Hammer ISO-호라이즌털 벤치프레스':{t:'대흉근 중부, 삼두',c:'견갑 모아 고정, 밀 때 가슴 중앙을 모은다. isolateral — 약한 쪽 기준으로 좌우 동일 중량.',w:'팔꿈치 45~75도 유지. 어깨 앞 통증 시 시트 높이 조정.'},
+  'Hammer ISO-인클라인 프레스':{t:'대흉근 상부, 전면삼각',c:'가슴 위쪽이 늘었다 조이는 느낌, 손잡이 쇄골 라인 높이.',w:'허리 과아치 금지 — 엉덩이 시트 밀착.'},
+  '머신 숄더 프레스':{t:'전면·측면삼각, 삼두',c:'팔꿈치 살짝 앞(스캡션 각), 정점 완전신전 직전 멈춤.',w:'허리 젖혀 밀기 금지 — 등 전체 시트 밀착.'},
+  'Nautilus 래터럴 레이즈 머신':{t:'측면삼각',c:'팔꿈치로 옆을 민다는 느낌, 정점 1초. 12~15 고반복 펌프.',w:'승모 으쓱 금지 — 어깨 끌어내린 상태 유지.'},
+  '펙덱 플라이':{t:'대흉근(스트레치 강조)',c:'가슴이 늘어나는 지점까지 열고, 모아서 1초 수축.',w:'어깨가 앞으로 말리지 않게 견갑 고정.'},
+  '업라이트 로우':{t:'측면삼각, 승모 상부',c:'와이드 그립, 팔꿈치가 손보다 높게, 명치 높이까지만.',w:'좁은 그립·과도한 높이 = 어깨 충돌 위험.'},
+  'Hammer ISO-하이 로우':{t:'광배 상부, 대원근',c:'위→아래로 당기며 팔꿈치는 골반 쪽. 신장 2~3초(너비 발달).',w:'반동 금지, 가슴 패드 밀착 유지.'},
+  '바이셉스 컬 머신':{t:'이두',c:'팔꿈치 패드 고정, 정점 1초·신장 2초. MMC 집중(상체 고립 핵심 포인트).',w:'RPE 10 = 증량 신호 아님. 휴식 2분 확보가 먼저.'},
+  '45도 레그프레스':{t:'대퇴사두, 둔근',c:'발판 중상단·어깨너비 = 둔근·햄 개입↑. 무릎 완전 잠금 금지. 하체 날 후 탄수 보충 OK.',w:'허리·골반이 시트에서 뜨면 ROM 줄이기.'},
+  'Booty Builder 힙 쓰러스트':{t:'둔근',c:'턱 당기고 골반 후방경사, 정점 둔근 스퀴즈 1~2초.',w:'허리 신전으로 마무리 금지 — 갈비뼈 다운.'},
   'Hammer ISO 언더 로우':{t:'광배(하부), 능형근',c:'언더그립으로 광배 동원↑, 팔꿈치 몸통 가깝게 뒤로.',w:'반동·상체 흔들기 금지.'},
   '바벨 벤트오버 로우':{t:'광배, 중부 등, 후면삼각근',c:'힙힌지 45도·등 중립, 하복부로 당기고 정점 견갑 모음.',w:'허리 부담 크니 무게 욕심 금지, 코어 고정.'},
   '랫풀다운':{t:'광배(너비)',c:'가슴 살짝 위로 젖히고 쇄골 쪽으로, 팔꿈치를 아래로 내린다는 느낌으로 광배 시작.',w:'이두로 당기거나 과하게 뒤로 눕지 않기.'},
@@ -1311,7 +1249,7 @@ const ExLog={
     await this.loadBase();
     await this.loadMemo();
     await this.loadRestCfg();
-    await this.loadDayOv();
+    this.seedAlias();
     document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
     if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.injectBar();
@@ -1325,13 +1263,45 @@ const ExLog={
     this.injectRecos();
     this.initWakeLock();
     this.initDateRollover();
-    this.initRestoreBanner(); // 콜드 스타트: 모든 load 완료 후 빈 저장소면 복원 안내
-    this.applySeqUI(); // 3분할 순환이면 탭 UI 접기
-    this.syncDayPanel(); // 오늘 운동일에 맞춰 부팅 라디오(요일 기본 선택값)를 교정
+    // 지난 세션 미전송분 자동 재전송 — 오프라인에서 기록한 뒤 앱을 열어보기만 해도 시트가 따라잡게.
+    // 이전에는 다음 세트를 입력해야 전송이 시작됐다. URL 미설정이면 _syncSoon이 조용히 무시.
+    if(this._dirty.size)this._syncSoon();
+    window.addEventListener('online',()=>{if(this._dirty.size)this._syncSoon();});
   },
 
-  async load(){try{const r=await window.storage.get('wl_v2');if(r)this.data=JSON.parse(r.value);}catch(_){}},
-  async save(){try{await window.storage.set('wl_v2',JSON.stringify(this.data));}catch(_){}},
+  // ── 저장: 월 단위 분할(wl_v2:YYYY-MM) ──
+  // 이전에는 세트 1개마다 전체 기록을 wl_v2 한 키로 재직렬화(동기 localStorage 쓰기 = 메인스레드 블로킹).
+  // 기록이 쌓일수록 입력 지연이 커지므로, 변경된 달만 다시 써서 저장 비용을 총 데이터량과 무관하게 만든다.
+  // 레거시 단일 키(wl_v2)는 최초 1회 월 키로 분할 이관 후 다시 읽지 않는다(만일을 위해 삭제하지도 않음).
+  _dirtyMonths:new Set(),
+  _monthOf(d){return String(d).slice(0,7);},
+  markDirty(date){this._dirtyMonths.add(this._monthOf(date||this.date));},
+  async load(){
+    try{
+      const r=await window.storage.list('wl_v2:');
+      const keys=((r&&r.keys)||[]).sort();
+      if(keys.length){
+        for(const k of keys){try{const v=await window.storage.get(k);if(v)Object.assign(this.data,JSON.parse(v.value)||{});}catch(_){}}
+        return;
+      }
+      const legacy=await window.storage.get('wl_v2'); // 월 키가 없으면 레거시 단일 키에서 1회 이관
+      if(legacy){
+        this.data=JSON.parse(legacy.value)||{};
+        Object.keys(this.data).forEach(d=>this.markDirty(d));
+        await this.save();
+      }
+    }catch(_){}
+  },
+  async save(){
+    try{
+      if(!this._dirtyMonths.size)return;
+      const dirty=[...this._dirtyMonths];
+      const byM={};dirty.forEach(m=>byM[m]={});
+      Object.keys(this.data).forEach(d=>{const m=this._monthOf(d);if(byM[m])byM[m][d]=this.data[d];});
+      for(const m of dirty)await window.storage.set('wl_v2:'+m,JSON.stringify(byM[m]));
+      dirty.forEach(m=>this._dirtyMonths.delete(m)); // 쓰기 성공분만 해제 — 실패 시 다음 save에서 재시도
+    }catch(_){}
+  },
 
   // ── 6주 훈련 블록: 시작일 저장 → 주차 계산 → 6주차에 보조 종목 로테이션 리뷰 트리거 ──
   block:null,
@@ -1358,6 +1328,48 @@ const ExLog={
   alias:{},
   async loadAlias(){try{const r=await window.storage.get('ex_alias');if(r)this.alias=JSON.parse(r.value)||{};}catch(_){}},
   saveAlias(){try{window.storage.set('ex_alias',JSON.stringify(this.alias));}catch(_){}},
+  // ── 자동 별칭: (1) 알려진 중복 표기 시드 (2) 정규화(공백·하이픈·괄호 무시) 동일명 첫 기록 시 자동 연결 ──
+  DEFAULT_ALIAS:{
+   'T바 로우':'T-바 로우',
+   '노틸러스 트라이셉스 인스텐션 머신':'트라이셉스 익스텐션 머신',
+   '숄더프레스':'머신 숄더 프레스',
+   'Hammer 벤치 (isolateral)':'Hammer ISO-호라이즌털 벤치프레스',
+   'Hammer ISO-체스트 프레스':'Hammer ISO-호라이즌털 벤치프레스',
+   '해머스트랭스 iso-래터럴 인클라인 프레스 머신':'Hammer ISO-인클라인 프레스',
+   'Watson 인클라인 (isolateral)':'Hammer ISO-인클라인 프레스',
+   '랫풀다운 / 풀업':'랫풀다운',
+   'Booty Builder 힙 어브덕션':'힙 어브덕션 (머신)',
+   '레그프레스':'시티드 레그프레스',
+   '45도 레그프레스':'시티드 레그프레스', /* 해외 짐 전환 — 옛 기구(45도) 기록을 현 기구로 연결해 추세·PR 승계 */
+   '체스트 서포티드 로우':'머신 로우',
+   '덤벨 플라이 / 펙덱':'펙덱 플라이'
+   /* '힙 어덕션 머신'(모음)은 어브덕션(벌림)과 다른 운동 — 연결 금지 */
+  },
+  _normName(n){return String(n||'').toLowerCase().replace(/[\s\-_·/()\[\]]+/g,'');},
+  _hasHist(cn){for(const dk in this.data){if((this.data[dk].exercises||[]).some(e=>this.canon(e.name)===cn&&(e.sets||[]).length))return true;}return false;},
+  _migrateCfg(oldKey,newCanon){ // 별칭 연결 시 세팅 메모·휴식 오버라이드 승계 (옛 키 고아화 버그 수정)
+    if(oldKey===newCanon)return;
+    if(this.memo&&this.memo[oldKey]!=null){if(this.memo[newCanon]==null)this.memo[newCanon]=this.memo[oldKey];delete this.memo[oldKey];this.saveMemo();}
+    if(this.restCfg&&this.restCfg[oldKey]!=null){if(this.restCfg[newCanon]==null)this.restCfg[newCanon]=this.restCfg[oldKey];delete this.restCfg[oldKey];this.saveRestCfg();}
+  },
+  seedAlias(){ // 앱 시작 시 1회 — 사용자가 이미 직접 연결/해제한 항목은 존중
+    let ch=false;
+    for(const k in this.DEFAULT_ALIAS){
+      const v=this.DEFAULT_ALIAS[k];
+      if(this.alias[k]||k===v||this.canon(v)===k)continue;
+      this.alias[k]=v;this._migrateCfg(k,this.canon(v));ch=true;
+    }
+    if(ch)this.saveAlias();
+  },
+  autoAlias(name){ // 새 종목명 첫 세트 저장 시 — 정규화가 같은 과거 이름을 자동 연결 (기록·추세·PR 즉시 승계)
+    const cn=this.canon(name);const nn=this._normName(cn);let ch=false;
+    this._histNames().forEach(h=>{
+      if(h===name||this.canon(h)===cn||this.canon(cn)===h)return;
+      if(this._normName(this.canon(h))===nn){this.alias[h]=cn;this._migrateCfg(h,cn);ch=true;}
+    });
+    if(ch){this.saveAlias();this._pbCache={};}
+    return ch;
+  },
   canon(name){ // 별칭 체인을 최종 이름으로 해석 (순환 방지 최대 5단계)
     let n=name,hop=0;
     while(this.alias[n]&&hop<5){n=this.alias[n];hop++;}
@@ -1386,12 +1398,14 @@ const ExLog={
   linkAlias(oldName,newName,el){
     if(this.canon(newName)===oldName){alert('순환 연결은 만들 수 없습니다.');return;}
     this.alias[oldName]=newName;this.saveAlias();
+    this._migrateCfg(oldName,this.canon(newName)); // 세팅 메모·휴식 설정 승계
+    this._pbCache={}; // 별칭 변경 = canon 변경 → 과거최고 캐시 무효화
     const box=el&&el.closest('.ex-alias-box');if(box)box.remove();
     this.refresh();this.injectTargets();
     if(typeof PlanApp!=='undefined')PlanApp.renderTrends();
   },
   unlinkAlias(oldName,el){
-    delete this.alias[oldName];this.saveAlias();
+    delete this.alias[oldName];this.saveAlias();this._pbCache={};
     const box=el&&el.closest('.ex-alias-box');if(box)box.remove();
     this.refresh();this.injectTargets();
     if(typeof PlanApp!=='undefined')PlanApp.renderTrends();
@@ -1413,49 +1427,6 @@ const ExLog={
     });
   },
 
-  // ── 콜드 스타트 복원 배너: 저장소가 비어 있으면(기기 변경·초기화) 시트 pull·JSON 복원으로 유도.
-  //    시트 URL(gs_script_url)도 localStorage와 함께 사라지므로, URL이 없으면 입력 모달부터 연다.
-  //    '닫기'는 영속(restore_hint_seen) — 진짜 첫 사용자를 다시 귀찮게 하지 않는다. ──
-  _restoreBannerEl:null,
-  async initRestoreBanner(){
-    try{
-      if(Object.keys(this.data).length)return;              // 기록이 있으면 불필요
-      const seen=await window.storage.get('restore_hint_seen');
-      if(seen&&seen.value==='1')return;
-    }catch(_){return;}
-    const host=document.querySelector('.tab-body.tab-w');
-    if(!host||host.querySelector('.restore-banner'))return;
-    const div=document.createElement('div');
-    div.className='restore-banner';
-    div.innerHTML='<div class="rb-t">📂 저장된 기록이 없습니다</div>'
-      +'<div class="rb-d">기기 변경이나 저장소 초기화 후라면 Google 시트 또는 JSON 백업에서 기록을 복원할 수 있어요. 처음 시작한다면 닫아도 됩니다.</div>'
-      +'<div class="rb-btns">'
-      +'<button type="button" class="rb-btn" onclick="ExLog.restoreFromBanner()">☁️ 시트에서 불러오기</button>'
-      +'<button type="button" class="rb-btn ghost" onclick="ExLog.jumpToBackup()">📥 JSON 가져오기</button>'
-      +'<button type="button" class="rb-btn ghost" onclick="ExLog.dismissRestoreBanner()">닫기</button>'
-      +'</div><div class="rb-msg" id="rb-msg"></div>';
-    host.insertBefore(div,host.firstChild);
-    this._restoreBannerEl=div;
-  },
-  async restoreFromBanner(){
-    const url=await this.getScriptUrl();
-    if(!url){this.openSync();return;}                        // URL 미설정 → 기존 입력 모달 재사용
-    const r=await this.pullFromSheets();                     // 진행·결과 메시지는 pullFromSheets가 #rb-msg에도 표시
-    if(r&&r.ok&&this._restoreBannerEl){
-      const btns=this._restoreBannerEl.querySelector('.rb-btns');if(btns)btns.remove(); // 성공 → 버튼 제거, 결과 메시지만 남김
-      try{window.storage.set('restore_hint_seen','1');}catch(_){}
-    }
-  },
-  jumpToBackup(){
-    const r=document.getElementById('tp');if(r)r.checked=true; // 플랜 탭으로 전환(라디오 기반 탭)
-    const el=document.getElementById('sec-bk');
-    if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);
-  },
-  dismissRestoreBanner(){
-    try{window.storage.set('restore_hint_seen','1');}catch(_){}
-    if(this._restoreBannerEl){this._restoreBannerEl.remove();this._restoreBannerEl=null;}
-  },
-
   // ── 화면 꺼짐 방지(Wake Lock): 세트 사이 휴식 중 화면 유지. 미지원 브라우저는 조용히 무시 ──
   _wakeLock:null,
   initWakeLock(){
@@ -1465,74 +1436,13 @@ const ExLog={
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();});
   },
 
-  // 운동일 결정 우선순위: ① 날짜별 오버라이드 ② 기록된 세션의 저장값 ③ 순환 모드(지난 운동의 다음 순번) ④ 요일 기본
-  // 순환 모드: 요일과 무관하게 마지막 본세트 기록일의 타입 다음 순번을 표시 — 하루 밀려도 시퀀스가 자동으로 따라옴
-  dayOv:{},
-  dayMode:'rotation', // 'rotation'(순환 — 기본) | 'weekday'(요일 고정, 피커에서 전환 가능)
-  daySeq:'3', // '3'(Push→Pull→Legs — 매 회차 같은 종목, 증량 주기 2배) | '6'(A/B 교차)
-  DAY_SEQ:['Push','Pull','Legs','Push+','Pull+','Legs+'],
-  DAY_SEQ3:['Push','Pull','Legs'],
-  async loadDayOv(){
-    try{const r=await window.storage.get('day_ov');if(r)this.dayOv=JSON.parse(r.value)||{};}catch(_){}
-    try{const r=await window.storage.get('day_mode');if(r)this.dayMode=(r.value==='weekday')?'weekday':'rotation';}catch(_){} // 저장값 없으면 순환이 기본
-    try{const r=await window.storage.get('day_seq');if(r)this.daySeq=(r.value==='6')?'6':'3';}catch(_){}
-  },
-  saveDayOv(){try{window.storage.set('day_ov',JSON.stringify(this.dayOv));}catch(_){}},
-  setDayMode(on){
-    this.dayMode=on?'rotation':'weekday';
-    try{window.storage.set('day_mode',this.dayMode);}catch(_){}
-    this._reopenPicker(); // 순환을 켜면 3/6분할 선택지가 보이도록 피커 재구성
-    this.applySeqUI();this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
-  },
-  setDaySeq(v){
-    this.daySeq=(v==='6')?'6':'3';
-    try{window.storage.set('day_seq',this.daySeq);}catch(_){}
-    this._reopenPicker();
-    this.applySeqUI();this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();this.injectRecos();
-  },
-  _reopenPicker(){const p=document.getElementById('day-ov-picker');if(p){p.remove();this.toggleDayPicker();}},
-  applySeqUI(){ // 3분할 순환이면 A/B 탭(Day4~6)을 숨기고 Day7을 '리포트'로 — 패널은 DOM에 보존(기록 매칭·통합 제안 소스)
-    const on=(this.dayMode==='rotation'&&this.daySeq!=='6');
-    document.body.classList.toggle('seq3',on);
-    const d7=document.querySelector('.day-lbl.lbl-d7');
-    if(d7){
-      const dn=d7.querySelector('.dn'),dl=d7.querySelector('.dl'),dw=d7.querySelector('.dw');
-      if(dn)dn.textContent=on?'주간':'Day7';
-      if(dl)dl.textContent=on?'📊 리포트':'REST';
-      if(dw)dw.textContent=on?'':'일';
-    }
-  },
-  _nextRotation(d){
-    // d 이전 마지막 '본세트가 있는' 날의 타입 다음 순번. 기록 날짜 수가 수백 수준이라 매 호출 정렬해도 무시 가능한 비용.
-    const seq=(this.daySeq==='6')?this.DAY_SEQ:this.DAY_SEQ3;
-    const keys=Object.keys(this.data).filter(k=>k<d).sort();
-    for(let i=keys.length-1;i>=0;i--){
-      const s=this.data[keys[i]];
-      if(!s||!(s.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))continue;
-      const base=(this.daySeq==='6')?s.day:String(s.day||'').replace('+',''); // 3분할: 과거 Push+ 기록도 Push로 취급
-      const idx=seq.indexOf(base);
-      if(idx<0)continue;
-      return seq[(idx+1)%seq.length];
-    }
-    return null;
-  },
-  _dayTypeFresh(d){ // 세션 저장값을 배제한 계산 — setDayOv가 s.day를 재산정할 때 순환 참조 방지
-    if(this.dayOv[d])return this.dayOv[d];
-    if(this.dayMode==='rotation'){return this._nextRotation(d)||'Push';} // 기준 기록 없으면 Push부터 시작
-    return EL_WDAY[new Date(d+'T12:00:00').getDay()]||'REST';
-  },
-  dayType(d){
-    if(this.dayOv[d])return this.dayOv[d];
-    const s=this.data[d];
-    if(s&&s.day)return s.day;                       // 기록된 날은 실제 수행 타입 (과거 조회 일관성)
-    return this._dayTypeFresh(d);
-  },
+  dayType(d){return EL_WDAY[new Date(d+'T12:00:00').getDay()]||'REST';},
   fmt(d){const today=_todayKey();const s=new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});return d===today?'오늘 ('+s+')':s;},
   session(){return this.data[this.date]||{day:this.dayType(this.date),exercises:[]};},
   _dirty:new Set(), // 시트 미전송 변경 날짜 — 증분 동기화용 (전송 성공 시 해당 날짜만 비움)
   // 영속화: 오프라인에서 기록 → 동기화 실패 → 앱 종료 시에도 미전송분이 남아 다음 실행에서 재전송되게
   _saveDirty(){try{window.storage.set('sync_dirty',JSON.stringify([...this._dirty]));}catch(_){}},
-  setSession(s){this.data[this.date]=s;this.save();this._dirty.add(this.date);this._saveDirty();},
+  setSession(s){this.data[this.date]=s;this.markDirty(this.date);this.save();this._dirty.add(this.date);this._saveDirty();},
 
   // ── 데이 플랜 편집 (DB에서 구성 · 추가/삭제 · 영속) ──
   PANEL_DAY:['Push','Pull','Legs','Push+','Pull+','Legs+','REST'],
@@ -1590,16 +1500,26 @@ const ExLog={
     const wrap=btn.closest('.ex-wrap');const panel=btn.closest('.day-panel');if(!wrap||!panel)return;
     newName=(newName||'').trim();if(!newName)return;
     const p=this.planFor(this.panelDayOf(panel));
+    let prevName='';
     if(wrap.classList.contains('custom-ex')){
-      const cur=wrap.dataset.cname;
+      const cur=wrap.dataset.cname;prevName=cur;
       p.add=(p.add||[]).map(n=>n===cur?newName:n);   // 같은 위치에서 이름만 교체
       this._transformWrap(wrap,newName);
       wrap.dataset.cname=newName;
     }else{
       const orig=wrap.dataset.origname||(wrap.querySelector('.ex-nm')?.textContent||'').trim();
+      prevName=wrap.dataset.swapto||orig;            // 교체 직전 화면에 있던 이름
       (p.swap=p.swap||{})[orig]=newName;             // 기본 슬롯 제자리 대체
       this._transformWrap(wrap,newName);
       wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
+    }
+    // ── 승계: 표기만 다른 같은 이름은 자동 연결, 그 외 기록 보유 종목은 1회 확인 후 연결 (기록·메모·휴식 설정이 따라옴) ──
+    if(prevName&&prevName!==newName&&this.canon(prevName)!==this.canon(newName)&&this.canon(newName)!==prevName){
+      const same=this._normName(this.canon(prevName))===this._normName(this.canon(newName));
+      if(same||(this._hasHist(this.canon(prevName))&&confirm("'"+prevName+"' 기록·세팅 메모·휴식 설정을 '"+newName+"'(으)로 이어갈까요?\n같은 동작의 장비 교체일 때만 [확인]을 누르세요."))){
+        this.alias[prevName]=newName;this.saveAlias();this._migrateCfg(prevName,this.canon(newName));
+        if(typeof PlanApp!=='undefined'&&PlanApp.renderTrends)PlanApp.renderTrends();
+      }
     }
     this._sortDay(panel); // 교체 후에도 부위별 볼륨 보존 순서로 재정렬
     this.savePlan();this.refresh();this.injectTargets();augmentCards();this.injectRecos();
@@ -1646,57 +1566,24 @@ const ExLog={
     return vol;
   },
   injectRecos(){
-    // 오늘의 구성 카드: ① 이번 주 부족 부위 채우기 ② (3분할 순환 시) B변형 패널 종목 통합 제안 ③ 오래 쉰 종목 알림
     if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
     const vol=this._weekMuscleSets();const byMuscle=this._recoLibIndex();
     document.querySelectorAll('.day-panel').forEach(panel=>{
       const list=panel.querySelector('.ex-list');if(!list)return;
       const dpc=[...panel.classList].find(c=>/^dp[1-6]$/.test(c));const nd=dpc?+dpc.slice(2):0;if(!nd)return;
       const cat=(nd===1||nd===4)?'push':(nd===2||nd===5)?'pull':'legs';
-      const nameOf=w=>(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim();
-      const present=new Set([...list.querySelectorAll('.ex-wrap')].filter(w=>w.style.display!=='none').map(nameOf));
-      // ① 부족 부위: 주간 목표 대비 미달 근육 → 라이브러리에서 미포함 종목 추천
+      const present=new Set([...list.querySelectorAll('.ex-wrap')].map(w=>(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim()));
       const gaps=RECO_CAT[cat].filter(m=>(vol[m]||0)<(RECO_TARGET[m]||10)).sort((a,b)=>(vol[a]||0)-(vol[b]||0));
       const recos=[];
       gaps.forEach(m=>{
         const take=(gaps.length===1?2:1);
         (byMuscle[m]||[]).filter(nm=>!present.has(nm)&&!recos.some(r=>r.name===nm)).slice(0,take).forEach(nm=>{if(recos.length<3)recos.push({name:nm,muscle:m,sets:vol[m]||0});});
       });
-      // ② B변형 통합 (3분할 순환 + 기본 패널만): 짝 패널(dp+3) 종목 중 미포함 — 기록 이력 있는 것 우선
-      let merges=[];
-      if(this.dayMode==='rotation'&&this.daySeq!=='6'&&nd<=3){
-        const mate=document.querySelector('.day-panel.dp'+(nd+3)+' .ex-list');
-        if(mate){
-          merges=[...mate.querySelectorAll('.ex-wrap')].filter(w=>w.style.display!=='none').map(nameOf)
-            .filter(nm=>nm&&!present.has(nm))
-            .map(nm=>{const p=this.prevSession(nm);return{name:nm,hasHist:!!p,last:p?p.date:null};})
-            .sort((a,b)=>(b.hasHist?1:0)-(a.hasHist?1:0)).slice(0,4);
-        }
-      }
-      // ③ 오래 쉰 종목: 이 패널 종목 중 마지막 본세트가 10일 이상 전 (신경·기술 감각 유지 알림)
-      const stale=[...present].map(nm=>{
-        const p=this.prevSession(nm);if(!p)return null;
-        const days=Math.round((new Date(_todayKey()+'T12:00:00')-new Date(p.date+'T12:00:00'))/86400000);
-        return days>=10?{name:nm,days}:null;
-      }).filter(Boolean).sort((a,b)=>b.days-a.days).slice(0,3);
       const old=list.querySelector('.day-reco');if(old)old.remove();
-      if(!recos.length&&!merges.length&&!stale.length)return;
-      const esc=s=>s.replace(/'/g,"\\'");
-      let h='';
-      if(recos.length){
-        h+='<div class="reco-hd">💡 이번 주 보완 추천<span class="reco-sub">부족 부위 채우기</span></div>'
-          +recos.map(r=>{const st=(r.sets%1===0?r.sets:r.sets.toFixed(1));return '<div class="reco-item" onclick="ExLog.addEx(\''+esc(r.name)+'\',this)"><span class="reco-plus">＋</span><span class="reco-nm">'+r.name+'</span><span class="reco-why">'+r.muscle+' · '+st+'세트/주</span></div>';}).join('');
-      }
-      if(merges.length){
-        h+='<div class="reco-hd">🔀 B변형 통합 제안<span class="reco-sub">'+this.PANEL_DAY[nd-1]+'+ 패널에서 가져오기</span></div>'
-          +merges.map(r=>'<div class="reco-item" onclick="ExLog.addEx(\''+esc(r.name)+'\',this)"><span class="reco-plus">＋</span><span class="reco-nm">'+r.name+'</span><span class="reco-why">'+(r.hasHist?'기록 있음 · '+String(r.last).slice(5).replace('-','/'):'기록 없음')+'</span></div>').join('');
-      }
-      if(stale.length){
-        h+='<div class="reco-hd">⏳ 오래 쉰 종목<span class="reco-sub">감각 리마인드 — 첫 세트 가볍게</span></div>'
-          +stale.map(r=>'<div class="reco-item reco-info"><span class="reco-nm">'+r.name+'</span><span class="reco-why">'+r.days+'일 전 마지막 기록</span></div>').join('');
-      }
+      if(!recos.length)return;
       const card=document.createElement('div');card.className='day-reco';
-      card.innerHTML=h;
+      card.innerHTML='<div class="reco-hd">💡 이번 주 보완 추천<span class="reco-sub">부족 부위 채우기</span></div>'+
+        recos.map(r=>{const st=(r.sets%1===0?r.sets:r.sets.toFixed(1));return '<div class="reco-item" onclick="ExLog.addEx(\''+r.name.replace(/'/g,"\\'")+'\',this)"><span class="reco-plus">＋</span><span class="reco-nm">'+r.name+'</span><span class="reco-why">'+r.muscle+' · '+st+'세트/주</span></div>';}).join('');
       list.appendChild(card);
     });
   },
@@ -1737,6 +1624,7 @@ const ExLog={
       const list=panel.querySelector('.ex-list');if(!list)return;
       panel.querySelectorAll('.custom-ex-label').forEach(el=>el.remove()); // 구버전 '+추가됨' 구분 라벨 정리
       (p.add||[]).forEach(name=>{
+        if(statics().some(x=>x.style.display!=='none'&&((x.dataset.swapto||x.querySelector('.ex-nm')?.textContent||'').trim())===name))return; // 기본 카드와 중복 방지
         let w=[...panel.querySelectorAll('.custom-ex')].find(w=>w.dataset.cname===name);
         if(!w)w=this.buildCardEl(name);
         list.appendChild(w); // 기존 노드면 리스트 끝으로 이동(순서 정렬), 없으면 신규 추가
@@ -1765,36 +1653,8 @@ const ExLog={
     const rc=list.querySelector('.day-reco');if(rc)list.appendChild(rc); // 추천 카드는 항상 맨 아래
   },
 
-  // ── 운동일 시프트: 배지 탭 → 피커. 기본값 선택은 오버라이드 해제와 동일(저장 안 함) ──
-  toggleDayPicker(){
-    const p0=document.getElementById('day-ov-picker');
-    if(p0){p0.remove();return;}
-    const bar=document.getElementById('ex-log-bar');if(!bar)return;
-    const cur=this.dayType(this.date);
-    const def=EL_WDAY[new Date(this.date+'T12:00:00').getDay()]||'REST';
-    const p=document.createElement('div');p.id='day-ov-picker';p.className='day-ov-picker';
-    p.innerHTML='<div class="dov-hd">'+this.fmt(this.date)+'의 운동일 변경 — 짐 휴무·일정 밀림 대응. 기록·볼륨·시트 요일이 함께 반영됩니다.</div>'
-      +'<div class="dov-chips">'+this.PANEL_DAY.map(t=>'<button type="button" class="dov-chip'+(t===cur?' on':'')+'" style="--c:'+(DAY_COLORS_EL[t]||'#888')+'" onclick="ExLog.setDayOv(\''+t+'\')">'+t+'</button>').join('')
-      +(this.dayOv[this.date]?'<button type="button" class="dov-chip reset" onclick="ExLog.setDayOv(null)">기본('+def+')으로</button>':'')+'</div>'
-      +'<label class="dov-mode"><input type="checkbox" '+(this.dayMode==='rotation'?'checked':'')+' onchange="ExLog.setDayMode(this.checked)"> 🔁 순환 모드 — 요일 무관, 지난 운동의 <b>다음 순번</b>을 자동 표시 (쉬는 날은 기록 없이 넘어가면 됨)</label>'
-      +(this.dayMode==='rotation'?'<div class="dov-seq"><label><input type="radio" name="dov-seq" value="3" '+(this.daySeq!=='6'?'checked':'')+' onchange="ExLog.setDaySeq(this.value)"> PPL 3분할 — 매 회차 같은 종목(증량 주기 2배)</label><label><input type="radio" name="dov-seq" value="6" '+(this.daySeq==='6'?'checked':'')+' onchange="ExLog.setDaySeq(this.value)"> 6순번 — A/B 변형 교차</label></div>':'');
-    bar.insertAdjacentElement('afterend',p);
-  },
-  setDayOv(t){
-    const def=EL_WDAY[new Date(this.date+'T12:00:00').getDay()]||'REST';
-    if(!t||t===def)delete this.dayOv[this.date];else this.dayOv[this.date]=t;
-    this.saveDayOv();
-    if(this.data[this.date]){const s=this.data[this.date];s.day=this._dayTypeFresh(this.date);this.setSession(s);} // 기록된 세션의 요일 라벨 갱신(저장값 배제 재산정) + dirty(시트 요일 열 반영)
-    const p=document.getElementById('day-ov-picker');if(p)p.remove();
-    this.updateBar();this.syncDayPanel();this.injectTargets();this.refresh();
-  },
-  syncDayPanel(){ // 보이는 데이 패널을 현재 날짜의 운동일에 맞춤 (jumpToEx와 동일 방식)
-    const idx=this.PANEL_DAY.indexOf(this.dayType(this.date));
-    if(idx<0)return;
-    const r=document.getElementById('d'+(idx+1));if(r)r.checked=true;
-  },
-  prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);(function(){const p=document.getElementById('day-ov-picker');if(p)p.remove();})();this.updateBar();this.injectTargets();this.refresh();},
-  next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);(function(){const p=document.getElementById('day-ov-picker');if(p)p.remove();})();this.updateBar();this.injectTargets();this.refresh();},
+  prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
+  next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
 
   injectBar(){
     const tabW=document.querySelector('.tab-body.tab-w');
@@ -1802,7 +1662,7 @@ const ExLog={
     const bar=document.createElement('div');
     bar.className='log-date-bar';bar.id='ex-log-bar';
     const day=this.dayType(this.date);
-    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><span class="log-day-badge" id="log-day-badge" onclick="ExLog.toggleDayPicker()" title="이 날짜의 운동일 변경" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</span></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
+    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><span class="log-day-badge" id="log-day-badge" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</span></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
     const ds=tabW.querySelector('.day-sel');if(ds)ds.insertAdjacentElement('afterend',bar);else tabW.insertBefore(bar,tabW.firstChild);
     const prog=document.createElement('div');prog.className='log-progress';prog.id='log-progress';
     bar.insertAdjacentElement('afterend',prog);
@@ -1810,6 +1670,40 @@ const ExLog={
     prog.insertAdjacentElement('afterend',brief);
   },
   // ── 오늘의 브리핑: 카드를 펼치지 않아도 오늘의 도전(증량)·채우기 목표가 보이게. 기록된 종목은 목록에서 빠져 '남은 목표'로 동작 ──
+  // ── 오늘의 준비도: 오늘 컨디션·수면 + 최근 운동일 RPE + 최근 7일 통증을 종합한 당일 강도 가이드 ──
+  // 디로드 제안(주 단위)과 달리 '오늘 증량을 갈지'의 당일 판단. 점수제(좋음 +1/나쁨 −1)로 근거를 그대로 노출하고,
+  // 신호가 없거나 중립이면 침묵한다(습관성 배너 방지).
+  readiness(){
+    const s=this.session();
+    let score=0,n=0;const bad=[],good=[];
+    const sl=+((s.cond||{}).sleep||0);
+    if(sl){n++;if(sl>=7){score++;good.push('수면 '+sl+'h');}else if(sl<6){score--;bad.push('수면 '+sl+'h');}}
+    const rt=+((s.cond||{}).rate||0);
+    if(rt){n++;if(rt>=4){score++;good.push('컨디션 '+rt+'/5');}else if(rt<=2){score--;bad.push('컨디션 '+rt+'/5');}}
+    // 최근 운동일(7일 내) 평균 RPE — 표본 3세트 미만이면 판단 보류
+    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
+    for(const k of keys){
+      const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
+      if(ago>7)break;
+      let rs=0,rn=0,has=false;
+      (this.data[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;has=true;if(st.rpe){rs+=st.rpe;rn++;}}));
+      if(!has)continue;
+      if(rn>=3){n++;const avg=rs/rn;if(avg>=9.3){score--;bad.push('전 세션 RPE '+avg.toFixed(1));}}
+      break; // 가장 최근 운동일 하나만 본다
+    }
+    let pain=0;
+    keys.forEach(k=>{
+      const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
+      if(ago>7)return;
+      (this.data[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(st.pain)pain++;}));
+    });
+    if(pain>=2){n++;score--;bad.push('통증 '+pain+'회/7일');}
+    if(!n)return null;
+    if(score<=-2)return{lvl:'low',msg:'🪫 준비도 낮음 ('+bad.join(' · ')+') — 오늘은 증량 보류 · 무게 유지, 필요하면 볼륨 −10~20%'};
+    if(score<0)return{lvl:'mid',msg:'🔸 준비도 보통 이하 ('+bad.join(' · ')+') — 무리한 증량 자제, RPE 여유 있을 때만 도전'};
+    if(score>=2)return{lvl:'high',msg:'🔋 준비도 좋음 ('+good.join(' · ')+') — 도전 중량 가기 좋은 날'};
+    return null;
+  },
   renderBrief(){
     const el=document.getElementById('log-brief');if(!el)return;
     const day=this.dayType(this.date);
@@ -1827,11 +1721,12 @@ const ExLog={
       if(sug.up&&sug.nextW)chal.push({n,w:sug.nextW});
       else if(sug.fillW!=null&&sug.cap)fill.push({n,w:sug.fillW,cap:sug.cap});
     });
-    if(!chal.length&&!fill.length){el.style.display='none';el.innerHTML='';return;}
+    const rd=this.readiness();
+    if(!chal.length&&!fill.length&&!rd){el.style.display='none';el.innerHTML='';return;}
     const short=n=>n.length>11?n.slice(0,10)+'…':n;
     const esc=n=>n.replace(/'/g,"\'");
     const item=(n,txt)=>'<span class="lb-item" onclick="ExLog.jumpToEx(\''+esc(n)+'\')">'+short(n)+' <b>'+txt+'</b></span>';
-    let h='';
+    let h=rd?'<span class="lb-ready '+rd.lvl+'">'+rd.msg+'</span>':'';
     if(chal.length)h+='<span class="lb-lbl up">⬆ 도전</span>'+chal.map(c=>item(c.n,c.w+'kg')).join('');
     if(fill.length)h+='<span class="lb-lbl">🎯 채우기</span>'+fill.slice(0,3).map(f=>item(f.n,f.w+'×'+f.cap)).join('');
     el.style.display='flex';el.innerHTML=h;
@@ -1955,6 +1850,31 @@ const ExLog={
       if(document.activeElement!==inp)inp.value=ses.note||'';   // 날짜 이동 시 해당 세션 노트 반영
     });
   },
+  // ── 수면 ↔ 퍼포먼스 상관: 최근 28일에서 수면 기록+본세트가 있는 날을 6.5h 기준으로 나눠 볼륨·RPE 비교 ──
+  // 양쪽 표본이 3일 미만이면 침묵(우연 상관 방지). 인과 단정이 아니라 본인 데이터의 경향 제시가 목적.
+  sleepInsight(){
+    const lo=[],hi=[];
+    const base=new Date(_todayKey()+'T12:00:00');
+    for(let i=0;i<28;i++){
+      const d=new Date(base);d.setDate(base.getDate()-i);
+      const s=this.data[_localKey(d)];
+      if(!s||!s.cond||!(+s.cond.sleep))continue;
+      let vol=0,rs=0,rn=0;
+      (s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=st.weight*st.reps;if(st.rpe){rs+=st.rpe;rn++;}}));
+      if(!vol)continue;
+      (+s.cond.sleep<6.5?lo:hi).push({vol,rpe:rn?rs/rn:null});
+    }
+    if(lo.length<3||hi.length<3)return null;
+    const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+    const dV=Math.round((avg(lo.map(x=>x.vol))-avg(hi.map(x=>x.vol)))/avg(hi.map(x=>x.vol))*100);
+    let html='💤 최근 4주 — 수면 6.5h 미만 '+lo.length+'일 vs 이상 '+hi.length+'일: 세션 볼륨 '+(dV>0?'+':'')+dV+'%';
+    const loR=lo.filter(x=>x.rpe!=null),hiR=hi.filter(x=>x.rpe!=null);
+    if(loR.length>=3&&hiR.length>=3){
+      const dR=avg(loR.map(x=>x.rpe))-avg(hiR.map(x=>x.rpe));
+      html+=' · 평균 RPE '+(dR>0?'+':'')+dR.toFixed(1);
+    }
+    return{html,lo:lo.length,hi:hi.length};
+  },
   _weekCondAvg(){ // 이번 주 컨디션·수면 평균 (기록된 날만)
     const ks=(typeof PlanApp!=='undefined'&&PlanApp._weekKeys)?PlanApp._weekKeys(0):[];
     let rs=0,rn=0,ss=0,sn=0;
@@ -2008,7 +1928,7 @@ const ExLog={
   filterPicker(input,tagId){const picker=input.closest('.ex-add-picker');if(picker)this._fillPicker(picker,tagId,input.value);},
 
   addEx(name,triggerEl){
-    name=(name||'').trim();if(!name)return;
+    name=(name||'').trim().replace(/[<>"]/g,'');if(!name)return; // 이름이 innerHTML 곳곳에 들어감 — 마크업 파손 문자 제거
     const picker=triggerEl.closest('.ex-add-picker');if(picker)picker.style.display='none';
     const panel=triggerEl.closest('.day-panel');if(!panel)return;
     const p=this.planFor(this.panelDayOf(panel));
@@ -2145,7 +2065,7 @@ const ExLog={
     const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
-    if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);}
+    if(!ex){ex={name:log.dataset.exname,sets:[]};s.exercises.push(ex);this.autoAlias(ex.name);}
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
       // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
       const old=ex.sets[+editIdx];
@@ -2285,7 +2205,12 @@ const ExLog={
   },
 
   // 다른 날짜(오늘 제외) 기준 최고 — 토스트(checkPR)·주간요약과 동일한 e1RM(맨몸은 reps) 기준으로 통일
+  // 캐시: refresh()가 세트 입력마다 카드 수 × 전체 기록 일수를 재스캔하던 것을 (열람일·canon)당 1회로 축소.
+  // 과거최고는 '열람일 이외' 날짜의 데이터라 같은 날 안에서는 불변 — 날짜 이동(_miniCacheCheck)·별칭 변경 시 무효화.
+  _pbCache:{},
   _priorBest(name){
+    const ck=this.date+'|'+this.canon(name);
+    const hit=this._pbCache[ck];if(hit)return hit;
     let bestE1=-1,bestReps=-1;
     for(const k in this.data){
       if(k===this.date)continue;
@@ -2293,9 +2218,28 @@ const ExLog={
       if(!ex)continue;
       ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
     }
-    return{bestE1,bestReps};
+    return this._pbCache[ck]={bestE1,bestReps};
   },
 
+  // ── 세션 페이스: 세트 타임스탬프(ts)로 세션 소요시간·세트 간격을 집계, 종목별 목표 휴식과 비교 ──
+  // 간격 = 휴식 + 다음 세트 수행 시간이므로 목표 휴식보다 다소 긴 게 정상. 15분 초과 공백은 이동/중단으로 간주해 제외.
+  _fmtSec(sec){const m=Math.floor(sec/60),ss=Math.round(sec%60);return m?(m+'분'+(ss?' '+ss+'초':'')):(ss+'초');},
+  sessionPace(dateKey){
+    const s=this.data[dateKey||this.date];if(!s)return null;
+    const evs=[];
+    (s.exercises||[]).forEach(ex=>{const rs=this.restSec(ex.name);(ex.sets||[]).forEach(st=>{if(st.ts&&st.reps>0)evs.push({t:+st.ts,rs});});});
+    if(evs.length<4)return null;
+    evs.sort((x,y)=>x.t-y.t);
+    const mins=Math.round((evs[evs.length-1].t-evs[0].t)/60000);
+    let gap=0,tgt=0,n=0;
+    for(let i=1;i<evs.length;i++){
+      const g=(evs[i].t-evs[i-1].t)/1000;
+      if(g>900)continue;
+      gap+=g;tgt+=evs[i].rs;n++;
+    }
+    if(!n||mins<5)return null;
+    return{mins,avg:Math.round(gap/n),tgt:Math.round(tgt/n),n};
+  },
   refresh(){
     const s=this.session();
     this.renderProgress();
@@ -2340,7 +2284,9 @@ const ExLog={
           cmp=pct===0?`<span class="sess-cmp">지난 ${pv.day}와 동일</span>`
             :`<span class="sess-cmp ${pct>0?'up':'dn'}">지난 ${pv.day} 대비 ${pct>0?'+':''}${pct}% ${pct>0?'↑':'↓'}</span>`;
         }
-        sum.style.display='';sum.innerHTML=`💪 오늘 <b>${totSets}</b>세트 · 볼륨 <b>${Math.round(totVol).toLocaleString()}</b>kg${cmp}`;
+        const pace=this.sessionPace(this.date);
+        const paceHtml=pace?`<span class="sess-pace">⏱ 세션 ${pace.mins}분 · 세트 간격 평균 ${this._fmtSec(pace.avg)} (목표 휴식 ${this._fmtSec(pace.tgt)}${pace.avg-pace.tgt>150?' — 간격 김':''})</span>`:'';
+        sum.style.display='';sum.innerHTML=`💪 오늘 <b>${totSets}</b>세트 · 볼륨 <b>${Math.round(totVol).toLocaleString()}</b>kg${cmp}${paceHtml}`;
       }
     }
     const mb=document.getElementById('motiv-bar');
@@ -2378,7 +2324,7 @@ const ExLog={
   },
 
   // ── 접힘 상태 카드 요약: '지난 50×10 · 오늘 2세트' ──
-  _miniCacheCheck(){if(this._miniDate!==this.date){this._miniDate=this.date;this._miniPrev={};}},
+  _miniCacheCheck(){if(this._miniDate!==this.date){this._miniDate=this.date;this._miniPrev={};this._pbCache={};}},
   _prevTopStr(name){
     if(name in this._miniPrev)return this._miniPrev[name];   // prevSession은 오늘 기록과 무관 → 날짜 단위 캐시
     const prev=this.prevSession(name);
@@ -2508,15 +2454,6 @@ const ExLog={
     }catch(_){return'';}
   },
 
-  // 혈액검사 리마인더: Phase 시작(26-05-25) 후 6개월 창(170~215일)에 주간 리포트로 안내
-  _bloodReminderHtml(daysOverride){
-    try{
-      const days=(daysOverride!=null)?daysOverride:Math.round((new Date(_todayKey()+'T12:00:00')-new Date('2026-05-25T12:00:00'))/86400000);
-      if(days<170||days>215)return'';
-      return'<div class="wr-remind">🩸 <b>6개월 혈액검사 시점</b> ('+days+'일 경과) — 공복 오전 채혈: 총·유리 테스토스테론 · E2 · 공복혈당·인슐린(HOMA-IR) · SHBG. 완료하면 플랜 탭 체크리스트에 표시하세요.</div>';
-    }catch(_){return'';}
-  },
-
   // ── 주간 리포트 (REST 패널): PR·최고 리프트·부위 달성·다음 주 도전 ──
   renderWeeklyReport(){
     const box=document.getElementById('weekly-report');if(box)box.innerHTML=this._weeklyReportHtml();
@@ -2545,7 +2482,7 @@ const ExLog={
       });
     });
     const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
-    const remind=this._ibReminderHtml()+this._backupReminderHtml()+this._bloodReminderHtml();
+    const remind=this._ibReminderHtml()+this._backupReminderHtml();
     if(!sessions)return'<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind+'<div class="wr-empty">이번 주 기록이 아직 없습니다. 세트를 기록하면 일요일에 여기서 한 주를 결산합니다.</div></div>';
     // 부위별 목표 달성/미달
     const vol=this._weekMuscleSets();
@@ -2568,6 +2505,7 @@ const ExLog={
     const ca=this._weekCondAvg();
     if(ca.rate!=null)h+='<div class="wr-row"><span>평균 컨디션</span><span class="v'+(ca.rate<3?' miss':'')+'">'+ca.rate.toFixed(1)+'/5</span></div>';
     if(ca.sleep!=null)h+='<div class="wr-row"><span>평균 수면</span><span class="v'+(ca.sleep<6?' miss':'')+'">'+ca.sleep.toFixed(1)+'h</span></div>';
+    const si=this.sleepInsight();if(si)h+='<div class="wr-insight">'+si.html+'</div>';
     // 이번 주 세션 노트 — 볼륨·정체 해석의 맥락 (통증·환경 등)
     const notes=[];wkKeys.forEach(dk=>{const n=this.data[dk]&&this.data[dk].note;if(n)notes.push({dk,n});});
     if(notes.length){
@@ -2603,10 +2541,12 @@ const ExLog={
   },
 
   // ── 도전 무게 자동 산출 ──
-  isCompound(name){return /스쿼트|데드|벤치|프레스|로우|풀업|런지|딥스|쓰러스트|스플릿/.test(name);},
+  isCompound(name){return /스쿼트|데드|벤치|프레스|로우|풀업|풀다운|런지|딥스|쓰러스트|스플릿/.test(name);},
   isTimed(name){return /플랭크|데드행/.test(name);},
-  restSec(name){const o=+this.restCfg[this.canon(name)];if(o>0)return o;return this.isCompound(name)?180:90;},
-  // ── 종목별 휴식시간 오버라이드: 기본(복합 180초/고립 90초)이 안 맞는 종목만 커스텀 (canon 기준 — 별칭 연결 시 승계) ──
+  // 펌프성(고반복 소근육·둔근 고립) 종목 — 회복 수요가 낮아 기본 휴식 90초
+  isPump(name){return /래터럴|레이즈|페이스풀|어브덕션|어덕션|슈러그|카프|종아리|크런치/.test(name);},
+  restSec(name){const o=+this.restCfg[this.canon(name)];if(o>0)return o;if(this.isPump(name))return 90;return this.isCompound(name)?180:120;},
+  // ── 종목별 휴식시간 오버라이드: 기본(복합 180초/고립 120초 — RPE 회복 우선, 펌프성 종목만 90초 지정)이 안 맞는 종목만 커스텀 (canon 기준 — 별칭 연결 시 승계) ──
   restCfg:{},
   async loadRestCfg(){try{const r=await window.storage.get('ex_rest');if(r)this.restCfg=JSON.parse(r.value)||{};}catch(_){}},
   saveRestCfg(){try{window.storage.set('ex_rest',JSON.stringify(this.restCfg));}catch(_){}},
@@ -2621,7 +2561,7 @@ const ExLog={
     if(panel){panel.remove();return;}
     const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
     const cur=+this.restCfg[this.canon(name)]||'';
-    const def=this.isCompound(name)?180:90;
+    const def=this.isCompound(name)?180:120;
     panel=document.createElement('div');panel.className='ex-base-panel';
     panel.innerHTML='<div class="ex-base-hd">⏱ 이 종목의 세트 간 <b>휴식시간</b>을 조정합니다. 비우면 기본('+def+'초)으로 돌아갑니다.</div>'
       +'<div class="ex-base-row"><input type="number" class="ex-rest-inp" step="15" min="15" max="600" inputmode="numeric" placeholder="기본 '+def+'초" value="'+cur+'">'
@@ -2642,9 +2582,13 @@ const ExLog={
     this.injectTargets();
   },
   repCap(name){
-    const wt=WEEK_TARGETS[name]||'';
-    const range=wt.match(/(\d+)\s*~\s*(\d+)/);if(range)return parseInt(range[2]);
-    const rep=wt.match(/×\s*(\d+)/);if(rep)return parseInt(rep[1]);
+    // 이전: WEEK_TARGETS 문구에서 rep 상한 파싱(문구가 낡으면 목표도 어긋남) → 운동 도감(sets:'4×6~8')에서 파싱
+    const e=this.libByName(this.canon(name))||this.libByName(name);
+    const s=(e&&e.sets)||'';
+    // '3~4×8~12' 같은 표기에서 세트 수 범위(3~4)를 오파싱하지 않도록 '×' 뒤 렙 범위를 우선 매칭
+    const rr=s.match(/×\s*(\d+)\s*~\s*(\d+)/);if(rr)return parseInt(rr[2]);
+    const rep=s.match(/×\s*(\d+)/);if(rep)return parseInt(rep[1]);
+    const range=s.match(/(\d+)\s*~\s*(\d+)/);if(range)return parseInt(range[2]);
     return this.isCompound(name)?8:12;
   },
   prevSession(name){
@@ -2658,16 +2602,23 @@ const ExLog={
     }
     return null;
   },
+  _targetNote(name){const n=TARGET_NOTES[this.canon(name)]||TARGET_NOTES[name];return n?' · '+n:'';},
   suggestTarget(name){
     const prev=this.prevSession(name);
-    if(!prev){const wt=WEEK_TARGETS[name];return wt?{html:wt,up:false}:null;}
+    const note=this._targetNote(name);
+    if(!prev){
+      // 이전: 하드코딩 문구 반환(수동 갱신 필요) → 도감 권장 세트 안내, 첫 기록부터 자동 목표 생성
+      const e=this.libByName(this.canon(name))||this.libByName(name);
+      const rec=e&&e.sets?('도감 권장 '+e.sets+' · '):'';
+      return{html:rec+'첫 기록을 남기면 자동 목표가 생성됩니다'+note,up:false};
+    }
     const sets=prev.sets;
     const setStr=sets.map(s=>s.weight+'×'+s.reps).join(', ');
     // 직전 기록이 며칠 전인지 — 3일 전과 3주 전은 증량 기대치가 다르다 (요일 무관 최근 기록 방식의 맥락 보완)
     const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(prev.date+'T12:00:00'))/864e5);
     const agoStr=ago<=0?'오늘':(ago===1?'어제':ago+'일 전');
     const prevLbl='<span class="wt-prev">지난('+agoStr+'): '+setStr+'</span>';
-    if(this.isTimed(name))return{html:prevLbl+' → 시간 늘리기',up:false};
+    if(this.isTimed(name))return{html:prevLbl+' → 시간 늘리기'+note,up:false};
     const cap=this.repCap(name);
     const lastW=sets[sets.length-1].weight;
     const allHit=sets.length>=2&&sets.every(s=>s.reps>=cap);
@@ -2675,11 +2626,11 @@ const ExLog={
       const inc=this.isCompound(name)?2.5:1;
       // RPE 반영: 렙 상단을 채웠어도 마지막 세션 체감 강도가 9.5+면 같은 무게 한 번 더 굳히기
       const hardest=Math.max.apply(null,sets.map(s=>s.rpe||0));
-      if(hardest>=9.5)return{html:prevLbl+' → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)',up:false,fillW:lastW,cap};
+      if(hardest>=9.5)return{html:prevLbl+' → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)'+note,up:false,fillW:lastW,cap};
       const ease=(hardest>0&&hardest<=8)?' (RPE '+hardest+' 여유)':'';
-      return{html:prevLbl+' → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease,up:true,nextW:lastW+inc};
+      return{html:prevLbl+' → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease+note,up:true,nextW:lastW+inc};
     }
-    return{html:prevLbl+' → '+lastW+'kg로 '+cap+'회 채우기',up:false,fillW:lastW,cap};
+    return{html:prevLbl+' → '+lastW+'kg로 '+cap+'회 채우기'+note,up:false,fillW:lastW,cap};
   },
   // ── 기본무게: 종목별 장비 자체 무게(바벨 20kg, 스미스 바, 머신 캐리지 등)를 등록하면
   //    세트 입력은 '추가 원판'만 받고 총 무게(기본+추가)로 저장·집계한다. 기록은 항상 총 무게 기준 ──
@@ -3065,104 +3016,57 @@ const ExLog={
     if(!url||!url.startsWith('https://script.google.com')){
       alert('올바른 Apps Script URL을 입력해주세요.');return;
     }
-    const prevUrl=await this.getScriptUrl(); // URL이 새로 설정/변경될 때만 전체 스냅샷(초기 적재), 이후 수동 동기화는 증분
     await window.storage.set('gs_script_url',url);
     this.closeSync();
-    await this.syncToSheets(url,url!==prevUrl);
+    await this.syncToSheets(url,true); // 수동 동기화는 전체 스냅샷 — 시트 복구·초기 적재용
   },
-  // ── 시트 → 앱 복원(pull): 시트가 원본(source of truth), localStorage는 언제 지워져도 되는 캐시.
-  //    병합 규칙: (날짜·종목) 단위 로컬 우선 — 미전송 로컬 수정을 보호하고, 시트는 빈 곳만 채운다.
-  //    복원된 날짜는 dirty로 표시하지 않음(시트에서 온 데이터를 시트로 재전송할 이유가 없음). ──
-  _setFlag(set){const p=[];if(set.warmup)p.push('W');if(set.rpe)p.push('RPE'+set.rpe);if(set.pain)p.push('P');return p.join(';');}, // 세트 상태 → 시트 '비고' (_parseFlag와 쌍)
-  _parseFlag(flag,set){String(flag||'').split(';').forEach(t=>{if(t==='W')set.warmup=true;else if(t==='P')set.pain=true;else if(t.startsWith('RPE')){const v=parseFloat(t.slice(3));if(v>0)set.rpe=v;}});return set;},
-  _mergePulled(rows,inbodyRows){
-    // 순수 병합 로직(테스트 단위) — export rows를 날짜→종목/유산소로 조립 후 로컬에 없는 것만 채움
-    const byDate={};
-    (rows||[]).forEach(r=>{
-      if(!r||!r.date||!r.name)return;
-      const d=byDate[r.date]||(byDate[r.date]={day:r.day||'',ex:{},cardio:{}}); // ex/cardio 모두 setNo 키 맵 — 시트 중복 행은 마지막 값 우선
-      if(!d.day&&r.day)d.day=r.day;
-      const m=String(r.name).match(/^🏃\s*(.*)$/); // 유산소는 '🏃 ' 접두로 직렬화됨 → cardio로 복귀
-      if(m){d.cardio[+r.setNo||0]={type:m[1]||'유산소',min:+r.reps||0,ts:r.ts||undefined};return;}
-      const e=d.ex[r.name]||(d.ex[r.name]={});
-      e[+r.setNo||0]=this._parseFlag(r.flag,{weight:+r.weight||0,reps:+r.reps||0,ts:r.ts||undefined});
-    });
-    let addedSets=0,keptEx=0;
-    Object.keys(byDate).forEach(date=>{
-      const src=byDate[date];
-      let s=this.data[date];
-      if(!s){s=this.data[date]={day:src.day,exercises:[]};}
-      else if(!s.day&&src.day)s.day=src.day;
-      if(!Array.isArray(s.exercises))s.exercises=[];
-      Object.keys(src.ex).forEach(name=>{
-        const local=s.exercises.find(e=>e.name===name);
-        if(local&&(local.sets||[]).length){keptEx++;return;} // 로컬 우선
-        const sets=Object.keys(src.ex[name]).sort((a,b)=>a-b).map(no=>src.ex[name][no]);
-        if(local)local.sets=sets;else s.exercises.push({name,sets});
-        addedSets+=sets.length;
-      });
-      const cNos=Object.keys(src.cardio);
-      if(cNos.length&&!(s.cardio||[]).length){
-        s.cardio=cNos.sort((a,b)=>a-b).map(no=>src.cardio[no]);
-        addedSets+=s.cardio.length;
-      }
-    });
-    // 인바디: 로컬에 없는 날짜만 추가 (시트 밖 확장 필드는 JSON 백업 몫)
-    let addedIb=0;
-    if(Array.isArray(inbodyRows)&&typeof InBody!=='undefined'&&Array.isArray(InBody._log)){
-      const have=new Set(InBody._log.map(e=>String(e.date).slice(0,10)));
-      inbodyRows.forEach(e=>{
-        if(!e||!e.date||have.has(String(e.date).slice(0,10)))return;
-        InBody._log.push({date:String(e.date).slice(0,10),wt:e.wt,sm:e.sm,bf:e.bf,ab:e.ab!=null?e.ab:undefined});
-        addedIb++;
-      });
-      if(addedIb)InBody._log.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-    }
-    return{addedSets,keptEx,addedIb};
-  },
-  // 전체 재업로드: 로컬 전체 스냅샷을 시트로 upsert — 시트 복구 등 예외 상황 전용(평소엔 증분으로 충분)
-  async fullResync(){
-    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);};
-    const url=await this.getScriptUrl();
-    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return;}
-    if(typeof confirm==='function'&&!confirm('로컬의 전체 기록을 시트로 재업로드합니다.\n기존 행은 갱신되고 삭제되지 않습니다. 평소에는 자동 증분 동기화로 충분합니다.\n진행할까요?'))return;
-    msg('⏳ 전체 재업로드 중…');
-    await this.syncToSheets(url,true);
-    msg('✓ 전체 재업로드 요청 완료 — 결과는 ☁️ 아이콘과 콘솔 [sync] 로그로 확인하세요.');
-  },
-  // 시트 중복 정리: 서버 cleanupDuplicates 호출 — (날짜·종목·세트) 키당 마지막 행만 보존
-  async dedupeSheet(){
-    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);};
-    const url=await this.getScriptUrl();
-    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return null;}
-    if(typeof confirm==='function'&&!confirm('시트에서 (날짜·종목·세트)가 같은 중복 행을 정리합니다.\n각 키의 마지막 행(최신 값)만 남습니다. 진행할까요?'))return null;
-    msg('⏳ 시트 중복 정리 중…');
+  // ── 시트 → 앱 복원(pull): 동기화가 단방향(push)이라 기기 변경·로컬 유실 시 복구 수단이 수동 JSON뿐이던 것을 보완.
+  //    시트가 source of truth — 시트에 있는 날짜는 시트 내용으로 교체, 시트에 없는 로컬 날짜와 당일 컨디션 기록은 유지.
+  //    Apps Script가 mode:'pull'을 지원해야 한다(apps-script.gs 참고 — "새 버전"으로 재배포 필요).
+  async restoreFromSheets(){
+    const inp=document.getElementById('sync-url-inp');
+    const url=((inp&&inp.value)||'').trim()||await this.getScriptUrl();
+    if(!url||!url.startsWith('https://script.google.com')){alert('먼저 Apps Script URL을 입력해주세요.');return;}
+    if(!confirm('Google Sheets의 기록으로 복원합니다.\n· 시트에 있는 날짜 → 시트 내용으로 교체\n· 시트에 없는 로컬 날짜 → 유지\n계속할까요?'))return;
+    const btn=document.getElementById('sync-restore-btn');
+    if(btn){btn.disabled=true;btn.textContent='⏳ 복원 중…';}
     try{
-      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'dedupe'}),redirect:'follow'});
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'pull'}),redirect:'follow'});
       const json=await res.json();
-      if(!json||json.ok===false||json.mode!=='dedupe'){msg('서버가 dedupe를 지원하지 않습니다 — Apps Script를 새 버전으로 재배포했는지 확인하세요.',true);return null;}
-      msg('✓ 정리 완료 — 중복/빈 행 '+json.deduped+'행 삭제');
-      return json;
-    }catch(err){msg('정리 실패: '+err.message,true);return null;}
-  },
-  async pullFromSheets(){
-    const msg=(t,err)=>{if(typeof Backup!=='undefined'&&Backup._msg)Backup._msg(t,err);const rb=document.getElementById('rb-msg');if(rb){rb.textContent=t;rb.classList.toggle('err',!!err);}};
-    const url=await this.getScriptUrl();
-    if(!url){msg('먼저 운동 탭 ☁️ 버튼에서 Apps Script URL을 설정하세요.',true);return null;}
-    msg('⏳ 시트에서 불러오는 중…');
-    try{
-      const res=await fetch(url+(url.includes('?')?'&':'?')+'mode=export',{redirect:'follow'});
-      const json=await res.json();
-      if(!json||json.ok===false||json.mode!=='export'){msg('서버가 export를 지원하지 않습니다 — Apps Script를 새 코드로 재배포(배포 관리 > 편집 > 새 버전)했는지 확인하세요.',true);return null;}
-      if(typeof InBody!=='undefined')await InBody.load(); // _log 준비 후 병합
-      const r=this._mergePulled(json.rows,json.inbody);
+      if(!json||json.ok===false||!Array.isArray(json.rows))throw new Error((json&&json.error)||'응답에 rows가 없습니다 — Apps Script를 pull 지원 버전으로 재배포했는지 확인하세요.');
+      const byDate={};
+      json.rows.forEach(r=>{
+        if(!r||!r.date||!r.name)return;
+        const d=String(r.date).slice(0,10);
+        const s=(byDate[d]=byDate[d]||{day:r.day||this.dayType(d),exercises:[],cardio:[]});
+        if(String(r.name).startsWith('🏃')){s.cardio.push({type:String(r.name).replace(/^🏃\s*/,'')||'유산소',min:+r.reps||0,ts:r.ts||null,_no:+r.setNo||0});return;}
+        let ex=s.exercises.find(x=>x.name===r.name);
+        if(!ex){ex={name:r.name,sets:[]};s.exercises.push(ex);}
+        const set={weight:+r.weight||0,reps:+r.reps||0,_no:+r.setNo||0};
+        if(r.ts)set.ts=+r.ts||r.ts;
+        if(+r.wu)set.warmup=true;   // wu/rpe/pain 열은 새 서버부터 기록 — 열이 없던 옛 행은 본세트로 복원됨
+        if(+r.rpe)set.rpe=+r.rpe;
+        if(+r.pain)set.pain=true;
+        ex.sets.push(set);
+      });
+      let dates=0,sets=0;
+      Object.keys(byDate).forEach(d=>{
+        const s=byDate[d];
+        s.exercises.forEach(ex=>{ex.sets.sort((a,b)=>a._no-b._no);ex.sets.forEach(st=>{delete st._no;sets++;});});
+        s.cardio.sort((a,b)=>a._no-b._no);s.cardio.forEach(c=>{delete c._no;});
+        if(!s.cardio.length)delete s.cardio;
+        if(this.data[d]&&this.data[d].cond)s.cond=this.data[d].cond; // 컨디션은 시트에 없음 — 로컬 보존
+        this.data[d]=s;this.markDirty(d);dates++;
+      });
       await this.save();
-      if(r.addedIb&&typeof InBody!=='undefined'){await InBody._save();InBody.render();}
-      this.refresh();this.injectTargets();
-      if(typeof PlanApp!=='undefined')PlanApp.init();
-      msg('✓ 복원 완료 — 세트·유산소 '+r.addedSets+'건, 인바디 '+r.addedIb+'건 추가 (로컬 우선으로 유지된 종목 '+r.keptEx+'개)');
-      return Object.assign({ok:true},r);
-    }catch(err){msg('불러오기 실패: '+err.message,true);return null;}
+      this._dirty.clear();this._saveDirty(); // 방금 시트에서 온 데이터 — 재전송 불필요
+      alert('✓ 복원 완료 — '+dates+'일 · '+sets+'세트\n화면을 새로 고칩니다.');
+      location.reload();
+    }catch(err){
+      alert('복원 실패: '+err.message);
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='📥 시트에서 복원';}
+    }
   },
   _syncRows(onlyDates){
     // 시트 upsert용 행 — 리프팅 세트(원본 로직 유지) + 유산소('🏃 ' 접두, reps열=분·weight/vol=0)
@@ -3174,7 +3078,8 @@ const ExLog={
       (s.exercises||[]).forEach(ex=>{
         if(!ex.sets?.length)return;
         ex.sets.forEach((set,i)=>{
-          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null,flag:this._setFlag(set)});
+          // wu/rpe/pain 열 추가 — 복원(pull) 시 워밍업 제외·RPE·통증 이력이 보존되도록 (옛 서버는 이 필드를 무시해도 무해)
+          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null,wu:set.warmup?1:'',rpe:set.rpe||'',pain:set.pain?1:''});
         });
       });
       (s.cardio||[]).forEach((c,i)=>{
@@ -3207,7 +3112,6 @@ const ExLog={
       let okFlag=true,sawServer=false,stale=false;
       try{
         const json=await res.json();sawServer=true;okFlag=json.ok!==false;
-        if(json.added!=null)console.log('[sync] 추가 '+json.added+' · 갱신 '+json.updated+(full&&json.added>0?' ⚠ 전체 재동기화에서 추가>0 — 키 불일치(중복) 의심':''));
         // 새 서버는 응답에 written 키를 돌려줌. 없으면 옛 배포가 실행 중(이전 코드는 inbody/upsert를 모름).
         if(json.written===undefined)stale=true;
       }catch(_){okFlag=res.ok;}   // 응답 본문을 못 읽으면(CORS 등) 판단 보류 — 오탐 방지
@@ -3245,7 +3149,36 @@ const PlanApp={
       c.classList.toggle('future',i+1!==phaseIdx);
     });
   },
+  // ── 디로드 자동 제안: 최근 7일 vs 그 전 7일의 RPE·통증·볼륨 + 블록 주차를 종합, 신호 2개 이상이면 제안 ──
+  // 판단 근거를 그대로 노출해 사용자가 수긍/기각할 수 있게 한다. RPE 표본 6세트 미만이면 해당 신호는 침묵.
+  _lastNDays(n,off){const out=[];const base=new Date(_todayKey()+'T12:00:00');for(let i=off;i<off+n;i++){const d=new Date(base);d.setDate(base.getDate()-i);out.push(_localKey(d));}return out;},
+  _rpeStats(keys){
+    const data=(typeof ExLog!=='undefined')?(ExLog.data||{}):{};
+    let rs=0,rn=0,pain=0,vol=0;
+    keys.forEach(k=>{const s=data[k];if(!s)return;(s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=st.weight*st.reps;if(st.rpe){rs+=st.rpe;rn++;}if(st.pain)pain++;}));});
+    return{rpe:rn?rs/rn:0,rn,pain,vol};
+  },
+  deloadSignals(){
+    const a=this._rpeStats(this._lastNDays(7,0)),b=this._rpeStats(this._lastNDays(7,7));
+    const wk=(typeof ExLog!=='undefined'&&ExLog.blockWeek)?(ExLog.blockWeek()||0):0;
+    const sig=[];
+    if(a.rn>=6&&a.rpe>=9)sig.push('7일 평균 RPE '+a.rpe.toFixed(1)+' (한계 근접)');
+    if(a.rn>=6&&b.rn>=6&&a.rpe-b.rpe>=0.5)sig.push('RPE 전주 대비 +'+(a.rpe-b.rpe).toFixed(1));
+    if(a.pain>=2)sig.push('통증 플래그 '+a.pain+'회/7일');
+    if(b.vol>0&&a.vol<b.vol*0.9&&a.rn>=3&&a.rpe>=b.rpe)sig.push('볼륨 −'+Math.round((1-a.vol/b.vol)*100)+'%인데 RPE 유지↑ (피로 누적)');
+    if(wk>=5)sig.push('블록 '+wk+'주차 (6주 주기 종반)');
+    return{signals:sig,suggest:sig.length>=2};
+  },
+  renderDeload(){
+    const el=document.getElementById('block-deload-note');if(!el)return;
+    const r=this.deloadSignals();
+    if(!r.suggest){el.style.display='none';el.innerHTML='';return;}
+    el.style.display='';
+    el.innerHTML='🪫 <b>디로드 주 검토 신호 '+r.signals.length+'개</b> — '+r.signals.join(' · ')
+      +'<br>추세 섹션의 <b>📋 디로드 플랜</b>에서 종목별 숫자(중량 유지 · 세트 55%)를 확인하세요.';
+  },
   renderBlock(){
+    this.renderDeload();
     // 운동 탭 블록 트래커(ExLog.block)와 단일 소스 — 하드코딩 시작일 제거
     const fill=document.getElementById('block-fill');
     const rd=document.getElementById('block-review-date');
@@ -3842,9 +3775,9 @@ const LibApp={
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
-  KEYS:['wl_v2','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','day_ov','day_mode','day_seq'],
-  PREFIXES:[], // 레거시 프리픽스 화이트리스트 제거 — 현 코드가 쓰지도 읽지도 않음
-  _allowed(k){return this.KEYS.includes(k)||this.PREFIXES.some(p=>k.startsWith(p));},
+  KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
+  PREFIXES:['wl_v2:'], // 운동 기록 월 키 (wl_v2:YYYY-MM) — 단일 키(wl_v2)는 내보내지 않음(이관 후 낡은 사본이라 백업 부풀림 방지)
+  _allowed(k){return this.KEYS.includes(k)||k==='wl_v2'/*레거시 백업 파일 가져오기 호환*/||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
   async _collect(){
     const out={};
@@ -3889,7 +3822,20 @@ const Backup={
     if(!keys.length){this._msg('복원할 데이터가 없습니다.',true);return;}
     if(!confirm('백업 데이터 '+keys.length+'개 키를 복원합니다.\n현재 기기의 같은 항목을 덮어씁니다. 계속할까요?'))return;
     let ok=0;
-    for(const k of keys){try{await window.storage.set(k,obj.data[k]);ok++;}catch(_){}}
+    // 운동 기록은 '전체 교체' 의미론: 백업에 기록 키가 있으면 기존 월 키를 먼저 정리해
+    // 백업에 없는 월이 남아 섞이는 것을 방지 (레거시 wl_v2 백업 ↔ 월 키 백업 모두 대응)
+    const hasWl=keys.some(k=>k==='wl_v2'||k.startsWith('wl_v2:'));
+    if(hasWl){try{const r=await window.storage.list('wl_v2:');for(const k of ((r&&r.keys)||[]))await window.storage.delete(k);}catch(_){}}
+    for(const k of keys){
+      try{
+        if(k==='wl_v2'){ // 레거시 단일 키 백업 → 월 키로 분할 저장
+          const all=JSON.parse(obj.data[k])||{};const byM={};
+          Object.keys(all).forEach(d=>{const m=d.slice(0,7);(byM[m]=byM[m]||{})[d]=all[d];});
+          for(const m in byM)await window.storage.set('wl_v2:'+m,JSON.stringify(byM[m]));
+        }else await window.storage.set(k,obj.data[k]);
+        ok++;
+      }catch(_){}
+    }
     this._msg('✓ '+ok+'/'+keys.length+'개 복원 완료 — 새로고침하여 적용합니다.');
     setTimeout(()=>location.reload(),900);
   }
@@ -3906,47 +3852,6 @@ const InBody={
     if(!this._log){this._log=[...IB_SEED];await this._save();}
   },
   async _save(){try{await window.storage.set('inbody_log',JSON.stringify(this._log));}catch(_){}},
-  GOAL_DATE:'2026-12-31', // 목표 시한 — Phase 3 종료와 정렬. IB_GOALS와 함께 여기만 수정
-  _goalPace(){ // 순수 계산(테스트 단위): 마지막 측정 기준, 목표까지 '주당 필요 변화량' vs 최근 3~6주 실적
-    const log=this._log||[];if(!log.length)return null;
-    const last=log[log.length-1];
-    const day=s=>new Date(String(s).slice(0,10)+'T12:00:00');
-    const now=day(last.date),end=day(this.GOAL_DATE);
-    const wksLeft=(end-now)/6048e5;
-    if(wksLeft<=0)return null;
-    let past=null; // 실적 기준점: 마지막 측정에서 21~42일 전 사이의 가장 최근 측정
-    for(let i=log.length-2;i>=0;i--){
-      const dd=(now-day(log[i].date))/864e5;
-      if(dd>=21&&dd<=42){past=log[i];break;}
-      if(dd>42)break;
-    }
-    const wksSpan=past?(now-day(past.date))/6048e5:0;
-    const rows=[];
-    [['체중','wt',IB_GOALS.wt,'kg'],['골격근','sm',IB_GOALS.sm,'kg'],['체지방','bf',IB_GOALS.bf,'%']].forEach(([lbl,k,goal,unit])=>{
-      const cur=last[k];if(cur==null)return;
-      const need=(goal-cur)/wksLeft;
-      const act=(past&&past[k]!=null&&wksSpan>0)?(cur-past[k])/wksSpan:null;
-      let st=null; // on(궤도)/near(근접)/off(이탈)/done(달성권)
-      if(Math.abs(goal-cur)<=0.3)st='done';
-      else if(act!=null){
-        const r=need!==0?act/need:1; // 같은 방향으로 얼마나 내고 있나
-        st=(r>=0.9)?'on':(r>=0.5?'near':'off');
-      }
-      rows.push({lbl,cur,goal,unit,need,act,st});
-    });
-    return{wksLeft,hasPast:!!past,rows};
-  },
-  _goalPaceHtml(){
-    const g=this._goalPace();if(!g||!g.rows.length)return'';
-    const f=(v,d)=>(v>0?'+':'')+v.toFixed(d);
-    const MK={on:'🟢 궤도 위',near:'🟡 근접',off:'🔴 이탈',done:'✅ 달성권'};
-    return '<div class="ib-pace"><div class="ib-pace-hd">🎯 목표 항로 — '+this.GOAL_DATE.slice(5).replace('-','/')+'까지 <b>'+Math.round(g.wksLeft)+'주</b></div>'
-      +g.rows.map(r=>{
-        const rate='주당 '+f(r.need,2)+(r.unit==='%'?'%p':r.unit)+' 필요'
-          +(r.act!=null?' · 최근 '+f(r.act,2)+(r.unit==='%'?'%p':r.unit):' · 실적 데이터 수집 중(4주 간격 측정 2회 필요)');
-        return '<div class="ib-pace-row"><span class="ip-lbl">'+r.lbl+'</span><span class="ip-path">'+r.cur+' → '+r.goal+r.unit+'</span><span class="ip-rate">'+rate+'</span>'+(r.st?'<span class="ip-st ip-'+r.st+'">'+MK[r.st]+'</span>':'')+'</div>';
-      }).join('')+'</div>';
-  },
   async render(){
     await this.load();
     const log=this._log;const last=log[log.length-1];
@@ -4042,10 +3947,36 @@ const InBody={
         +'</div>';
     });
     html+='</div>';
-    html+=this._goalPaceHtml(); // 목표 항로 — 현황 카드 아래
     box.innerHTML=html;
     if(note){const d=new Date(last.date+'T12:00:00');note.textContent='📅 최근 측정: '+d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'})+' · '+log.length+'회 누적';}
+    this._renderAdvice(log);
     this.renderProjection();
+  },
+  // ── 정체/속도 자동 분석 — 플랜 규칙('2주 정체 시 ±50~100kcal 조정')을 측정 데이터에서 자동 판정 ──
+  // 최신 측정 vs 12일 이상 벌어진 가장 최근 측정(≈2주 전)을 비교. 공백 28일 초과면 판단 보류.
+  trendAdvice(log){
+    if(!log||log.length<3)return null;
+    const last=log[log.length-1];
+    const lastD=new Date(last.date+'T12:00:00');
+    let ref=null;
+    for(let i=log.length-2;i>=0;i--){
+      const days=Math.round((lastD-new Date(log[i].date+'T12:00:00'))/864e5);
+      if(days>=12){ref=log[i];break;}
+    }
+    if(!ref)return null;
+    const days=Math.round((lastD-new Date(ref.date+'T12:00:00'))/864e5);
+    if(days>28)return null;
+    const dWt=+(last.wt-ref.wt).toFixed(1),dBf=+(last.bf-ref.bf).toFixed(1),dSm=+(last.sm-ref.sm).toFixed(1);
+    const span=days+'일간';
+    if(dWt<=-1.6)return{type:'fast',msg:'🚨 감량 과속 — '+span+' 체중 '+dWt+'kg. 근손실 위험 구간: +100kcal 복귀 또는 수면·단백질(170g+) 점검.'};
+    if(dSm>=0.2&&dBf<=-0.3)return{type:'recomp',msg:'✅ 리컴프 순항 — '+span+' 골격근 +'+dSm+'kg · 체지방 '+dBf+'%p. 현재 칼로리·볼륨 유지.'};
+    if(Math.abs(dWt)<0.4&&Math.abs(dBf)<0.4&&Math.abs(dSm)<0.3)return{type:'plateau',msg:'⚠️ 2주 정체 — '+span+' 체중 '+(dWt>0?'+':'')+dWt+'kg · 체지방 '+(dBf>0?'+':'')+dBf+'%p · 골격근 '+(dSm>0?'+':'')+dSm+'kg. 플랜 규칙: −50~100kcal 또는 유산소 +10분/회 검토.'};
+    return null;
+  },
+  _renderAdvice(log){
+    const el=document.getElementById('inbody-advice');if(!el)return;
+    const a=this.trendAdvice(log||this._log||[]);
+    el.innerHTML=a?'<div class="ib-advice '+a.type+'">'+a.msg+'</div>':'';
   },
   renderProjection(){
     const box=document.getElementById('inbody-projection');if(!box)return;
@@ -4152,8 +4083,11 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.s
 <div class="sync-modal" id="sync-modal" onclick="if(event.target===this)ExLog.closeSync()">
   <div class="sync-modal-box">
     <div class="sync-modal-title">☁️ Google Sheets 동기화</div>
-    <p style="font-size:12px;color:#666;margin:0 0 10px">Apps Script 배포 URL을 붙여넣으세요.<br>한 번만 설정하면 이후 자동 동기화됩니다.</p>
+    <p style="font-size:12px;color:#666;margin:0 0 10px">Apps Script 배포 URL을 붙여넣으세요.<br>한 번만 설정하면 이후 자동 동기화됩니다.<br><b>시트에서 복원</b>: 기기 변경·데이터 유실 시 시트의 기록을 이 기기로 가져옵니다.</p>
     <input class="sync-url-input" id="sync-url-inp" placeholder="https://script.google.com/macros/s/.../exec" type="url"/>
+    <div class="sync-modal-row">
+      <button class="sync-modal-btn sec" id="sync-restore-btn" onclick="ExLog.restoreFromSheets()">📥 시트에서 복원</button>
+    </div>
     <div class="sync-modal-row">
       <button class="sync-modal-btn sec" onclick="ExLog.closeSync()">취소</button>
       <button class="sync-modal-btn pri" onclick="ExLog.saveAndSync()">저장 &amp; 동기화</button>
