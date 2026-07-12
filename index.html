@@ -29,17 +29,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-r,.day-r,.exck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .nav-lbl{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:#8e8e93;cursor:pointer;border-bottom:2.5px solid transparent}
-#tw:checked~.top-nav .lbl-w,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p{color:#085041;border-bottom-color:#085041}
+#tw:checked~.top-nav .lbl-w,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p,#tb:checked~.top-nav .lbl-b{color:#085041;border-bottom-color:#085041}
 .tab-body{display:none}
-#tw:checked~.tab-w,#td:checked~.tab-d,#tl:checked~.tab-l,#tp:checked~.tab-p{display:block}
+#tw:checked~.tab-w,#td:checked~.tab-d,#tl:checked~.tab-l,#tp:checked~.tab-p,#tb:checked~.tab-b{display:block}
 .day-sel{display:flex;gap:5px;padding:10px 16px;overflow-x:auto;background:#fff;border-bottom:1px solid #f0f0f0;-webkit-overflow-scrolling:touch}
 .day-sel::-webkit-scrollbar{display:none}
 .day-lbl{flex:1 1 0;min-width:0;height:50px;border-radius:10px;border:1.5px solid #d1d1d6;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fff;position:relative}
 .day-lbl span{display:block;text-align:center}
-.dn{font-size:9px;font-weight:600;color:#8e8e93}
-.dl{font-size:11px;font-weight:700;color:#1c1c1e}
-.dw{font-size:9px;color:#8e8e93}
-.today-dot{position:absolute;top:3px;right:4px;width:5px;height:5px;border-radius:50%;background:#ff3b30}
+.dn{font-size:13px;font-weight:800;color:#1c1c1e}
+.dl{font-size:9.5px;font-weight:600;color:#8e8e93}
 #d1:checked~.tab-w .lbl-d1{background:#D85A30;border-color:#D85A30}
 #d2:checked~.tab-w .lbl-d2{background:#185FA5;border-color:#185FA5}
 #d3:checked~.tab-w .lbl-d3{background:#3B6D11;border-color:#3B6D11}
@@ -117,9 +115,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .rd{font-size:10.5px;color:#636366;line-height:1.5}
 .cooldown{margin:8px 16px;padding:10px 13px;background:#fff;border-radius:10px;border:.5px solid #e5e5ea;font-size:12px;color:#636366;line-height:1.6;margin-bottom:16px}
 .cooldown b{color:#1c1c1e;font-weight:600}
-.rest-day{padding:50px 24px;text-align:center}
-.rest-title{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:10px}
-.rest-desc{font-size:13.5px;color:#3c3c43;line-height:1.9}
 .rest-desc b{color:#1c1c1e;font-weight:600}
 /* 보완 추천 (운동 탭) */
 .day-reco{margin:10px 0 4px;padding:11px 12px;border:1px dashed #b7d8c4;border-radius:12px;background:#f3faf6}
@@ -261,11 +256,15 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .pv-fill{height:100%;border-radius:5px;transition:width .3s}
 .pv-val{font-size:11px;font-weight:700;width:40px;text-align:right;color:var(--color-text-secondary)}
 .pv-val.low{color:#BA7517}
-.tr-row{padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary,#e5e5ea)}
+.tr-row{padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary,#e5e5ea)}
 .tr-row:last-child{border-bottom:0;padding-bottom:0}
 .tr-row:first-child{padding-top:0}
 .tr-top{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.tr-nm{font-size:12px;font-weight:700;color:var(--color-text-primary)}
+.tr-nm{font-size:13px;font-weight:700;color:var(--color-text-primary)}
+.tr-grp{margin:14px 0 2px;font-size:12px;font-weight:800;color:var(--color-text-secondary);letter-spacing:.2px}
+.tr-grp-n{font-weight:600;color:var(--color-text-tertiary);font-size:10px}
+.tr-more-btn{display:block;width:100%;margin-top:10px;padding:9px;font-size:12px;font-weight:600;color:#185FA5;background:#f4f7fa;border:1px solid #dbe4ec;border-radius:10px;cursor:pointer}
+.tr-more-note{font-size:10.5px;color:var(--color-text-tertiary);padding:4px 0 2px}
 .tr-plat{font-size:9px;font-weight:700;color:#fff;background:#BA7517;padding:1px 6px;border-radius:8px}
 .tr-mid{display:flex;align-items:center;gap:10px}
 .tr-spark{flex-shrink:0}
@@ -398,7 +397,8 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .pr-t2{font-size:15px;font-weight:800}
 .prj-card{margin-top:10px;border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:12px 14px;background:var(--color-background-secondary,#f7f8f9)}
 .prj-hd{font-size:12px;font-weight:800;color:#085041;margin-bottom:9px}
-.prj-row{display:flex;align-items:center;gap:7px;font-size:12px;padding:4px 0;flex-wrap:wrap}
+.prj-row{display:flex;align-items:center;gap:7px;font-size:12px;padding:6.5px 0;flex-wrap:wrap;border-bottom:0.5px solid var(--color-border-tertiary,#eee)}
+.prj-row:last-of-type{border-bottom:none}
 .prj-lbl{font-weight:700;color:var(--color-text-secondary);width:62px;flex-shrink:0}
 .prj-val{font-weight:800;color:var(--color-text-primary)}
 .prj-arrow{color:var(--color-text-tertiary);font-size:11px}
@@ -585,8 +585,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* 도감 미연결 힌트 */
 .fb.link .fl{color:#185FA5}
 /* 6주 블록 */
-.block-chip{font-size:11px;color:#4a4a45;background:#F4F1EA;border-radius:var(--border-radius-md);padding:6px 10px;margin:6px 0;display:flex;align-items:center;gap:8px}
-.bc-act{margin-left:auto;color:#185FA5;cursor:pointer;font-weight:600}
+.block-chip{font-size:11px;color:#4a4a45;background:#F4F1EA;border-radius:var(--border-radius-md);padding:6px 10px;margin:6px 16px 0;display:flex;align-items:center;justify-content:center;gap:8px}
+.bc-act{margin-left:6px;color:#185FA5;cursor:pointer;font-weight:600}
 .bc-due{color:#BA7517;font-weight:600}
 .tr-block{font-size:12px;line-height:1.6;color:#153A5E;background:#EAF1F8;border:0.5px solid #CBDDEE;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
 .tr-block-list{margin:6px 0}
@@ -604,7 +604,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .cd-min{width:64px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 8px}
 .cd-ok{font-size:12px;color:#fff;background:#3B6D11;border:none;border-radius:6px;padding:6px 12px;cursor:pointer}
 /* 레그데이 리마인더 */
-.legday-note{font-size:11px;line-height:1.6;color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8;border-radius:var(--border-radius-md);padding:7px 10px;margin:6px 0}
+.legday-note{font-size:11px;line-height:1.6;color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8;border-radius:var(--border-radius-md);padding:7px 10px;margin:6px 16px 0;text-align:center}
 /* 상대강도 */
 .tr-bw{font-size:10px;color:#6B4FA0;background:#F1EDF8;border-radius:6px;padding:1px 5px}
 /* 기본무게 */
@@ -670,8 +670,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-wu-log{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;color:#fff;background:#085041;border:none;border-radius:7px;padding:5px 10px;cursor:pointer}
 .ex-wu-log:disabled{background:#9fbfb5;cursor:default}
 /* 세션 진행률 — 날짜 바 아래 얇은 바 (기록 기반 자동) */
-.log-progress{display:none;align-items:center;gap:8px;padding:5px 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
-.lp-bar{flex:1;height:4px;background:#eceef0;border-radius:2px;overflow:hidden}
+.log-progress{display:none;align-items:center;justify-content:center;gap:8px;padding:5px 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
+.lp-bar{flex:0 1 240px;height:4px;background:#eceef0;border-radius:2px;overflow:hidden}
 .lp-fill{height:100%;border-radius:2px;transition:width .3s ease}
 .lp-txt{font-size:10px;font-weight:600;color:var(--color-text-tertiary);flex-shrink:0;font-variant-numeric:tabular-nums}
 /* 렙 원탭 칩 — 세트 입력행 아래, 손 젖은 상태에서 타이핑 없이 확정 */
@@ -743,8 +743,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </style>
 </head>
 <body>
-<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderCalendar();InBody.render();},30)">📊 플랜</label></div>
+<input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="tab" id="tb" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r">
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderBlock();PlanApp.renderCalendar();},30)">📈 분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">🩺 관리</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -882,11 +882,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 섹션 점프 칩 -->
 <div class="plan-nav">
 <button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-ws')">🏆 성과</button>
-<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-ib')">📊 체성분</button>
-<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-cal')">🔥 캘린더</button>
 <button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-vol')">💪 볼륨</button>
 <button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-tr')">📈 추세</button>
-<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-bk')">💾 백업</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-cal')">🔥 캘린더</button>
 </div>
 
 <!-- 이번 주 성과 요약 -->
@@ -898,6 +896,48 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <details class="info-card pr-fold"><summary>🏆 PR 보드 — 역대 최고 기록<span class="ic">▾</span></summary><div class="info-body"><div id="pr-board"></div></div></details>
 
 <!-- 체성분 현황 -->
+<div class="plan-hd" id="sec-vol">📊 주간 부위별 볼륨</div>
+<div id="plan-vol" class="plan-card"></div>
+
+<div class="plan-hd" id="sec-tr">📈 종목별 추세 · 정체</div>
+<div id="plan-trend" class="plan-card"></div>
+
+<details class="plan-fold"><summary class="plan-hd">⏱ 6주 블록 진행</summary>
+<div class="plan-block-card">
+  <div class="plan-block-header">
+    <span class="plan-block-title">1차 블록 리뷰</span>
+    <span class="plan-block-date" id="block-review-date"></span>
+  </div>
+  <div class="plan-block-bar"><div class="plan-block-fill" id="block-fill"></div></div>
+  <div class="plan-block-foot">
+    <span id="block-days-txt"></span>
+    <span id="block-remain-txt"></span>
+  </div>
+  <div class="plan-block-deload" id="block-deload-note" style="display:none"></div>
+  <div class="plan-block-items">
+    <div class="plan-block-item">📊 체성분 4주 추세 분석</div>
+    <div class="plan-block-item">💪 핵심 6종목 증량 상태 검토</div>
+    <div class="plan-block-item">🔄 보조 종목 로테이션 재설계</div>
+    <div class="plan-block-item">⚖️ 칼로리 조정 여부 결정</div>
+  </div>
+</div>
+</details>
+
+<!-- 체질 프로파일 -->
+<div class="plan-hd" id="sec-cal">🔥 운동 캘린더</div>
+<div id="plan-calendar" class="plan-card"></div>
+
+</div><!-- plan-wrap -->
+</div><!-- tab-body tab-p -->
+<div class="tab-body tab-b">
+<div class="plan-wrap">
+
+<!-- 섹션 점프 칩 -->
+<div class="plan-nav">
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-ib')">📊 체성분</button>
+<button class="plan-nav-chip" onclick="PlanApp.jumpTo('sec-bk')">💾 백업</button>
+</div>
+
 <div class="plan-hd" id="sec-ib">📊 체성분 현황</div>
 <div id="inbody-cards"></div>
 
@@ -981,9 +1021,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 
 <!-- Phase 타임라인 -->
 <!-- 운동 캘린더 -->
-<div class="plan-hd" id="sec-cal">🔥 운동 캘린더</div>
-<div id="plan-calendar" class="plan-card"></div>
-
 <details class="plan-fold"><summary class="plan-hd">🗓 단계별 플랜</summary>
 <div class="plan-phase-track">
   <div class="plan-phase-bar">
@@ -1018,34 +1055,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </details>
 
 <!-- 6주 블록 -->
-<details class="plan-fold"><summary class="plan-hd">⏱ 6주 블록 진행</summary>
-<div class="plan-block-card">
-  <div class="plan-block-header">
-    <span class="plan-block-title">1차 블록 리뷰</span>
-    <span class="plan-block-date" id="block-review-date"></span>
-  </div>
-  <div class="plan-block-bar"><div class="plan-block-fill" id="block-fill"></div></div>
-  <div class="plan-block-foot">
-    <span id="block-days-txt"></span>
-    <span id="block-remain-txt"></span>
-  </div>
-  <div class="plan-block-deload" id="block-deload-note" style="display:none"></div>
-  <div class="plan-block-items">
-    <div class="plan-block-item">📊 체성분 4주 추세 분석</div>
-    <div class="plan-block-item">💪 핵심 6종목 증량 상태 검토</div>
-    <div class="plan-block-item">🔄 보조 종목 로테이션 재설계</div>
-    <div class="plan-block-item">⚖️ 칼로리 조정 여부 결정</div>
-  </div>
-</div>
-</details>
-
-<!-- 체질 프로파일 -->
-<div class="plan-hd" id="sec-vol">📊 주간 부위별 볼륨</div>
-<div id="plan-vol" class="plan-card"></div>
-
-<div class="plan-hd" id="sec-tr">📈 종목별 추세 · 정체</div>
-<div id="plan-trend" class="plan-card"></div>
-
 <details class="plan-fold"><summary class="plan-hd">🧬 체질 프로파일</summary>
 <div class="plan-body-card">
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
@@ -1080,7 +1089,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 
 </div><!-- plan-wrap -->
-</div><!-- tab-body tab-p -->
+</div><!-- tab-body tab-b -->
 
 <script src="exercise-library.js"></script>
 <script>
@@ -2344,7 +2353,7 @@ const ExLog={
     }
     this.renderCardio();                                     // 유산소 목록 갱신
     this.renderCond();                                       // 컨디션·수면 표시 갱신
-    this.renderWeeklyReport();                               // REST(일요일) 패널 주간 리포트 동기 갱신
+    this.renderWeeklyReport();                               // 주간 리포트 동기 갱신 (운동 탭 하단 상시 노출)
     this.updateGripChips();                                  // 데드 그립 교대 표시 갱신
   },
 
@@ -3427,7 +3436,7 @@ const PlanApp={
     let bwKg=null;
     try{if(typeof InBody!=='undefined'){if(!InBody._log)await InBody.load();if(InBody._log&&InBody._log.length)bwKg=InBody._log[InBody._log.length-1].wt||null;}}catch(_){}
     let plateauCompounds=0; // 디로드 감지용: 복합 종목 동시 정체 수
-    const rowsHtml=names.slice(0,8).map(n=>{
+    const rowFor=(n)=>{
       const arr=byEx[n];const last=arr[arr.length-1],prev=arr[arr.length-2];
       const delta=last.e1-prev.e1;
       const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
@@ -3443,7 +3452,28 @@ const PlanApp={
         ms='<div class="tr-ms"><span class="tr-ms-txt">🏁 <b>'+next+'kg</b>까지 '+(next-best).toFixed(1)+'kg</span><div class="tr-ms-bar"><div class="tr-ms-fill" style="width:'+p+'%"></div></div></div>';
       }
       return '<div class="tr-row"><div class="tr-top"><span class="tr-nm" onclick="ExLog.showHistory(\''+n.replace(/'/g,"\\'")+'\')" title="탭하면 전체 기록">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span>'+((bwKg&&typeof ExLog!=='undefined'&&ExLog.isCompound(n))?' <span class="tr-bw">'+(last.e1/bwKg).toFixed(2)+'×BW</span>':'')+' '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+ms+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
-    }).join('');
+    };
+    // ── 가독성: 부위 그룹핑 + 그룹당 기본 5개(전체 펼치기) — 최근 기록순 단일 긴 목록이던 것을 푸시/풀/하체로 구획 ──
+    const catLbl={push:'🔴 푸시',pull:'🔵 풀',legs:'🟢 하체',etc:'⚪ 기타'};
+    const catOf=n=>{const mu=this.muscleOf(n);const b=mu&&mu.p;for(const c in RECO_CAT){if(RECO_CAT[c].includes(b))return c;}return 'etc';};
+    const groups={push:[],pull:[],legs:[],etc:[]};
+    names.forEach(n=>groups[catOf(n)].push(n));
+    const LIMIT=this._trAll?999:5;
+    let rowsHtml='';let hidden=0;
+    ['push','pull','legs','etc'].forEach(c=>{
+      const g=groups[c];if(!g.length)return;
+      rowsHtml+='<div class="tr-grp">'+catLbl[c]+' <span class="tr-grp-n">'+g.length+'</span></div>'+g.slice(0,LIMIT).map(rowFor).join('');
+      if(g.length>LIMIT){hidden+=g.length-LIMIT;rowsHtml+='<div class="tr-more-note">… '+(g.length-LIMIT)+'개 숨김</div>';}
+    });
+    if(hidden)rowsHtml+='<button class="tr-more-btn" onclick="PlanApp._trAll=true;PlanApp.renderTrends()">전체 펼치기 ('+hidden+'개 더)</button>';
+    else if(this._trAll)rowsHtml+='<button class="tr-more-btn" onclick="PlanApp._trAll=false;PlanApp.renderTrends()">접기</button>';
+    // 디로드 신호는 표시 개수와 무관하게 전체 종목 기준으로 재계산
+    plateauCompounds=names.filter(n=>{
+      if(!(typeof ExLog!=='undefined'&&ExLog.isCompound(n)))return false;
+      const arr=byEx[n];if(arr.length<3)return false;
+      const a=arr.slice(-3).map(x=>x.e1);
+      return a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3;
+    }).length;
     // 6주 블록 리뷰: 6주차 도달 시 블록 내 보조 종목 정체를 나열하고 같은 부위 대체 후보 제안
     let blockBanner='';
     const bw6=(typeof ExLog!=='undefined'&&ExLog.blockWeek)?ExLog.blockWeek():null;

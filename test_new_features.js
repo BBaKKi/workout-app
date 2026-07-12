@@ -421,8 +421,10 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 
   console.log('\n[운동 라이브러리 검증]');
   const LIB=w.eval('window.EXERCISE_LIBRARY');
-  await t('183개 엔트리·신규 2종 존재',async()=>{
-    eq(LIB.length,183);
+  await t('184개 엔트리(어시스트 딥스 머신 추가)·신규 종목 존재',async()=>{
+    eq(LIB.length,184);
+    ok(LIB.some(e=>e.name==='어시스트 딥스 머신'));
+    ok(LIB.some(e=>(e.aka||[]).includes('체스트 프레스 머신')));
     ok(LIB.some(e=>e.name==='토르소 로테이션'));
     ok(LIB.some(e=>e.name==='스미스 숄더 프레스'));
   });
