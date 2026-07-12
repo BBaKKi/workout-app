@@ -235,6 +235,7 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
   await t('빈 주간에도 예외 없이 생성',async()=>{
     ExLog.data={};
     await w.eval('window.storage').set('wl_v2','{}'); // _logData의 storage 폴백까지 비움
+    const wlr=await w.eval('window.storage').list('wl_v2:');for(const k of ((wlr&&wlr.keys)||[]))await w.eval('window.storage').delete(k); // 월분할 키도 비움
     const md=await PlanApp.copyReport(null);
     ok(md.includes('이번 주 기록 없음'));
   });
@@ -574,10 +575,11 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(/\.ib-modal\{display:none[^}]*align-items:flex-end/.test(src));
     ok(/\.sync-modal\{display:none[^}]*align-items:flex-end/.test(src));
   });
-  await t('U3: PlanApp 요일 타입·색상이 상단 상수와 단일 소스 (REST 색 불일치 해소)',async()=>{
-    ok(PlanApp.DAY_TYPES===w.eval('EL_WDAY'),'DAY_TYPES 사본 잔존');
+  await t('U3: 색상 단일 소스 + 순환제 상수(EL_CYCLE) 존재 (요일 고정표 제거)',async()=>{
     ok(PlanApp.DAY_COLORS===w.eval('DAY_COLORS_EL'),'DAY_COLORS 사본 잔존');
     eq(PlanApp.DAY_COLORS.REST,'#888780');
+    eq(w.eval('EL_CYCLE').join(','),'Push,Pull,Legs');
+    ok(PlanApp.DAY_TYPES===undefined,'요일 고정표(DAY_TYPES) 잔존');
   });
 
   console.log('\n[A. 렙 원탭 칩]');
@@ -692,13 +694,11 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(/1\/\d+종목/.test(el.textContent),'카운트 형식 오류: '+el.textContent);
     ExLog.data={};ExLog.date=_todayKey();ExLog.renderProgress();
   });
-  await t('REST일은 진행률 숨김',async()=>{
-    // 최근 일요일로 이동
-    const now=new Date();const sun=new Date(now);sun.setDate(now.getDate()-now.getDay());
-    const sk=(()=>{const t=new Date(sun);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);})();
-    ExLog.date=sk;ExLog.renderProgress();
+  await t('레거시 REST 세션 날짜는 진행률 숨김 (순환제: 미기록일은 다음 타입으로 표시)',async()=>{
+    ExLog.data={'2026-07-05':{day:'REST',exercises:[]}};
+    ExLog.date='2026-07-05';ExLog.renderProgress();
     eq(d.getElementById('log-progress').style.display,'none');
-    ExLog.date=_todayKey();ExLog.renderProgress();
+    ExLog.data={};ExLog.date=_todayKey();ExLog.renderProgress();
   });
 
   console.log('\n[정리 — 유령 CSS·e1RM 단일화·레거시]');
@@ -788,14 +788,12 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.data={};
   });
   await t('renderBrief: 도전 항목 표시 → 기록하면 목록에서 제거·전부 없으면 숨김',async()=>{
-    // 오늘 요일 패널의 실제 종목 하나에 '증량 타이밍' 이력 구성
-    const day=ExLog.dayType(_todayKey());
-    if(day==='REST'){ok(true);return;} // 일요일 실행 환경에선 스킵
-    const idx=ExLog.PANEL_DAY.indexOf(day);
-    const panel=d.querySelector('.day-panel.dp'+(idx+1));
+    // 순환제: 지난 세션을 Legs로 두면 오늘 타입 = Push. Push 패널 종목에 '증량 타이밍' 이력 구성
+    const panel=d.querySelector('.day-panel.dp1');
     const target=panel.querySelector('.ex-wrap .ex-nm').textContent.trim();
-    ExLog.data={'2026-07-01':{day,exercises:[{name:target,sets:[{weight:40,reps:ExLog.repCap(target)},{weight:40,reps:ExLog.repCap(target)}]}]}};
+    ExLog.data={'2026-07-01':{day:'Legs',exercises:[{name:target,sets:[{weight:40,reps:ExLog.repCap(target)},{weight:40,reps:ExLog.repCap(target)}]}]}};
     ExLog.date=_todayKey();
+    const day='Push';
     ExLog.renderBrief();
     const el=d.getElementById('log-brief');
     ok(el.style.display!=='none','브리핑 미표시');
@@ -1034,6 +1032,87 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(!/90kg/.test(src),'90kg 규칙 잔존 — 현행은 75kg 정착');
     ok(!/91kg/.test(src),'옛 체중(91kg) 문구 잔존');
     ok(!/64kg 정착|20kg 정착|25kg 유지 재평가|7kg 기준점/.test(src),'시점 박제 무게 처방 잔존');
+  });
+
+
+  console.log('\n[PPL 순환 · 부위 추천 · 별칭 통합 · 세팅 병합]');
+  await t('3패널 구조: day-panel 3개·병합 카드·상시 주간리포트',async()=>{
+    eq(d.querySelectorAll('.day-panel').length,3);
+    const names=p=>[...d.querySelectorAll('.day-panel.dp'+p+' .ex-nm')].map(x=>x.textContent.trim());
+    ok(names(1).includes('펙덱 플라이')&&names(1).includes('페이스풀 (케이블) ⭐필수'),'Push 병합 누락');
+    ok(names(2).includes('풀업 (체중/어시스트)')&&names(2).includes('Hammer ISO-프론트 풀다운'),'Pull 병합 누락');
+    ok(names(3).includes('Booty Builder 힙 쓰러스트')&&names(3).includes('레그레이즈'),'Legs 병합 누락');
+    ok(d.getElementById('weekly-report'),'weekly-report 슬롯 없음');
+  });
+  await t('순환 dayType: 무기록→Push, 지난 세션 다음 순서, 휴식·유산소는 순환 안 밀림, 레거시 + 호환',async()=>{
+    ExLog.data={};
+    eq(ExLog.dayType('2026-08-10'),'Push');
+    ExLog.data={'2026-08-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]}};
+    eq(ExLog.dayType('2026-08-03'),'Pull'); // 8/2 쉬어도 순환 유지
+    ExLog.data['2026-08-03']={day:'Pull',exercises:[],cardio:[{type:'러닝',min:30}]};
+    eq(ExLog.dayType('2026-08-04'),'Pull'); // 유산소만 한 날은 순환 안 밀림
+    ExLog.data={'2026-08-01':{day:'Pull+',exercises:[{name:'랫풀다운',sets:[{weight:40,reps:8}]}]}};
+    eq(ExLog.dayType('2026-08-02'),'Legs'); // 레거시 Pull+ → Pull 다음
+    ExLog.data['2026-08-05']={day:'Legs',exercises:[]};
+    eq(ExLog.dayType('2026-08-05'),'Legs'); // 기록된 날은 저장 타입
+    ExLog.data={};
+  });
+  await t('recommendType: 방치 타입 추천·미성숙 데이터 침묵·순환 일치 시 침묵',async()=>{
+    const lk=w.eval('_localKey');
+    const today=_todayKey();
+    const mk=off=>{const dd=new Date(today+'T12:00:00');dd.setDate(dd.getDate()-off);return lk(dd);};
+    ExLog.date=today;
+    // (a) 세 타입 미완주(성숙도 가드) → 침묵
+    ExLog.data={};
+    ExLog.data[mk(1)]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]};
+    eq(ExLog.recommendType(),null,'미성숙 데이터인데 추천 발생');
+    // (b) Pull 11일 방치, 마지막 세션 Legs → next=Push, best=Pull → 추천
+    ExLog.data={};
+    ExLog.data[mk(11)]={day:'Pull',exercises:[{name:'랫풀다운',sets:[{weight:40,reps:8}]}]};
+    ExLog.data[mk(2)]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]};
+    ExLog.data[mk(1)]={day:'Legs',exercises:[{name:'V스쿼트 머신',sets:[{weight:100,reps:8}]}]};
+    const r=ExLog.recommendType();
+    ok(r&&r.type==='Pull',JSON.stringify(r));
+    ok(/마지막 11일 전/.test(r.why),r.why);
+    // (c) 고른 순환(1~3일 간격) → 침묵
+    ExLog.data={};
+    ExLog.data[mk(3)]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]};
+    ExLog.data[mk(2)]={day:'Pull',exercises:[{name:'랫풀다운',sets:[{weight:40,reps:8}]}]};
+    ExLog.data[mk(1)]={day:'Legs',exercises:[{name:'V스쿼트 머신',sets:[{weight:100,reps:8}]}]};
+    eq(ExLog.recommendType(),null,'고른 순환인데 추천 발생');
+    ExLog.data={};
+  });
+  await t('autoConsolidate: 도감 aka 표기를 표준명으로 자동 연결·세팅 승계',async()=>{
+    await w.storage.delete('alias_consol_v1');
+    ExLog.data={'2026-08-01':{day:'Pull',exercises:[{name:'시티드 로우 머신',sets:[{weight:30,reps:10}]}]}};
+    delete ExLog.alias['시티드 로우 머신'];
+    ExLog.memo['시티드 로우 머신']='시트 3';
+    await ExLog.autoConsolidate();
+    eq(ExLog.canon('시티드 로우 머신'),'머신 로우');
+    eq(ExLog.memoOf('머신 로우'),'시트 3','세팅 메모 승계 실패');
+    delete ExLog.alias['시티드 로우 머신'];delete ExLog.memo['머신 로우'];ExLog.data={};
+    const flag=await w.storage.get('alias_consol_v1');ok(flag,'1회 플래그 미기록');
+  });
+  await t('백업 가져오기: ex_memo 등 로컬 세팅 병합 보존(로컬 전용 항목 유지)',async()=>{
+    const Backup=w.eval('Backup');
+    ok(Backup.MERGE_KEYS.includes('ex_memo')&&Backup.MERGE_KEYS.includes('ex_base'),'MERGE_KEYS 누락');
+    await w.storage.set('ex_memo',JSON.stringify({'로컬종목':'로컬 세팅','공통종목':'로컬값'}));
+    const ta=d.getElementById('bk-ta');
+    ta.value=JSON.stringify({app:'fit-tracker',version:1,exported:'2026-08-01',data:{ex_memo:JSON.stringify({'공통종목':'백업값','백업종목':'백업 세팅'})}});
+    w.confirm=()=>true;
+    await Backup.importData();
+    const r=await w.storage.get('ex_memo');const m=JSON.parse(r.value);
+    eq(m['로컬종목'],'로컬 세팅','로컬 전용 항목이 지워짐');
+    eq(m['공통종목'],'백업값','충돌 시 백업 우선이어야 함');
+    eq(m['백업종목'],'백업 세팅');
+    await w.storage.set('ex_memo','{}');ExLog.memo={};
+  });
+  await t('switchDay: 오늘 타입 전환·세션 저장·패널 라디오 동기화',async()=>{
+    ExLog.data={};ExLog.date=_todayKey();
+    ExLog.switchDay('Legs');
+    eq(ExLog.session().day,'Legs');
+    ok(d.getElementById('d3').checked,'Legs 패널 미선택');
+    ExLog.switchDay('Push');ExLog.data={};
   });
 
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
