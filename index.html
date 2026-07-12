@@ -3857,9 +3857,12 @@ function augmentCards(){
     const e=m[nm.textContent.trim()];if(!e)return;
     if(det.querySelector('.ex-extra'))return;
     const d=document.createElement('details');d.className='ex-extra';
-    d.innerHTML='<summary>📐 그립 · 세팅</summary><div class="ex-extra-body">'
+    // 도감의 상세 자극점·ROM까지 운동 탭 카드에 주입 — 카드 고정 문구보다 깊은 해부·감각 설명 제공
+    d.innerHTML='<summary>📐 자극 · 그립 · 세팅 · ROM</summary><div class="ex-extra-body">'
+      +(e.target?'<div class="exx-row"><span class="exx-l">자극점</span><span>'+e.target+'</span></div>':'')
       +(e.grip?'<div class="exx-row"><span class="exx-l">그립·힘</span><span>'+e.grip+'</span></div>':'')
       +(e.setup?'<div class="exx-row"><span class="exx-l">세팅</span><span>'+e.setup+'</span></div>':'')
+      +(e.rom?'<div class="exx-row"><span class="exx-l">ROM</span><span>'+e.rom+'</span></div>':'')
       +'</div>';
     det.appendChild(d);
   });
