@@ -15,7 +15,7 @@
 :root{
  --color-text-primary:#1c1c1e;
  --color-text-secondary:#48484a;
- --color-text-tertiary:#8e8e93;
+ --color-text-tertiary:#6d6d72; /* 8e8e93(대비 3.0:1) → 4.7:1 — 소형 텍스트 가독성 */
  --color-border-secondary:#d1d1d6;
  --color-border-tertiary:#e5e5ea;
  --color-background-primary:#ffffff;
@@ -25,7 +25,7 @@
  --border-radius-lg:14px;
  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:480px;margin:0 auto;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:480px;margin:0 auto;min-height:100vh;line-height:1.45;-webkit-text-size-adjust:100%}
 .tab-r,.day-r,.exck{display:none}
 .top-nav{display:flex;background:#fff;border-bottom:1px solid #d1d1d6;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .nav-lbl{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:#8e8e93;cursor:pointer;border-bottom:2.5px solid transparent}
@@ -46,7 +46,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 #d1:checked~.tab-w .dp1,#d2:checked~.tab-w .dp2,#d3:checked~.tab-w .dp3{display:block}
 .day-header{padding:12px 16px 10px;background:#fff;border-bottom:1px solid #f0f0f0}
 .hbadge{display:inline-block;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;color:#fff;margin-bottom:5px}
-.hinfo{font-size:11.5px;color:#636366}
+.hinfo{font-size:12px;color:#55555a;line-height:1.5}
 .ex-list{padding:8px 16px;display:flex;flex-direction:column;gap:7px}
 .ex-wrap{display:flex;flex-direction:column}
 .ex-card{border-radius:12px;border:1px solid #e5e5ea;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);transition:opacity .2s}
@@ -59,9 +59,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ck-btn{width:24px;height:24px;border-radius:50%;border:2px solid #d1d1d6;background:#fff;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .ck-icon{display:none;color:#fff;font-size:13px;font-weight:700}
 .ex-info{flex:1;min-width:0}
-.ex-nm{font-size:13.5px;font-weight:600;color:#1c1c1e;margin-bottom:4px;transition:all .2s}
+.ex-nm{font-size:14.5px;font-weight:600;color:#1c1c1e;margin-bottom:4px;transition:all .2s}
 .ex-meta{display:flex;gap:4px;flex-wrap:wrap}
-.tag{font-size:10px;padding:2px 7px;border-radius:10px;border:.5px solid;white-space:nowrap}
+.tag{font-size:10.5px;padding:2.5px 8px;border-radius:10px;border:.5px solid;white-space:nowrap}
 .t-s{background:#f0eeff;border-color:#c5bef5;color:#4a3ab0}
 .t-e{background:#f2f2f7;border-color:#d1d1d6;color:#636366}
 .t-m{background:#e8f5e9;border-color:#a5d6a7;color:#1b5e20}
@@ -73,11 +73,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fb.stim{background:#e8f5ee;border-color:#81c995}
 .fb.tip{background:#e8f0fe;border-color:#90caf9}
 .fb.warn{background:#fce8e6;border-color:#ef9a9a}
-.fl{font-size:9px;font-weight:700;margin-bottom:3px}
+.fl{font-size:10px;font-weight:700;margin-bottom:3px}
 .fb.stim .fl{color:#1b5e20}
 .fb.tip .fl{color:#0d47a1}
 .fb.warn .fl{color:#b71c1c}
-.ft{font-size:10.5px;line-height:1.55}
+.ft{font-size:12px;line-height:1.6}
 .fb.stim .ft{color:#2e7d32}
 .fb.tip .ft{color:#1565c0}
 .fb.warn .ft{color:#c62828}
@@ -196,7 +196,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .wl-picker-tag:active{background:var(--color-background-secondary)}
 .wl-picker-search{width:100%;font-size:13px;padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);margin-bottom:8px;box-sizing:border-box}
 /* 주차 목표 배지 */
-.ex-week-target{font-size:11px;color:#3B6D11;background:#EAF3DE;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;line-height:1.5}
+.ex-week-target{font-size:12px;color:#3B6D11;background:#EAF3DE;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;line-height:1.5}
 .ex-week-target.up{color:#1b5e20;background:#d7f0d9;font-weight:600}
 .ex-week-target .wt-prev{color:#8e8e93;font-weight:400}
 /* 휴식 타이머 */
@@ -223,7 +223,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .wl-confirm-btn:active{background:#063c30}
 .wl-cancel-btn{flex-shrink:0;width:44px;height:44px;border:1px solid var(--color-border-secondary,#cdd9e3);border-radius:10px;background:var(--color-background-primary,#fff);color:var(--color-text-secondary,#636366);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .wl-cancel-btn:active{background:var(--color-background-secondary,#eef0f2)}
-.wl-set-chip{display:inline-flex;align-items:center;gap:1px;padding:7px 12px;min-height:34px;border-radius:9px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;border:1px solid #cdd9e3;background:#eef3f7;color:#33415c}
+.wl-set-chip{display:inline-flex;align-items:center;gap:1px;padding:7px 12px;min-height:36px;border-radius:9px;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;border:1px solid #cdd9e3;background:#eef3f7;color:#33415c}
 .wl-set-chip.hit{background:#e3f4e8;border-color:#a5d6a7;color:#1b5e20}
 .wl-set-chip.miss{background:#fdecea;border-color:#ef9a9a;color:#b3402a}
 .ex-log-add-btn{padding:8px 14px;font-size:13px;border-radius:9px}
@@ -244,7 +244,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .cue-warn .lbl{color:#b3402a}
 /* 플랜 탭 */
 .plan-wrap{padding:12px 16px 80px}
-.plan-hd{font-size:13px;font-weight:800;color:var(--color-text-primary);margin:24px 0 12px;padding:9px 12px;background:var(--color-background-secondary,#ebedef);border-left:3px solid #3B6D11;border-radius:8px;line-height:1.3}
+.plan-hd{font-size:14px;font-weight:800;color:var(--color-text-primary);margin:24px 0 12px;padding:9px 12px;background:var(--color-background-secondary,#ebedef);border-left:3px solid #3B6D11;border-radius:8px;line-height:1.3}
 .plan-hd:first-of-type{margin-top:2px}
 .plan-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .plan-vol-head{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:8px}
@@ -265,7 +265,14 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .tr-grp-n{font-weight:600;color:var(--color-text-tertiary);font-size:10px}
 .tr-more-btn{display:block;width:100%;margin-top:10px;padding:9px;font-size:12px;font-weight:600;color:#185FA5;background:#f4f7fa;border:1px solid #dbe4ec;border-radius:10px;cursor:pointer}
 .tr-more-note{font-size:10.5px;color:var(--color-text-tertiary);padding:4px 0 2px}
-.tr-plat{font-size:9px;font-weight:700;color:#fff;background:#BA7517;padding:1px 6px;border-radius:8px}
+.vt-legend{display:flex;gap:12px;justify-content:center;margin-top:6px;font-size:10.5px;color:var(--color-text-secondary)}
+.vt-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.vt-note{text-align:center;font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.rules-card .rule{font-size:12px;line-height:1.65;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,#eee)}
+.rules-card .rule:last-child{border-bottom:none}
+.bk-check-row{font-size:11.5px;line-height:1.55;color:#7A5A12;background:#FFF6E5;border:1px solid #EED9A8;border-radius:8px;padding:6px 9px;margin-top:6px}
+.bk-check-row.ok{color:#3B6D11;background:#EAF3DE;border-color:#C9DCB0}
+.tr-plat{font-size:10px;font-weight:700;color:#fff;background:#BA7517;padding:1px 6px;border-radius:8px}
 .tr-mid{display:flex;align-items:center;gap:10px}
 .tr-spark{flex-shrink:0}
 .tr-stat{font-size:11px;color:var(--color-text-secondary)}
@@ -453,9 +460,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-phase-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .plan-phase-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 8px;text-align:center}
 .plan-phase-card.current{border-color:#3B6D11;background:#EAF3DE}
-.plan-phase-badge{font-size:9px;font-weight:700;color:#fff;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px}
+.plan-phase-badge{font-size:10px;font-weight:700;color:#fff;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px}
 .plan-phase-kcal{font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--color-text-primary)}
-.plan-phase-months{font-size:9px;color:var(--color-text-tertiary);margin-top:2px}
+.plan-phase-months{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
 .plan-phase-focus{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
 .plan-phase-card.future{opacity:.55}
 .plan-phase-card.future .plan-phase-kcal{color:var(--color-text-tertiary)}
@@ -471,7 +478,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-block-item{font-size:12px;color:var(--color-text-secondary)}
 /* 주간 체크 */
 /* ── 신규: 카드 접힘 요약 ── */
-.ex-mini{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-mini{font-size:11.5px;color:var(--color-text-tertiary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ex-mini b{color:#185FA5;font-weight:600}
 /* ── 신규: 세션 비교 ── */
 .sess-cmp{margin-left:6px}
@@ -626,7 +633,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-memo-inp{flex:1;min-width:0;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 8px;font-size:13px}
 /* RPE 선택 입력 — 세트 입력줄의 작은 셀렉트 */
 .wl-rpe-sel{flex-shrink:0;border:0.5px solid var(--color-border-tertiary);border-radius:8px;background:#fff;font-size:12px;color:#636366;padding:0 2px;height:44px;max-width:64px}
-.chip-rpe{font-style:normal;font-size:9px;opacity:.75;margin-left:2px}
+.chip-rpe{font-style:normal;font-size:10px;opacity:.75;margin-left:2px}
 /* 통증 플래그 */
 .wl-pain-btn{flex-shrink:0;border:none;background:#fdf3e3;color:#b26a00;font-size:15px;width:44px;height:44px;border-radius:10px;cursor:pointer;opacity:.45}
 .wl-pain-btn.on{opacity:1;background:#fbe3c9;box-shadow:inset 0 0 0 1.5px #e09b3d}
@@ -744,7 +751,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="tab" id="tb" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderBlock();PlanApp.renderCalendar();},30)">📈 분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">🩺 관리</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderVolTrend();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderBlock();PlanApp.renderCalendar();},30)">📈 분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">🩺 관리</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -898,6 +905,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 체성분 현황 -->
 <div class="plan-hd" id="sec-vol">📊 주간 부위별 볼륨</div>
 <div id="plan-vol" class="plan-card"></div>
+
+<div class="plan-hd" id="sec-vt">📉 주간 볼륨 추이</div>
+<div id="plan-voltrend" class="plan-card"></div>
 
 <div class="plan-hd" id="sec-tr">📈 종목별 추세 · 정체</div>
 <div id="plan-trend" class="plan-card"></div>
@@ -1075,6 +1085,16 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </details>
 
 <!-- 데이터 백업 -->
+<details class="plan-fold"><summary class="plan-hd">❓ 판정 규칙 — 이 숫자는 어떻게 나오나</summary>
+<div class="plan-card rules-card">
+<div class="rule"><b>🎯 자동 목표</b> — 같은 종목(별칭 연결 포함)의 가장 최근 기록 기준. 전 세트가 렙 상한(도감 sets 표기에서 파싱, 예: 4×6~8 → 8)을 채우면 복합 +2.5kg / 고립 +1kg 도전 제안. 단, 그 세션 최고 RPE가 9.5+면 같은 무게 한 번 더 굳히기.</div>
+<div class="rule"><b>🔋 준비도</b> — 오늘 수면(≥7h +1 / 6h 미만 −1) · 컨디션(≥4 +1 / ≤2 −1) · 최근 운동일 평균 RPE(9.3+ −1) · 최근 7일 통증(2회+ −1)의 합산. <b>−2 이하 = 낮음</b>(증량 보류), <b>+2 이상 = 좋음</b>(도전 적기). 중립이면 표시 안 함.</div>
+<div class="rule"><b>📌 오늘 추천</b> — 타입별 점수 = 마지막 수행 경과일(14일 포화)×2 + 담당 부위 주간 목표 부족 세트. 순환 다음 타입보다 3점 이상 높고 2일 이상 더 밀렸을 때만 제안. 세 타입 모두 수행 이력이 있어야 작동.</div>
+<div class="rule"><b>🪫 디로드 신호</b> — ① 최근 7일 평균 RPE ≥9 ② RPE 전주 대비 +0.5 ③ 통증 2회+/7일 ④ 볼륨 −10%인데 RPE 유지↑ ⑤ 블록 5주차+ 중 <b>2개 이상</b>이면 배너 표시.</div>
+<div class="rule"><b>⚖️ 체성분 정체/과속</b> — 최신 측정 vs ~2주 전(12일 이상 간격): |Δ체중|&lt;0.4kg · |Δ체지방|&lt;0.4%p · |Δ골격근|&lt;0.3kg 모두 해당 = 정체(−50~100kcal 검토). 14일간 체중 −1.6kg 이상 = 감량 과속(+100kcal 검토).</div>
+<div class="rule"><b>📉 주간 볼륨 추이</b> — 본세트(워밍업 제외)의 무게×횟수 합을 주 단위로 집계, 도감 주동근 기준 푸시/풀/하체 색 구분.</div>
+</div></details>
+
 <div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
 <div class="bk-card">
 <div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b></div>
@@ -1084,8 +1104,10 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <button class="bk-btn ghost" onclick="Backup.copy()">📋 복사</button>
 <button class="bk-btn ghost" onclick="Backup.download()">💾 파일 저장</button>
 <button class="bk-btn ghost" onclick="Backup.importData()">📥 가져오기</button>
+<button class="bk-btn ghost" onclick="Backup.runCheck()">🔎 데이터 점검</button>
 </div>
 <div class="bk-msg" id="bk-msg"></div>
+<div class="bk-check" id="bk-check"></div>
 </div>
 
 </div><!-- plan-wrap -->
@@ -1235,6 +1257,7 @@ const ExLog={
     // 이전에는 다음 세트를 입력해야 전송이 시작됐다. URL 미설정이면 _syncSoon이 조용히 무시.
     if(this._dirty.size)this._syncSoon();
     window.addEventListener('online',()=>{if(this._dirty.size)this._syncSoon();});
+    setTimeout(()=>this.autoFullSync(),3000); // 일요일이면 전체 스냅샷 1회 (유휴 시점에)
   },
 
   // ── 저장: 월 단위 분할(wl_v2:YYYY-MM) ──
@@ -3028,6 +3051,19 @@ const ExLog={
     const m=document.getElementById('rest-mini');if(m)m.classList.remove('show','done');
   },
 
+  // ── 주 1회 자동 전체 동기화(일요일 첫 실행): 증분 동기화가 남길 수 있는 시트 엣지(잔여 행 등) 자가 치유 ──
+  async autoFullSync(force){
+    try{
+      if(!force&&new Date().getDay()!==0)return;
+      const today=_todayKey();
+      const r=await window.storage.get('full_sync_done');
+      if(!force&&r&&r.value>=today)return; // 오늘 이미 수행
+      const url=await this.getScriptUrl();if(!url)return;
+      await this.syncToSheets(url,true);
+      await window.storage.set('full_sync_done',today);
+    }catch(_){}
+  },
+
   // ── Google Sheets 동기화 ──
   async getScriptUrl(){
     try{const r=await window.storage.get('gs_script_url');return r?r.value:'';}catch(_){return'';}
@@ -3164,7 +3200,7 @@ const ExLog={
 const PlanApp={
   // 타입→색은 상단 DAY_COLORS_EL을 단일 소스로 참조 (요일→타입 고정표는 순환제 전환으로 제거)
   DAY_COLORS:DAY_COLORS_EL,
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();this.loadBlood();},
+  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();this.loadBlood();},
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
@@ -3415,6 +3451,39 @@ const PlanApp={
     const pts=v.map((x,i)=>(pad+i*step).toFixed(1)+','+(h-pad-(x-mn)/rng*(h-pad*2)).toFixed(1));
     const lp=pts[pts.length-1].split(',');const top=v[v.length-1]>=mx-0.01;
     return '<svg class="tr-spark" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linejoin="round"/><circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="2.3" fill="'+(top?'#3B6D11':'#888')+'"/></svg>';
+  },
+  // ── 주간 볼륨 추이(8주): 부위 카테고리별 스택 막대 — 볼륨 축적/피로 누적을 한눈에. 디로드 판단 보조 ──
+  async renderVolTrend(){
+    const box=document.getElementById('plan-voltrend');if(!box)return;
+    const data=await this._logData();
+    const weeks=[];
+    for(let off=-7;off<=0;off++){
+      const keys=this._weekKeys(off);
+      const cat={push:0,pull:0,legs:0,etc:0};let tot=0;
+      keys.forEach(dk=>{const ses=data[dk];if(!ses)return;(ses.exercises||[]).forEach(ex=>{
+        const mu=this.muscleOf(ex.name);const b=mu&&mu.p;let c='etc';
+        for(const k in RECO_CAT){if(RECO_CAT[k].includes(b)){c=k;break;}}
+        (ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;const v=(st.weight||0)*st.reps;cat[c]+=v;tot+=v;});
+      });});
+      weeks.push({lbl:keys[0].slice(5).replace('-','/'),tot,cat});
+    }
+    if(!weeks.some(w=>w.tot>0)){box.innerHTML='<div class="plan-vol-empty">기록이 쌓이면 주 단위 볼륨 추이가 여기 표시됩니다.</div>';return;}
+    const max=Math.max.apply(null,weeks.map(w=>w.tot))||1;
+    const W=330,H=124,bw=28,gap=(W-8*bw)/8;
+    const COLV={push:'#D85A30',pull:'#185FA5',legs:'#3B6D11',etc:'#999'};
+    let bars='';
+    weeks.forEach((w,i)=>{
+      const x=gap/2+i*(bw+gap);let y=H-18;
+      ['legs','pull','push','etc'].forEach(c=>{
+        const h=w.tot?Math.round(w.cat[c]/max*(H-42)):0;
+        if(h>0){y-=h;bars+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+h+'" rx="2" fill="'+COLV[c]+'"/>';}
+      });
+      if(w.tot>0)bars+='<text x="'+(x+bw/2)+'" y="'+(y-4)+'" font-size="8" text-anchor="middle" fill="#666">'+(w.tot>=1000?(w.tot/1000).toFixed(1)+'k':Math.round(w.tot))+'</text>';
+      bars+='<text x="'+(x+bw/2)+'" y="'+(H-6)+'" font-size="8" text-anchor="middle"'+(i===7?' font-weight="700" fill="#085041"':' fill="#999"')+'>'+w.lbl+'</text>';
+    });
+    box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">'+bars+'</svg>'
+      +'<div class="vt-legend"><span><i style="background:#D85A30"></i>푸시</span><span><i style="background:#185FA5"></i>풀</span><span><i style="background:#3B6D11"></i>하체</span></div>'
+      +'<div class="vt-note">주간 총볼륨(kg) · 마지막 막대 = 이번 주(진행 중)</div>';
   },
   async renderTrends(){
     const box=document.getElementById('plan-trend');if(!box)return;
@@ -3841,6 +3910,28 @@ const Backup={
   MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
   _allowed(k){return this.KEYS.includes(k)||k==='wl_v2'/*레거시 백업 파일 가져오기 호환*/||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
+  // ── 데이터 점검: 별칭 순환·미연결 중복 표기·도감 미매칭·0kg 본세트·미래 날짜 등 이상치 나열 ──
+  async runCheck(){
+    const el=document.getElementById('bk-check');if(!el)return;
+    const out=[];
+    try{
+      const data=(typeof ExLog!=='undefined'&&ExLog.data)||{};
+      const today=_todayKey();
+      const future=Object.keys(data).filter(k=>k>today&&(data[k].exercises||[]).some(e=>(e.sets||[]).length));
+      if(future.length)out.push('📅 미래 날짜 기록: '+future.join(', '));
+      for(const k in ExLog.alias){let n=k,hop=0;while(ExLog.alias[n]&&hop<10){n=ExLog.alias[n];hop++;}if(hop>=10)out.push('🔗 별칭 순환 의심: '+k);}
+      const hist=ExLog._histNames();
+      const seen={};
+      hist.forEach(n=>{const nn=ExLog._normName(ExLog.canon(n));(seen[nn]=seen[nn]||new Set()).add(ExLog.canon(n));});
+      for(const nn in seen){if(seen[nn].size>1)out.push('🔀 미연결 중복 의심: '+[...seen[nn]].join(' ↔ ')+' — 기록 옆 🔗로 연결하면 추세가 합쳐집니다');}
+      const unm=hist.filter(n=>!ExLog.libByName(ExLog.canon(n)));
+      if(unm.length)out.push('📚 도감 미매칭 종목 ('+unm.length+'): '+unm.slice(0,8).join(', ')+(unm.length>8?' …':''));
+      const zero=new Set();
+      Object.keys(data).forEach(k=>(data[k].exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(_isWorkSet(st)&&!(st.weight>0))zero.add(e.name);})));
+      if(zero.size)out.push('⚖️ 0kg 본세트: '+[...zero].slice(0,8).join(', ')+' (체중·시간 종목이면 정상)');
+    }catch(e){out.push('점검 중 오류: '+e.message);}
+    el.innerHTML=out.length?out.map(o=>'<div class="bk-check-row">'+o+'</div>').join(''):'<div class="bk-check-row ok">✓ 이상 없음 — 별칭·도감 연결·기록이 깨끗합니다</div>';
+  },
   async _collect(){
     const out={};
     for(const k of this.KEYS){try{const r=await window.storage.get(k);if(r&&r.value!=null)out[k]=String(r.value);}catch(_){}}
@@ -4141,7 +4232,15 @@ const InBody={
     });
   }
 };
-document.addEventListener('DOMContentLoaded',()=>{ExLog.init();PlanApp.init();MuscleMap.init();LibApp.render();InBody.render();});
+document.addEventListener('DOMContentLoaded',()=>{
+  ExLog.init();PlanApp.init();MuscleMap.init();LibApp.render();InBody.render();
+  // 홈화면 바로가기(manifest shortcuts) 진입 처리 — ?tab=p(분석) / ?action=inbody(인바디 입력)
+  try{
+    const q=new URLSearchParams(location.search);
+    if(q.get('tab')==='p'){const r=document.getElementById('tp');if(r)r.checked=true;}
+    if(q.get('action')==='inbody'){const r=document.getElementById('tb');if(r)r.checked=true;setTimeout(()=>{try{InBody.openModal();}catch(_){}},400);}
+  }catch(_){}
+});
 // PWA: 서비스워커 등록 (network-first — 배포하면 온라인 시 항상 최신, 오프라인만 캐시)
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
 </script>

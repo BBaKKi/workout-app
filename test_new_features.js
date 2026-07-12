@@ -1117,6 +1117,58 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.switchDay('Push');ExLog.data={};
   });
 
+
+  console.log('\n[볼륨 추이 · 자동 전체 동기화 · 데이터 점검 · 바로가기]');
+  await t('renderVolTrend: 스택 막대·범례 생성, 무기록 시 빈 안내',async()=>{
+    const PlanApp=w.eval('PlanApp');
+    ExLog.data={};
+    await PlanApp.renderVolTrend();
+    ok(d.getElementById('plan-voltrend').textContent.includes('기록이 쌓이면'),'빈 안내 없음');
+    const wk=PlanApp._weekKeys(0)[0];
+    ExLog.data[wk]={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10},{weight:50,reps:10}]}]};
+    await PlanApp.renderVolTrend();
+    const box=d.getElementById('plan-voltrend');
+    ok(box.querySelector('svg'),'SVG 없음');
+    ok(box.querySelector('rect'),'막대 없음');
+    ok(box.textContent.includes('푸시')&&box.textContent.includes('이번 주'),'범례/주석 없음');
+    ExLog.data={};
+  });
+  await t('autoFullSync(force): 전체 스냅샷 전송 + 수행일 기록',async()=>{
+    await w.storage.set('gs_script_url','https://script.google.com/macros/s/x/exec');
+    await w.storage.delete('full_sync_done');
+    let sent=null;
+    const oldFetch=w.fetch;
+    w.fetch=(u,opt)=>{try{sent=JSON.parse(opt.body);}catch(_){}return Promise.resolve({json:()=>Promise.resolve({ok:true,written:1})});};
+    ExLog.data={'2026-07-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]}};
+    ExLog.markDirty('2026-07-01');
+    await ExLog.autoFullSync(true);
+    ok(sent&&sent.mode==='upsert'&&sent.rows.length===1,'전체 스냅샷 미전송: '+JSON.stringify(sent&&sent.mode));
+    const r=await w.storage.get('full_sync_done');
+    ok(r&&r.value===_todayKey(),'수행일 미기록');
+    w.fetch=oldFetch;ExLog.data={};ExLog._dirty.clear();
+  });
+  await t('Backup.runCheck: 미연결 중복·미래 날짜 탐지, 정상 시 이상 없음',async()=>{
+    const Backup=w.eval('Backup');
+    ExLog.data={
+      '2099-01-01':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]},
+      '2026-07-01':{day:'Pull',exercises:[{name:'티바 로우',sets:[{weight:20,reps:8}]},{name:'티바로우',sets:[{weight:20,reps:8}]}]}
+    };
+    await Backup.runCheck();
+    const txt=d.getElementById('bk-check').textContent;
+    ok(txt.includes('미래 날짜'),'미래 날짜 미탐지: '+txt);
+    ok(txt.includes('미연결 중복'),'중복 표기 미탐지: '+txt);
+    ExLog.data={};
+    await Backup.runCheck();
+    ok(d.getElementById('bk-check').textContent.includes('이상 없음'),'정상 케이스 오탐');
+  });
+  await t('manifest shortcuts + 진입 파라미터 처리 + 규칙 도움말 존재',async()=>{
+    const man=fs.readFileSync(path.join(__dirname,'manifest.json'),'utf8');
+    ok(man.includes('"shortcuts"')&&man.includes('?action=inbody'),'manifest shortcuts 없음');
+    ok(/action=inbody|action'\)==='inbody'|get\('action'\)/.test(src),'진입 파라미터 처리 없음');
+    ok(src.includes('판정 규칙'),'규칙 도움말 카드 없음');
+    ok(d.getElementById('bk-check'),'점검 결과 슬롯 없음');
+  });
+
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
   process.exit(fail?1:0);
 })().catch(e=>{console.error('부트 실패:',e);process.exit(1);});
