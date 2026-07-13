@@ -412,11 +412,13 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     const mf=JSON.parse(fs.readFileSync(path.join(__dirname,'manifest.json'),'utf8'));
     ok(mf.start_url==='./'&&mf.display==='standalone'&&mf.icons.length===2);
   });
-  await t('sw.js: network-first·GET 전용·동일 출처 가드',async()=>{
+  await t('sw.js: stale-while-revalidate·GET 전용·동일 출처 가드',async()=>{
     const sw=fs.readFileSync(path.join(__dirname,'sw.js'),'utf8');
     ok(sw.includes("req.method !== 'GET'"),'GET 가드 없음');
     ok(sw.includes('url.origin !== self.location.origin'),'동일 출처 가드 없음');
-    ok(sw.indexOf('fetch(req)')<sw.indexOf('caches.match(req)'),'network-first 순서 아님');
+    // SWR: 핸들러가 캐시를 먼저 응답하고 백그라운드 재검증(_revalidate)을 waitUntil로 수행
+    ok(sw.includes('_revalidate'),'백그라운드 재검증 없음');
+    ok(/waitUntil\(_revalidate/.test(sw),'재검증이 waitUntil로 보호되지 않음');
   });
 
   console.log('\n[운동 라이브러리 검증]');
@@ -491,10 +493,12 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(man.includes('icon192.png')&&man.includes('icon512.png'),'manifest에 실제 파일명 없음');
     ok(sw.includes('icon192.png')&&sw.includes('icon512.png'),'sw PRECACHE에 실제 파일명 없음');
   });
-  await t('sw.js: allSettled 프리캐시(부분 실패 허용) + 네트워크 타임아웃 존재',async()=>{
+  await t('sw.js: allSettled 프리캐시(부분 실패 허용) + 새 버전 감지 알림',async()=>{
     const sw=fs.readFileSync(path.join(__dirname,'sw.js'),'utf8');
     ok(sw.includes('Promise.allSettled'),'allSettled 프리캐시 없음 — addAll은 1개 404에 설치 전체 실패');
-    ok(/NET_TIMEOUT_MS/.test(sw)&&/Promise\.race/.test(sw),'네트워크 타임아웃 레이스 없음');
+    // SWR에서는 캐시 즉시 응답이라 타임아웃 레이스가 불필요 — 대신 새 배포 감지(sw-updated postMessage)가 있어야 한다
+    ok(sw.includes('sw-updated')&&sw.includes('postMessage'),'새 버전 감지 알림 없음');
+    ok(/etag/i.test(sw),'배포본 변경 감지(ETag 비교) 없음');
   });
 
   console.log('\n[증분 시트 동기화]');
@@ -1167,6 +1171,40 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ok(/action=inbody|action'\)==='inbody'|get\('action'\)/.test(src),'진입 파라미터 처리 없음');
     ok(src.includes('판정 규칙'),'규칙 도움말 카드 없음');
     ok(d.getElementById('bk-check'),'점검 결과 슬롯 없음');
+  });
+
+  console.log('\n[삭제 영속 큐 · 분석 탭 스킵 · 종목 인덱스]');
+  await t('_deleteFromSheet: 영속 큐잉(sync_del) + init/online 재전송 훅 존재',async()=>{
+    ExLog._delQ.length=0;
+    ExLog._deleteFromSheet('2026-07-01','딥스 머신',3);
+    eq(ExLog._delQ.length,1,'큐 미적재');
+    eq(ExLog._delQ[0].setNo,3,'키 불일치');
+    const r=await w.storage.get('sync_del');
+    ok(r&&JSON.parse(r.value).length===1,'sync_del 미영속');
+    ok(src.includes('this._delQ.length)this._flushDeletes()'),'init/online 재전송 훅 없음');
+    ok(/syncToSheets[\s\S]{0,400}_flushDeletes\(\)/.test(src),'동기화 시 삭제 재전송 없음');
+    ExLog._delQ.length=0;await w.storage.set('sync_del','[]');
+  });
+  await t('renderAnalysis: dataVer 동일하면 스킵, 데이터 쓰기 후 재렌더',async()=>{
+    const PlanApp=w.eval('PlanApp');
+    let calls=0;const orig=PlanApp.renderCalendar;PlanApp.renderCalendar=()=>{calls++;};
+    try{
+      PlanApp.renderAnalysis(true);eq(calls,1,'강제 렌더 실패');
+      PlanApp.renderAnalysis();eq(calls,1,'변경 없는데 재렌더');
+      ExLog.date='2026-07-06';
+      ExLog.setSession({day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]});
+      PlanApp.renderAnalysis();eq(calls,2,'데이터 변경 후 미렌더');
+    }finally{PlanApp.renderCalendar=orig;}
+  });
+  await t('종목 인덱스: data 직접 교체·대입에도 자동 무효화(프록시)',async()=>{
+    ExLog.data={};
+    ExLog.data['2026-07-01']={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:10}]}]};
+    const cn=ExLog.canon('딥스 머신');
+    eq(ExLog._exFor(cn).length,1,'인덱스 미반영');
+    ExLog.data['2026-07-03']={day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:52.5,reps:8}]}]};
+    eq(ExLog._exFor(cn).length,2,'직접 대입 후 무효화 안 됨');
+    ExLog.data={};
+    eq(ExLog._exFor(cn).length,0,'전체 교체 후 무효화 안 됨');
   });
 
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
