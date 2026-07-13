@@ -751,7 +751,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="tab" id="tb" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r">
-<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderWeek();PlanApp.renderVolume();PlanApp.renderVolTrend();PlanApp.renderTrends();PlanApp.renderWeekSummary();PlanApp.renderPRBoard();PlanApp.renderBlock();PlanApp.renderCalendar();},30)">📈 분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">🩺 관리</label></div>
+<div class="top-nav"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">🏋️ 운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">💪 근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">📚 도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderAnalysis();},30)">📈 분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">🩺 관리</label></div>
 <div class="tab-body tab-w">
 <div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
@@ -1138,6 +1138,9 @@ function _localKey(d){const t=new Date(d);t.setMinutes(t.getMinutes()-t.getTimez
 function _todayKey(){return _localKey(new Date());}
 function _isWorkSet(s){return !!s&&s.reps>0&&!s.warmup;} // '본세트' 판정 — 워밍업 세트는 모든 볼륨·PR·추세 집계에서 제외하는 공통 기준
 function _e1Of(w,r){return w*(1+r/30);} // 추정 1RM(Epley) — 단일 소스. 공식 교체·고반복 보정 시 여기 한 곳만 수정
+// HTML 이스케이프 — 운동명 등 데이터가 innerHTML/onclick에 들어갈 때 마크업 파손·주입 방지 (입력단 필터의 2차 방어선)
+function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function _escJs(s){return _esc(String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"));} // onclick 속성 안 JS 문자열용: JS 이스케이프 후 HTML 이스케이프
 // ── 운동 배치 규칙 ──
 // 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
 const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
@@ -1225,11 +1228,13 @@ const EX_CUES={
 };
 const ExLog={
   date:_todayKey(),
+  dataVer:0, // 데이터 쓰기마다 증가 — 분석 탭이 '변경 없음'이면 재렌더를 건너뛰는 기준
   data:{},
   plan:{},
   rest:{name:'',endAt:0,total:0,int:null},
 
   async init(){
+    this._wrapData(); // load 전에 감시 설치 — 이후 모든 data 쓰기가 캐시 무효화를 동반
     await this.load();
     await this.loadPlan();
     await this.loadAlias();
@@ -1256,7 +1261,8 @@ const ExLog={
     // 지난 세션 미전송분 자동 재전송 — 오프라인에서 기록한 뒤 앱을 열어보기만 해도 시트가 따라잡게.
     // 이전에는 다음 세트를 입력해야 전송이 시작됐다. URL 미설정이면 _syncSoon이 조용히 무시.
     if(this._dirty.size)this._syncSoon();
-    window.addEventListener('online',()=>{if(this._dirty.size)this._syncSoon();});
+    if(this._delQ.length)this._flushDeletes();
+    window.addEventListener('online',()=>{if(this._dirty.size)this._syncSoon();if(this._delQ.length)this._flushDeletes();});
     setTimeout(()=>this.autoFullSync(),3000); // 일요일이면 전체 스냅샷 1회 (유휴 시점에)
   },
 
@@ -1266,7 +1272,7 @@ const ExLog={
   // 레거시 단일 키(wl_v2)는 최초 1회 월 키로 분할 이관 후 다시 읽지 않는다(만일을 위해 삭제하지도 않음).
   _dirtyMonths:new Set(),
   _monthOf(d){return String(d).slice(0,7);},
-  markDirty(date){this._dirtyMonths.add(this._monthOf(date||this.date));},
+  markDirty(date){this.dataVer++;this._invalidateIdx();this._dirtyMonths.add(this._monthOf(date||this.date));}, // 데이터 쓰기 단일 관문 — 종목 인덱스·분석탭 버전도 여기서 무효화
   async load(){
     try{
       const r=await window.storage.list('wl_v2:');
@@ -1301,6 +1307,7 @@ const ExLog={
     try{const r=await window.storage.get('block_v1');if(r)this.block=JSON.parse(r.value);}catch(_){}
     try{const r=await window.storage.get('last_backup');if(r)this.lastBackup=r.value;}catch(_){}
     try{const r=await window.storage.get('sync_dirty');if(r)JSON.parse(r.value).forEach(d=>this._dirty.add(d));}catch(_){} // 지난 세션의 미전송 날짜 복원
+    try{const r=await window.storage.get('sync_del');if(r)this._delQ=JSON.parse(r.value)||[];}catch(_){} // 지난 세션의 미전송 삭제 복원
   },
   saveBlock(){try{window.storage.set('block_v1',JSON.stringify(this.block));}catch(_){}},
   blockWeek(){ // 1부터 시작하는 주차. 블록 미설정/미래 시작일이면 null
@@ -1318,7 +1325,7 @@ const ExLog={
   // ── 기록 연결(별칭): 옛이름 → 새이름 매핑. 장비·짐이 바뀌어 종목명이 달라져도 추세·직전기록·PR이 이어지도록 ──
   alias:{},
   async loadAlias(){try{const r=await window.storage.get('ex_alias');if(r)this.alias=JSON.parse(r.value)||{};}catch(_){}},
-  saveAlias(){try{window.storage.set('ex_alias',JSON.stringify(this.alias));}catch(_){}},
+  saveAlias(){this.dataVer++;this._invalidateIdx();try{window.storage.set('ex_alias',JSON.stringify(this.alias));}catch(_){}}, // 별칭=canon 변경 → 종목 인덱스·분석탭 무효화
   // ── 자동 별칭: (1) 알려진 중복 표기 시드 (2) 정규화(공백·하이픈·괄호 무시) 동일명 첫 기록 시 자동 연결 ──
   DEFAULT_ALIAS:{
    'T바 로우':'T-바 로우',
@@ -1337,7 +1344,7 @@ const ExLog={
    /* '힙 어덕션 머신'(모음)은 어브덕션(벌림)과 다른 운동 — 연결 금지 */
   },
   _normName(n){return String(n||'').toLowerCase().replace(/[\s\-_·/()\[\]]+/g,'');},
-  _hasHist(cn){for(const dk in this.data){if((this.data[dk].exercises||[]).some(e=>this.canon(e.name)===cn&&(e.sets||[]).length))return true;}return false;},
+  _hasHist(cn){return this._exFor(cn).length>0;}, // 인덱스는 세트가 있는 기록만 담으므로 존재=이력
   _migrateCfg(oldKey,newCanon){ // 별칭 연결 시 세팅 메모·휴식 오버라이드 승계 (옛 키 고아화 버그 수정)
     if(oldKey===newCanon)return;
     if(this.memo&&this.memo[oldKey]!=null){if(this.memo[newCanon]==null)this.memo[newCanon]=this.memo[oldKey];delete this.memo[oldKey];this.saveMemo();}
@@ -1396,8 +1403,8 @@ const ExLog={
     const linked=Object.keys(this.alias).filter(k=>this.canon(k)===canonCur&&k!==cur);
     const cands=this._histNames().filter(n=>n!==cur&&this.canon(n)!==canonCur).slice(0,20);
     let html='<div class="ex-alias-hd">🔗 과거 기록 연결 — 장비가 바뀌어 이름이 달라진 옛 종목을 선택하면 추세·직전기록이 이어집니다</div>';
-    if(linked.length)html+='<div class="ex-alias-linked">연결됨: '+linked.map(n=>'<span class="ex-alias-tag">'+n+' <b class="ex-alias-x" onclick="ExLog.unlinkAlias(\''+n.replace(/'/g,"\\'")+'\',this)">✕</b></span>').join('')+'</div>';
-    html+=cands.length?'<div class="ex-alias-list">'+cands.map(n=>'<button class="wl-picker-tag" onclick="ExLog.linkAlias(\''+n.replace(/'/g,"\\'")+'\',\''+cur.replace(/'/g,"\\'")+'\',this)">'+n+'</button>').join('')+'</div>':'<div class="ex-alias-empty">연결할 다른 기록이 없습니다.</div>';
+    if(linked.length)html+='<div class="ex-alias-linked">연결됨: '+linked.map(n=>'<span class="ex-alias-tag">'+_esc(n)+' <b class="ex-alias-x" onclick="ExLog.unlinkAlias(\''+_escJs(n)+'\',this)">✕</b></span>').join('')+'</div>';
+    html+=cands.length?'<div class="ex-alias-list">'+cands.map(n=>'<button class="wl-picker-tag" onclick="ExLog.linkAlias(\''+_escJs(n)+'\',\''+_escJs(cur)+'\',this)">'+_esc(n)+'</button>').join('')+'</div>':'<div class="ex-alias-empty">연결할 다른 기록이 없습니다.</div>';
     box.innerHTML=html;
     log.appendChild(box);
   },
@@ -1448,7 +1455,7 @@ const ExLog={
   dayType(d){
     const cur=this.data[d];
     if(cur&&cur.day)return this._baseType(cur.day);
-    const keys=Object.keys(this.data).filter(k=>k<d).sort().reverse();
+    const keys=this._pastKeysDesc(d); // 캐시된 내림차순 키
     for(const k of keys){
       const ps=this.data[k];
       if(!ps||!(ps.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))continue;
@@ -1461,6 +1468,7 @@ const ExLog={
   fmt(d){const today=_todayKey();const s=new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});return d===today?'오늘 ('+s+')':s;},
   session(){return this.data[this.date]||{day:this.dayType(this.date),exercises:[]};},
   _dirty:new Set(), // 시트 미전송 변경 날짜 — 증분 동기화용 (전송 성공 시 해당 날짜만 비움)
+  _delQ:[], // 시트 미반영 삭제 키 큐 — fire-and-forget이던 delete를 영속화해 오프라인·실패 시 유실(pull 복원 때 세트 부활) 방지
   // 영속화: 오프라인에서 기록 → 동기화 실패 → 앱 종료 시에도 미전송분이 남아 다음 실행에서 재전송되게
   _saveDirty(){try{window.storage.set('sync_dirty',JSON.stringify([...this._dirty]));}catch(_){}},
   setSession(s){this.data[this.date]=s;this.markDirty(this.date);this.save();this._dirty.add(this.date);this._saveDirty();},
@@ -1473,7 +1481,7 @@ const ExLog={
   savePlan(){try{window.storage.set('plan_v2',JSON.stringify(this.plan));}catch(_){}},
   planFor(day){if(!this.plan[day])this.plan[day]={add:[],rm:[]};return this.plan[day];},
   libByName(name){const L=window.EXERCISE_LIBRARY||[];return L.find(e=>e.name===name)||L.find(e=>(e.aka||[]).includes(name));},
-  _tagBtn(n){return '<button class="wl-picker-tag" onclick="ExLog.addEx(\''+String(n).replace(/'/g,"\\'")+'\',this)">'+n+'</button>';},
+  _tagBtn(n){return '<button class="wl-picker-tag" onclick="ExLog.addEx(\''+_escJs(n)+'\',this)">'+_esc(n)+'</button>';},
 
   dbCardInner(e,name){
     const nm=name||(e&&e.name)||'';
@@ -1508,7 +1516,7 @@ const ExLog={
     const alts=bucket?lib.filter(function(e){const m=PlanApp.muscleOf(e.name);return m&&m.p===bucket&&e.name!==name;}):[];
     card.open=true;
     if(!alts.length){panel.innerHTML='<div class="ex-swap-hd">같은 부위 대체 운동이 도감에 없습니다.</div>';}
-    else{panel.innerHTML='<div class="ex-swap-hd">🔄 같은 부위('+(bucket||'')+') — 탭하면 이 운동과 교체</div>'+alts.slice(0,12).map(function(e){return '<div class="ex-swap-row"><span class="ex-swap-nm">'+e.name+'</span><button class="ex-swap-pick" onclick="ExLog.swapEx(this,\''+e.name.replace(/'/g,"\\'")+'\')">교체</button></div>';}).join('');}
+    else{panel.innerHTML='<div class="ex-swap-hd">🔄 같은 부위('+(bucket||'')+') — 탭하면 이 운동과 교체</div>'+alts.slice(0,12).map(function(e){return '<div class="ex-swap-row"><span class="ex-swap-nm">'+_esc(e.name)+'</span><button class="ex-swap-pick" onclick="ExLog.swapEx(this,\''+_escJs(e.name)+'\')">교체</button></div>';}).join('');}
     panel.classList.add('open');
   },
   _transformWrap(wrap,newName){
@@ -1694,7 +1702,7 @@ const ExLog={
   // ── 오늘 타입 추천: 기본은 순환 다음 타입. 타입별 '마지막 수행 경과일×2 + 담당 부위 주간 목표 부족 세트'를
   //    점수화해 순환보다 뚜렷이 급한(점수차 3+) 타입이 있으면 근거와 함께 제안. 탭하면 오늘 타입 전환. ──
   _lastDoneAgo(t){
-    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
+    const keys=this._pastKeysDesc(); // 캐시된 내림차순 키 — 호출마다 filter+sort 반복 제거
     for(const k of keys){
       const s=this.data[k];
       if(!s||this._baseType(s.day)!==t)continue;
@@ -1734,7 +1742,7 @@ const ExLog={
     const rt=+((s.cond||{}).rate||0);
     if(rt){n++;if(rt>=4){score++;good.push('컨디션 '+rt+'/5');}else if(rt<=2){score--;bad.push('컨디션 '+rt+'/5');}}
     // 최근 운동일(7일 내) 평균 RPE — 표본 3세트 미만이면 판단 보류
-    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
+    const keys=this._pastKeysDesc(); // 캐시된 내림차순 키 — 호출마다 filter+sort 반복 제거
     for(const k of keys){
       const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
       if(ago>7)break;
@@ -1965,7 +1973,7 @@ const ExLog={
   },
   _shownNames(panel){const set=new Set();panel.querySelectorAll('.ex-wrap').forEach(w=>{if(w.style.display!=='none'){const n=w.querySelector('.ex-nm');if(n)set.add(n.textContent.trim());}});return set;},
   _hiddenStaticNames(panel){const arr=[];panel.querySelectorAll('.ex-wrap:not(.custom-ex)').forEach(w=>{if(w.style.display==='none'){const n=w.querySelector('.ex-nm');if(n)arr.push(n.textContent.trim());}});return arr;},
-  _tagRestoreBtn(n){return '<button class="wl-picker-tag wl-picker-restore" onclick="ExLog.addEx(\''+String(n).replace(/'/g,"\\'")+'\',this)" title="지웠던 기본 운동 복구">'+n+'</button>';},
+  _tagRestoreBtn(n){return '<button class="wl-picker-tag wl-picker-restore" onclick="ExLog.addEx(\''+_escJs(n)+'\',this)" title="지웠던 기본 운동 복구">'+_esc(n)+'</button>';},
   _fillPicker(picker,tagId,q){
     const el=picker.querySelector('#'+tagId);if(!el)return;
     const panel=picker.closest('.day-panel');const day=picker.dataset.day;
@@ -2102,7 +2110,7 @@ const ExLog={
   showPR(name){
     let t=document.getElementById('pr-toast');
     if(!t){t=document.createElement('div');t.id='pr-toast';t.className='pr-toast';document.body.appendChild(t);}
-    t.innerHTML='<span class="pr-emoji">🎉</span><div class="pr-txt"><div class="pr-t1">개인 신기록!</div><div class="pr-t2">'+name+'</div></div>';
+    t.innerHTML='<span class="pr-emoji">🎉</span><div class="pr-txt"><div class="pr-t1">개인 신기록!</div><div class="pr-t2">'+_esc(name)+'</div></div>';
     t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
     clearTimeout(this._prTimer);this._prTimer=setTimeout(function(){t.classList.remove('show');},2800);
   },
@@ -2167,14 +2175,13 @@ const ExLog={
       const cn=this.canon(e.name);
       let today=-1;ws.forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>today)today=v;});
       let prior=-1;
-      Object.keys(this.data).forEach(dk=>{if(dk>=this.date)return;
-        (this.data[dk].exercises||[]).forEach(pe=>{if(this.canon(pe.name)!==cn)return;
-          (pe.sets||[]).filter(_isWorkSet).forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>prior)prior=v;});});});
+      this._exFor(cn).forEach(r=>{if(r.date>=this.date)return; // 종목 인덱스 — 전체 날짜 풀스캔 제거
+        (r.ex.sets||[]).filter(_isWorkSet).forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>prior)prior=v;});});
       if(prior>=0&&today>prior+0.05)prs++;
     });
     // 지난 같은 요일 세션 대비 볼륨
     let cmp='';
-    const prevK=Object.keys(this.data).filter(k=>k<this.date&&this.data[k].day===day).sort().reverse()[0];
+    const prevK=this._pastKeysDesc().find(k=>(this.data[k]||{}).day===day); // 캐시된 키에서 첫 매치만
     if(prevK){
       let pv=0;(this.data[prevK].exercises||[]).forEach(e=>(e.sets||[]).filter(_isWorkSet).forEach(st=>{pv+=(st.weight||0)*st.reps;}));
       if(pv>0){const p=Math.round((vol-pv)/pv*100);cmp='<div class="dn-t3">지난 '+day+' 대비 볼륨 '+(p>=0?'+':'')+p+'%</div>';}
@@ -2254,26 +2261,88 @@ const ExLog={
     this.refresh();
     this._syncSoon();
   },
-  // upsert 방식에서는 로컬 삭제만으로 시트 행이 안 지워지므로, 잔여 행을 명시적으로 정리
-  async _deleteFromSheet(date,name,setNo){
+  // upsert 방식에서는 로컬 삭제만으로 시트 행이 안 지워지므로, 잔여 행을 명시적으로 정리.
+  // 이전에는 fire-and-forget fetch라 오프라인·실패 시 삭제가 시트에 영영 누락 → pull 복원 때 지운 세트가 부활했다.
+  // 지금은 영속 큐(sync_del)에 넣고 성공 시에만 제거 — init/online/동기화 시점에 자동 재전송된다.
+  _saveDelQ(){try{window.storage.set('sync_del',JSON.stringify(this._delQ));}catch(_){}},
+  _deleteFromSheet(date,name,setNo){
     if(!date||!name||!setNo)return;
+    this._delQ.push({date,name,setNo});this._saveDelQ();
+    this._flushDeletes();
+  },
+  async _flushDeletes(){
+    if(this._delFlushing||!this._delQ.length)return;
     const url=await this.getScriptUrl();if(!url)return;
-    fetch(url,{method:'POST',body:JSON.stringify({mode:'delete',keys:[{date,name,setNo}]}),redirect:'follow'}).catch(()=>{});
+    this._delFlushing=true;
+    try{
+      const keys=this._delQ.slice(); // 스냅샷 — 전송 중 새로 큐잉되는 삭제는 다음 회차로
+      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'delete',keys}),redirect:'follow'});
+      let okFlag=res.ok;
+      try{const j=await res.json();okFlag=j.ok!==false;}catch(_){} // 본문 못 읽으면 res.ok로 판단
+      if(okFlag){this._delQ=this._delQ.slice(keys.length);this._saveDelQ();} // 새 삭제는 push라 앞쪽 keys.length개가 정확히 스냅샷
+    }catch(_){/* 오프라인 등 — 큐 유지, 다음 기회에 재전송 */}
+    finally{this._delFlushing=false;}
   },
 
   // 다른 날짜(오늘 제외) 기준 최고 — 토스트(checkPR)·주간요약과 동일한 e1RM(맨몸은 reps) 기준으로 통일
+  // ── 종목 인덱스: canon → [{date,ex}] 날짜 오름차순 ──
+  // 이전에는 _priorBest·prevSession·_hasHist·완료토스트 PR 집계가 각각 전체 기록(모든 날×모든 종목)을 풀스캔했다.
+  // 지연 구축 + 데이터 변경 시 무효화(markDirty)로, 조회 비용을 '그 종목의 기록 수'에 비례하게 축소 —
+  // 기록이 수년치로 쌓여도 날짜 이동·목표 주입이 일정 속도를 유지한다. ex는 참조 공유라 세트 편집이 즉시 반영된다.
+  _exIdx:null,
+  _invalidateIdx(){this._exIdx=null;this._dk=null;this._pkdCache=null;},
+  // data 감시 프록시: this.data[k]=… / delete / this.data={} 전체 교체 — 어떤 경로로 써도 캐시가 자동 무효화된다.
+  // 실제 앱은 markDirty가 쓰기 관문이지만, 시트 복원·백업 가져오기·테스트처럼 data를 직접 다루는 코드도 안전해진다.
+  // 같은 참조 재대입(setSession의 통상 경로)은 스킵 — 인덱스가 ex 참조를 공유하므로 무효화 불필요.
+  _wrapData(){
+    if(this._dataWrapped)return;this._dataWrapped=true;
+    const self=this;
+    const wrap=obj=>new Proxy(obj,{
+      set(o,k,v){if(o[k]!==v){o[k]=v;self._invalidateIdx();}return true;},
+      deleteProperty(o,k){delete o[k];self._invalidateIdx();return true;}
+    });
+    let cur=wrap(this.data||{});
+    Object.defineProperty(this,'data',{
+      get(){return cur;},
+      set(v){cur=wrap(v||{});self._invalidateIdx();},
+      configurable:true
+    });
+  },
+  _buildExIdx(){
+    const idx={};
+    for(const dk of this._dateKeys()){
+      (this.data[dk].exercises||[]).forEach(ex=>{
+        if(!(ex.sets||[]).length)return;
+        const cn=this.canon(ex.name);
+        (idx[cn]=idx[cn]||[]).push({date:dk,ex});
+      });
+    }
+    return this._exIdx=idx;
+  },
+  _exFor(cn){return (this._exIdx||this._buildExIdx())[cn]||[];},
+  // 정렬된 날짜 키 캐시 — Object.keys().filter().sort()를 호출부마다 반복하던 것을 공용화
+  _dk:null,
+  _dateKeys(){return this._dk||(this._dk=Object.keys(this.data).sort());},
+  _pkdCache:null,
+  _pastKeysDesc(d){ // 기준일(기본: 열람일) 이전 날짜 내림차순 — (데이터·기준일)당 1회만 계산
+    d=d||this.date;
+    const c=this._pkdCache;
+    if(c&&c.d===d)return c.a;
+    const a=this._dateKeys().filter(k=>k<d).reverse();
+    this._pkdCache={d,a};
+    return a;
+  },
   // 캐시: refresh()가 세트 입력마다 카드 수 × 전체 기록 일수를 재스캔하던 것을 (열람일·canon)당 1회로 축소.
   // 과거최고는 '열람일 이외' 날짜의 데이터라 같은 날 안에서는 불변 — 날짜 이동(_miniCacheCheck)·별칭 변경 시 무효화.
   _pbCache:{},
   _priorBest(name){
-    const ck=this.date+'|'+this.canon(name);
+    const cn=this.canon(name); // 루프 밖 1회 계산 (이전에는 날짜×종목 비교마다 재계산)
+    const ck=this.date+'|'+cn;
     const hit=this._pbCache[ck];if(hit)return hit;
     let bestE1=-1,bestReps=-1;
-    for(const k in this.data){
-      if(k===this.date)continue;
-      const ex=this.data[k].exercises?.find(e=>this.canon(e.name)===this.canon(name));
-      if(!ex)continue;
-      ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
+    for(const r of this._exFor(cn)){
+      if(r.date===this.date)continue;
+      r.ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
     }
     return this._pbCache[ck]={bestE1,bestReps};
   },
@@ -2458,7 +2527,7 @@ const ExLog={
   // ── 같은 데이 타입의 직전 세션 톤수 ──
   _prevDayTypeVol(day){
     if(!day||day==='REST')return null;
-    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
+    const keys=this._pastKeysDesc(); // 캐시된 내림차순 키 — 호출마다 filter+sort 반복 제거
     for(const k of keys){
       const ses=this.data[k];if(!ses||this._baseType(ses.day)!==this._baseType(day))continue; // 옛 Push+ 기록도 Push 이력으로 비교
       let v=0,has=false;
@@ -2651,11 +2720,12 @@ const ExLog={
   prevSession(name){
     // 요일 무관: 같은 종목명이 기록된 가장 최근 과거 날짜를 직전 기록으로 사용
     // (불규칙 스케줄에서도 도전 무게가 실제 최신 수행을 따라가도록)
-    const keys=Object.keys(this.data).filter(k=>k<this.date).sort().reverse();
-    for(const k of keys){
-      const s=this.data[k];if(!s)continue;
-      const ex=s.exercises?.find(e=>this.canon(e.name)===this.canon(name)&&(e.sets||[]).some(_isWorkSet));
-      if(ex)return{date:k,sets:ex.sets.filter(_isWorkSet)};
+    const cn=this.canon(name);
+    const rs=this._exFor(cn); // 종목 인덱스 — 전체 날짜가 아니라 이 종목의 기록만 역순 탐색
+    for(let i=rs.length-1;i>=0;i--){
+      const r=rs[i];
+      if(r.date>=this.date)continue;
+      if((r.ex.sets||[]).some(_isWorkSet))return{date:r.date,sets:r.ex.sets.filter(_isWorkSet)};
     }
     return null;
   },
@@ -3165,6 +3235,7 @@ const ExLog={
     url=url||(await this.getScriptUrl());
     if(!url)return;
     clearTimeout(this._syncTimer);            // 대기 중 디바운스가 있으면 취소(중복 전송 방지)
+    this._flushDeletes();                     // 큐에 남은 삭제 키도 이 기회에 재전송
     const btn=document.getElementById('log-sync-btn');
     if(btn){btn.classList.add('syncing');btn.textContent='⏳';}
     // dirty 스냅샷: 전송 중 새로 생기는 변경(다음 세트 입력)은 지우지 않도록 사본으로 고정
@@ -3200,7 +3271,14 @@ const ExLog={
 const PlanApp={
   // 타입→색은 상단 DAY_COLORS_EL을 단일 소스로 참조 (요일→타입 고정표는 순환제 전환으로 제거)
   DAY_COLORS:DAY_COLORS_EL,
-  init(){this.renderPhase();this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();this.loadBlood();},
+  init(){this.renderPhase();this.renderAnalysis(true);this.loadBlood();},
+  // 분석 탭 일괄 렌더 — ExLog.dataVer가 그대로면 스킵. 이전에는 탭 전환마다 8종 렌더러(SVG 다수)를 무조건 재실행했다.
+  renderAnalysis(force){
+    const v=(typeof ExLog!=='undefined')?ExLog.dataVer:-1;
+    if(!force&&this._renderedVer===v)return;
+    this._renderedVer=v;
+    this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();
+  },
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
     const start=new Date('2026-05-25T00:00:00');
@@ -4245,7 +4323,19 @@ document.addEventListener('DOMContentLoaded',()=>{
   }catch(_){}
 });
 // PWA: 서비스워커 등록 (network-first — 배포하면 온라인 시 항상 최신, 오프라인만 캐시)
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+  // SWR 전략: SW가 백그라운드 갱신에서 새 배포(ETag 변경)를 감지하면 sw-updated 메시지를 보냄 → 새로고침 토스트
+  navigator.serviceWorker.addEventListener('message',ev=>{
+    if(!ev.data||ev.data.type!=='sw-updated'||document.getElementById('sw-upd-toast'))return;
+    const t=document.createElement('div');t.id='sw-upd-toast';t.className='pr-toast';
+    t.style.pointerEvents='auto';t.style.cursor='pointer';t.style.background='linear-gradient(135deg,#185FA5,#0C447C)';
+    t.innerHTML='<span class="pr-emoji">🆕</span><div class="pr-txt"><div class="pr-t1">새 버전이 준비됐어요</div><div class="pr-t2">탭하면 새로고침</div></div>';
+    t.onclick=()=>location.reload();
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add('show'));
+    setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),600);},10000);
+  });
+}
 </script>
 <!-- 동기화 설정 모달 -->
 <div class="sync-modal" id="sync-modal" onclick="if(event.target===this)ExLog.closeSync()">

@@ -1,10 +1,10 @@
-/* 운동 루틴 PWA 서비스워커 — network-first 전략.
-   온라인이면 항상 네트워크(=GitHub Pages 최신 배포)를 우선하고 성공 응답으로 캐시를 갱신,
-   오프라인일 때만 캐시로 폴백한다. cache-first와 달리 배포 후 옛 버전이 고착되지 않으므로
-   push만 하면 되는 현재 워크플로우를 그대로 유지할 수 있다. */
-const CACHE = 'fit-tracker-v1'; // 캐시 스키마가 바뀔 때만 올리면 됨 (network-first라 콘텐츠 갱신엔 불필요)
+/* 운동 루틴 PWA 서비스워커 — stale-while-revalidate 전략.
+   캐시가 있으면 즉시 캐시로 응답(콜드 스타트 ~0.1초)하고, 백그라운드에서 네트워크로 갱신한다.
+   갱신 결과가 기존 캐시와 다르면(ETag/Last-Modified 비교) 클라이언트에 'sw-updated' 메시지를 보내
+   index.html이 "새 버전" 토스트를 띄운다. network-first 대비: 느린 네트워크에서 최대 4초 기다리던
+   실행 지연이 사라지고, 배포 반영은 토스트 새로고침 또는 다음 실행에 이뤄진다. */
+const CACHE = 'fit-tracker-v1'; // 캐시 스키마가 바뀔 때만 올리면 됨
 const PRECACHE = ['./', './index.html', './exercise-library.js', './manifest.json', './icon192.png', './icon512.png'];
-const NET_TIMEOUT_MS = 4000; // 느린 네트워크에서 이 시간 안에 응답 없으면 캐시로 폴백 (오프라인급 반응성)
 
 self.addEventListener('install', e => {
   // allSettled: 파일 1개가 404여도(아이콘 교체 등) 나머지 프리캐시와 SW 설치는 진행.
@@ -24,6 +24,26 @@ self.addEventListener('activate', e => {
   );
 });
 
+// 배포본 변경 감지: GitHub Pages가 주는 ETag(없으면 Last-Modified, 그것도 없으면 content-length)로 비교.
+// 본문 해시보다 훨씬 싸고, 재배포 시 헤더가 반드시 바뀐다.
+function _ver(res) {
+  return res.headers.get('etag') || res.headers.get('last-modified') || res.headers.get('content-length') || '';
+}
+
+async function _revalidate(req, cached) {
+  try {
+    const res = await fetch(req);
+    if (!res || !res.ok) return;
+    const changed = cached && _ver(cached) !== _ver(res);
+    await (await caches.open(CACHE)).put(req, res.clone());
+    // index.html(내비게이션)이 바뀐 경우에만 알림 — 부속 파일 갱신으로 토스트가 남발되지 않게
+    if (changed && (req.mode === 'navigate' || /index\.html$/.test(new URL(req.url).pathname))) {
+      const cs = await self.clients.matchAll({ type: 'window' });
+      cs.forEach(c => c.postMessage({ type: 'sw-updated' }));
+    }
+  } catch (_) { /* 오프라인 — 다음 기회에 */ }
+}
+
 self.addEventListener('fetch', e => {
   const req = e.request;
   // GET만 처리 — Apps Script 동기화(POST) 등은 그대로 통과
@@ -32,25 +52,22 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   e.respondWith((async () => {
+    const cached = await caches.match(req) ||
+      (req.mode === 'navigate' ? await caches.match('./index.html') : null);
+    if (cached) {
+      // 즉시 캐시 응답 + 백그라운드 갱신 (SW 수명 보장 위해 waitUntil)
+      e.waitUntil(_revalidate(req, cached));
+      return cached;
+    }
+    // 캐시 미스(첫 방문·새 파일): 네트워크 직행, 성공 시 캐시에 적재
     try {
-      const netP = fetch(req);
-      netP.catch(() => {}); // 타임아웃 패배 후 늦게 실패해도 unhandled rejection 방지
-      const res = await Promise.race([
-        netP,
-        new Promise((_, rej) => setTimeout(() => rej(new Error('net-timeout')), NET_TIMEOUT_MS))
-      ]);
+      const res = await fetch(req);
       if (res && res.ok) {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(req, copy));
       }
       return res;
     } catch (_) {
-      const hit = await caches.match(req);
-      if (hit) return hit;
-      if (req.mode === 'navigate') {
-        const idx = await caches.match('./index.html');
-        if (idx) return idx;
-      }
       return Response.error();
     }
   })());
