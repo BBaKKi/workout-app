@@ -292,7 +292,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mm-wrap{padding:14px 16px 80px}
 .mm-title{font-size:15px;font-weight:800;color:var(--color-text-primary);margin-bottom:4px}
 .mm-sub{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px}
-.mm-svg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto;color:var(--color-text-secondary)}
+.mm-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;color:var(--color-text-secondary)}
 .mm-sil *{fill:var(--color-border-tertiary,#dadde0);opacity:.45;stroke:none}
 .mz{stroke:#fff;stroke-width:1;cursor:pointer;fill-opacity:.5;transition:fill-opacity .15s}
 .mz[data-m="가슴"]{fill:#D85A30}
@@ -308,8 +308,10 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mz[data-m="승모"]{fill:#7A6F2E}
 .mz[data-m="후면삼각"]{fill:#C46A2A}
 .mz[data-m="종아리"]{fill:#3E2E66}
+.mz[data-m="내전근"]{fill:#8B5E3C}
 .mm-sep{stroke:#fff;stroke-width:1.3;opacity:.5;fill:none}
 .mz.sel{fill-opacity:.95;stroke:#085041;stroke-width:1.5}
+.mz.subsel{fill-opacity:1;stroke:#08312a;stroke-width:2.2}
 .mm-vlbl{font-size:10px;fill:var(--color-text-tertiary);text-anchor:middle}
 .mm-info{margin-top:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;background:var(--color-background-primary);min-height:70px}
 .mm-info-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:16px 0}
@@ -825,7 +827,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="tab-body tab-d">
 <div class="mm-wrap">
   <div class="mm-title">💪 근육 지도</div>
-  <div class="mm-sub">부위를 탭하면 기능 · 어디가 늘어나고(신장) 조여야 하는지(수축) · 자극 운동을 볼 수 있습니다.</div>
+  <div class="mm-sub">부위를 탭하면 기능 · 신장/수축 · 세부 근육 · 자극 운동을 볼 수 있습니다. 이제 그림이 세부 근육(광배·능형·상완근 등)까지 나뉘어 있어, 세밀한 조각을 직접 탭하거나 아래 카드를 누르면 그림에서 해당 위치가 표시됩니다.</div>
   <svg viewBox="0 0 330 380" class="mm-svg" xmlns="http://www.w3.org/2000/svg">
     <!-- ===== 앞면 (cx≈85) ===== -->
     <g class="mm-sil">
@@ -840,19 +842,50 @@ details.plan-fold[open]>summary::after{content:'▴'}
     </g>
     <line class="mm-sep" x1="85" y1="58" x2="85" y2="150"/>
     <path class="mm-sep" d="M75,110 H95 M75,122 H95 M75,134 H95"/>
-    <ellipse class="mz" data-m="전면삼각" cx="59" cy="58" rx="9" ry="8" onclick="MuscleMap.show('전면삼각')"/>
-    <ellipse class="mz" data-m="전면삼각" cx="111" cy="58" rx="9" ry="8" onclick="MuscleMap.show('전면삼각')"/>
-    <ellipse class="mz" data-m="측면삼각" cx="50" cy="62" rx="6" ry="9" onclick="MuscleMap.show('측면삼각')"/>
-    <ellipse class="mz" data-m="측면삼각" cx="120" cy="62" rx="6" ry="9" onclick="MuscleMap.show('측면삼각')"/>
-    <path class="mz" data-m="가슴" d="M73,72 C66,72 64,82 64,90 C64,97 70,100 76,99 C80,98 82,92 82,84 C82,76 79,72 73,72 Z" onclick="MuscleMap.show('가슴')"/>
-    <path class="mz" data-m="가슴" d="M97,72 C104,72 106,82 106,90 C106,97 100,100 94,99 C90,98 88,92 88,84 C88,76 91,72 97,72 Z" onclick="MuscleMap.show('가슴')"/>
-    <ellipse class="mz" data-m="이두" cx="49" cy="92" rx="6" ry="14" onclick="MuscleMap.show('이두')"/>
-    <ellipse class="mz" data-m="이두" cx="121" cy="92" rx="6" ry="14" onclick="MuscleMap.show('이두')"/>
-    <ellipse class="mz" data-m="전완" cx="49" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완')"/>
-    <ellipse class="mz" data-m="전완" cx="121" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완')"/>
-    <rect class="mz" data-m="코어" x="76" y="104" width="18" height="48" rx="6" onclick="MuscleMap.show('코어')"/>
-    <ellipse class="mz" data-m="대퇴사두" cx="77" cy="220" rx="9" ry="34" onclick="MuscleMap.show('대퇴사두')"/>
-    <ellipse class="mz" data-m="대퇴사두" cx="93" cy="220" rx="9" ry="34" onclick="MuscleMap.show('대퇴사두')"/>
+    <!-- 전면삼각 -->
+    <ellipse class="mz" data-m="전면삼각" data-sub="0" cx="59" cy="58" rx="9" ry="8" onclick="MuscleMap.show('전면삼각',0)"/>
+    <ellipse class="mz" data-m="전면삼각" data-sub="0" cx="111" cy="58" rx="9" ry="8" onclick="MuscleMap.show('전면삼각',0)"/>
+    <!-- 측면삼각 -->
+    <ellipse class="mz" data-m="측면삼각" data-sub="0" cx="50" cy="62" rx="6" ry="9" onclick="MuscleMap.show('측면삼각',0)"/>
+    <ellipse class="mz" data-m="측면삼각" data-sub="0" cx="120" cy="62" rx="6" ry="9" onclick="MuscleMap.show('측면삼각',0)"/>
+    <!-- 가슴: 상부0 · 중부1 · 하부2 · 전거근3 -->
+    <path class="mz" data-m="가슴" data-sub="0" d="M65,74.5 C70,72 78,72 81,75 L81,81 L65,81 Z" onclick="MuscleMap.show('가슴',0)"/>
+    <path class="mz" data-m="가슴" data-sub="1" d="M65,81 L81,81 L81,90 L65,90 Z" onclick="MuscleMap.show('가슴',1)"/>
+    <path class="mz" data-m="가슴" data-sub="2" d="M65,90 L81,90 C80,97.5 72,99.5 66,96.5 Z" onclick="MuscleMap.show('가슴',2)"/>
+    <path class="mz" data-m="가슴" data-sub="0" d="M105,74.5 C100,72 92,72 89,75 L89,81 L105,81 Z" onclick="MuscleMap.show('가슴',0)"/>
+    <path class="mz" data-m="가슴" data-sub="1" d="M89,81 L105,81 L105,90 L89,90 Z" onclick="MuscleMap.show('가슴',1)"/>
+    <path class="mz" data-m="가슴" data-sub="2" d="M89,90 L105,90 C104,97.5 96,99.5 90,96.5 Z" onclick="MuscleMap.show('가슴',2)"/>
+    <path class="mz" data-m="가슴" data-sub="3" d="M60,96 l4,1.4 -0.4,3 -4,-1.4 z M60.4,101 l4,1.4 -0.4,3 -4,-1.4 z" onclick="MuscleMap.show('가슴',3)"/>
+    <path class="mz" data-m="가슴" data-sub="3" d="M110,96 l-4,1.4 0.4,3 4,-1.4 z M109.6,101 l-4,1.4 0.4,3 4,-1.4 z" onclick="MuscleMap.show('가슴',3)"/>
+    <!-- 이두: 장두0 · 단두1 · 상완근2 -->
+    <path class="mz" data-m="이두" data-sub="0" d="M49,78 C45,79 43,85 43,92 C43,99 45,104 49,106 Z" onclick="MuscleMap.show('이두',0)"/>
+    <path class="mz" data-m="이두" data-sub="1" d="M49,78 C53,79 55,85 55,92 C55,99 53,104 49,106 Z" onclick="MuscleMap.show('이두',1)"/>
+    <ellipse class="mz" data-m="이두" data-sub="2" cx="49" cy="110" rx="5" ry="5.5" onclick="MuscleMap.show('이두',2)"/>
+    <path class="mz" data-m="이두" data-sub="0" d="M121,78 C125,79 127,85 127,92 C127,99 125,104 121,106 Z" onclick="MuscleMap.show('이두',0)"/>
+    <path class="mz" data-m="이두" data-sub="1" d="M121,78 C117,79 115,85 115,92 C115,99 117,104 121,106 Z" onclick="MuscleMap.show('이두',1)"/>
+    <ellipse class="mz" data-m="이두" data-sub="2" cx="121" cy="110" rx="5" ry="5.5" onclick="MuscleMap.show('이두',2)"/>
+    <!-- 전완(앞): 굴근0(안) · 상완요골근2(밖) -->
+    <path class="mz" data-m="전완" data-sub="0" d="M49,114 C52,115 54,121 54,128 C54,135 52,141 49,142 Z" onclick="MuscleMap.show('전완',0)"/>
+    <path class="mz" data-m="전완" data-sub="2" d="M49,114 C46,115 44,121 44,128 C44,135 46,141 49,142 Z" onclick="MuscleMap.show('전완',2)"/>
+    <path class="mz" data-m="전완" data-sub="0" d="M121,114 C118,115 116,121 116,128 C116,135 118,141 121,142 Z" onclick="MuscleMap.show('전완',0)"/>
+    <path class="mz" data-m="전완" data-sub="2" d="M121,114 C124,115 126,121 126,128 C126,135 124,141 121,142 Z" onclick="MuscleMap.show('전완',2)"/>
+    <!-- 코어: 복직근 상부0 · 하부1 · 복사근2 · 복횡근3 -->
+    <rect class="mz" data-m="코어" data-sub="2" x="73.5" y="108" width="3.5" height="40" rx="1.6" onclick="MuscleMap.show('코어',2)"/>
+    <rect class="mz" data-m="코어" data-sub="2" x="93" y="108" width="3.5" height="40" rx="1.6" onclick="MuscleMap.show('코어',2)"/>
+    <rect class="mz" data-m="코어" data-sub="0" x="77" y="105" width="16" height="18.5" rx="3" onclick="MuscleMap.show('코어',0)"/>
+    <rect class="mz" data-m="코어" data-sub="1" x="77" y="126.5" width="16" height="21.5" rx="3" onclick="MuscleMap.show('코어',1)"/>
+    <rect class="mz" data-m="코어" data-sub="3" x="77" y="123.5" width="16" height="3" onclick="MuscleMap.show('코어',3)"/>
+    <!-- 대퇴사두: 대퇴직근0 · 외측광근1 · 내측광근2 · 중간광근3 · (내전근) -->
+    <path class="mz" data-m="대퇴사두" data-sub="1" d="M73,188 C70,191 68,208 68,226 C68,240 69,250 71,253 L73,253 Z" onclick="MuscleMap.show('대퇴사두',1)"/>
+    <path class="mz" data-m="대퇴사두" data-sub="0" d="M73,187.5 C74,186.5 80,186.5 81,187.5 L81,253 C80,254 74,254 73,253 Z" onclick="MuscleMap.show('대퇴사두',0)"/>
+    <path class="mz" data-m="대퇴사두" data-sub="2" d="M81,219 L86,219 C86,238 85,250 83,253 L81,253 Z" onclick="MuscleMap.show('대퇴사두',2)"/>
+    <path class="mz" data-m="내전근" data-sub="0" d="M81,189 L86,189 L86,218 L81,218 Z" onclick="MuscleMap.show('내전근',0)"/>
+    <rect class="mz" data-m="대퇴사두" data-sub="3" x="76.2" y="194" width="1.6" height="54" rx="0.8" onclick="MuscleMap.show('대퇴사두',3)"/>
+    <path class="mz" data-m="대퇴사두" data-sub="1" d="M97,188 C100,191 102,208 102,226 C102,240 101,250 99,253 L97,253 Z" onclick="MuscleMap.show('대퇴사두',1)"/>
+    <path class="mz" data-m="대퇴사두" data-sub="0" d="M89,187.5 C90,186.5 96,186.5 97,187.5 L97,253 C96,254 90,254 89,253 Z" onclick="MuscleMap.show('대퇴사두',0)"/>
+    <path class="mz" data-m="대퇴사두" data-sub="2" d="M84,219 L89,219 L89,253 L84,253 Z" onclick="MuscleMap.show('대퇴사두',2)"/>
+    <path class="mz" data-m="내전근" data-sub="0" d="M84,189 L89,189 L89,218 L84,218 Z" onclick="MuscleMap.show('내전근',0)"/>
+    <rect class="mz" data-m="대퇴사두" data-sub="3" x="92.2" y="194" width="1.6" height="54" rx="0.8" onclick="MuscleMap.show('대퇴사두',3)"/>
     <!-- ===== 뒷면 (cx≈245) ===== -->
     <g class="mm-sil">
       <ellipse cx="245" cy="22" rx="12" ry="14"/>
@@ -865,21 +898,48 @@ details.plan-fold[open]>summary::after{content:'▴'}
       <path d="M278,57 C284,70 287,90 287,108 C287,124 286,138 284,150 C283,156 278,156 277,150 C275,138 274,124 274,108 C274,90 272,72 268,58 Z"/>
     </g>
     <line class="mm-sep" x1="245" y1="72" x2="245" y2="150"/>
-    <path class="mz" data-m="승모" d="M232,46 L258,46 L252,68 C249,72 241,72 238,68 Z" onclick="MuscleMap.show('승모')"/>
-    <ellipse class="mz" data-m="후면삼각" cx="218" cy="58" rx="8" ry="8" onclick="MuscleMap.show('후면삼각')"/>
-    <ellipse class="mz" data-m="후면삼각" cx="272" cy="58" rx="8" ry="8" onclick="MuscleMap.show('후면삼각')"/>
-    <path class="mz" data-m="등" d="M236,74 C228,76 226,92 228,108 C229,120 234,128 240,128 C242,120 242,96 242,80 C242,75 239,73 236,74 Z" onclick="MuscleMap.show('등')"/>
-    <path class="mz" data-m="등" d="M254,74 C262,76 264,92 262,108 C261,120 256,128 250,128 C248,120 248,96 248,80 C248,75 251,73 254,74 Z" onclick="MuscleMap.show('등')"/>
-    <ellipse class="mz" data-m="삼두" cx="210" cy="92" rx="6" ry="14" onclick="MuscleMap.show('삼두')"/>
-    <ellipse class="mz" data-m="삼두" cx="280" cy="92" rx="6" ry="14" onclick="MuscleMap.show('삼두')"/>
-    <ellipse class="mz" data-m="전완" cx="210" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완')"/>
-    <ellipse class="mz" data-m="전완" cx="280" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완')"/>
-    <ellipse class="mz" data-m="후면사슬" cx="238" cy="172" rx="9" ry="11" onclick="MuscleMap.show('후면사슬')"/>
-    <ellipse class="mz" data-m="후면사슬" cx="252" cy="172" rx="9" ry="11" onclick="MuscleMap.show('후면사슬')"/>
-    <ellipse class="mz" data-m="후면사슬" cx="237" cy="220" rx="8" ry="30" onclick="MuscleMap.show('후면사슬')"/>
-    <ellipse class="mz" data-m="후면사슬" cx="253" cy="220" rx="8" ry="30" onclick="MuscleMap.show('후면사슬')"/>
-    <ellipse class="mz" data-m="종아리" cx="237" cy="285" rx="7" ry="22" onclick="MuscleMap.show('종아리')"/>
-    <ellipse class="mz" data-m="종아리" cx="253" cy="285" rx="7" ry="22" onclick="MuscleMap.show('종아리')"/>
+    <!-- 승모 상부0 -->
+    <path class="mz" data-m="승모" data-sub="0" d="M232,46 L258,46 L252,66 C249,70 241,70 238,66 Z" onclick="MuscleMap.show('승모',0)"/>
+    <!-- 후면삼각0 · 회전근개1 -->
+    <ellipse class="mz" data-m="후면삼각" data-sub="0" cx="218" cy="58" rx="8" ry="8" onclick="MuscleMap.show('후면삼각',0)"/>
+    <ellipse class="mz" data-m="후면삼각" data-sub="0" cx="272" cy="58" rx="8" ry="8" onclick="MuscleMap.show('후면삼각',0)"/>
+    <ellipse class="mz" data-m="후면삼각" data-sub="1" cx="221" cy="64.5" rx="3" ry="3" onclick="MuscleMap.show('후면삼각',1)"/>
+    <ellipse class="mz" data-m="후면삼각" data-sub="1" cx="269" cy="64.5" rx="3" ry="3" onclick="MuscleMap.show('후면삼각',1)"/>
+    <!-- 등: 능형·중부승모2 -->
+    <path class="mz" data-m="등" data-sub="2" d="M237,73 L253,73 L253,89 L237,89 Z" onclick="MuscleMap.show('등',2)"/>
+    <!-- 승모 중부·하부1 -->
+    <path class="mz" data-m="승모" data-sub="1" d="M240,89 L250,89 L248,110 L242,110 Z" onclick="MuscleMap.show('승모',1)"/>
+    <!-- 등: 대원근1 (겨드랑이 뒤) -->
+    <path class="mz" data-m="등" data-sub="1" d="M228,72 C224,74 224,80 227,84 L233,82 L233,73 Z" onclick="MuscleMap.show('등',1)"/>
+    <path class="mz" data-m="등" data-sub="1" d="M262,72 C266,74 266,80 263,84 L257,82 L257,73 Z" onclick="MuscleMap.show('등',1)"/>
+    <!-- 등: 광배0 -->
+    <path class="mz" data-m="등" data-sub="0" d="M236,90 C229,92 227,106 230,118 C232,126 237,128 240,126 L240,90 Z" onclick="MuscleMap.show('등',0)"/>
+    <path class="mz" data-m="등" data-sub="0" d="M254,90 C261,92 263,106 260,118 C258,126 253,128 250,126 L250,90 Z" onclick="MuscleMap.show('등',0)"/>
+    <!-- 등: 척추기립근4 -->
+    <rect class="mz" data-m="등" data-sub="4" x="240" y="110" width="4" height="42" rx="1.6" onclick="MuscleMap.show('등',4)"/>
+    <rect class="mz" data-m="등" data-sub="4" x="246" y="110" width="4" height="42" rx="1.6" onclick="MuscleMap.show('등',4)"/>
+    <!-- 삼두: 장두0(안) · 외측두1(밖) · 내측두2 -->
+    <path class="mz" data-m="삼두" data-sub="0" d="M210,78 C213,79 216,85 216,92 C216,99 213,104 210,106 Z" onclick="MuscleMap.show('삼두',0)"/>
+    <path class="mz" data-m="삼두" data-sub="1" d="M210,78 C207,79 204,85 204,92 C204,99 207,104 210,106 Z" onclick="MuscleMap.show('삼두',1)"/>
+    <ellipse class="mz" data-m="삼두" data-sub="2" cx="210" cy="110" rx="4.5" ry="5" onclick="MuscleMap.show('삼두',2)"/>
+    <path class="mz" data-m="삼두" data-sub="0" d="M280,78 C277,79 274,85 274,92 C274,99 277,104 280,106 Z" onclick="MuscleMap.show('삼두',0)"/>
+    <path class="mz" data-m="삼두" data-sub="1" d="M280,78 C283,79 286,85 286,92 C286,99 283,104 280,106 Z" onclick="MuscleMap.show('삼두',1)"/>
+    <ellipse class="mz" data-m="삼두" data-sub="2" cx="280" cy="110" rx="4.5" ry="5" onclick="MuscleMap.show('삼두',2)"/>
+    <!-- 전완(뒤): 신근1 -->
+    <ellipse class="mz" data-m="전완" data-sub="1" cx="210" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완',1)"/>
+    <ellipse class="mz" data-m="전완" data-sub="1" cx="280" cy="128" rx="5" ry="15" onclick="MuscleMap.show('전완',1)"/>
+    <!-- 후면사슬: 대둔근0 · 중둔근·소둔근1 · 햄스트링2 -->
+    <ellipse class="mz" data-m="후면사슬" data-sub="0" cx="238" cy="172" rx="9" ry="11" onclick="MuscleMap.show('후면사슬',0)"/>
+    <ellipse class="mz" data-m="후면사슬" data-sub="0" cx="252" cy="172" rx="9" ry="11" onclick="MuscleMap.show('후면사슬',0)"/>
+    <ellipse class="mz" data-m="후면사슬" data-sub="1" cx="229" cy="167" rx="4.5" ry="6" onclick="MuscleMap.show('후면사슬',1)"/>
+    <ellipse class="mz" data-m="후면사슬" data-sub="1" cx="261" cy="167" rx="4.5" ry="6" onclick="MuscleMap.show('후면사슬',1)"/>
+    <ellipse class="mz" data-m="후면사슬" data-sub="2" cx="237" cy="220" rx="8" ry="30" onclick="MuscleMap.show('후면사슬',2)"/>
+    <ellipse class="mz" data-m="후면사슬" data-sub="2" cx="253" cy="220" rx="8" ry="30" onclick="MuscleMap.show('후면사슬',2)"/>
+    <!-- 종아리: 비복근0 · 가자미근1 -->
+    <path class="mz" data-m="종아리" data-sub="0" d="M237,263 C232,266 230,278 230,289 L244,289 C244,278 242,266 237,263 Z" onclick="MuscleMap.show('종아리',0)"/>
+    <path class="mz" data-m="종아리" data-sub="1" d="M230,289 C230,299 233,306 237,307 C241,306 244,299 244,289 Z" onclick="MuscleMap.show('종아리',1)"/>
+    <path class="mz" data-m="종아리" data-sub="0" d="M253,263 C248,266 246,278 246,289 L260,289 C260,278 258,266 253,263 Z" onclick="MuscleMap.show('종아리',0)"/>
+    <path class="mz" data-m="종아리" data-sub="1" d="M246,289 C246,299 249,306 253,307 C257,306 260,299 260,289 Z" onclick="MuscleMap.show('종아리',1)"/>
     <text x="85" y="373" class="mm-vlbl">앞면</text>
     <text x="245" y="373" class="mm-vlbl">뒷면</text>
   </svg>
@@ -3904,7 +3964,8 @@ const MUSCLE_INFO={
  '후면삼각':{c:'#C46A2A',loc:'어깨 뒤 · 후면 삼각근(Posterior deltoid)',anat:'삼각근 뒤 갈래. 프레스가 많을수록 상대적으로 약해져 자세 불균형의 원인이 된다.',fn:'팔을 뒤로 펴는 어깨 신전·수평 외전. 회전근개와 함께 어깨 뒤를 안정화.',stretch:'팔을 몸 앞으로 가져가 어깨 뒤가 늘어난 상태에서 시작.',contract:'팔꿈치를 뒤·옆으로 당겨 견갑을 모으며 후면삼각을 1초 조임.',cue:'페이스풀·리어델트 플라이로 보강. 라운드 숄더(굽은 어깨) 교정의 핵심 부위.',mistake:'무겁게 들어 광배·승모가 대신 일하는 것. 가볍게 고반복으로 후면삼각만 분리.'},
  '승모':{c:'#7A6F2E',loc:'목·등 위쪽 · 승모근(Trapezius)',anat:'상부(견갑 거상)·중부(후인)·하부(하강) 세 부분. 상부는 슈러그, 중하부는 로우에서 발달.',fn:'견갑골을 올리고·모으고·내리며 어깨를 안정화. 목·어깨 두께를 만든다.',stretch:'슈러그 하단에서 어깨를 충분히 내려 상부 승모가 늘어난다.',contract:'어깨를 귀 쪽으로 곧게 들어 정점 1초(슈러그). 돌리지 말 것.',cue:'데드리프트·로우에서 이미 많이 쓰이므로 별도 슈러그는 보조로 충분.',mistake:'어깨를 앞뒤로 돌리는(원형) 슈러그 — 직선 상하로만 움직여야 안전하다.'},
  '전완':{c:'#5B8A2A',loc:'아래팔 · 전완 굴근·신근',anat:'손목 굴근(안쪽)·신근(바깥)·완요골근. 악력과 팔뚝 두께를 담당.',fn:'손목을 굽히고 펴며, 무엇보다 모든 당기는 동작에서 바를 쥐는 악력을 낸다.',stretch:'리스트 컬 하단에서 손가락을 펴 전완이 늘어난다. 데드행도 강한 신장 자극.',contract:'손목을 말아 쥐며 정점에서 조이기. 데드행은 등척성으로 버티며 악력 유지.',cue:'데드리프트 악력이 한계면 오버언더 그립으로 보완. 데드행으로 악력·척추 감압을 함께.',mistake:'스트랩에만 의존해 전완을 전혀 쓰지 않는 것. 가끔은 맨손으로 악력을 길러야 한다.'},
- '종아리':{c:'#3E2E66',loc:'정강이 뒤 · 비복근·가자미근',anat:'비복근(무릎 펴고 서서)·가자미근(무릎 굽혀 앉아서). 둘 다 자극하려면 스탠딩+시티드 병행.',fn:'발목을 펴는 저측굴곡. 걷기·점프의 추진. 본인은 걷기로 이미 발달한 편.',stretch:'뒤꿈치를 발판 아래로 깊게 내려 종아리가 길게 늘어나야 한다.',contract:'까치발로 최대한 밀어 올려 정점 1~2초 강하게 조임.',cue:'이미 발달해 있어 볼륨보다 자극 분산이 우선. 레그컬에서 발끝을 정강이로 당겨 종아리 개입을 줄인다.',mistake:'반동으로 빠르게 튕기는 것 — 스트레칭과 정점 수축을 모두 천천히.'}
+ '종아리':{c:'#3E2E66',loc:'정강이 뒤 · 비복근·가자미근',anat:'비복근(무릎 펴고 서서)·가자미근(무릎 굽혀 앉아서). 둘 다 자극하려면 스탠딩+시티드 병행.',fn:'발목을 펴는 저측굴곡. 걷기·점프의 추진. 본인은 걷기로 이미 발달한 편.',stretch:'뒤꿈치를 발판 아래로 깊게 내려 종아리가 길게 늘어나야 한다.',contract:'까치발로 최대한 밀어 올려 정점 1~2초 강하게 조임.',cue:'이미 발달해 있어 볼륨보다 자극 분산이 우선. 레그컬에서 발끝을 정강이로 당겨 종아리 개입을 줄인다.',mistake:'반동으로 빠르게 튕기는 것 — 스트레칭과 정점 수축을 모두 천천히.'},
+ '내전근':{c:'#8B5E3C',loc:'허벅지 안쪽 · 내전근군(장·단·대내전근)',anat:'허벅지 안쪽 라인을 만드는 근육군. 어브덕션(벌림)과 정반대로 다리를 몸 중심으로 모은다.',fn:'다리를 안쪽으로 모으는 내전 + 스쿼트 하단에서 골반 안정·신전 보조. 스쿼트 바닥 안정성의 숨은 기반.',stretch:'와이드·스모 스탠스 스쿼트 하단에서 허벅지 안쪽이 길게 늘어난다.',contract:'어덕션 머신에서 무릎으로 패드를 밀어 다리를 모으고 정점 1초.',cue:'발이 아니라 무릎 안쪽으로 패드를 미는 힘. 상체를 살짝 앞으로 숙이면 자극↑.',mistake:'발에 힘을 줘 다리를 모으는 것 — 자극이 정강이로 샌다.'}
 };
 const MuscleMap={
   _exByMus:null,
@@ -3916,9 +3977,15 @@ const MuscleMap={
     all.forEach(n=>{const mu=PlanApp.muscleOf(n);if(!mu)return;(map[mu.p]=map[mu.p]||[]).push(n);});
     this._exByMus=map;
   },
-  show(m){
+  // subIdx: 세부근육 인덱스(그림의 세부 조각을 탭했을 때 전달). 있으면 그림에서 해당 조각을 강조하고 팝업의 해당 카드를 펼친다.
+  show(m,subIdx){
     this.init();
-    document.querySelectorAll('.mz').forEach(z=>z.classList.toggle('sel',z.dataset.m===m));
+    var si=(subIdx==null?null:String(subIdx));
+    document.querySelectorAll('.mz').forEach(function(z){
+      var on=z.dataset.m===m;
+      z.classList.toggle('sel',on);
+      z.classList.toggle('subsel',on&&si!=null&&z.dataset.sub===si);
+    });
     const info=MUSCLE_INFO[m];const box=document.getElementById('mm-info');if(!box||!info)return;
     const exs=this._exByMus[m]||[];
     box.innerHTML='<div class="mm-h"><span class="mm-dot" style="background:'+info.c+'"></span><span class="mm-nm">'+m+'</span></div>'
@@ -3931,8 +3998,9 @@ const MuscleMap={
       +'<div class="mm-scr cue"><span class="tg">포인트</span><span class="tx">'+info.cue+'</span></div>'
       +'</div>'
       // 세부 근육 카드 — window.MUSCLE_DETAIL(exercise-library.js)에서 주입. 각 세부근육의 위치·섬유 방향·힘 방향·손가락 큐를 접이식으로 표시
-      +((window.MUSCLE_DETAIL&&window.MUSCLE_DETAIL[m]&&window.MUSCLE_DETAIL[m].sub)?'<div class="mm-sub-lbl">🔬 세부 근육 ('+window.MUSCLE_DETAIL[m].sub.length+')</div>'+window.MUSCLE_DETAIL[m].sub.map(function(s){
-        return '<details class="mm-sub"><summary><span class="mm-sub-nm">'+s.n+'</span><span class="chev">▾</span></summary><div class="mm-sub-body">'
+      +((window.MUSCLE_DETAIL&&window.MUSCLE_DETAIL[m]&&window.MUSCLE_DETAIL[m].sub)?'<div class="mm-sub-lbl">🔬 세부 근육 ('+window.MUSCLE_DETAIL[m].sub.length+') — 카드를 누르면 그림에서 위치가 표시됩니다</div>'+window.MUSCLE_DETAIL[m].sub.map(function(s,i){
+        // summary 탭 → 그림에서 해당 세부근육 조각 강조(hlSub)
+        return '<details class="mm-sub"><summary onclick="MuscleMap.hlSub(\''+m+'\','+i+')"><span class="mm-sub-nm">'+s.n+'</span><span class="chev">▾</span></summary><div class="mm-sub-body">'
           +'<div class="mm-sub-r"><span class="mm-sub-l">위치</span><span>'+s.loc+'</span></div>'
           +(s.dir?'<div class="mm-sub-r"><span class="mm-sub-l dir">방향</span><span>'+s.dir+'</span></div>':'')
           +'<div class="mm-sub-r"><span class="mm-sub-l how">키우기</span><span>'+s.how+'</span></div>'
@@ -3941,6 +4009,15 @@ const MuscleMap={
       }).join(''):'')
       +(info.mistake?'<div class="mm-mistake"><span class="mm-mistake-t">⚠ 흔한 실수</span>'+info.mistake+'</div>':'')
       +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'<div class="mm-noex">현재 루틴에선 복합 종목에서 <b>보조로</b> 단련됩니다. 전용 강화가 필요하면 📚 도감에서 종목을 찾아 추가하세요.</div>');
+    // 그림의 세부 조각을 탭한 경우 → 해당 카드를 자동으로 펼쳐 설명을 바로 노출
+    if(si!=null){var cs=box.querySelectorAll('.mm-sub');if(cs[subIdx]){cs[subIdx].open=true;}}
+  },
+  // 팝업의 세부근육 카드 탭 → 그림에서 해당 조각만 강조(그룹 선택 상태는 유지)
+  hlSub(m,idx){
+    var si=String(idx);
+    document.querySelectorAll('.mz').forEach(function(z){
+      z.classList.toggle('subsel',z.dataset.m===m&&z.dataset.sub===si);
+    });
   }
 };
 function libLookup(){
