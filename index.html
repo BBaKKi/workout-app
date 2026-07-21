@@ -329,6 +329,18 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .mm-scr.contract .tg{color:#D85A30}
 .mm-scr.cue .tg{color:#3B6D11}
 .mm-scr .tx{color:var(--color-text-secondary)}
+.mm-sub-lbl{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin:2px 0 6px}
+.mm-sub{margin-bottom:6px;border:1px solid var(--color-border,#e3e6ea);border-radius:8px;background:var(--color-background,#fff)}
+.mm-sub summary{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;cursor:pointer;list-style:none;font-size:12px;font-weight:700}
+.mm-sub summary::-webkit-details-marker{display:none}
+.mm-sub[open] .chev{transform:rotate(180deg)}
+.mm-sub .chev{font-size:10px;color:var(--color-text-tertiary);transition:transform .15s}
+.mm-sub-body{padding:2px 10px 9px;display:flex;flex-direction:column;gap:5px}
+.mm-sub-r{display:flex;gap:8px;font-size:11.5px;line-height:1.55;color:var(--color-text-secondary)}
+.mm-sub-l{font-weight:800;flex-shrink:0;width:44px;color:var(--color-text-tertiary)}
+.mm-sub-l.dir{color:#185FA5}
+.mm-sub-l.how{color:#D85A30}
+.mm-sub-l.ex{color:#3B6D11}
 .mm-exs-lbl{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:6px}
 .mm-exs{display:flex;flex-wrap:wrap;gap:6px}
 .mm-noex{font-size:11.5px;color:var(--color-text-tertiary);line-height:1.5;padding:8px 10px;background:var(--color-background-secondary,#f2f4f6);border-radius:8px}
@@ -762,7 +774,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 <div class="day-panel dp1">
 <div class="day-header"><span class="hbadge" style="background:#D85A30">Push</span><div class="hinfo">가슴·어깨·삼두 · 복합 3분 / 고립 2분 / 펌프성 90초 · 목표는 카드의 🎯 자동 목표 참조</div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분) · 모빌리티→활성화→통제<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 외회전</b> — 팔꿈치 90도 고정 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>숄더 서클·월 슬라이드</b> — 각 10회 <span style="color:#8e8e93">(흉추 열기)</span></div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>가슴 스트레칭</b> — 문틀 30초 × 2 <span style="color:#8e8e93">(말린 대흉근 이완)</span></div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>밴드 풀어파트 / 페이스풀</b> — 15~20회 × 2 <span style="color:#C0392B">★후면·중하부 승모 활성 — 전면삼각 우세 억제</span></div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>인클라인 플라이 가볍게</b> — 12회 <span style="color:#C0392B">★윗가슴 MMC 연결(실패 근처 금지, 느낌만 깨우기)</span></div></div><div class="wu-item"><div class="wu-num">6</div><div class="wu-txt"><b>첫 종목 램프업</b> — 본세트 50%×10 → 75%×5 · <b>본세트 내내 견갑 후인·하강 유지(proud chest)</b></div></div></div></details>
+<details class="info-card wu-card"><summary>🔥 워밍업 (5~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>밴드 외회전</b> — 팔꿈치 90도 고정 15회 × 2세트</div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>숄더 서클·월 슬라이드</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>가슴 스트레칭</b> — 문틀 30초 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>첫 종목 램프업</b> — 본세트 50%×10 → 75%×5</div></div></div></details>
 <div class="done-banner"><div class="di">💪</div><div class="dt">Day 1 완료!</div><div class="ds">Push 완주! 단백질 40g + 크레아틴. 다음 세션은 Pull — 데드리프트는 무게 욕심 없이 기립근 회복 우선.</div></div>
 <div class="ex-list">
 <div class="ex-wrap"><input type="checkbox" id="c1_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c1_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">Hammer ISO-호라이즌털 벤치프레스</div><div class="ex-meta"><span class="tag t-s">4×6~9</span><span class="tag t-e">Hammer Strength</span><span class="tag t-m">대흉근 중부·삼두</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">견갑 모아 고정, 밀 때 <b>가슴 중앙을 모은다</b>. isolateral — 약한 쪽 기준 좌우 동일 중량.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">내릴 때 2~3초, 닿기 직전 1초 정지 후 폭발적으로. e1RM 99 도달 — <b>76.4×8 두 세트 정착이 다음 관문</b>.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">팔꿈치 45~75도. 어깨 앞 통증 시 시트 높이 조정.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">시트·그립 높이 세팅(세팅 메모 활용)</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 고정·흡기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">2~3초 하강·1초 정지</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">가슴 모으며 밀기</div></div><div class="fstep"><div class="snum">5</div><div class="stxt">완전신전 직전 멈춤</div></div></div></details></div></details></div>
@@ -1090,7 +1102,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="rule"><b>🎯 자동 목표</b> — 같은 종목(별칭 연결 포함)의 가장 최근 기록 기준. 전 세트가 렙 상한(도감 sets 표기에서 파싱, 예: 4×6~8 → 8)을 채우면 복합 +2.5kg / 고립 +1kg 도전 제안. 단, 그 세션 최고 RPE가 9.5+면 같은 무게 한 번 더 굳히기.</div>
 <div class="rule"><b>🔋 준비도</b> — 오늘 수면(≥7h +1 / 6h 미만 −1) · 컨디션(≥4 +1 / ≤2 −1) · 최근 운동일 평균 RPE(9.3+ −1) · 최근 7일 통증(2회+ −1)의 합산. <b>−2 이하 = 낮음</b>(증량 보류), <b>+2 이상 = 좋음</b>(도전 적기). 중립이면 표시 안 함.</div>
 <div class="rule"><b>📌 오늘 추천</b> — 타입별 점수 = 마지막 수행 경과일(14일 포화)×2 + 담당 부위 주간 목표 부족 세트. 순환 다음 타입보다 3점 이상 높고 2일 이상 더 밀렸을 때만 제안. 세 타입 모두 수행 이력이 있어야 작동.</div>
-<div class="rule"><b>🧍 자세교정·윗가슴 추적</b> — 라운드숄더·거북목 대응으로 <b>후면삼각</b>(페이스풀·리버스펙덱·리어델트 플라이·밴드 외회전 = 이전엔 '등'에 묻혔음)과 <b>윗가슴</b>(인클라인 계열)을 별도 부위로 집계. 주간 목표(후면삼각 8·윗가슴 6세트) 미달 시 Push/Pull 날 하단 '💡 보완 추천'에 자동으로 뜨고, 채우면 사라진다. 인클라인은 가슴에 0.5세트로도 함께 계산.</div>
 <div class="rule"><b>🪫 디로드 신호</b> — ① 최근 7일 평균 RPE ≥9 ② RPE 전주 대비 +0.5 ③ 통증 2회+/7일 ④ 볼륨 −10%인데 RPE 유지↑ ⑤ 블록 5주차+ 중 <b>2개 이상</b>이면 배너 표시.</div>
 <div class="rule"><b>⚖️ 체성분 정체/과속</b> — 최신 측정 vs ~2주 전(12일 이상 간격): |Δ체중|&lt;0.4kg · |Δ체지방|&lt;0.4%p · |Δ골격근|&lt;0.3kg 모두 해당 = 정체(−50~100kcal 검토). 14일간 체중 −1.6kg 이상 = 감량 과속(+100kcal 검토).</div>
 <div class="rule"><b>📉 주간 볼륨 추이</b> — 본세트(워밍업 제외)의 무게×횟수 합을 주 단위로 집계, 도감 주동근 기준 푸시/풀/하체 색 구분.</div>
@@ -1144,7 +1155,7 @@ function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 function _escJs(s){return _esc(String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"));} // onclick 속성 안 JS 문자열용: JS 이스케이프 후 HTML 이스케이프
 // ── 운동 배치 규칙 ──
 // 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
-const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','윗가슴','전면삼각','측면삼각','후면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
+const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
 // 고립(isolation) 종목 판정 — 같은 부위 안에서 복합보다 뒤로 보냄
 const ISO_RE=/플라이|펙덱|크로스오버|레이즈|레그\s*레이즈|컬|익스텐션|푸시다운|킥\s*백|킥백|스컬|크런치|플랭크|풀오버|스트레이트\s*암|카프|종아리|슈러그|페이스풀|리스트|어브덕션|어덕션|우드촙|트위스트|롤아웃|데드버그|버드독|할로우|팔로프|V업/;
 // 기구 부하 tier: 같은 부위·같은 복합 안에서 주력(무거운) 동작을 먼저. 바벨·플레이트/핀 머신=주력(0), 케이블(1), 덤벨(2), 체중·밴드(3).
@@ -1155,8 +1166,8 @@ function _equipRank(n){
   return 0; // 바벨·해머·왓슨·V스쿼트·레그프레스 등 플레이트/핀 머신 = 주력 최대부하
 }
 // 보완 추천: 각 날 담당 부위 + 부위별 주간 세트 목표(앱 기준: 권장 10~20, PRI 10 / 중간 8 / 소·보조 6)
-const RECO_CAT={push:['가슴','윗가슴','측면삼각','전면삼각','삼두','후면삼각'],pull:['등','이두','승모','후면삼각'],legs:['대퇴사두','후면사슬','코어','종아리']};
-const RECO_TARGET={'가슴':10,'윗가슴':6,'등':10,'측면삼각':10,'전면삼각':6,'삼두':8,'이두':8,'승모':6,'후면삼각':8,'대퇴사두':8,'후면사슬':8,'코어':6,'종아리':6};
+const RECO_CAT={push:['가슴','측면삼각','전면삼각','삼두'],pull:['등','이두','승모'],legs:['대퇴사두','후면사슬','코어','종아리']};
+const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':6,'삼두':8,'이두':8,'승모':6,'대퇴사두':8,'후면사슬':8,'코어':6,'종아리':6};
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 const EL_DAY_EX={Push:["Hammer 벤치 (isolateral)","Watson 인클라인 (isolateral)","Watson 디클라인 (isolateral)","DB 오버헤드프레스","케이블 래터럴 레이즈","딥스 머신","오버헤드 트라이셉스 익스텐션","트라이셉스 익스텐션 머신","덤벨 숄더프레스","페이스풀 (케이블) ⭐필수","덤벨 플라이 / 펙덱","케이블 트라이셉스 푸시다운","벤치 딥스"],Pull:["바벨 데드리프트","T-바 로우","Hammer ISO 언더 로우","바벨 벤트오버 로우","랫풀다운","스트레이트 암 풀다운","케이블 시티드 로우","덤벨 바이셉스 컬","컨센트레이션 컬","풀업 (체중)","원암 덤벨 로우","인클라인 덤벨 컬","해머 컬","케이블 바이셉스 컬","데드행"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","사이드 플랭크","불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","레그레이즈","케이블 크런치","플랭크"]};
@@ -1176,7 +1187,7 @@ const TARGET_NOTES={
 };
 const EX_CUES={
   'Hammer 벤치 (isolateral)':{t:'대흉근(중앙·하부), 삼두 보조',c:'견갑 후인·하강 고정, 가슴 내밀기. 가슴 중앙 높이로 밀고 정점에서 대흉근 쥐어짜기.',w:'팔꿈치 과도하게 벌리지 않기(45~60도). 어깨 앞 통증 시 손잡이 각도 조정.'},
-  'Watson 인클라인 (isolateral)':{t:'대흉근 상부, 전면삼각근',c:'등판 30~45도, 쇄골 방향으로 밀며 상부 가슴에 집중. ★라운드숄더 보정: 견갑 후인+하강 고정하고 가슴 내밀기(proud chest) — 이걸 놓치면 전면삼각이 자극을 가로챈다.',w:'각도 45도 넘기면 어깨로 부하 이동. 어깨가 앞으로 말리면 무게 낮추고 견갑부터 고정.'},
+  'Watson 인클라인 (isolateral)':{t:'대흉근 상부, 전면삼각근',c:'등판 30~45도, 쇄골 방향으로 밀며 상부 가슴에 집중.',w:'각도 45도 넘기면 어깨로 부하 이동.'},
   'Watson 디클라인 (isolateral)':{t:'대흉근 하부',c:'하부 가슴 수축 느끼며 팔꿈치 몸통 가깝게.',w:'견갑 고정, 어깨 말리지 않게.'},
   'DB 오버헤드프레스':{t:'전면·측면 삼각근, 삼두',c:'코어·둔근 조여 허리 보호. 덤벨 귀 옆에서 수직으로, 정점 팔꿈치 살짝 안 잠그기.',w:'허리 과신전 금지(갈비뼈 닫기). 어깨 충돌 시 궤도 조정.'},
   '케이블 래터럴 레이즈':{t:'측면 삼각근',c:'새끼손가락 살짝 위로, 팔꿈치 약간 굽혀 고정. 어깨 높이까지만, 천천히 내리며 장력 유지.',w:'승모로 으쓱하지 않기 — 우측 승모 과활성 주의, 가벼운 무게로 고립.'},
@@ -1186,7 +1197,7 @@ const EX_CUES={
   '바벨 데드리프트':{t:'척추기립근, 둔근, 햄스트링, 광배',c:'오버언더 그립(우세손 오버, 매 세트 교대). 바 정강이 가까이·가슴 펴고 등 중립. 1초 정점 수축(두께) + 2~3초 천천히 내리기(너비).',w:'라운딩·락아웃 과신전 금지 — 둔근 스퀴즈+갈비뼈 다운으로 중립 마무리. 75kg 정착 전 증량 금지(80kg 기립근 통증 이력). 오버언더 그립 시 언더 팔꿈치 완전 신전·좌우 교대.'},
   'T-바 로우':{t:'광배, 능형근, 중부 승모',c:'힙힌지 상체 45도, 배꼽 쪽으로 당기고 견갑 모으기, 정점 1초.',w:'허리 둥글지 않게 중립 유지.'},
   'Hammer ISO-호라이즌털 벤치프레스':{t:'대흉근 중부, 삼두',c:'견갑 모아 고정, 밀 때 가슴 중앙을 모은다. isolateral — 약한 쪽 기준으로 좌우 동일 중량.',w:'팔꿈치 45~75도 유지. 어깨 앞 통증 시 시트 높이 조정.'},
-  'Hammer ISO-인클라인 프레스':{t:'대흉근 상부, 전면삼각',c:'가슴 위쪽이 늘었다 조이는 느낌, 손잡이 쇄골 라인 높이. ★라운드숄더 보정: 견갑 후인+하강 유지(가슴 내밀기) — 어깨 말리면 윗가슴 대신 전면삼각이 먹는다.',w:'허리 과아치 금지 — 엉덩이 시트 밀착. 자극이 어깨 앞으로 새면 인클라인 플라이로 pre-exhaust 후 가벼운 무게로.'},
+  'Hammer ISO-인클라인 프레스':{t:'대흉근 상부, 전면삼각',c:'가슴 위쪽이 늘었다 조이는 느낌, 손잡이 쇄골 라인 높이.',w:'허리 과아치 금지 — 엉덩이 시트 밀착.'},
   '머신 숄더 프레스':{t:'전면·측면삼각, 삼두',c:'팔꿈치 살짝 앞(스캡션 각), 정점 완전신전 직전 멈춤.',w:'허리 젖혀 밀기 금지 — 등 전체 시트 밀착.'},
   'Nautilus 래터럴 레이즈 머신':{t:'측면삼각',c:'팔꿈치로 옆을 민다는 느낌, 정점 1초. 12~15 고반복 펌프.',w:'승모 으쓱 금지 — 어깨 끌어내린 상태 유지.'},
   '펙덱 플라이':{t:'대흉근(스트레치 강조)',c:'가슴이 늘어나는 지점까지 열고, 모아서 1초 수축.',w:'어깨가 앞으로 말리지 않게 견갑 고정.'},
@@ -3439,8 +3450,8 @@ const PlanApp={
     if(/스컬|JM/.test(n))return{p:'삼두',s:[]};
     if(/노르딕|글루트햄|햄\s*컬/.test(n))return{p:'후면사슬',s:[]};
     if(/업라이트/.test(n))return{p:'측면삼각',s:['승모']};
-    if(/래터럴|레터럴|사이드\s*레이즈/.test(n)&&!/벤치|프레스|풀다운/.test(n))return /벤트오버|리어/.test(n)?{p:'후면삼각',s:[]}:{p:'측면삼각',s:[]};
-    if(/페이스풀|리어|후면\s*삼각|리버스\s*펙|리버스\s*플라이|외회전/.test(n))return{p:'후면삼각',s:[]};
+    if(/래터럴|레터럴|사이드\s*레이즈/.test(n)&&!/벤치|프레스|풀다운/.test(n))return /벤트오버|리어/.test(n)?{p:'등',s:[]}:{p:'측면삼각',s:[]};
+    if(/페이스풀|리어|후면\s*삼각|리버스\s*펙|리버스\s*플라이|외회전/.test(n))return{p:'등',s:[]};
     if(/숄더\s*?프레스|오버헤드\s*?프레스|밀리터리|OHP|아놀드|파이크|바이킹|랜드마인/i.test(n))return{p:'전면삼각',s:['삼두','측면삼각']};
     if(/프론트\s*레이즈/.test(n))return{p:'전면삼각',s:[]};
     if(/리스트\s*컬|손목|파머스/.test(n))return{p:'전완',s:[]};
@@ -3456,17 +3467,16 @@ const PlanApp={
     if(/굿모닝|풀스루|스윙|백\s*익스텐션|하이퍼|루마니안|RDL|레그\s*?컬|힙\s*?쓰러스트|힙\s*?어브덕션|어브덕터|글루트/.test(n))return{p:'후면사슬',s:[]};
     if(/데드리프트|랙풀/.test(n))return{p:'후면사슬',s:['등']};
     if(/로우|풀\s*?다운|풀업|풀오버|랫|친업/.test(n))return{p:'등',s:['이두']};
-    if(/인클라인/.test(n))return{p:'윗가슴',s:['가슴','삼두']};
-    if(/체스트|벤치|푸시업|디클라인/.test(n))return{p:'가슴',s:['삼두']};
+    if(/체스트|벤치|푸시업|인클라인|디클라인/.test(n))return{p:'가슴',s:['삼두']};
     if(/스쿼트|레그\s*?프레스|익스텐션|런지|스텝업|불가리안|고블릿|시시/.test(n))return{p:'대퇴사두',s:['후면사슬']};
     return null;
   },
   async renderVolume(){
     const box=document.getElementById('plan-vol');if(!box)return;
     const data=await this._logData();const{ws,we}=this._weekRange();
-    const order=['가슴','윗가슴','등','측면삼각','전면삼각','후면삼각','삼두','이두','대퇴사두','후면사슬','코어','전완','내전근','승모','종아리'];
-    const COL={'가슴':'#D85A30','윗가슴':'#E4703F','등':'#185FA5','측면삼각':'#BA7517','전면삼각':'#E0922F','후면삼각':'#C0392B','삼두':'#0C447C','이두':'#3B6D11','대퇴사두':'#27500A','후면사슬':'#6B4FA0','코어':'#888','전완':'#5B8A2A','내전근':'#8B5E3C','승모':'#7A6F2E','종아리':'#3E2E66'};
-    const PRI={'측면삼각':1,'등':1,'가슴':1,'윗가슴':1,'후면삼각':1};
+    const order=['가슴','등','측면삼각','전면삼각','삼두','이두','대퇴사두','후면사슬','코어','전완','내전근','승모','종아리'];
+    const COL={'가슴':'#D85A30','등':'#185FA5','측면삼각':'#BA7517','전면삼각':'#E0922F','삼두':'#0C447C','이두':'#3B6D11','대퇴사두':'#27500A','후면사슬':'#6B4FA0','코어':'#888','전완':'#5B8A2A','내전근':'#8B5E3C','승모':'#7A6F2E','종아리':'#3E2E66'};
+    const PRI={'측면삼각':1,'등':1,'가슴':1};
     const OPT={'전완':1,'내전근':1,'승모':1,'종아리':1};
     const vol={};order.forEach(m=>vol[m]=0);
     for(const dk in data){
@@ -3920,6 +3930,15 @@ const MuscleMap={
       +'<div class="mm-scr contract"><span class="tg">수축 ◉</span><span class="tx">'+info.contract+'</span></div>'
       +'<div class="mm-scr cue"><span class="tg">포인트</span><span class="tx">'+info.cue+'</span></div>'
       +'</div>'
+      // 세부 근육 카드 — window.MUSCLE_DETAIL(exercise-library.js)에서 주입. 각 세부근육의 위치·섬유 방향·힘 방향·손가락 큐를 접이식으로 표시
+      +((window.MUSCLE_DETAIL&&window.MUSCLE_DETAIL[m]&&window.MUSCLE_DETAIL[m].sub)?'<div class="mm-sub-lbl">🔬 세부 근육 ('+window.MUSCLE_DETAIL[m].sub.length+')</div>'+window.MUSCLE_DETAIL[m].sub.map(function(s){
+        return '<details class="mm-sub"><summary><span class="mm-sub-nm">'+s.n+'</span><span class="chev">▾</span></summary><div class="mm-sub-body">'
+          +'<div class="mm-sub-r"><span class="mm-sub-l">위치</span><span>'+s.loc+'</span></div>'
+          +(s.dir?'<div class="mm-sub-r"><span class="mm-sub-l dir">방향</span><span>'+s.dir+'</span></div>':'')
+          +'<div class="mm-sub-r"><span class="mm-sub-l how">키우기</span><span>'+s.how+'</span></div>'
+          +(s.ex?'<div class="mm-sub-r"><span class="mm-sub-l ex">대표</span><span>'+s.ex+'</span></div>':'')
+          +'</div></details>';
+      }).join(''):'')
       +(info.mistake?'<div class="mm-mistake"><span class="mm-mistake-t">⚠ 흔한 실수</span>'+info.mistake+'</div>':'')
       +(exs.length?'<div class="mm-exs-lbl">이 부위 자극 운동 ('+exs.length+')</div><div class="mm-exs">'+exs.map(e=>'<span class="mm-ex">'+e+'</span>').join('')+'</div>':'<div class="mm-noex">현재 루틴에선 복합 종목에서 <b>보조로</b> 단련됩니다. 전용 강화가 필요하면 📚 도감에서 종목을 찾아 추가하세요.</div>');
   }
