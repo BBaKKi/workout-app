@@ -3266,22 +3266,27 @@ const ExLog={
     }
   },
   _syncRows(onlyDates){
-    // 시트 upsert용 행 — 리프팅 세트(원본 로직 유지) + 유산소('🏃 ' 접두, reps열=분·weight/vol=0)
-    // onlyDates(Set)가 주어지면 그 날짜들만 직렬화 — 증분 동기화 시 전체 기록 재전송 방지
-    const rows=[];
+    // 시트 upsert용 행 — 리프팅 세트 + 유산소('🏃 ' 접두, reps열=분·weight/vol=0)
+    // onlyDates(Set)가 주어지면 그 날짜들만 직렬화 — 증분 동기화 시 전체 기록 재전송 방지.
+    // ★모든 행은 동일한 필드 집합·순서를 갖는다(리프팅·유산소 공통) — 열 어긋남/필드명 불일치 방지.
+    // ★(date|name|setNo) 키로 페이로드 내 중복 행 제거 — 같은 세트가 두 번 실려 시트에 중복 append 되는 것 방지.
+    const rows=[];const seen=new Set();
+    const ROW=(date,day,name,setNo,weight,reps,vol,ts,wu,rpe,pain)=>{
+      const k=date+'|'+name+'|'+setNo;if(seen.has(k))return;seen.add(k);
+      rows.push({date,day,name,setNo,weight,reps,vol,ts,wu,rpe,pain}); // 필드 순서 고정
+    };
     Object.keys(this.data).sort().forEach(date=>{
       if(onlyDates&&!onlyDates.has(date))return;
       const s=this.data[date];if(!s)return;
       (s.exercises||[]).forEach(ex=>{
         if(!ex.sets?.length)return;
         ex.sets.forEach((set,i)=>{
-          // wu/rpe/pain 열 추가 — 복원(pull) 시 워밍업 제외·RPE·통증 이력이 보존되도록 (옛 서버는 이 필드를 무시해도 무해)
-          rows.push({date,day:s.day||'',name:ex.name,setNo:i+1,weight:set.weight,reps:set.reps,vol:Math.round(set.weight*set.reps),ts:set.ts||null,wu:set.warmup?1:'',rpe:set.rpe||'',pain:set.pain?1:''});
+          ROW(date,s.day||'',ex.name,i+1,set.weight,set.reps,Math.round(set.weight*set.reps),set.ts||null,set.warmup?1:'',set.rpe||'',set.pain?1:'');
         });
       });
       (s.cardio||[]).forEach((c,i)=>{
         if(!(+c.min>0))return;
-        rows.push({date,day:s.day||'',name:'🏃 '+(c.type||'유산소'),setNo:i+1,weight:0,reps:+c.min,vol:0,ts:c.ts||null});
+        ROW(date,s.day||'','🏃 '+(c.type||'유산소'),i+1,0,+c.min,0,c.ts||null,'','',''); // 유산소도 wu/rpe/pain 빈칸으로 동일 형태
       });
     });
     return rows;
