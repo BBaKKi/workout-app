@@ -68,20 +68,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .chev{font-size:14px;color:#c7c7cc;transition:transform .2s;flex-shrink:0}
 .ex-card[open] .chev{transform:rotate(180deg)}
 .ex-detail{border-top:1px solid #f2f2f7}
-.focus-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 12px}
-.fb{border-radius:8px;padding:9px;border:.5px solid}
-.fb.stim{background:#e8f5ee;border-color:#81c995}
-.fb.tip{background:#e8f0fe;border-color:#90caf9}
-.fb.warn{background:#fce8e6;border-color:#ef9a9a}
-.fl{font-size:10px;font-weight:700;margin-bottom:3px}
+/* 카드 상세 통일 레이아웃 — 자극/요령/주의/그립·힘/세팅/ROM/순서를 동일한 [라벨 | 내용] 행으로 */
+.focus-grid{display:flex;flex-direction:column;gap:0;padding:9px 14px 0}
+.fb{display:flex;gap:9px;align-items:baseline;background:none;border:none;border-radius:0;padding:5px 0}
+.fb.link{background:#FDF7EC;border:.5px solid #EAD9B0;border-radius:8px;padding:8px 10px;margin-top:4px}
+.fl{flex:0 0 58px;width:58px;font-size:11px;font-weight:800;margin:0;white-space:nowrap;line-height:1.5}
 .fb.stim .fl{color:#1b5e20}
 .fb.tip .fl{color:#0d47a1}
 .fb.warn .fl{color:#b71c1c}
-.ft{font-size:12px;line-height:1.6}
-.fb.stim .ft{color:#2e7d32}
-.fb.tip .ft{color:#1565c0}
-.fb.warn .ft{color:#c62828}
-.ft b{font-weight:600}
+.fb.link .fl{color:#8a6d2f}
+.ft{flex:1;font-size:12px;line-height:1.6;color:#3c3c43}
+.ft b{font-weight:700;color:#1c1c1e}
 .flow-d{padding:0 12px 10px}
 .flow-d>summary{font-size:12px;font-weight:700;color:#636366;cursor:pointer;list-style:none;padding:2px 0}
 .flow-d>summary::-webkit-details-marker{display:none}
@@ -371,15 +368,17 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .lib-add.added{background:#3B6D11}
 .lib-add:disabled{opacity:.85}
 .lib-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:20px 0}
-.ex-extra{margin-top:8px;border-top:0.5px solid var(--color-border-tertiary);padding-top:8px}
-.ex-extra>summary{font-size:12px;font-weight:700;color:#085041;cursor:pointer;list-style:none}
-.ex-extra>summary::-webkit-details-marker{display:none}
-.ex-extra>summary::after{content:" ▾";color:#8fb3ac;font-size:10px;font-weight:400}
-.ex-extra[open]>summary::after{content:" ▴"}
-.ex-extra-body{display:flex;flex-direction:column;gap:6px;margin-top:7px}
-.exx-row{display:flex;gap:8px;font-size:12px;line-height:1.5}
-.exx-l{font-weight:800;color:var(--color-text-tertiary);flex-shrink:0;width:52px}
-.exx-row span:last-child{color:var(--color-text-secondary)}
+.ex-more{margin:0;padding:0 14px 8px;border:none;display:flex;flex-direction:column;gap:0}
+.ex-more-cap{display:none}
+.exx-row{display:flex;gap:9px;align-items:baseline;padding:5px 0;font-size:12px;line-height:1.6}
+.exx-l{flex:0 0 58px;width:58px;font-weight:800;font-size:11px;white-space:nowrap}
+.exx-row span:last-child{flex:1;color:#3c3c43}
+.exx-l.lgrip{color:#5B3A6B}
+.exx-l.lset{color:#8a5a1a}
+.exx-l.lrom{color:#0C447C}
+.exx-l.lseq{color:#555}
+.exx-row .stp-seq b.stp-n{display:inline-block;min-width:15px;height:15px;line-height:15px;text-align:center;background:#eceafc;border-radius:50%;font-size:9px;color:#4a3ab0;font-weight:800;margin-right:3px}
+.exx-row .stp-sep{color:#c7c7cc;margin:0 3px}
 /* 체성분 카드 */
 .plan-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .plan-stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px}
@@ -588,7 +587,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-wu-note{margin-top:6px;font-size:11px;color:#8e8e93}
 .ex-wu-empty{color:#8e8e93;font-size:12px}
 /* 데드 그립 교대 칩 */
-.ex-grip-chip{font-size:11px;color:#5B3A6B;background:#F1EAF6;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;line-height:1.5;cursor:pointer}
+.ex-grip-chip{font-size:10.5px;color:#5B3A6B;background:#F1EAF6;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;line-height:1.5;cursor:pointer;display:inline-block;vertical-align:middle}
 .grip-note{display:block;color:#9a8aa8;font-size:10px}
 /* 인바디 측정 리마인더 */
 .wr-remind{font-size:12px;line-height:1.6;color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:9px 11px;margin-bottom:10px}
@@ -629,7 +628,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* 상대강도 */
 .tr-bw{font-size:10px;color:#6B4FA0;background:#F1EDF8;border-radius:6px;padding:1px 5px}
 /* 기본무게 */
-.ex-base-btn{font-size:11px;color:#555;background:#F1F1EC;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block}
+.ex-base-btn{font-size:10.5px;color:#555;background:#F1F1EC;border:none;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;width:auto;vertical-align:middle}
 .ex-base-panel{background:#F7F7F2;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
 .ex-base-hd{color:#6b6b66;line-height:1.5;margin-bottom:8px}
 .ex-base-row{display:flex;gap:6px;align-items:center}
@@ -637,9 +636,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-base-save{font-size:12px;color:#fff;background:#085041;border:none;border-radius:6px;padding:6px 12px;cursor:pointer}
 .ex-base-clear{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:6px;padding:6px 10px;cursor:pointer}
 /* 종목별 세팅 메모 — 새 헬스장 머신 세팅(시트·핀·발판) 기록 */
-.ex-memo-btn{font-size:11px;color:#4a3f2a;background:#F6F1E3;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.ex-memo-btn{font-size:10.5px;color:#4a3f2a;background:#F6F1E3;border:none;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;vertical-align:middle}
 .ex-memo-btn.has{color:#6b5518;font-weight:600}
-.ex-rest-btn{font-size:11px;color:#2e4a5e;background:#EDF3F7;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block;text-align:left}
+.ex-rest-btn{font-size:10.5px;color:#2e4a5e;background:#EDF3F7;border:none;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;width:auto;text-align:left;vertical-align:middle}
 .ex-rest-btn.has{color:#0C447C;font-weight:600}
 .ex-memo-panel{background:#FBF8EE;border:0.5px solid #E8E0C8;border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
 .ex-memo-hd{color:#7a6f4e;line-height:1.5;margin-bottom:8px}
@@ -1230,11 +1229,11 @@ const RECO_CAT={push:['가슴','측면삼각','전면삼각','삼두'],pull:['�
 const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':6,'삼두':8,'이두':8,'승모':6,'대퇴사두':8,'후면사슬':8,'코어':6,'종아리':6};
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
-// 재배치(26.07): 안드로이드·라운드숄더·넓은 윗가슴·발달된 종아리 반영.
-//  Push — 중복 프레스/딥스/삼두 정리, 우선순위 측면삼각 2·후면삼각(라운드숄더) 2로 보강, 이미 발달한 윗가슴(인클라인) 제외.
-//  Pull — 겹치는 헤비 로우·이두 고립 압축(등6·이두3), 저부하 힌지 부담 완화.
+// 재배치(26.07): 안드로이드·라운드숄더·발달된 종아리 반영.
+//  Push — 라운드숄더로 '더딘 윗가슴'을 우선순위로: 상부 2(인클라인 프레스+인클라인 케이블 플라이)+중부 1. 라운드숄더 교정 후면삼각 2(페이스풀+리어델트), 우선순위 측면삼각 2. 중복 프레스/딥스/삼두 정리.
+//  Pull — 겹치는 헤비 로우·이두 고립 압축(등6·이두3). 로우가 라운드숄더 교정(중부등)도 겸함.
 //  Legs — 대퇴5·후면4 유지(안드로이드), 코어3으로 감량, 종아리는 이미 발달해 제외.
-const EL_DAY_EX={Push:["Hammer 벤치 (isolateral)","Watson 디클라인 (isolateral)","덤벨 플라이 / 펙덱","덤벨 숄더프레스","케이블 래터럴 레이즈","Nautilus 래터럴 레이즈 머신","페이스풀 (케이블) ⭐필수","리어 델트 플라이","딥스 머신","오버헤드 트라이셉스 익스텐션","케이블 트라이셉스 푸시다운"],Pull:["바벨 데드리프트","바벨 벤트오버 로우","케이블 시티드 로우","원암 덤벨 로우","랫풀다운","풀업 (체중)","스트레이트암 풀다운","인클라인 덤벨 컬","해머 컬","컨센트레이션 컬","데드행"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","사이드 플랭크","레그레이즈","케이블 크런치"]};
+const EL_DAY_EX={Push:["Watson 인클라인 (isolateral)","Hammer 벤치 (isolateral)","인클라인 케이블 플라이","덤벨 숄더프레스","케이블 래터럴 레이즈","Nautilus 래터럴 레이즈 머신","페이스풀 (케이블) ⭐필수","리어 델트 플라이","딥스 머신","오버헤드 트라이셉스 익스텐션","케이블 트라이셉스 푸시다운"],Pull:["바벨 데드리프트","바벨 벤트오버 로우","케이블 시티드 로우","원암 덤벨 로우","랫풀다운","풀업 (체중)","스트레이트암 풀다운","인클라인 덤벨 컬","해머 컬","컨센트레이션 컬","데드행"],Legs:["V스쿼트 머신","시티드 레그프레스","레그컬 (머신)","레그 익스텐션","힙 어브덕션 (머신)","루마니안 데드리프트","불가리안 스플릿 스쿼트","힙쓰러스트","워킹 런지","사이드 플랭크","레그레이즈","케이블 크런치"]};
 // ── PPL 순환제: 요일 고정 대신 Push→Pull→Legs 순환. 쉬는 날은 순환이 밀리지 않는다 ──
 const EL_CYCLE=['Push','Pull','Legs'];
 const EL_BASE={'Push+':'Push','Pull+':'Pull','Legs+':'Legs'}; // 옛 6일제(A/B) 데이터 호환 매핑
@@ -1639,7 +1638,7 @@ const ExLog={
     let card;
     if(match){
       card=match.closest('details.ex-card').cloneNode(true);
-      ['.ex-log','.ex-extra','.ex-week-target','.ex-cue','.ex-del-btn'].forEach(s=>card.querySelector(s)?.remove());
+      ['.ex-log','.ex-extra','.ex-more','.ex-week-target','.ex-cue','.ex-del-btn'].forEach(s=>card.querySelector(s)?.remove());
     }else{
       const tmp=document.createElement('div');tmp.innerHTML=this.dbCardInner(this.libByName(name),name);card=tmp.firstElementChild;
     }
@@ -1906,7 +1905,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-wu-btn" type="button" onclick="this.classList.toggle('on')" title="워밍업 세트 — 볼륨·PR·추세 집계에서 제외">W</button><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div><div class="wl-rep-chips" style="display:none"></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div><div class="wl-rep-chips" style="display:none"></div>`;
   },
 
   injectLogs(){
@@ -3048,17 +3047,9 @@ const ExLog={
         badge.className='ex-week-target'+(sug.up?' up':'');
         badge.innerHTML='🎯 '+sug.html;
       }
-      // 복합 종목: 워밍업 램프업 계산 버튼 (기립근 보호 — 본세트 전 40/60/80% 단계 상승)
-      let wuBtn=det.querySelector('.ex-warmup-btn');
-      if(this.isCompound(name)&&!this.isTimed(name)){
-        if(!wuBtn){
-          wuBtn=document.createElement('button');wuBtn.className='ex-warmup-btn';wuBtn.type='button';
-          wuBtn.textContent='🔥 워밍업 세트';
-          wuBtn.setAttribute('onclick','ExLog.toggleWarmup(this)');
-          const anchor2=det.querySelector('.ex-week-target');
-          if(anchor2)det.insertBefore(wuBtn,anchor2.nextSibling);else det.insertBefore(wuBtn,det.firstChild);
-        }
-      }else if(wuBtn){wuBtn.remove();}
+      // 워밍업 세트 제거(사용자 요청) — 종목별 램프업 버튼/패널을 표시하지 않고, 이전에 주입된 것도 정리
+      const wuBtn=det.querySelector('.ex-warmup-btn');if(wuBtn)wuBtn.remove();
+      const wuPanel=det.querySelector('.ex-warmup');if(wuPanel)wuPanel.remove();
       // 기본무게 설정 칩 (모든 종목 — 상태를 라벨에 표시)
       let bb=det.querySelector('.ex-base-btn');
       if(!bb){
@@ -3110,19 +3101,9 @@ const ExLog={
         }
         gc.innerHTML=this._gripChipHtml(name);
       }else if(gc){gc.remove();}
-      let cue=det.querySelector('.ex-cue');
-      const info=EX_CUES[name];
-      if(!info){if(cue)cue.remove();return;}
-      if(!cue){
-        cue=document.createElement('details');cue.className='ex-cue';
-        const anchor=det.querySelector('.ex-week-target');
-        if(anchor)det.insertBefore(cue,anchor.nextSibling);
-        else det.insertBefore(cue,det.firstChild);
-      }
-      let rows='<div class="ex-cue-row cue-tgt"><span class="lbl">🎯 타겟</span>'+info.t+'</div>';
-      rows+='<div class="ex-cue-row cue-cue"><span class="lbl">📝 폼</span>'+info.c+'</div>';
-      if(info.w)rows+='<div class="ex-cue-row cue-warn"><span class="lbl">⚠️ 주의</span>'+info.w+'</div>';
-      cue.innerHTML='<summary>💡 폼 &amp; 자극점</summary><div class="ex-cue-body">'+rows+'</div>';
+      // 통합(가독성): '💡 폼 & 자극점'(EX_CUES) 박스는 상단 focus-grid(🎯자극점·💡요령·⚠주의)와 내용이 중복 → 제거.
+      // 기술 상세는 focus-grid(개인 코칭) + 📐 그립·세팅·ROM(ex-more, 도감)로 일원화. 이전에 주입된 박스도 정리.
+      const cue=det.querySelector('.ex-cue');if(cue)cue.remove();
     });
     this.injectBrief();                                      // 목표 배지 주입 후 브리핑 갱신
   },
@@ -4035,16 +4016,27 @@ function augmentCards(){
     const nm=card.querySelector('.ex-nm');const det=card.querySelector('.ex-detail');
     if(!nm||!det)return;
     const e=m[nm.textContent.trim()];if(!e)return;
-    if(det.querySelector('.ex-extra'))return;
-    const d=document.createElement('details');d.className='ex-extra';
-    // 도감의 상세 자극점·ROM까지 운동 탭 카드에 주입 — 카드 고정 문구보다 깊은 해부·감각 설명 제공
-    d.innerHTML='<summary>📐 자극 · 그립 · 세팅 · ROM</summary><div class="ex-extra-body">'
-      +(e.target?'<div class="exx-row"><span class="exx-l">자극점</span><span>'+e.target+'</span></div>':'')
-      +(e.grip?'<div class="exx-row"><span class="exx-l">그립·힘</span><span>'+e.grip+'</span></div>':'')
-      +(e.setup?'<div class="exx-row"><span class="exx-l">세팅</span><span>'+e.setup+'</span></div>':'')
-      +(e.rom?'<div class="exx-row"><span class="exx-l">ROM</span><span>'+e.rom+'</span></div>':'')
-      +'</div>';
-    det.appendChild(d);
+    if(det.querySelector('.ex-more'))return;
+    // 통일: 그립·힘/세팅/ROM/순서를 focus-grid(자극점·요령·주의)와 동일한 [라벨|내용] 행으로 이어붙여 한 흐름으로.
+    let rows=(e.grip?'<div class="exx-row"><span class="exx-l lgrip">✊ 그립힘</span><span>'+e.grip+'</span></div>':'')
+      +(e.setup?'<div class="exx-row"><span class="exx-l lset">🎚 세팅</span><span>'+e.setup+'</span></div>':'')
+      +(e.rom?'<div class="exx-row"><span class="exx-l lrom">↔ ROM</span><span>'+e.rom+'</span></div>':'');
+    // 동작 순서(flow-d 접이식)를 같은 행 포맷으로 흡수 — 별도 탭 제거로 시각 언어 일원화
+    const flow=det.querySelector('.flow-d');
+    if(flow){
+      const steps=[...flow.querySelectorAll('.stxt')].map(s=>s.innerHTML.trim()).filter(Boolean);
+      if(steps.length){
+        const seq=steps.map((t,i)=>'<b class="stp-n">'+(i+1)+'</b>'+t).join('<span class="stp-sep">›</span>');
+        rows+='<div class="exx-row"><span class="exx-l lseq">📋 순서</span><span class="stp-seq">'+seq+'</span></div>';
+      }
+      flow.remove();
+    }
+    if(!rows)return;
+    const box=document.createElement('div');box.className='ex-more';
+    box.innerHTML=rows;
+    // focus-grid 다음, 기록(ex-log) 앞에 배치
+    const log=det.querySelector('.ex-log');
+    if(log)det.insertBefore(box,log);else det.appendChild(box);
   });
 }
 const LibApp={
