@@ -423,8 +423,9 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 
   console.log('\n[운동 라이브러리 검증]');
   const LIB=w.eval('window.EXERCISE_LIBRARY');
-  await t('184개 엔트리(어시스트 딥스 머신 추가)·신규 종목 존재',async()=>{
-    eq(LIB.length,184);
+  await t('185개 엔트리(Y-레이즈 추가)·신규 종목 존재',async()=>{
+    eq(LIB.length,185);
+    ok(LIB.some(e=>e.name==='Y-레이즈 (하부승모)'),'Y-레이즈 미등록');
     ok(LIB.some(e=>e.name==='어시스트 딥스 머신'));
     ok(LIB.some(e=>(e.aka||[]).includes('체스트 프레스 머신')));
     ok(LIB.some(e=>e.name==='토르소 로테이션'));
@@ -1042,13 +1043,57 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 
 
   console.log('\n[PPL 순환 · 부위 추천 · 별칭 통합 · 세팅 병합]');
-  await t('3패널 구조: day-panel 3개·병합 카드·상시 주간리포트',async()=>{
+  await t('3패널 구조 + A/B 세션 그룹·상시 주간리포트',async()=>{
     eq(d.querySelectorAll('.day-panel').length,3);
+    eq(d.querySelectorAll('.sess-grp').length,6,'A/B 세션 그룹 6개여야 함');
     const names=p=>[...d.querySelectorAll('.day-panel.dp'+p+' .ex-nm')].map(x=>x.textContent.trim());
-    ok(names(1).includes('펙덱 플라이')&&names(1).includes('페이스풀 (케이블) ⭐필수'),'Push 병합 누락');
-    ok(names(2).includes('풀업 (체중/어시스트)')&&names(2).includes('Hammer ISO-프론트 풀다운'),'Pull 병합 누락');
-    ok(names(3).includes('Booty Builder 힙 쓰러스트')&&names(3).includes('레그레이즈'),'Legs 병합 누락');
+    ok(names(1).includes('펙덱 플라이')&&names(1).includes('페이스풀 (케이블) ⭐필수'),'Push 종목 누락');
+    ok(names(2).includes('풀업 (체중/어시스트)')&&names(2).includes('바벨 데드리프트'),'Pull 종목 누락');
+    ok(names(3).includes('Booty Builder 힙 쓰러스트')&&names(3).includes('레그레이즈'),'Legs 종목 누락');
     ok(d.getElementById('weekly-report'),'weekly-report 슬롯 없음');
+  });
+  await t('자세 교정: 업라이트 로우 제거·대체 종목 배치·페이스풀 상시',async()=>{
+    const all=[...d.querySelectorAll('.day-panel .ex-nm')].map(x=>x.textContent.trim());
+    ok(!all.includes('업라이트 로우'),'업라이트 로우가 남아 있음(상부승모 과활성 종목)');
+    ok(all.includes('케이블 래터럴 레이즈'),'대체 종목 미배치');
+    ok(all.filter(n=>n==='Y-레이즈 (하부승모)').length===2,'Y-레이즈는 Pull A/B 양쪽에 있어야 함');
+    ok(all.filter(n=>n==='페이스풀 (케이블) ⭐필수').length===4,'페이스풀은 Push/Pull A·B 4곳');
+  });
+  await t('데드리프트는 Pull A에만 (주 1회)',async()=>{
+    const grps=[...d.querySelectorAll('.day-panel.dp2 .sess-grp')];
+    eq(grps.length,2);
+    const has=g=>[...g.querySelectorAll('.ex-nm')].some(x=>x.textContent.trim()==='바벨 데드리프트');
+    ok(has(grps[0]),'Pull A에 데드 없음');
+    ok(!has(grps[1]),'Pull B에 데드가 남아 있음');
+  });
+  await t('교정 종목 순서 고정(data-pin): _sortDay 후에도 자리 유지',async()=>{
+    const grp=d.querySelector('.day-panel.dp2 .sess-grp');
+    const panel=d.querySelector('.day-panel.dp2');
+    const before=[...grp.querySelectorAll('.ex-nm')].map(x=>x.textContent.trim());
+    eq(before[3],'페이스풀 (케이블) ⭐필수','초기 배치 4번째');
+    eq(before[4],'Y-레이즈 (하부승모)','초기 배치 5번째');
+    ExLog._sortDay(panel);
+    const after=[...grp.querySelectorAll('.ex-nm')].map(x=>x.textContent.trim());
+    eq(after[3],'페이스풀 (케이블) ⭐필수','정렬 후 페이스풀이 밀림');
+    eq(after[4],'Y-레이즈 (하부승모)','정렬 후 Y-레이즈가 밀림');
+  });
+  await t('activeGrp: 보이는 세션만 오늘의 플랜으로 집계',async()=>{
+    const panel=d.querySelector('.day-panel.dp2');
+    const g=ExLog.activeGrp(panel);
+    ok(g&&g.classList.contains('sess-grp'),'활성 그룹 미검출');
+    ok(ExLog.activeList(panel),'활성 ex-list 미검출');
+    const n=[...g.querySelectorAll('.ex-nm')].length;
+    ok(n>0&&n<[...panel.querySelectorAll('.ex-nm')].length,'활성 그룹이 패널 전체와 같음(A/B 미분리)');
+  });
+  await t('자세 교정 카드: 상시 노출 + 완료 기록 저장',async()=>{
+    ok(d.getElementById('posture-card'),'자세 교정 카드 없음');
+    ok(!d.getElementById('posture-card').closest('.day-panel'),'데이 패널 안에 있으면 Push/Pull/Legs 전환 시 사라짐');
+    const ck=d.getElementById('pc-done');ok(ck,'완료 체크박스 없음');
+    const P=w.eval('Posture');ck.checked=true;P.toggle(ck);
+    ok(Object.keys(P.data).length===1,'완료 기록 미저장');
+    ok(/최근 7일 1\/7/.test(d.getElementById('pc-streak').textContent),'스트릭 표시 오류');
+    ck.checked=false;P.toggle(ck);
+    eq(Object.keys(P.data).length,0,'해제 시 기록 미삭제');
   });
   await t('순환 dayType: 무기록→Push, 지난 세션 다음 순서, 휴식·유산소는 순환 안 밀림, 레거시 + 호환',async()=>{
     ExLog.data={};
@@ -1205,6 +1250,101 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     eq(ExLog._exFor(cn).length,2,'직접 대입 후 무효화 안 됨');
     ExLog.data={};
     eq(ExLog._exFor(cn).length,0,'전체 교체 후 무효화 안 됨');
+  });
+
+
+  console.log('\n[A/B 자동 판정 · 균형 지표 · 히트맵 · 대체 종목 · 블록 리뷰]');
+  await t('sessOf: 고유 종목 기록으로 A/B 역산',async()=>{
+    ExLog.data={};
+    ExLog.data['2026-07-20']={day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:70,reps:5}]}]};
+    eq(ExLog.sessOf('2026-07-20'),'A','데드 = Pull A');
+    ExLog.data['2026-07-23']={day:'Pull',exercises:[{name:'풀업 (체중/어시스트)',sets:[{weight:0,reps:8}]},{name:'T-바 로우',sets:[{weight:45,reps:10}]}]};
+    eq(ExLog.sessOf('2026-07-23'),'B','풀업·T바 = Pull B');
+    ExLog.data['2026-07-25']={day:'Pull',exercises:[{name:'페이스풀 (케이블) ⭐필수',sets:[{weight:10,reps:15}]}]};
+    eq(ExLog.sessOf('2026-07-25'),null,'공통 종목만 → 판정 불가');
+  });
+  await t('lastSess/syncSess: 직전 세션의 반대를 자동 선택',async()=>{
+    // 순환제상 오늘이 Pull이 되도록: 마지막 기록을 Push로 둔다 (Push→Pull)
+    ExLog.data={
+      '2026-07-18':{day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:70,reps:5}]}]},
+      '2026-07-21':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]}
+    };
+    ExLog.date='2026-07-23';
+    eq(ExLog.dayType('2026-07-23'),'Pull','순환 판정 전제 확인');
+    const last=ExLog.lastSess('Pull');
+    eq(last&&last.sess,'A');
+    ExLog.syncSess();
+    ok(d.getElementById('s2b').checked,'직전이 A였으므로 B가 선택돼야 함');
+    ok(/자동/.test(d.querySelector('.dp2 .sess-hint').textContent),'자동 판정 힌트 없음');
+    // 오늘 기록이 생기면 그 기록을 따른다
+    ExLog.data['2026-07-23']={day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:72.5,reps:5}]}]};
+    ExLog.syncSess();
+    ok(d.getElementById('s2a').checked,'오늘 데드를 했으면 A로 맞춰야 함');
+  });
+  await t('수동 선택은 유지, 날짜 이동 시 자동 판정 복귀',async()=>{
+    ExLog.data={
+      '2026-07-18':{day:'Pull',exercises:[{name:'바벨 데드리프트',sets:[{weight:70,reps:5}]}]},
+      '2026-07-21':{day:'Push',exercises:[{name:'딥스 머신',sets:[{weight:50,reps:8}]}]}
+    };
+    ExLog.date='2026-07-23';
+    const rb=d.getElementById('s2b');rb.checked=true;ExLog.onSessPick(rb);
+    ExLog.syncSess();
+    ok(d.querySelector('.dp2').dataset.sessManual==='1','수동 플래그 미설정');
+    ok(/수동/.test(d.querySelector('.dp2 .sess-hint').textContent),'수동 힌트 없음');
+    ExLog._clearSessManual();
+    ok(!d.querySelector('.dp2').dataset.sessManual,'날짜 이동 시 수동 플래그 해제 안 됨');
+  });
+  await t('전후방 균형: 비율 계산·목표 미달 경고',async()=>{
+    const b1=PlanApp._balance({'등':20,'승모':0,'가슴':10,'전면삼각':0});
+    eq(b1.ratio,2,'2:1 계산 오류');
+    ok(/vb-r ok/.test(PlanApp._balanceHtml({'등':20,'가슴':10})),'목표 충족인데 ok 아님');
+    ok(/vb-r warn/.test(PlanApp._balanceHtml({'등':8,'가슴':12})),'전방 우세인데 warn 아님');
+    ok(/vb-r mid/.test(PlanApp._balanceHtml({'등':17,'가슴':10})),'1.7배는 mid여야 함');
+    eq(PlanApp._balanceHtml({}),'','기록 없으면 빈 문자열');
+  });
+  await t('히트맵: 볼륨에 따라 fill-opacity 매핑 + 부족 부위 안내',async()=>{
+    ExLog.data={};
+    const wk=PlanApp._weekKeys(0);
+    ExLog.data[wk[1]]={day:'Pull',exercises:[{name:'랫풀다운',sets:Array.from({length:10},()=>({weight:45,reps:10}))}]};
+    const MuscleMap=w.eval('MuscleMap');
+    await MuscleMap.heat();
+    const back=d.querySelector('.mz[data-m="등"]');
+    const chest=d.querySelector('.mz[data-m="가슴"]');
+    ok(parseFloat(back.style.fillOpacity)>parseFloat(chest.style.fillOpacity),'볼륨 많은 부위가 더 진해야 함');
+    ok(/가슴/.test(d.getElementById('mm-heat').textContent),'부족 부위 안내 없음');
+    ok(d.querySelector('.mz[data-m="후면삼각"]').style.fillOpacity===back.style.fillOpacity,'후면삼각은 등 값을 따라야 함');
+  });
+  await t('도감: 대체 종목(alt) 필드 등록·렌더',async()=>{
+    const LIB=w.eval('window.EXERCISE_LIBRARY');
+    eq(LIB.filter(e=>e.alt).length,26,'alt 보유 종목 수');
+    const fp=LIB.find(e=>e.name==='페이스풀');
+    ok(fp.alt.eq&&fp.alt.pain,'페이스풀 대체안 누락');
+    const LibApp=w.eval('LibApp');
+    LibApp.q='페이스풀';LibApp.render();LibApp.q='';
+    const html=d.getElementById('lib-list').innerHTML;
+    ok(/장비 없을 때/.test(html)&&/통증 있을 때/.test(html),'도감 카드에 대체 미렌더');
+  });
+  await t('6주 블록 리뷰: 종목별 증량·정체·균형·판단 체크리스트',async()=>{
+    ExLog.block={start:'2026-06-16'};
+    ExLog.date='2026-07-28';
+    ExLog.data={
+      '2026-06-17':{day:'Pull',exercises:[{name:'랫풀다운',sets:[{weight:45,reps:8,rpe:8}]},{name:'바벨 데드리프트',sets:[{weight:70,reps:5}]}]},
+      '2026-07-01':{day:'Pull',exercises:[{name:'랫풀다운',sets:[{weight:47,reps:9,rpe:9}]}]},
+      '2026-07-20':{day:'Pull',exercises:[{name:'랫풀다운',sets:[{weight:50,reps:10,rpe:9,pain:1}]}]}
+    };
+    const md=await PlanApp.copyBlockReview(null);
+    ok(/## 6주 블록 리뷰 \(2026-06-16/.test(md),'헤더 오류');
+    ok(/### 종목별 증량 상태/.test(md)&&/랫풀다운/.test(md),'종목 표 없음');
+    ok(/e1RM Δ/.test(md),'e1RM 컬럼 없음');
+    ok(/전후방 균형 Pull:Push/.test(md),'균형 지표 없음');
+    ok(/통증 플래그 누적 1회/.test(md),'통증 집계 없음');
+    ok(/### 판단 필요/.test(md),'체크리스트 없음');
+  });
+  await t('블록 미설정이면 최근 42일로 폴백',async()=>{
+    ExLog.block=null;
+    const r=PlanApp._blockRange();
+    eq(r.set,false);
+    eq(Math.round((new Date(r.end)-new Date(r.start))/864e5),41);
   });
 
   console.log('\n결과: '+pass+' 통과, '+fail+' 실패');
