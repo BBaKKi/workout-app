@@ -200,6 +200,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-week-target{font-size:12px;color:#3B6D11;background:#EAF3DE;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;line-height:1.5}
 .ex-week-target.up{color:#1b5e20;background:#d7f0d9;font-weight:600}
 .ex-week-target .wt-prev{color:#8e8e93;font-weight:400}
+.ex-week-target .wt-dl{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#F7EFE2;color:#7A5A12;font-size:10.5px;font-weight:600}
 /* 휴식 타이머 */
 /* 휴식 타이머는 스티키 미니바 하나로 통일 — 카드 내 인라인 타이머 제거(위치가 카드 상태·스크롤에 따라 달라지던 것 일원화) */
 @keyframes rmflash{0%,100%{background:#7f1d1d}50%{background:#a03c3c}}
@@ -471,6 +472,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ib-advice.fast{background:#FDEEEE;border:1px solid #EFC1C1;color:#8E2F2F}
 .ib-advice.recomp{background:#EAF3DE;border:1px solid #C9DCB0;color:#3B6D11}
 .plan-block-deload{margin-top:8px;padding:8px 11px;border-radius:10px;background:#FFF6E5;border:1px solid #EED9A8;color:#7A5A12;font-size:11.5px;line-height:1.5}
+.plan-block-deload .dl-sep{border-top:1px solid #EED9A8;margin:8px 0}
 /* Phase */
 .plan-phase-track{margin-bottom:10px}
 .plan-phase-bar{display:flex;height:8px;background:var(--color-border-tertiary);border-radius:5px;overflow:hidden;margin-bottom:5px}
@@ -759,6 +761,12 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .pr-meta{font-size:10px;color:#8e8e93}
 .pr-empty{font-size:12px;color:#8e8e93;padding:6px 0}
 /* 디로드 배너 */
+.scap-warm{background:#F2F6FA;border:0.5px solid #D6E2ED;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px;font-size:11.5px;line-height:1.6;color:#3A4A5A}
+.scap-warm .sw-hd{font-weight:700;color:#185FA5;margin-bottom:5px;font-size:12px}
+.scap-warm .sw-note{color:#5A6A7A;margin-bottom:7px}
+.scap-warm .sw-row{display:flex;gap:7px;margin-bottom:5px}
+.scap-warm .sw-n{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:#185FA5;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.scap-warm .sw-cue{margin-top:7px;padding-top:7px;border-top:1px solid #D6E2ED}
 .tr-deload{font-size:12px;line-height:1.6;color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
 .tr-deload-plan{display:none;margin-top:8px}
 .tr-deload-plan.open{display:block}
@@ -797,6 +805,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 <div class="day-panel dp2">
 <div class="day-header"><span class="hbadge" style="background:#185FA5">Pull A</span><div class="hinfo">힌지 + 수평 당김(두께) · <b>주 1회 데드 데이</b> · 수축 1초 / 신장 2~3초<br><b>순서 근거</b>: 데드(최대 중량) → 허리 무부하 로우 → 수직 → 사선 → 이두 → 데드행 감압</div></div>
+<div class="scap-warm"><div class="sw-hd">🔧 세션 전 견갑 활성화 (3분)</div><div class="sw-note">견갑 후인이 안 되는 원인은 ① 흉추 신전 부족 ② 소흉근 단축 ③ 하부 승모·전거근 조절 부족 순이다. <b>순서를 지켜야 효과가 난다</b> — 자리를 만들고(①) 당기는 것을 풀고(②) 잡아주는 근육을 깨운(③) 다음에 본세트로 간다.</div><div class="sw-list"><div class="sw-row"><span class="sw-n">1</span><span class="sw-t"><b>폼롤러 흉추 신전</b> — 롤러를 가로로, 등 상부(T4~T8)에 대고 신전 <b>60초</b>. 흉추가 굽어 있으면 견갑이 모일 물리적 자리가 없다.</span></div><div class="sw-row"><span class="sw-n">2</span><span class="sw-t"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 팔꿈치가 어깨선보다 약간 아래. <b>30초 × 2</b>. 라운드숄더의 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근이다. <b>어깨 앞쪽 통증이 있으면 생략</b>.</span></div><div class="sw-row"><span class="sw-n">3</span><span class="sw-t"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이 또는 1~2kg <b>12~15회</b>. 하부 승모 활성 — 상부 승모 과활성은 하부가 일을 안 해서 생기는 대상작용이다.</span></div><div class="sw-row"><span class="sw-n">4</span><span class="sw-t"><b>월 슬라이드</b> — <b>10회</b>. 전거근·견갑 상방회전.</span></div></div><div class="sw-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다. 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2 (그립·광배 활성·척추 감압)</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>캣카우·힙힌지 드릴</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>데드 램프업</b> — 40×8 → 60×5 → 75×3</div></div></div></details>
 <div class="done-banner"><div class="di">🎯</div><div class="dt">Pull A 완료!</div><div class="ds">Pull A 완주! 데드 락아웃이 중립에서 끝났는지 확인. 다음 세션은 <b>Push B(상부 가슴)</b> — 기립근에 하루 더 여유를 준다.</div></div>
 <div class="ex-list">
@@ -835,6 +844,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 <div class="day-panel dp5">
 <div class="day-header"><span class="hbadge" style="background:#0C447C">Pull B</span><div class="hinfo">수직 당김(너비) + 프리웨이트 로우 · <b>데드 없는 날</b> — 기립근 여유를 로우에 쓴다<br><b>순서 근거</b>: 체중 수직(그립 신선할 때) → 프리 로우 → 케이블 로우 → 견갑 하강 → 팔 → 데드행</div></div>
+<div class="scap-warm"><div class="sw-hd">🔧 세션 전 견갑 활성화 (3분)</div><div class="sw-note">견갑 후인이 안 되는 원인은 ① 흉추 신전 부족 ② 소흉근 단축 ③ 하부 승모·전거근 조절 부족 순이다. <b>순서를 지켜야 효과가 난다</b> — 자리를 만들고(①) 당기는 것을 풀고(②) 잡아주는 근육을 깨운(③) 다음에 본세트로 간다.</div><div class="sw-list"><div class="sw-row"><span class="sw-n">1</span><span class="sw-t"><b>폼롤러 흉추 신전</b> — 롤러를 가로로, 등 상부(T4~T8)에 대고 신전 <b>60초</b>. 흉추가 굽어 있으면 견갑이 모일 물리적 자리가 없다.</span></div><div class="sw-row"><span class="sw-n">2</span><span class="sw-t"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 팔꿈치가 어깨선보다 약간 아래. <b>30초 × 2</b>. 라운드숄더의 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근이다. <b>어깨 앞쪽 통증이 있으면 생략</b>.</span></div><div class="sw-row"><span class="sw-n">3</span><span class="sw-t"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이 또는 1~2kg <b>12~15회</b>. 하부 승모 활성 — 상부 승모 과활성은 하부가 일을 안 해서 생기는 대상작용이다.</span></div><div class="sw-row"><span class="sw-n">4</span><span class="sw-t"><b>월 슬라이드</b> — <b>10회</b>. 전거근·견갑 상방회전.</span></div></div><div class="sw-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다. 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 풀어파트·견갑 하강 드릴</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>풀업 램프업</b> — 어시스트 높게 8회 → 본세트 설정</div></div></div></details>
 <div class="done-banner"><div class="di">🦾</div><div class="dt">Pull B 완료!</div><div class="ds">Pull B 완주! 다음 세션은 <b>Legs B(후면사슬)</b> — RDL은 데드와 4세션 간격이니 폼 우선으로 가볍게 시작.</div></div>
 <div class="ex-list">
@@ -1196,9 +1206,9 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <details class="plan-fold"><summary class="plan-hd">❓ 판정 규칙 — 이 숫자는 어떻게 나오나</summary>
 <div class="plan-card rules-card">
 <div class="rule"><b>🎯 자동 목표</b> — 같은 종목(별칭 연결 포함)의 가장 최근 기록 기준. 전 세트가 렙 상한(도감 sets 표기에서 파싱, 예: 4×6~8 → 8)을 채우면 복합 +2.5kg / 고립 +1kg 도전 제안. 단, 그 세션 최고 RPE가 9.5+면 같은 무게 한 번 더 굳히기.</div>
-<div class="rule"><b>🔋 준비도</b> — 오늘 수면(≥7h +1 / 6h 미만 −1) · 컨디션(≥4 +1 / ≤2 −1) · 최근 운동일 평균 RPE(9.3+ −1) · 최근 7일 통증(2회+ −1)의 합산. <b>−2 이하 = 낮음</b>(증량 보류), <b>+2 이상 = 좋음</b>(도전 적기). 중립이면 표시 안 함.</div>
+<div class="rule"><b>🔋 준비도</b> — 오늘 수면 · 컨디션(≥4 +1 / ≤2 −1) · 최근 운동일 평균 RPE · 최근 7일 통증(2회+ −1)의 합산. 수면과 RPE는 고정값이 아니라 <b>최근 28일 내 기준선(중앙값) 대비</b>로 판정한다 — 수면은 평소보다 1h 이상 부족할 때, RPE는 기준선 +0.4 이상일 때 감점. <b>−2 이하 = 낮음</b>(증량 보류), <b>+2 이상 = 좋음</b>(도전 적기). 중립이면 표시 안 함.</div>
 <div class="rule"><b>📌 오늘 추천</b> — 타입별 점수 = 마지막 수행 경과일(14일 포화)×2 + 담당 부위 주간 목표 부족 세트. 순환 다음 타입보다 3점 이상 높고 2일 이상 더 밀렸을 때만 제안. 세 타입 모두 수행 이력이 있어야 작동.</div>
-<div class="rule"><b>🪫 디로드 신호</b> — ① 최근 7일 평균 RPE ≥9 ② RPE 전주 대비 +0.5 ③ 통증 2회+/7일 ④ 볼륨 −10%인데 RPE 유지↑ ⑤ 블록 5주차+ 중 <b>2개 이상</b>이면 배너 표시.</div>
+<div class="rule"><b>🪫 디로드 신호</b> — ① 최근 7일 평균 RPE ≥ 내 기준선 +0.3 ② RPE 전주 대비 +0.3 ③ 통증 2회+/7일 ④ 볼륨 −10%인데 RPE 유지↑ ⑤ 복합 2종 이상 3회 연속 정체 ⑥ 블록 5주차+ 중 <b>2개 이상</b>이면 배너 표시. 계획 탭·추세 탭 배너가 같은 판정을 공유한다. <b>디로드 시작</b>을 누르면 7일간 자동 목표가 '중량 유지 · 세트 55%'로 바뀌고 기간이 끝나면 스스로 복귀한다.<br><b>🛏 회복 병목(수면)</b>은 디로드와 별개로 판정한다 — 주간 평균 수면이 2주 연속 6.5h 미만이면 별도 표시. 수면 부족은 볼륨을 줄여도 원인이 남기 때문이다.</div>
 <div class="rule"><b>⚖️ 체성분 정체/과속</b> — 최신 측정 vs ~2주 전(12일 이상 간격): |Δ체중|&lt;0.4kg · |Δ체지방|&lt;0.4%p · |Δ골격근|&lt;0.3kg 모두 해당 = 정체(−50~100kcal 검토). 14일간 체중 −1.6kg 이상 = 감량 과속(+100kcal 검토).</div>
 <div class="rule"><b>📉 주간 볼륨 추이</b> — 본세트(워밍업 제외)의 무게×횟수 합을 주 단위로 집계, 도감 주동근 기준 푸시/풀/하체 색 구분.</div>
 </div></details>
@@ -1423,6 +1433,7 @@ const ExLog={
   lastBackup:null,
   async loadMeta(){
     try{const r=await window.storage.get('block_v1');if(r)this.block=JSON.parse(r.value);}catch(_){}
+    try{const r=await window.storage.get('deload_v1');if(r)this.deload=JSON.parse(r.value);}catch(_){}
     try{const r=await window.storage.get('last_backup');if(r)this.lastBackup=r.value;}catch(_){}
     try{const r=await window.storage.get('sync_dirty');if(r)JSON.parse(r.value).forEach(d=>this._dirty.add(d));}catch(_){} // 지난 세션의 미전송 날짜 복원
     try{const r=await window.storage.get('sync_del');if(r)this._delQ=JSON.parse(r.value)||[];}catch(_){} // 지난 세션의 미전송 삭제 복원
@@ -1434,6 +1445,110 @@ const ExLog={
     if(ms<0)return null;
     return Math.floor(ms/86400000/7)+1;
   },
+  // ── 회복 지표(개인 기준선) ────────────────────────────────────────────────
+  // RPE·수면을 고정 임계가 아니라 '내 최근 28일 기준선' 대비로 판정한다.
+  // 고정 임계(RPE 9.0/9.3)는 항상 8.5~9로 찍는 사용자에게 영구 미발동이 되어 신호 자체가 죽는다.
+  // 전 기록을 1회만 스캔하고 dataVer+열람일로 캐시 — suggestTarget()이 종목 카드마다 호출되므로 재계산 금지.
+  _recCache:null,
+  recovery(){
+    const ck=this.dataVer+'|'+this.date;
+    if(this._recCache&&this._recCache.k===ck)return this._recCache.v;
+    const base=new Date(this.date+'T12:00:00');
+    const R28=[],S28=[],e1by={};
+    const mk=()=>({r:[],vol:0,sl:[],pain:0});
+    const w0=mk(),w1=mk();                                   // w0=최근 7일, w1=그 전 7일
+    this._dateKeys().forEach(k=>{
+      const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
+      if(ago<0||ago>70)return;                               // 정체 판정에 필요한 최근 3세션 범위까지만
+      const s=this.data[k]||{};
+      const w=(ago<7)?w0:((ago<14)?w1:null);
+      (s.exercises||[]).forEach(ex=>{
+        const sets=(ex.sets||[]).filter(st=>_isWorkSet(st)&&st.weight>0);
+        if(!sets.length)return;
+        if(!this.isTimed(ex.name)){                          // 종목별 e1RM — 최근 3세션만 유지(오름차순 스캔)
+          const cn=this.canon(ex.name);
+          const e1=Math.max.apply(null,sets.map(st=>st.weight*(1+st.reps/30)));
+          const a=(e1by[cn]=e1by[cn]||[]);a.push(e1);if(a.length>3)a.shift();
+        }
+        sets.forEach(st=>{
+          if(ago<28&&st.rpe)R28.push(st.rpe);
+          if(!w)return;
+          w.vol+=st.weight*st.reps;
+          if(st.rpe)w.r.push(st.rpe);
+          if(st.pain)w.pain++;
+        });
+      });
+      const sl=+((s.cond||{}).sleep||0);
+      if(sl>0){if(ago<28)S28.push(sl);if(w)w.sl.push(sl);}
+    });
+    const med=a=>{if(!a.length)return null;const b=a.slice().sort((x,y)=>x-y),m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2;};
+    const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+    let plateau=0;                                           // 복합 종목 3회 연속 e1RM 정체 수
+    for(const cn in e1by){
+      const a=e1by[cn];
+      if(a.length<3||!this.isCompound(cn))continue;
+      if(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3)plateau++;
+    }
+    const pack=w=>({rpe:avg(w.r),n:w.r.length,vol:w.vol,sleep:avg(w.sl),sn:w.sl.length,pain:w.pain});
+    const v={rpeBase:R28.length>=30?avg(R28):null,            // 표본 30세트 미만이면 기준선 판단 보류
+             sleepBase:S28.length>=7?med(S28):null,            // RPE는 평균(비교 대상 w0.rpe와 통계량을 맞춘다), 수면은 중앙값(단일 일자와 비교)
+             w0:pack(w0),w1:pack(w1),plateau};
+    this._recCache={k:ck,v};
+    return v;
+  },
+
+  // ── 디로드 단일 판정 ──────────────────────────────────────────────────────
+  // 이전에는 계획 탭(PlanApp.deloadSignals)과 추세 탭(renderTrends 인라인)이 서로 다른 기준으로 따로 판정해
+  // 한쪽만 켜지거나, "디로드 하세요"와 "+2.5kg 도전"이 동시에 뜨는 모순이 생겼다.
+  // 이제 두 배너와 자동 목표가 모두 이 함수 하나를 본다.
+  deloadState(){
+    const r=this.recovery(),sig=[],B=r.rpeBase;
+    if(B!=null&&r.w0.n>=6&&r.w0.rpe>=B+0.3)
+      sig.push('7일 RPE '+r.w0.rpe.toFixed(2)+' (기준선 '+B.toFixed(1)+' 대비 +'+(r.w0.rpe-B).toFixed(2)+')');
+    if(r.w0.n>=6&&r.w1.n>=6&&(r.w0.rpe-r.w1.rpe)>=0.3)
+      sig.push('RPE 전주 대비 +'+(r.w0.rpe-r.w1.rpe).toFixed(2));
+    if(r.w0.pain>=2)sig.push('통증 플래그 '+r.w0.pain+'회/7일');
+    if(r.w1.vol>0&&r.w0.vol<r.w1.vol*0.9&&r.w0.n>=3&&r.w0.rpe>=r.w1.rpe)
+      sig.push('볼륨 −'+Math.round((1-r.w0.vol/r.w1.vol)*100)+'%인데 RPE 유지↑');
+    if(r.plateau>=2)sig.push('복합 '+r.plateau+'종 3회 연속 정체');
+    const wk=this.blockWeek()||0;
+    if(wk>=5)sig.push('블록 '+wk+'주차');
+    return{signals:sig,suggest:sig.length>=2,day:this.deloadDay()};
+  },
+
+  // ── 회복 병목(수면): 디로드와 분리한다 ────────────────────────────────────
+  // 수면 부족은 훈련 피로가 아니라 회복 용량 자체의 문제라 볼륨을 줄여도 원인이 남는다.
+  // 같은 배너에 섞으면 "디로드 했는데 왜 그대로지"가 반복되므로 별도 신호로 노출한다.
+  sleepBottleneck(){
+    const r=this.recovery();
+    if(r.w0.sn<3||r.w1.sn<3)return null;
+    if(r.w0.sleep<6.5&&r.w1.sleep<6.5)
+      return{avg:(r.w0.sleep+r.w1.sleep)/2,w0:r.w0.sleep,w1:r.w1.sleep};
+    return null;
+  },
+
+  // ── 디로드 주 실행: 한 번 켜면 자동 목표가 따라오고 7일 후 스스로 해제된다 ──
+  deload:null,
+  saveDeload(){try{window.storage.set('deload_v1',JSON.stringify(this.deload));}catch(_){}},
+  deloadDay(){                                               // 진행 일차 1~7, 미실행·종료면 0
+    if(!this.deload||!this.deload.start)return 0;
+    const d=Math.floor((new Date(this.date+'T12:00:00')-new Date(this.deload.start+'T12:00:00'))/864e5);
+    return (d>=0&&d<7)?d+1:0;
+  },
+  _afterDeloadChange(){
+    this._recCache=null;
+    this.injectTargets();                                    // 자동 목표 배지는 refresh()가 갱신하지 않는다
+    this.refresh();
+    if(typeof PlanApp!=='undefined'){if(PlanApp.renderBlock)PlanApp.renderBlock();if(PlanApp.renderTrends)PlanApp.renderTrends();}
+  },
+  startDeload(){
+    if(!confirm('이번 주를 디로드 주로 전환할까요?\n\n· 중량은 그대로, 세트 수만 55%\n· 증량 제안 중지\n· 7일 뒤 자동 종료'))return;
+    this.deload={start:this.date};this.saveDeload();this._afterDeloadChange();
+  },
+  endDeload(){
+    this.deload=null;this.saveDeload();this._afterDeloadChange();
+  },
+
   startBlock(){
     if(this.block&&this.block.start&&!confirm('새 6주 블록을 오늘부터 시작할까요?\n(현재 블록: '+this.block.start+' 시작, '+this.blockWeek()+'주차)'))return;
     this.block={start:this.date};this.saveBlock();this.refresh();
@@ -1862,8 +1977,16 @@ const ExLog={
   readiness(){
     const s=this.session();
     let score=0,n=0;const bad=[],good=[];
+    const rec=this.recovery();
+    const sB=rec.sleepBase;
     const sl=+((s.cond||{}).sleep||0);
-    if(sl){n++;if(sl>=7){score++;good.push('수면 '+sl+'h');}else if(sl<6){score--;bad.push('수면 '+sl+'h');}}
+    // 수면: 절대 6h가 아니라 '내 평소보다 1h 이상 부족'을 감점 신호로 삼는다.
+    // 상시 수면부족(5~6h)이면 절대 기준으로는 매일 −1이 되어 배너가 상시 노출되고 신호로서 의미가 죽는다.
+    if(sl){n++;
+      const loT=(sB!=null)?Math.min(6,sB-1):6, hiT=(sB!=null)?Math.max(7,sB+0.5):7;
+      if(sl>=hiT){score++;good.push('수면 '+sl+'h');}
+      else if(sl<loT){score--;bad.push('수면 '+sl+'h'+(sB!=null?' (평소 '+sB.toFixed(1)+'h)':''));}
+    }
     const rt=+((s.cond||{}).rate||0);
     if(rt){n++;if(rt>=4){score++;good.push('컨디션 '+rt+'/5');}else if(rt<=2){score--;bad.push('컨디션 '+rt+'/5');}}
     // 최근 운동일(7일 내) 평균 RPE — 표본 3세트 미만이면 판단 보류
@@ -1874,7 +1997,9 @@ const ExLog={
       let rs=0,rn=0,has=false;
       (this.data[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;has=true;if(st.rpe){rs+=st.rpe;rn++;}}));
       if(!has)continue;
-      if(rn>=3){n++;const avg=rs/rn;if(avg>=9.3){score--;bad.push('전 세션 RPE '+avg.toFixed(1));}}
+      if(rn>=3){n++;const avg=rs/rn;
+        const thr=(rec.rpeBase!=null)?rec.rpeBase+0.4:9.3;  // 기준선 미확보(표본 부족) 시에만 옛 고정값으로 폴백
+        if(avg>=thr){score--;bad.push('전 세션 RPE '+avg.toFixed(1)+(rec.rpeBase!=null?' / 기준선 '+rec.rpeBase.toFixed(1):''));}}
       break; // 가장 최근 운동일 하나만 본다
     }
     let pain=0;
@@ -2873,6 +2998,13 @@ const ExLog={
     if(this.isTimed(name))return{html:prevLbl+' → 시간 늘리기'+note,up:false};
     const cap=this.repCap(name);
     const lastW=sets[sets.length-1].weight;
+    // 디로드 주에는 증량 제안을 끄고 '중량 유지 · 세트 55%'로 자동 전환한다(7일 뒤 자동 복귀).
+    // 배너와 자동 목표가 반대 방향을 가리키던 모순을 제거하는 부분.
+    const dlD=this.deloadDay();
+    if(dlD){
+      const sc=Math.max(2,Math.round(sets.length*0.55));
+      return{html:prevLbl+' → <b>'+lastW+'kg 유지 · '+sc+'세트</b> <span class="wt-dl">디로드 '+dlD+'/7일</span>'+note,up:false,fillW:lastW,cap};
+    }
     const allHit=sets.length>=2&&sets.every(s=>s.reps>=cap);
     if(allHit){
       const inc=this.isCompound(name)?2.5:1;
@@ -3410,31 +3542,28 @@ const PlanApp={
   },
   // ── 디로드 자동 제안: 최근 7일 vs 그 전 7일의 RPE·통증·볼륨 + 블록 주차를 종합, 신호 2개 이상이면 제안 ──
   // 판단 근거를 그대로 노출해 사용자가 수긍/기각할 수 있게 한다. RPE 표본 6세트 미만이면 해당 신호는 침묵.
-  _lastNDays(n,off){const out=[];const base=new Date(_todayKey()+'T12:00:00');for(let i=off;i<off+n;i++){const d=new Date(base);d.setDate(base.getDate()-i);out.push(_localKey(d));}return out;},
-  _rpeStats(keys){
-    const data=(typeof ExLog!=='undefined')?(ExLog.data||{}):{};
-    let rs=0,rn=0,pain=0,vol=0;
-    keys.forEach(k=>{const s=data[k];if(!s)return;(s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=st.weight*st.reps;if(st.rpe){rs+=st.rpe;rn++;}if(st.pain)pain++;}));});
-    return{rpe:rn?rs/rn:0,rn,pain,vol};
-  },
-  deloadSignals(){
-    const a=this._rpeStats(this._lastNDays(7,0)),b=this._rpeStats(this._lastNDays(7,7));
-    const wk=(typeof ExLog!=='undefined'&&ExLog.blockWeek)?(ExLog.blockWeek()||0):0;
-    const sig=[];
-    if(a.rn>=6&&a.rpe>=9)sig.push('7일 평균 RPE '+a.rpe.toFixed(1)+' (한계 근접)');
-    if(a.rn>=6&&b.rn>=6&&a.rpe-b.rpe>=0.5)sig.push('RPE 전주 대비 +'+(a.rpe-b.rpe).toFixed(1));
-    if(a.pain>=2)sig.push('통증 플래그 '+a.pain+'회/7일');
-    if(b.vol>0&&a.vol<b.vol*0.9&&a.rn>=3&&a.rpe>=b.rpe)sig.push('볼륨 −'+Math.round((1-a.vol/b.vol)*100)+'%인데 RPE 유지↑ (피로 누적)');
-    if(wk>=5)sig.push('블록 '+wk+'주차 (6주 주기 종반)');
-    return{signals:sig,suggest:sig.length>=2};
-  },
+  deloadSignals(){return (typeof ExLog!=='undefined'&&ExLog.deloadState)?ExLog.deloadState():{signals:[],suggest:false,day:0};},
   renderDeload(){
     const el=document.getElementById('block-deload-note');if(!el)return;
-    const r=this.deloadSignals();
-    if(!r.suggest){el.style.display='none';el.innerHTML='';return;}
-    el.style.display='';
-    el.innerHTML='🪫 <b>디로드 주 검토 신호 '+r.signals.length+'개</b> — '+r.signals.join(' · ')
-      +'<br>추세 섹션의 <b>📋 디로드 플랜</b>에서 종목별 숫자(중량 유지 · 세트 55%)를 확인하세요.';
+    if(typeof ExLog==='undefined'||!ExLog.deloadState){el.style.display='none';el.innerHTML='';return;}
+    const st=ExLog.deloadState();
+    let sb=null;try{sb=ExLog.sleepBottleneck();}catch(_){}
+    let h='';
+    if(st.day){
+      h='🪫 <b>디로드 주 '+st.day+'/7일 진행 중</b> — 중량 유지 · 세트 55%. 운동 탭 자동 목표에 이미 반영돼 있습니다.'
+        +'<span class="bc-act" onclick="ExLog.endDeload()">지금 종료</span>';
+    }else if(st.suggest){
+      h='🪫 <b>디로드 검토 신호 '+st.signals.length+'개</b> — '+st.signals.join(' · ')
+        +'<span class="bc-act" onclick="ExLog.startDeload()">이번 주 디로드 시작</span>';
+    }
+    // 수면 병목은 디로드와 독립적으로 표시한다 — 볼륨을 줄이는 것으로는 해결되지 않는 축이라 처방이 다르다.
+    if(sb){
+      h+=(h?'<div class="dl-sep"></div>':'')
+        +'🛏 <b>회복 병목: 수면</b> — 2주 평균 '+sb.avg.toFixed(1)+'h (이번 주 '+sb.w0.toFixed(1)+'h · 전주 '+sb.w1.toFixed(1)+'h). '
+        +'수면 부족은 훈련량을 줄여도 원인이 남습니다. 디로드보다 수면 복구가 먼저입니다.';
+    }
+    if(!h){el.style.display='none';el.innerHTML='';return;}
+    el.style.display='';el.innerHTML=h;
   },
   renderBlock(){
     this.renderDeload();
@@ -3694,14 +3823,12 @@ const PlanApp={
     // 상대강도(×BW): 인바디 최신 체중 기준 — 커팅 중 절대중량 유지 = 상대강도 상승을 가시화
     let bwKg=null;
     try{if(typeof InBody!=='undefined'){if(!InBody._log)await InBody.load();if(InBody._log&&InBody._log.length)bwKg=InBody._log[InBody._log.length-1].wt||null;}}catch(_){}
-    let plateauCompounds=0; // 디로드 감지용: 복합 종목 동시 정체 수
     const rowFor=(n)=>{
       const arr=byEx[n];const last=arr[arr.length-1],prev=arr[arr.length-2];
       const delta=last.e1-prev.e1;
       const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
       let plateau=false;
       if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
-      if(plateau&&typeof ExLog!=='undefined'&&ExLog.isCompound(n))plateauCompounds++;
       // e1RM 마일스톤 — 복합 종목만: 역대 최고 e1RM 기준 다음 10kg 단위까지 진행 바 (커팅 중에도 반복수로 움직이는 지표)
       let ms='';
       if(typeof ExLog!=='undefined'&&ExLog.isCompound(n)){
@@ -3759,19 +3886,19 @@ const PlanApp={
           :'보조 종목이 모두 진행 중입니다. 이번 블록 구성을 유지해도 좋습니다.')
         +'<span class="bc-act" onclick="ExLog.startBlock()">새 블록 시작</span></div>';
     }
-    // 디로드 배너: 볼륨은 채우고 있는데(≥70%) 복합 2종 이상이 3회 연속 정체 → 피로 누적 신호
+    // 디로드 배너: 계획 탭과 동일한 ExLog.deloadState() 판정을 쓴다(이전에는 여기만 다른 기준이었다)
     let banner='';
-    if(plateauCompounds>=2&&typeof ExLog!=='undefined'&&ExLog._weekGoalPct){
-      const wg=ExLog._weekGoalPct();
-      if(wg&&wg.pct>=70){
-        let condNote='';
-        try{const ca=ExLog._weekCondAvg();if(ca.rate!=null&&ca.rate<3)condNote=' 이번 주 평균 컨디션 '+ca.rate.toFixed(1)+'/5 — 수면·회복 요인부터 점검하세요.';}catch(_){}
-        // 디로드 플랜 데이터: 최근 수행 복합(앵커) 종목의 마지막 무게·세트 수 스냅샷 (버튼 탭 시 즉석 표 생성)
-        this._deloadRows=names.filter(n=>ExLog.isCompound(n)&&!ExLog.isTimed(n)).slice(0,6)
-          .map(n=>{const l=byEx[n][byEx[n].length-1];return{n,w:l.w,sc:l.sc||3};});
-        banner='<div class="tr-deload">🛌 <b>디로드 검토</b> — 복합 '+plateauCompounds+'종이 3회 연속 정체 중이고 주간 볼륨은 '+wg.pct+'% 소화 중입니다. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.'+condNote
-          +'<span class="bc-act" onclick="PlanApp.toggleDeloadPlan(this)">📋 디로드 플랜</span><div class="tr-deload-plan"></div></div>';
-      }
+    const dlSt=(typeof ExLog!=='undefined'&&ExLog.deloadState)?ExLog.deloadState():null;
+    if(dlSt&&(dlSt.day||dlSt.suggest)){
+      let condNote='';
+      try{const sb=ExLog.sleepBottleneck();if(sb)condNote=' · 🛏 2주 평균 수면 '+sb.avg.toFixed(1)+'h — 수면 복구가 우선입니다.';}catch(_){}
+      // 디로드 플랜 데이터: 최근 수행 복합(앵커) 종목의 마지막 무게·세트 수 스냅샷 (버튼 탭 시 즉석 표 생성)
+      this._deloadRows=names.filter(n=>ExLog.isCompound(n)&&!ExLog.isTimed(n)).slice(0,6)
+        .map(n=>{const l=byEx[n][byEx[n].length-1];return{n,w:l.w,sc:l.sc||3};});
+      banner='<div class="tr-deload">🛌 <b>'+(dlSt.day?'디로드 주 '+dlSt.day+'/7일 진행 중':'디로드 검토')+'</b> — '+dlSt.signals.join(' · ')
+        +(dlSt.day?'. 중량 유지 · 세트 55% — 자동 목표에 반영 중입니다.':'. 1주간 중량 유지·볼륨 50~60%로 줄여 회복 후 재도전을 권장합니다.')+condNote
+        +'<span class="bc-act" onclick="'+(dlSt.day?'ExLog.endDeload()':'ExLog.startDeload()')+'">'+(dlSt.day?'지금 종료':'이번 주 디로드 시작')+'</span>'
+        +'<span class="bc-act" onclick="PlanApp.toggleDeloadPlan(this)">📋 디로드 플랜</span><div class="tr-deload-plan"></div></div>';
     }
     box.innerHTML=blockBanner+banner+rowsHtml;
   },
