@@ -766,12 +766,19 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .pr-meta{font-size:10px;color:#8e8e93}
 .pr-empty{font-size:12px;color:#8e8e93;padding:6px 0}
 /* 디로드 배너 */
-.scap-warm{background:#F2F6FA;border:0.5px solid #D6E2ED;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px;font-size:11.5px;line-height:1.6;color:#3A4A5A}
-.scap-warm .sw-hd{font-weight:700;color:#185FA5;margin-bottom:5px;font-size:12px}
-.scap-warm .sw-note{color:#5A6A7A;margin-bottom:7px}
-.scap-warm .sw-row{display:flex;gap:7px;margin-bottom:5px}
-.scap-warm .sw-n{flex-shrink:0;width:17px;height:17px;border-radius:50%;background:#185FA5;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
-.scap-warm .sw-cue{margin-top:7px;padding-top:7px;border-top:1px solid #D6E2ED}
+.wu-cue{margin-top:8px;padding-top:8px;border-top:1px solid #D6E2ED;font-size:11.5px;line-height:1.6;color:#3A4A5A}
+.sl-top{display:flex;gap:6px;margin-bottom:10px}
+.sl-kpi{flex:1;text-align:center;background:#F4F6FA;border:0.5px solid #DDE4EE;border-radius:10px;padding:8px 2px}
+.sl-kpi .sl-n{display:block;font-size:19px;font-weight:700;color:#3A4A5E;line-height:1.15}
+.sl-kpi .sl-n.ok{color:#1F6B4A}
+.sl-kpi .sl-l{display:block;font-size:10px;color:#8A93A0;margin-top:2px}
+.sl-bars{display:flex;gap:8px;align-items:flex-end;height:62px;padding:0 4px}
+.sl-bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.sl-bar .sl-fill{background:#C6D2E2;border-radius:4px 4px 0 0;min-height:2px}
+.sl-bar .sl-fill.ok{background:#7FBF9B}
+.sl-bar span{font-size:9.5px;color:#8A93A0;text-align:center;margin-top:3px}
+.sl-trend{font-size:11px;color:#67788f;margin-top:6px}
+.sl-verdict{margin-top:8px;padding-top:8px;border-top:1px solid #E3E8EF;font-size:11.5px;line-height:1.6;color:#3A4A5E}
 .ib-recomp{background:#F0F7F3;border:0.5px solid #CFE4D8;border-radius:var(--border-radius-md);padding:10px 12px;margin:8px 0;font-size:11.5px;line-height:1.6;color:#2F4A3C}
 .ib-recomp .rc-hd{font-weight:700;color:#1F6B4A;font-size:12px;margin-bottom:6px}
 .ib-recomp .rc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
@@ -779,6 +786,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ib-recomp .rc-chip.good{background:#E4F3EA;border-color:#B6DCC6;color:#1F6B4A}
 .ib-recomp .rc-verdict{padding-top:6px;border-top:1px solid #D8E6DE}
 .ib-recomp .rc-note{margin-top:5px;color:#7A8A80;font-size:10.5px}
+.prj-thin{margin-right:4px;padding:0 5px;border-radius:5px;background:#F0EEE9;color:#8A8375;font-size:10px}
 .prj-fast{color:#1F6B4A;font-weight:700}.prj-ontime{color:#7A5A12;font-weight:700}.prj-late{color:#A03C3C;font-weight:700}
 .tr-sleep{font-size:12px;line-height:1.6;color:#334a5e;background:#EEF4FA;border:0.5px solid #CFE0EE;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
 .tr-deload{font-size:12px;line-height:1.6;color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
@@ -819,8 +827,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 <div class="day-panel dp2">
 <div class="day-header"><span class="hbadge" style="background:#185FA5">Pull A</span><div class="hinfo">힌지 + 수평 당김(두께) · <b>주 1회 데드 데이</b> · 수축 1초 / 신장 2~3초<br><b>순서 근거</b>: 데드(최대 중량) → 허리 무부하 로우 → 수직 → <b>측면삼각</b> → 이두 → 데드행 감압<br><b>조정</b>: 하이 로우 제거(같은 세션 머신 로우와 중복) → 그 자리에 래터럴 — 몸통 두께 대신 어깨 너비로</div></div>
-<div class="scap-warm"><div class="sw-hd">🔧 세션 전 견갑 활성화 (3분)</div><div class="sw-note">견갑 후인이 안 되는 원인은 ① 흉추 신전 부족 ② 소흉근 단축 ③ 하부 승모·전거근 조절 부족 순이다. <b>순서를 지켜야 효과가 난다</b> — 자리를 만들고(①) 당기는 것을 풀고(②) 잡아주는 근육을 깨운(③) 다음에 본세트로 간다.</div><div class="sw-list"><div class="sw-row"><span class="sw-n">1</span><span class="sw-t"><b>폼롤러 흉추 신전</b> — 롤러를 가로로, 등 상부(T4~T8)에 대고 신전 <b>60초</b>. 흉추가 굽어 있으면 견갑이 모일 물리적 자리가 없다.</span></div><div class="sw-row"><span class="sw-n">2</span><span class="sw-t"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 팔꿈치가 어깨선보다 약간 아래. <b>30초 × 2</b>. 라운드숄더의 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근이다. <b>어깨 앞쪽 통증이 있으면 생략</b>.</span></div><div class="sw-row"><span class="sw-n">3</span><span class="sw-t"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이 또는 1~2kg <b>12~15회</b>. 하부 승모 활성 — 상부 승모 과활성은 하부가 일을 안 해서 생기는 대상작용이다.</span></div><div class="sw-row"><span class="sw-n">4</span><span class="sw-t"><b>월 슬라이드</b> — <b>10회</b>. 전거근·견갑 상방회전.</span></div></div><div class="sw-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다. 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2 (그립·광배 활성·척추 감압)</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 풀어파트</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>캣카우·힙힌지 드릴</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>데드 램프업</b> — 40×8 → 60×5 → 75×3</div></div></div></details>
+<details class="info-card wu-card"><summary>🔥 워밍업 + 견갑 활성화 (10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2 (그립·광배 활성·척추 감압)</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>캣카우·힙힌지 드릴</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>폼롤러 흉추 신전</b> — 롤러 가로, 등 상부(T4~T8) <b>60초</b> <span style="color:#8e8e93">(흉추가 굽으면 견갑이 모일 자리가 없다)</span></div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 어깨선보다 약간 아래 <b>30초 × 2</b> <span style="color:#8e8e93">(라운드숄더 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근 · 어깨 앞 통증 시 생략)</span></div></div><div class="wu-item"><div class="wu-num">6</div><div class="wu-txt"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이~2kg <b>12~15회</b> <span style="color:#8e8e93">(하부 승모 활성 — 상부 승모 과활성은 하부가 쉬어서 생긴다)</span></div></div><div class="wu-item"><div class="wu-num">7</div><div class="wu-txt"><b>월 슬라이드</b> — <b>10회</b> <span style="color:#8e8e93">(전거근·견갑 상방회전)</span></div></div><div class="wu-item"><div class="wu-num">8</div><div class="wu-txt"><b>데드 램프업</b> — 40×8 → 60×5 → 75×3</div></div><div class="wu-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다 — 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div></details>
 <div class="done-banner"><div class="di">🎯</div><div class="dt">Pull A 완료!</div><div class="ds">Pull A 완주! 데드 락아웃이 중립에서 끝났는지 확인. 다음 세션은 <b>Push B(상부 가슴)</b> — 기립근에 하루 더 여유를 준다.</div></div>
 <div class="ex-list">
 <div class="ex-wrap"><input type="checkbox" id="c2_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">바벨 데드리프트</div><div class="ex-meta"><span class="tag t-s">4×5~8</span><span class="tag t-e">파워랙</span><span class="tag t-m">후면사슬 전체</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">발뒤꿈치로 땅을 민다는 느낌. 허리·등 전체 복합.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>주 1회로 축소</b>(6세션 순환 — 현재 주 4.8회 페이스면 실제 8~9일 간격) — 기립근 회복 시간이 넉넉하니 폼이 무너진 반복 없이 5~8회를 채우는 데 집중. <b>오버언더 그립: 언더 팔꿈치 완전 신전·세트마다 좌우 교대</b>(이두 파열 방지). 90kg에서 3주 정체 중인데, 80kg에서 허리 통증 이력이 있어 <b>무게보다 반복·폼 안정이 먼저</b>다.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft"><b>락아웃 과신전 금지</b> — 둔근 스퀴즈+갈비뼈 다운으로 중립에서 끝. <b>75kg 정착 전 증량 금지</b>(80kg 기립근 통증 이력). 종아리가 발달한 체형은 발목이 뻣뻣해 셋업에서 엉덩이가 먼저 솟기 쉽다 — 뒤꿈치 압을 끝까지 유지.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">발 어깨너비·바 정강이 앞</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">힙 힌지로 그립·복압</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">발뒤꿈치 밀며 엉덩이·어깨 동시에</div></div><div class="fstep"><div class="snum">4</div><div class="stxt"><b>둔근 스퀴즈로 직립 — 뒤로 젖히지 않기</b></div></div><div class="fstep"><div class="snum">5</div><div class="stxt">천천히 내리기</div></div></div></details></div></details></div>
@@ -857,8 +864,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 <div class="day-panel dp5">
 <div class="day-header"><span class="hbadge" style="background:#0C447C">Pull B</span><div class="hinfo">수직 당김(너비) + 프리웨이트 로우 · <b>데드 없는 날</b> — 기립근 여유를 로우에 쓴다<br><b>순서 근거</b>: 체중 수직(그립 신선할 때) → 프리 로우 → 견갑 하강 → 팔 → 데드행<br><b>조정</b>: 케이블 시티드 로우 제거(T바와 중복) — 세션 단축분은 회복(수면)에 돌린다</div></div>
-<div class="scap-warm"><div class="sw-hd">🔧 세션 전 견갑 활성화 (3분)</div><div class="sw-note">견갑 후인이 안 되는 원인은 ① 흉추 신전 부족 ② 소흉근 단축 ③ 하부 승모·전거근 조절 부족 순이다. <b>순서를 지켜야 효과가 난다</b> — 자리를 만들고(①) 당기는 것을 풀고(②) 잡아주는 근육을 깨운(③) 다음에 본세트로 간다.</div><div class="sw-list"><div class="sw-row"><span class="sw-n">1</span><span class="sw-t"><b>폼롤러 흉추 신전</b> — 롤러를 가로로, 등 상부(T4~T8)에 대고 신전 <b>60초</b>. 흉추가 굽어 있으면 견갑이 모일 물리적 자리가 없다.</span></div><div class="sw-row"><span class="sw-n">2</span><span class="sw-t"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 팔꿈치가 어깨선보다 약간 아래. <b>30초 × 2</b>. 라운드숄더의 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근이다. <b>어깨 앞쪽 통증이 있으면 생략</b>.</span></div><div class="sw-row"><span class="sw-n">3</span><span class="sw-t"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이 또는 1~2kg <b>12~15회</b>. 하부 승모 활성 — 상부 승모 과활성은 하부가 일을 안 해서 생기는 대상작용이다.</span></div><div class="sw-row"><span class="sw-n">4</span><span class="sw-t"><b>월 슬라이드</b> — <b>10회</b>. 전거근·견갑 상방회전.</span></div></div><div class="sw-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다. 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div>
-<details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 풀어파트·견갑 하강 드릴</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>풀업 램프업</b> — 어시스트 높게 8회 → 본세트 설정</div></div></div></details>
+<details class="info-card wu-card"><summary>🔥 워밍업 + 견갑 활성화 (10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>폼롤러 흉추 신전</b> — 롤러 가로, 등 상부(T4~T8) <b>60초</b> <span style="color:#8e8e93">(흉추가 굽으면 견갑이 모일 자리가 없다)</span></div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 어깨선보다 약간 아래 <b>30초 × 2</b> <span style="color:#8e8e93">(라운드숄더 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근 · 어깨 앞 통증 시 생략)</span></div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이~2kg <b>12~15회</b> <span style="color:#8e8e93">(하부 승모 활성 — 상부 승모 과활성은 하부가 쉬어서 생긴다)</span></div></div><div class="wu-item"><div class="wu-num">6</div><div class="wu-txt"><b>월 슬라이드</b> — <b>10회</b> <span style="color:#8e8e93">(전거근·견갑 상방회전)</span></div></div><div class="wu-item"><div class="wu-num">7</div><div class="wu-txt"><b>풀업 램프업</b> — 어시스트 높게 8회 → 본세트 설정</div></div><div class="wu-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다 — 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div></details>
 <div class="done-banner"><div class="di">🦾</div><div class="dt">Pull B 완료!</div><div class="ds">Pull B 완주! 다음 세션은 <b>Legs B(후면사슬)</b> — RDL은 데드와 4세션 간격이니 폼 우선으로 가볍게 시작.</div></div>
 <div class="ex-list">
 <div class="ex-wrap"><input type="checkbox" id="c5_1" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c5_1" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">풀업 (체중/어시스트)</div><div class="ex-meta"><span class="tag t-s">4×6~10</span><span class="tag t-e">풀업 바</span><span class="tag t-m">광배(너비)·상완</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">가슴을 바 쪽으로 — 팔꿈치를 골반으로 내리는 느낌. <b>견갑 하강으로 시작</b>.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">데드가 없는 날의 첫 종목 — <b>그립·광배가 신선할 때</b> 수행한다. 어시스트 무게를 줄여가는 것이 증량이고, 감량 진행 자체가 프로그레션이다.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">키핑(반동) 금지 — 컨트롤 하강 2~3초. 턱을 바 위로 내밀려 목을 빼지 말 것.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">견갑 하강으로 시작</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">가슴 바 쪽으로</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">2~3초 하강</div></div></div></details></div></details></div>
@@ -1025,6 +1031,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 
 <!-- 이번 주 성과 요약 -->
+<div class="plan-hd" id="sec-sleep">🛏 수면</div>
+<div id="sleep-card" class="plan-card"></div>
 <div class="plan-hd" id="sec-ws">🏆 이번 주 성과</div>
 <div id="week-summary" class="plan-card"></div>
 <button class="copy-report-btn" onclick="PlanApp.copyReport(this)">📋 Claude 보고용 요약 복사</button>
@@ -3728,7 +3736,7 @@ const PlanApp={
     const v=(typeof ExLog!=='undefined')?ExLog.dataVer:-1;
     if(!force&&this._renderedVer===v)return;
     this._renderedVer=v;
-    this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();
+    this.renderSleep();this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();
   },
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
   renderPhase(){
@@ -3750,6 +3758,51 @@ const PlanApp={
   // ── 디로드 자동 제안: 최근 7일 vs 그 전 7일의 RPE·통증·볼륨 + 블록 주차를 종합, 신호 2개 이상이면 제안 ──
   // 판단 근거를 그대로 노출해 사용자가 수긍/기각할 수 있게 한다. RPE 표본 6세트 미만이면 해당 신호는 침묵.
   deloadSignals(){return (typeof ExLog!=='undefined'&&ExLog.deloadState)?ExLog.deloadState():{signals:[],suggest:false,day:0};},
+  // ── 수면: 지금 이 사람의 최대 제약이 훈련량이 아니라 수면인데, 앱은 기록만 하고 목표도 피드백도 없었다.
+  // 볼륨·RPE에는 목표·추세·배너가 다 있으면서 정작 병목 축만 측정에 머물면 행동이 바뀌지 않는다.
+  SLEEP_GOAL:7,
+  renderSleep(){
+    const el=document.getElementById('sleep-card');if(!el)return;
+    if(typeof ExLog==='undefined'){el.innerHTML='';return;}
+    const G=this.SLEEP_GOAL, data=ExLog.data||{}, base=new Date(_todayKey()+'T12:00:00');
+    const day=[];                                   // 최근 28일 [{ago, h}]
+    for(const k in data){
+      const h=+((data[k].cond||{}).sleep||0); if(!(h>0))continue;
+      const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
+      if(ago>=0&&ago<28)day.push({ago,h});
+    }
+    if(day.length<3){el.innerHTML='<div class="plan-vol-empty">운동 탭에서 수면 시간을 3일 이상 기록하면 목표 달성률과 연속 기록이 표시됩니다.</div>';return;}
+    day.sort((a,b)=>a.ago-b.ago);
+    let streak=0;                                   // 오늘(또는 최근 기록일)부터 연속 달성
+    for(const d of day){ if(d.h>=G)streak++; else break; }
+    let best=0,cur=0;
+    [...day].reverse().forEach(d=>{ if(d.h>=G){cur++;best=Math.max(best,cur);} else cur=0; });
+    const wk=[0,1,2,3].map(w=>{const v=day.filter(d=>d.ago>=w*7&&d.ago<(w+1)*7).map(d=>d.h);
+      return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;});
+    const w0=wk[0],w1=wk[1];
+    const hit=day.filter(d=>d.h>=G).length, rate=Math.round(hit/day.length*100);
+    const avg=(day.reduce((a,d)=>a+d.h,0)/day.length);
+    const bars=wk.map((v,i)=>{
+      const lbl=(i===0?'이번':i+'주전');   // wk는 [이번주,1주전,2주전,3주전] 순 — reverse() 후에도 라벨은 그대로 따라간다
+      if(v==null)return '<div class="sl-bar"><div class="sl-fill" style="height:0"></div><span>'+lbl+'</span></div>';
+      const hp=Math.round(Math.min(v/9,1)*100);
+      return '<div class="sl-bar" title="'+v.toFixed(1)+'h"><div class="sl-fill'+(v>=G?' ok':'')+'" style="height:'+hp+'%"></div><span>'+(i===0?'이번':i+'주전')+'</span></div>';
+    }).reverse().join('');
+    const trend=(w0!=null&&w1!=null)?(w0-w1):null;
+    let verdict;
+    if(avg>=G) verdict='<b>목표를 유지하고 있습니다.</b> 이 구간에서는 증량·볼륨 확대를 시도해도 회복이 따라옵니다.';
+    else if(avg>=6.5) verdict='목표까지 <b>'+(G-avg).toFixed(1)+'시간</b> — 취침을 30분 앞당기는 것부터. 운동 종료 후 심부체온이 내려가는 데 1.5~2시간이 걸립니다.';
+    else verdict='평균 <b>'+avg.toFixed(1)+'시간</b> — 훈련량이 아니라 <b>여기가 상한</b>입니다. 이 상태에서 볼륨을 늘리면 회복이 먼저 무너집니다. '
+      +'운동 종료를 1시간 앞당기고 카페인을 오후로 제한하는 것이 e1RM 증량보다 효과가 큽니다.';
+    el.innerHTML='<div class="sl-top">'
+      +'<div class="sl-kpi"><span class="sl-n'+(streak>0?' ok':'')+'">'+streak+'</span><span class="sl-l">연속 달성</span></div>'
+      +'<div class="sl-kpi"><span class="sl-n">'+avg.toFixed(1)+'h</span><span class="sl-l">28일 평균</span></div>'
+      +'<div class="sl-kpi"><span class="sl-n">'+rate+'%</span><span class="sl-l">'+G+'h 달성률</span></div>'
+      +'<div class="sl-kpi"><span class="sl-n">'+best+'</span><span class="sl-l">최고 연속</span></div>'
+      +'</div><div class="sl-bars">'+bars+'</div>'
+      +(trend!=null?'<div class="sl-trend">전주 대비 '+(trend>=0?'+':'')+trend.toFixed(1)+'h</div>':'')
+      +'<div class="sl-verdict">'+verdict+'</div>';
+  },
   renderDeload(){
     const el=document.getElementById('block-deload-note');if(!el)return;
     if(typeof ExLog==='undefined'||!ExLog.deloadState){el.style.display='none';el.innerHTML='';return;}
@@ -4481,7 +4534,9 @@ const LibApp={
     }
   }
 };
-const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10};
+// 허리 88cm: 체지방 20%(지방 −9.5kg) 도달 시 추정치이자, 도중에 복부비만 컷오프(남성 90cm)를 지나는 값.
+// 안드로이드 체형에서 어깨-허리 대비를 만드는 건 어깨(골격 고정)가 아니라 허리 쪽이라 프레임의 1순위 지표다.
+const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
   KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
@@ -4664,7 +4719,7 @@ const InBody={
       return'<div class="ib-spark-wrap"><div class="ib-spark-lbl">최근 '+vals.length+'회 추세</div><div class="ib-spark"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><polyline points="'+pts.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linejoin="round"/><circle cx="'+lastPt[0]+'" cy="'+lastPt[1]+'" r="2.5" fill="'+col+'"/></svg></div></div>';
     };
     const OPT_FIELDS=[
-      {key:'waist',lbl:'허리둘레',unit:'cm',col:'#8B5E3C',sub:v=>'줄자 측정 · 목표 재확정 예정'},
+      {key:'waist',lbl:'허리둘레',unit:'cm',col:'#8B5E3C',goal:IB_GOALS.waist,sub:v=>{const d=(v-IB_GOALS.waist).toFixed(1);return d>0?'목표까지 −'+d+'cm · 프레임 1순위 지표':'✓ 목표 도달!';}},
       {key:'vf',lbl:'내장지방레벨',unit:'',col:'#A03C3C',goal:IB_GOALS.vf,sub:v=>v<=IB_GOALS.vf?'✓ 목표(≤10) 도달!':'목표 ≤10 · 잔여 −'+(v-IB_GOALS.vf).toFixed(1)},
       {key:'pa',lbl:'위상각',unit:'°',col:'#2E6E8E',sub:v=>'세포 건강·회복 지표 (상승 = 개선)'},
       {key:'bmr',lbl:'기초대사량',unit:'kcal',col:'#7A5A12',sub:v=>'근량 증가와 함께 상승하는 게 이상적'}
@@ -4756,24 +4811,42 @@ const InBody={
     if(log.length<2){box.innerHTML='';return;}
     const t0=new Date(log[0].date+'T12:00:00').getTime();
     const xs=log.map(e=>(new Date(e.date+'T12:00:00').getTime()-t0)/864e5);
+    // 허리처럼 일부 회차에만 기록된 항목이 있어, 회귀는 해당 항목의 유효 측정만으로 계산한다
+    // (전 회차를 강제로 쓰면 결측이 0으로 섞여 기울기가 망가진다)
     const slope=(key)=>{
-      const ys=log.map(e=>e[key]);const n=xs.length;
-      const mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n;
-      let num=0,den=0;for(let i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)*(xs[i]-mx);}
-      return den?{m:num/den,b:my-(num/den)*mx}:null;
+      const X=[],Y=[];
+      log.forEach((e,i)=>{if(e[key]!=null&&!isNaN(e[key])){X.push(xs[i]);Y.push(+e[key]);}});
+      const n=X.length;if(n<2)return null;
+      const mx=X.reduce((a,b)=>a+b,0)/n,my=Y.reduce((a,b)=>a+b,0)/n;
+      let num=0,den=0;for(let i=0;i<n;i++){num+=(X[i]-mx)*(Y[i]-my);den+=(X[i]-mx)*(X[i]-mx);}
+      return den?{m:num/den,b:my-(num/den)*mx,n}:null;
     };
     const goalDate=new Date('2026-12-31T12:00:00').getTime();
     const xGoal=(goalDate-t0)/864e5;
-    const CLAMP={wt:[70,120],sm:[30,42],bf:[8,40],ab:[0.70,1.2]};
+    const CLAMP={wt:[70,120],sm:[30,42],bf:[8,40],ab:[0.70,1.2],waist:[70,120]};
     const F=[
       {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,dir:-1,dec:1},
       {key:'sm',lbl:'골격근량',unit:'kg',goal:IB_GOALS.sm,dir:1,dec:1},
       {key:'bf',lbl:'체지방률',unit:'%',goal:IB_GOALS.bf,dir:-1,dec:1},
+      {key:'waist',lbl:'허리둘레',unit:'cm',goal:IB_GOALS.waist,dir:-1,dec:1},
       {key:'ab',lbl:'복부지방률',unit:'',goal:IB_GOALS.ab,dir:-1,dec:2}
     ];
     let rows='';let onTrack=0,total=0;
     F.forEach(f=>{
       const r=slope(f.key);if(!r)return;
+      const lastV=(function(){for(let i=log.length-1;i>=0;i--)if(log[i][f.key]!=null)return +log[i][f.key];return null;})();
+      // 표본 2회짜리 회귀는 두 점을 잇는 직선이라 기울기가 그대로 예측이 된다(허리 −3.7cm/주 같은 값).
+      // 이 구간에서는 예측·ETA·페이스를 아예 내지 않고 잔여량만 보여준다.
+      if(r.n<3){
+        if(lastV==null)return;
+        total++;
+        const rem=(f.dir===1?(f.goal-lastV):(lastV-f.goal));
+        rows+='<div class="prj-row"><span class="prj-lbl">'+f.lbl+'</span><span class="prj-val">'+lastV.toFixed(f.dec)+f.unit+'</span>'
+          +'<span class="prj-arrow">목표 '+f.goal+f.unit+(rem>0?' · 잔여 '+rem.toFixed(f.dec)+f.unit:'')+'</span>'
+          +'<span class="prj-thin">측정 '+r.n+'회 — 추세 판단 보류</span></div>';
+        if(rem<=0)onTrack++;
+        return;
+      }
       let proj=r.m*xGoal+r.b;
       const cl=CLAMP[f.key];proj=Math.max(cl[0],Math.min(cl[1],proj));
       const reach=f.dir===1?(proj>=f.goal):(proj<=f.goal);
@@ -4782,7 +4855,8 @@ const InBody={
       const projStr=proj.toFixed(f.dec)+f.unit;
       const gap=Math.abs(proj-f.goal).toFixed(f.dec);
       // 필요 페이스: (목표까지 잔여량 ÷ 목표일까지 잔여 주) vs 현재 회귀 기울기 — 이분법(도달/부족) 대신 '얼마나 더'를 수치화
-      const lastVal=log[log.length-1][f.key];
+      const lastVal=(function(){for(let i=log.length-1;i>=0;i--)if(log[i][f.key]!=null)return +log[i][f.key];return null;})();
+      if(lastVal==null)return;
       const wksLeft=Math.max((goalDate-Date.now())/864e5/7,0.5);
       const remain=f.dir===1?(f.goal-lastVal):(lastVal-f.goal);          // 목표 방향 기준 잔여량(+면 아직 남음)
       let paceHtml='',etaHtml='';
@@ -4804,7 +4878,7 @@ const InBody={
           }else etaHtml=' · <span class="prj-late">현 페이스로는 도달 요원</span>';
         }
       }
-      const status=reach?'<span class="prj-ok">도달 ✓</span>':'<span class="prj-no">'+gap+f.unit+' 부족</span>';
+      const status=(r.n&&r.n<3?'<span class="prj-thin">n='+r.n+'</span>':'')+(reach?'<span class="prj-ok">도달 ✓</span>':'<span class="prj-no">'+gap+f.unit+' 부족</span>');
       const rate=(Math.abs(perWk)<0.001)?'변화 거의 없음':((perWk>0?'+':'')+perWk.toFixed(f.dec===2?3:2)+f.unit+'/주');
       rows+='<div class="prj-row"><span class="prj-lbl">'+f.lbl+'</span><span class="prj-val">~'+projStr+'</span><span class="prj-arrow">목표 '+f.goal+f.unit+' · 현재 '+rate+paceHtml+etaHtml+'</span>'+status+'</div>';
     });
