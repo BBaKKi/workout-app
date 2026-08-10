@@ -3,7 +3,7 @@
    갱신 결과가 기존 캐시와 다르면(ETag/Last-Modified 비교) 클라이언트에 'sw-updated' 메시지를 보내
    index.html이 "새 버전" 토스트를 띄운다. network-first 대비: 느린 네트워크에서 최대 4초 기다리던
    실행 지연이 사라지고, 배포 반영은 토스트 새로고침 또는 다음 실행에 이뤄진다. */
-const CACHE = 'fit-tracker-v1'; // 캐시 스키마가 바뀔 때만 올리면 됨
+const CACHE = 'fit-tracker-v2'; // 배포본 구성이 바뀌면 올린다 — activate에서 옛 캐시를 통째로 삭제하고 6개를 새로 프리캐시
 const PRECACHE = ['./', './index.html', './exercise-library.js', './manifest.json', './icon192.png', './icon512.png'];
 
 self.addEventListener('install', e => {
