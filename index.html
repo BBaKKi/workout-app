@@ -648,6 +648,20 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-base-inp{width:110px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 8px;font-size:13px}
 .ex-base-save{font-size:12px;color:#fff;background:#085041;border:none;border-radius:6px;padding:6px 12px;cursor:pointer}
 .ex-base-clear{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:6px;padding:6px 10px;cursor:pointer}
+/* 브랜드 칩 — 같은 동작의 기구 변형을 한 탭으로 전환 */
+.ex-brand-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 7px}
+.ex-brand-lb{font-size:10px;color:#8a8a82;margin-right:2px}
+.ex-brand-chip{font-size:10.5px;color:#63635c;background:#f4f4f1;border:.5px solid #e5e5de;border-radius:20px;padding:4px 9px;cursor:pointer;white-space:nowrap}
+.ex-brand-chip b{font-weight:600;color:#085041;font-size:10px}
+.ex-brand-chip.on{color:#fff;background:#085041;border-color:#085041;cursor:default}
+.ex-brand-chip.on b{color:#cfe6df}
+.ex-brand-chip.cfg{padding:4px 8px;color:#8a8a82}
+.ex-coef-panel{background:#F2F6F5;border:0.5px solid #cfe0db;border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
+.ex-coef-hd{color:#4e6b64;line-height:1.55;margin-bottom:9px}
+.ex-coef-grid{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.ex-coef-row{display:flex;align-items:center;gap:5px;font-size:12px;color:#4e6b64}
+.ex-coef-inp{width:64px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 6px;font-size:13px}
+.ex-coef-row2{display:flex;gap:6px}
 /* 종목별 세팅 메모 — 새 헬스장 머신 세팅(시트·핀·발판) 기록 */
 .ex-memo-btn{font-size:10.5px;color:#63635c;background:#f4f4f1;border:.5px solid #e5e5de;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;vertical-align:middle}
 .ex-memo-btn.has{color:#6b5518;font-weight:600;background:#F6F1E3;border-color:#e6dcc2}
@@ -1300,16 +1314,28 @@ function _brandOf(n){
 // 사용자가 보고한 체감 서열(해머 > 왓슨·노틸러스). 실측 환산비가 잡히기 전까지 방향 안내에만 쓴다.
 const BRAND_HARD={hammer:2,watson:1,nautilus:1};
 const BRAND_LBL={hammer:'해머',watson:'왓슨',nautilus:'노틸러스'};
+// 브랜드 체감계수 — '표기 1kg이 실제로 얼마나 무겁게 느껴지는가'의 상대값.
+// 해머 1.10 = 같은 표기 중량에서 왓슨·노틸러스보다 10% 무겁게 느껴진다는 뜻(사용자 체감 보고 기준 초기값).
+// 기록된 숫자는 절대 바꾸지 않는다 — 기구를 갈아탈 때 '시작 무게 제안'과 브랜드 간 비교에만 쓴다.
+// 환산: 새 기구 시작 무게 = 직전 무게 × (직전 기구 계수 ÷ 새 기구 계수)
+const BRAND_COEF_DEFAULT={hammer:1.10,watson:1.00,nautilus:1.00,none:1.00};
 // 같은 동작의 브랜드 변형 그룹 — 자리가 차서 다른 기구를 쓸 때 시작 무게를 환산해 제안한다.
 const VARIANT_GROUP=[
   ['Hammer ISO-인클라인 프레스','Watson 인클라인 프레스 머신'],
   ['Hammer ISO-디클라인 프레스','Watson 디클라인 프레스 머신'],
-  ['Hammer ISO-프론트 풀다운','Watson 오버헤드 풀다운','랫풀다운'],
-  ['Hammer ISO-숄더 프레스','머신 숄더 프레스'],
+  ['Hammer ISO-프론트 풀다운','Watson 프론트 풀다운 (오버그립)','Watson 프론트 풀다운 (언더그립)','Nautilus 랫풀다운','랫풀다운'],
+  ['Hammer ISO-숄더 프레스','Watson 숄더 프레스','머신 숄더 프레스'],
   ['Hammer ISO-레그 익스텐션','Nautilus 레그 익스텐션','레그 익스텐션'],
-  ['Hammer ISO-레그컬','Nautilus 라잉 레그컬','라잉 레그컬'],
+  ['Hammer ISO-레그컬','Nautilus 라잉 레그컬','라잉 레그컬','레그컬 (머신)'],
   ['Hammer 슈퍼 플라이','Nautilus 펙덱 플라이','펙덱 플라이']
 ];
+// 칩에 쓸 짧은 라벨 — 브랜드명만으로 구분이 안 되는 경우(왓슨 오버/언더)와 무브랜드 기본 기구를 위해.
+const VARIANT_LBL={
+  '랫풀다운':'케이블','레그 익스텐션':'기본','라잉 레그컬':'기본','레그컬 (머신)':'기본',
+  '펙덱 플라이':'기본','머신 숄더 프레스':'기본',
+  'Watson 프론트 풀다운 (오버그립)':'왓슨 오버','Watson 프론트 풀다운 (언더그립)':'왓슨 언더'
+};
+function _variantLbl(n){return VARIANT_LBL[n]||BRAND_LBL[_brandOf(n)]||n;}
 // ── 동작 패턴 ───────────────────────────────────────────────────────────────
 // 부위 버킷은 너무 거칠다(등 36종·후면사슬 31종). 그대로 대체 후보를 뽑으면
 // 랫풀다운(수직 당김)의 대체로 T바 로우(수평 당김)·밴드 외회전이 올라온다.
@@ -1343,6 +1369,10 @@ function _movePat(n){
 }
 function _variantsOf(name){
   for(const g of VARIANT_GROUP)if(g.includes(name))return g.filter(x=>x!==name);
+  return [];
+}
+function _variantGroupOf(name){ // 자기 자신을 포함한 전체 그룹 (브랜드 칩 렌더링용)
+  for(const g of VARIANT_GROUP)if(g.includes(name))return g;
   return [];
 }
 const EFF_BUCKET_RE=[[/페이스풀|리어\s*델트|리버스\s*펙덱|벤트오버\s*래터럴/,'후면삼각']];
@@ -1459,6 +1489,7 @@ const ExLog={
     await this.loadAlias();
     await this.loadMeta();
     await this.loadBase();
+    await this.loadCoef();
     await this.loadMemo();
     await this.loadRestCfg();
     this.seedAlias();
@@ -1654,6 +1685,10 @@ const ExLog={
   // ── 자동 별칭: (1) 알려진 중복 표기 시드 (2) 정규화(공백·하이픈·괄호 무시) 동일명 첫 기록 시 자동 연결 ──
   DEFAULT_ALIAS:{
    'T바 로우':'T-바 로우',
+   /* 왓슨 풀다운은 오버/언더 두 기구가 따로 있어 이름을 그립까지 명시하도록 바꿨다.
+      옛 표기 기록은 오버그립으로 승계한다(그동안 쓰던 것이 오버그립). */
+   'Watson 오버헤드 풀다운':'Watson 프론트 풀다운 (오버그립)',
+   '왓슨 오버헤드 풀다운':'Watson 프론트 풀다운 (오버그립)',
    '노틸러스 트라이셉스 인스텐션 머신':'트라이셉스 익스텐션 머신',
    '숄더프레스':'머신 숄더 프레스',
    'Hammer 벤치 (isolateral)':'Hammer ISO-호라이즌털 벤치프레스',
@@ -1747,6 +1782,9 @@ const ExLog={
     });
     if(!best)return null;
     if(best.ratio)return{alt:best.alt,est:Math.round(best.lastW*best.ratio*2)/2,ratio:best.ratio,lastW:best.lastW,n:Math.min(mine.length,best.n)};
+    // 실측 환산비가 아직 없다 → 설정된 브랜드 보정계수로 환산 (계수가 같으면 방향 안내만)
+    const cv=this.coefConvert(best.alt,this.canon(name),best.lastW);
+    if(cv)return{alt:best.alt,est:cv.est,lastW:best.lastW,coef:cv.k};
     const ba=_brandOf(this.canon(name)),bb=_brandOf(best.alt);
     let dir='';
     if(ba&&bb&&BRAND_HARD[ba]!==BRAND_HARD[bb])
@@ -1882,6 +1920,54 @@ const ExLog={
     b.setAttribute('onclick','event.stopPropagation();event.preventDefault();ExLog.toggleSwap(this)');
     const del=sm.querySelector('.ex-del-btn');const chev=sm.querySelector('.chev');
     if(del)sm.insertBefore(b,del);else if(chev)sm.insertBefore(b,chev);else sm.appendChild(b);
+  },
+  // 브랜드 칩 전환 — 같은 동작의 기구 변형으로 제자리 교체.
+  // swapEx와 달리 '기록을 이어갈까요?' 확인을 띄우지 않는다: 브랜드별 분리가 이 기능의 목적이라
+  // 승계는 오히려 자동 목표를 오염시킨다. 시작 무게는 🎯 자동 목표가 환산해서 제안한다.
+  switchBrand(btn,newName){
+    const wrap=btn.closest('.ex-wrap');const panel=btn.closest('.day-panel');if(!wrap||!panel)return;
+    const cur=(wrap.querySelector('.ex-nm')?.textContent||'').trim();
+    if(!newName||cur===newName)return;
+    const p=this.planFor(this.panelDayOf(panel));
+    if(wrap.classList.contains('custom-ex')){
+      p.add=(p.add||[]).map(n=>n===wrap.dataset.cname?newName:n);
+      this._transformWrap(wrap,newName);wrap.dataset.cname=newName;
+    }else{
+      const orig=wrap.dataset.origname||cur;
+      (p.swap=p.swap||{})[orig]=newName;
+      this._transformWrap(wrap,newName);
+      wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
+    }
+    this.savePlan();this.refresh();this.injectTargets();augmentCards();this.injectRecos();
+  },
+  toggleCoef(btn){
+    const det=btn.closest('.ex-detail');if(!det)return;
+    let panel=det.querySelector('.ex-coef-panel');
+    if(panel){panel.remove();return;}
+    panel=document.createElement('div');panel.className='ex-coef-panel';
+    const row=b=>'<label class="ex-coef-row"><span>'+BRAND_LBL[b]+'</span>'
+      +'<input type="number" step="0.01" min="0.5" max="1.5" class="ex-coef-inp" data-b="'+b+'" value="'+this.coefOf(b).toFixed(2)+'"></label>';
+    panel.innerHTML='<div class="ex-coef-hd">⚙ <b>브랜드 체감 보정</b> — 같은 표기 1kg이 얼마나 무겁게 느껴지는지의 상대값입니다. '
+      +'해머 1.10이면 왓슨 50kg ≒ <b>해머 45.5kg</b>로 시작 무게를 제안합니다.<br>'
+      +'<b>기록되는 중량은 바뀌지 않습니다</b> — 시작 무게 제안에만 쓰이고, 같은 그룹의 두 기구가 각각 2세션 이상 쌓이면 실측 환산비가 이 값을 대체합니다.</div>'
+      +'<div class="ex-coef-grid">'+['hammer','watson','nautilus'].map(row).join('')+'</div>'
+      +'<div class="ex-coef-row2"><button class="ex-base-save" onclick="ExLog.saveCoefFromUI(this)">저장</button>'
+      +'<button class="ex-base-clear" onclick="ExLog.resetCoefFromUI(this)">기본값으로</button></div>';
+    (btn.parentNode||btn).insertAdjacentElement('afterend',panel);
+  },
+  saveCoefFromUI(el){
+    const panel=el.closest('.ex-coef-panel');
+    panel.querySelectorAll('.ex-coef-inp').forEach(i=>this.setCoef(i.dataset.b,parseFloat(i.value)));
+    panel.remove();
+    document.querySelectorAll('.ex-brand-row').forEach(r=>{r.dataset.sig='';});
+    this.injectTargets();
+  },
+  resetCoefFromUI(el){
+    const panel=el.closest('.ex-coef-panel');
+    ['hammer','watson','nautilus'].forEach(b=>{delete this.bcoef[b];});
+    this.saveCoef();panel.remove();
+    document.querySelectorAll('.ex-brand-row').forEach(r=>{r.dataset.sig='';});
+    this.injectTargets();
   },
   toggleSwap(btn){
     const card=btn.closest('details.ex-card');if(!card)return;
@@ -3195,15 +3281,19 @@ const ExLog={
       const rec=e&&e.sets?('도감 권장 '+e.sets+' · '):'';
       // 자리가 차서 다른 브랜드 기구로 갈아탄 상황 — '첫 기록'이라도 시작 무게를 제안한다.
       const vh=this.variantHint(name);
-      if(vh&&vh.est)
-        return{html:rec+'<b>'+vh.est+'kg 시작 제안</b> <span class="wt-var">'+vh.alt+' '+vh.lastW+'kg × 실측비 '+vh.ratio.toFixed(2)+' · n='+vh.n+'</span>'+note,up:false,fillW:vh.est};
+      if(vh&&vh.est){
+        const src=vh.ratio?('실측비 '+vh.ratio.toFixed(2)+' · n='+vh.n):('보정계수 ×'+vh.coef.toFixed(2)+' · 설정값');
+        return{html:rec+'<b>'+vh.est+'kg 시작 제안</b> <span class="wt-var">'+vh.alt+' '+vh.lastW+'kg × '+src+'</span>'+note,up:false,fillW:vh.est};
+      }
       if(vh)
         return{html:rec+vh.alt+' 최근 <b>'+vh.lastW+'kg</b> <span class="wt-var">'+(vh.dir||'브랜드가 달라 체감이 다를 수 있음 — 가볍게 시작')+'</span>'+note,up:false,fillW:vh.lastW};
       return{html:rec+'첫 기록을 남기면 자동 목표가 생성됩니다'+note,up:false};
     }
     // 기록이 있는 경우에도 환산비가 잡혔으면 칩으로 노출 — 기구 전환 판단에 쓴다
     const vsuf=(()=>{const v=this.variantHint(name);
-      return (v&&v.ratio)?' <span class="wt-var">'+v.alt+' 대비 ×'+v.ratio.toFixed(2)+' (n='+v.n+')</span>':'';})();
+      if(v&&v.ratio)return ' <span class="wt-var">'+v.alt+' 대비 실측 ×'+v.ratio.toFixed(2)+' (n='+v.n+')</span>';
+      if(v&&v.coef)return ' <span class="wt-var">'+v.alt+' 대비 보정 ×'+v.coef.toFixed(2)+'</span>';
+      return '';})();
     const sets=prev.sets;
     const setStr=sets.map(s=>s.weight+'×'+s.reps).join(', ');
     // 직전 기록이 며칠 전인지 — 3일 전과 3주 전은 증량 기대치가 다르다 (요일 무관 최근 기록 방식의 맥락 보완)
@@ -3233,6 +3323,27 @@ const ExLog={
   },
   // ── 기본무게: 종목별 장비 자체 무게(바벨 20kg, 스미스 바, 머신 캐리지 등)를 등록하면
   //    세트 입력은 '추가 원판'만 받고 총 무게(기본+추가)로 저장·집계한다. 기록은 항상 총 무게 기준 ──
+  // ── 브랜드 체감 보정계수: 기구를 갈아탈 때 시작 무게 환산에만 쓰는 값 ──
+  //    저장되는 세트 중량은 언제나 기구에 표기된 실제 중량 그대로다. 계수를 기록에 곱하면
+  //    자동 목표(+2.5kg)와 정체 판정이 오염되므로 절대 섞지 않는다.
+  bcoef:{},
+  async loadCoef(){try{const r=await window.storage.get('brand_coef');if(r)this.bcoef=JSON.parse(r.value)||{};}catch(_){}},
+  saveCoef(){try{window.storage.set('brand_coef',JSON.stringify(this.bcoef));}catch(_){}},
+  coefOf(b){const k=b||'none';const v=+this.bcoef[k];return v>0?v:(BRAND_COEF_DEFAULT[k]||1);},
+  setCoef(b,v){
+    v=+v;
+    const def=BRAND_COEF_DEFAULT[b]||1;
+    if(v>0&&v>=0.5&&v<=1.5&&Math.abs(v-def)>1e-9)this.bcoef[b]=Math.round(v*100)/100;
+    else delete this.bcoef[b];
+    this.saveCoef();
+  },
+  // fromName 기구의 무게 w를 toName 기구의 표기 중량으로 환산. 계수가 같으면 null(=환산 의미 없음).
+  coefConvert(fromName,toName,w){
+    const bf=_brandOf(fromName)||'none',bt=_brandOf(toName)||'none';
+    const cf=this.coefOf(bf),ct=this.coefOf(bt);
+    if(!(w>0)||Math.abs(cf-ct)<1e-9)return null;
+    return{est:Math.round(w*cf/ct*2)/2,k:cf/ct,from:bf,to:bt};
+  },
   base:{},
   async loadBase(){try{const r=await window.storage.get('ex_base');if(r)this.base=JSON.parse(r.value)||{};}catch(_){}},
   saveBase(){try{window.storage.set('ex_base',JSON.stringify(this.base));}catch(_){}},
@@ -3478,6 +3589,27 @@ const ExLog={
       const rCustom=!!(+this.restCfg[this.canon(name)]);
       rb.classList.toggle('has',rCustom);
       rb.textContent='⏱ 휴식 '+rsec+'초'+(rCustom?' (커스텀)':'');
+      // ── 브랜드 칩: 같은 동작의 기구 변형을 한 탭으로 전환 ──
+      //    기록은 기구별로 분리된 상태를 유지한다(승계 확인을 띄우지 않는 이유).
+      const cnName=this.canon(name);
+      const grpAll=_variantGroupOf(cnName);
+      let brow=det.querySelector('.ex-brand-row');
+      if(grpAll.length<2){if(brow)brow.remove();}
+      else{
+        if(!brow){brow=document.createElement('div');brow.className='ex-brand-row';det.insertBefore(brow,bb);}
+        const sig=this.dataVer+'|'+cnName;
+        if(brow.dataset.sig!==sig){ // 기록/종목이 바뀔 때만 재계산 — 매 refresh마다 prevSession 반복 호출 방지
+          brow.dataset.sig=sig;
+          brow.innerHTML='<span class="ex-brand-lb">기구</span>'+grpAll.map(v=>{
+            const on=(v===cnName);
+            const pv=this.prevSession(v);
+            const w=pv?pv.sets[pv.sets.length-1].weight:0;
+            return '<button type="button" class="ex-brand-chip'+(on?' on':'')+'" '
+              +(on?'disabled':'onclick="ExLog.switchBrand(this,\''+_escJs(v)+'\')"')
+              +' title="'+_esc(v)+'">'+_esc(_variantLbl(v))+(w?' <b>'+w+'</b>':'')+'</button>';
+          }).join('')+'<button type="button" class="ex-brand-chip cfg" onclick="ExLog.toggleCoef(this)" title="브랜드 체감 보정계수 설정">⚙</button>';
+        }
+      }
       // 통증 이력 경고 (canon 기준 최근 1건 — 재도전 시 상기)
       let pw=det.querySelector('.ex-pain-warn');
       const ph2=this._lastPain(name);
@@ -4541,7 +4673,7 @@ const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
 const Backup={
   KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
   PREFIXES:['wl_v2:'], // 운동 기록 월 키 (wl_v2:YYYY-MM) — 단일 키(wl_v2)는 내보내지 않음(이관 후 낡은 사본이라 백업 부풀림 방지)
-  MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
+  MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias','brand_coef'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
   _allowed(k){return this.KEYS.includes(k)||k==='wl_v2'/*레거시 백업 파일 가져오기 호환*/||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
   // ── 데이터 점검: 별칭 순환·미연결 중복 표기·도감 미매칭·0kg 본세트·미래 날짜 등 이상치 나열 ──
