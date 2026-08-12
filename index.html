@@ -648,6 +648,15 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-base-inp{width:110px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 8px;font-size:13px}
 .ex-base-save{font-size:12px;color:#fff;background:#085041;border:none;border-radius:6px;padding:6px 12px;cursor:pointer}
 .ex-base-clear{font-size:12px;color:#a33;background:none;border:0.5px solid #d8b4b4;border-radius:6px;padding:6px 10px;cursor:pointer}
+/* 부하 유형 칩 — 어시스트·체중·시간 종목의 계산 근거 */
+.ex-load-btn{font-size:10.5px;color:#63635c;background:#f4f4f1;border:.5px solid #e5e5de;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;vertical-align:middle}
+.ex-load-btn.has{color:#6b2f18;font-weight:600;background:#FAEFE9;border-color:#EBD2C6}
+.ex-load-panel{background:#FBF4F0;border:0.5px solid #EBD9CF;border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
+.ex-load-hd{color:#7a5442;line-height:1.55;margin-bottom:9px}
+.ex-load-opt{display:block;width:100%;text-align:left;background:#fff;border:.5px solid #e9ddd5;border-radius:8px;padding:7px 10px;margin-bottom:5px;cursor:pointer;font-size:12px;color:#5c5c56}
+.ex-load-opt b{display:inline-block;min-width:56px;color:#3d3d38}
+.ex-load-opt span{color:#8a8a82;font-size:11px}
+.ex-load-opt.on{background:#F3E7E0;border-color:#d9bfb1;box-shadow:inset 0 0 0 1px #d9bfb1}
 /* 브랜드 칩 — 같은 동작의 기구 변형을 한 탭으로 전환 */
 .ex-brand-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 7px}
 .ex-brand-lb{font-size:10px;color:#8a8a82;margin-right:2px}
@@ -1290,7 +1299,31 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().
 function _localKey(d){const t=new Date(d);t.setMinutes(t.getMinutes()-t.getTimezoneOffset());return t.toISOString().slice(0,10);}
 function _todayKey(){return _localKey(new Date());}
 function _isWorkSet(s){return !!s&&s.reps>0&&!s.warmup;} // '본세트' 판정 — 워밍업 세트는 모든 볼륨·PR·추세 집계에서 제외하는 공통 기준
-function _e1Of(w,r){return w*(1+r/30);} // 추정 1RM(Epley) — 단일 소스. 공식 교체·고반복 보정 시 여기 한 곳만 수정
+// 추정 1RM — 10회까지는 Epley(1+r/30), 10회를 넘으면 기울기를 절반으로 감쇠한다.
+// Epley는 고반복에서 1RM을 크게 과대추정한다(15회 ×1.50, 20회 ×1.67). 12~15회로 하는
+// 래터럴·펙덱·어브덕션이 실제보다 강해 보였고, '무게는 그대로인데 반복만 늘린 날'이
+// 증량한 날처럼 잡혀 정체 판정이 늦어졌다. 10회에서 값·기울기가 이어지므로 기존 기록과 단절이 없다.
+function _e1Of(w,r){r=+r||0;return w*(r<=10?(1+r/30):(1+10/30+(r-10)/60));}
+// 세트의 '실부하'. 어시스트(체중−보조)·체중(체중+추가) 종목은 저장 시 계산해 둔 ew를 쓰고,
+// ew가 없으면(일반 종목·구버전 기록) 표기 중량 그대로. e1RM·PR·추세·볼륨은 전부 이 값을 본다.
+function _ldW(s){const e=+((s||{}).ew);return e>0?e:(+((s||{}).weight)||0);}
+// ── 부하 유형 ───────────────────────────────────────────────────────────────
+// 지금까지 앱은 '표기 중량 = 부하'라는 가정 하나로 돌았다. 어시스트 머신은 표기가 낮을수록
+// 부하가 크고, 체중·시간 종목은 표기에 부하가 아예 안 잡힌다. 유형을 나눠 실부하를 계산한다.
+const LOAD_LBL={normal:'일반',assist:'어시스트',bw:'체중',time:'시간'};
+const LOAD_DESC={
+  normal:'표기 중량이 곧 부하 — 늘리는 것이 증량',
+  assist:'표기값은 보조 중량 — 실부하 = 체중 − 보조, 줄이는 것이 증량',
+  bw:'부하는 체중 — 표기는 벨트 등 추가 중량, 실부하 = 체중 + 추가',
+  time:'반복 칸에 초를 기록 — 실부하 = 체중 + 추가, 진행은 시간'
+};
+function _loadGuess(n){
+  n=n||'';
+  if(/플랭크|데드행/.test(n))return 'time';
+  if(/어시스트|assist/i.test(n))return 'assist';   // '풀업 (체중/어시스트)'도 여기 — 보조 0을 넣으면 맨몸과 동일하게 계산된다
+  if(/풀업|친업|턱걸이|맨몸|푸시업|딥스(?!\s*머신)/.test(n))return 'bw';
+  return 'normal';
+}
 // HTML 이스케이프 — 운동명 등 데이터가 innerHTML/onclick에 들어갈 때 마크업 파손·주입 방지 (입력단 필터의 2차 방어선)
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function _escJs(s){return _esc(String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"));} // onclick 속성 안 JS 문자열용: JS 이스케이프 후 HTML 이스케이프
@@ -1490,6 +1523,8 @@ const ExLog={
     await this.loadMeta();
     await this.loadBase();
     await this.loadCoef();
+    await this.loadLoadType();
+    this.migrateEw();          // 인바디 로드를 기다리므로 await하지 않는다 (첫 화면 지연 방지)
     await this.loadMemo();
     await this.loadRestCfg();
     this.seedAlias();
@@ -1590,13 +1625,13 @@ const ExLog={
         if(!sets.length)return;
         if(!this.isTimed(ex.name)){                          // 종목별 e1RM — 최근 3세션만 유지(오름차순 스캔)
           const cn=this.canon(ex.name);
-          const e1=Math.max.apply(null,sets.map(st=>st.weight*(1+st.reps/30)));
+          const e1=Math.max.apply(null,sets.map(st=>_e1Of(_ldW(st),st.reps)));
           const a=(e1by[cn]=e1by[cn]||[]);a.push(e1);if(a.length>3)a.shift();
         }
         sets.forEach(st=>{
           if(ago<28&&st.rpe)R28.push(st.rpe);
           if(!w)return;
-          w.vol+=st.weight*st.reps;
+          w.vol+=_ldW(st)*st.reps;
           if(st.rpe)w.r.push(st.rpe);
           if(st.pain)w.pain++;
         });
@@ -1758,7 +1793,7 @@ const ExLog={
       (this.data[k].exercises||[]).forEach(ex=>{
         if(this.canon(ex.name)!==cn)return;
         const sets=(ex.sets||[]).filter(st=>_isWorkSet(st)&&st.weight>0);
-        if(sets.length)out.push(Math.max.apply(null,sets.map(st=>st.weight*(1+st.reps/30))));
+        if(sets.length)out.push(Math.max.apply(null,sets.map(st=>_e1Of(_ldW(st),st.reps))));
       });
     });
     this._e1Cache.m[cn]=out;
@@ -1950,6 +1985,24 @@ const ExLog={
       wrap.dataset.origname=orig;wrap.dataset.swapto=newName;
     }
     this.savePlan();this.refresh();this.injectTargets();augmentCards();this.injectRecos();
+  },
+  toggleLoadType(btn){
+    const det=btn.closest('.ex-detail');if(!det)return;
+    let panel=det.querySelector('.ex-load-panel');
+    if(panel){panel.remove();return;}
+    const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
+    const cur=this.loadTypeOf(name);
+    panel=document.createElement('div');panel.className='ex-load-panel';
+    panel.innerHTML='<div class="ex-load-hd">⚖ <b>이 종목의 부하 유형</b> — 자동 목표 방향·PR·추세가 이 설정을 따릅니다. 바꾸면 <b>과거 기록의 실부하도 다시 계산</b>됩니다.</div>'
+      +['normal','assist','bw','time'].map(t=>'<button type="button" class="ex-load-opt'+(t===cur?' on':'')+'" onclick="ExLog.pickLoadType(this,\''+t+'\')"><b>'+LOAD_LBL[t]+'</b><span>'+LOAD_DESC[t]+'</span></button>').join('');
+    btn.insertAdjacentElement('afterend',panel);
+  },
+  pickLoadType(el,t){
+    const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
+    if(log)this.setLoadType(log.dataset.exname,t);
+    const pan=det.querySelector('.ex-load-panel');if(pan)pan.remove();
+    this.refresh();this.injectTargets();
+    if(typeof PlanApp!=='undefined'&&PlanApp.renderTrends)PlanApp.renderTrends();
   },
   toggleCoef(btn){
     const det=btn.closest('.ex-detail');if(!det)return;
@@ -2479,7 +2532,7 @@ const ExLog={
       const s=this.data[_localKey(d)];
       if(!s||!s.cond||!(+s.cond.sleep))continue;
       let vol=0,rs=0,rn=0;
-      (s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=st.weight*st.reps;if(st.rpe){rs+=st.rpe;rn++;}}));
+      (s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=_ldW(st)*st.reps;if(st.rpe){rs+=st.rpe;rn++;}}));
       if(!vol)continue;
       (+s.cond.sleep<6.5?lo:hi).push({vol,rpe:rn?rs/rn:null});
     }
@@ -2590,6 +2643,10 @@ const ExLog={
     const base=this.baseOf(log.dataset.exname);
     if(wi)wi.value=lastW?(base?Math.max(0,Math.round((lastW-base)*100)/100):lastW):'';  // 기본무게 등록 시 입력칸은 추가 원판
     if(wi&&base)wi.placeholder='＋원판';
+    const _lt=this.loadTypeOf(log.dataset.exname);
+    const _ri=inp.querySelector('.wl-rp-input');
+    if(wi&&!base)wi.placeholder=_lt==='assist'?'보조kg':(_lt==='bw'||_lt==='time'?'추가kg':'kg');
+    if(_ri)_ri.placeholder=_lt==='time'?'초':'회';
     inp.querySelector('.wl-rp-input').value='';
     inp.style.display='flex';btn.style.display='none';
     // 렙 원탭 칩: 지난 세트 렙 ±1 + 렙 상단(✦) — 탭 한 번으로 세트 확정 (무게는 프리필돼 있으므로 필요 시 먼저 수정)
@@ -2644,21 +2701,34 @@ const ExLog={
     setTimeout(()=>ri?.focus(),50);
   },
 
-  _prE1(s){return _e1Of(s.weight,s.reps);},
+  _prE1(s){return _e1Of(_ldW(s),s.reps);},
   _priorSets(name){
     let arr=[];const cn=this.canon(name);
     for(const dk in this.data){(this.data[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
     return arr.filter(_isWorkSet);
   },
+  // 세트에 붙일 부하 메타 — 일반 종목이면 아무것도 붙이지 않아 기존 기록 형식과 동일하다.
+  _loadMeta(name,w){
+    const t=this.loadTypeOf(name);
+    if(t==='normal')return{};
+    const bw=this.bwOn(this.date);
+    if(!bw)return{};
+    return{ew:this.effW(name,w,this.date,bw),bw:bw};
+  },
   checkPR(name,w,r){
     const prior=this._priorSets(name);if(!prior.length)return false;
-    if(w>0){
-      const loaded=prior.filter(s=>s.weight>0);if(!loaded.length)return true;
+    const lt=this.loadTypeOf(name);
+    if(lt==='time'){                                  // 시간 종목은 초(=reps)가 기록이다
+      return r>Math.max.apply(null,prior.map(s=>s.reps||0));
+    }
+    const ew=this.effW(name,w,this.date);             // 어시스트·체중은 실부하로 비교 (보조를 줄인 날이 신기록)
+    if(ew>0){
+      const loaded=prior.filter(s=>_ldW(s)>0);if(!loaded.length)return true;
       const best=Math.max.apply(null,loaded.map(s=>this._prE1(s)));
-      return _e1Of(w,r)>best+0.05;
+      return _e1Of(ew,r)>best+0.05;
     }else{
-      const bw=prior.filter(s=>s.weight===0);if(!bw.length)return false;
-      return r>Math.max.apply(null,bw.map(s=>s.reps));
+      const bws=prior.filter(s=>_ldW(s)===0);if(!bws.length)return false;
+      return r>Math.max.apply(null,bws.map(s=>s.reps));
     }
   },
   showPR(name){
@@ -2688,7 +2758,7 @@ const ExLog={
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
       // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
       const old=ex.sets[+editIdx];
-      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},old.pain?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
+      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},this._loadMeta(log.dataset.exname,w),old.pain?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
@@ -2697,7 +2767,7 @@ const ExLog={
     }
     // 신규 세트 (워밍업은 PR 판정 대상 아님)
     const isPR=wuOn?false:this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},rpe?{rpe}:{},wuOn?{warmup:true}:{}));
+    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},this._loadMeta(log.dataset.exname,w),rpe?{rpe}:{},wuOn?{warmup:true}:{}));
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
@@ -2727,10 +2797,10 @@ const ExLog={
     (s.exercises||[]).forEach(e=>{
       const ws=(e.sets||[]).filter(_isWorkSet);if(!ws.length)return;
       const cn=this.canon(e.name);
-      let today=-1;ws.forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>today)today=v;});
+      let today=-1;ws.forEach(st=>{const v=_ldW(st)>0?_e1Of(_ldW(st),st.reps):st.reps;if(v>today)today=v;});
       let prior=-1;
       this._exFor(cn).forEach(r=>{if(r.date>=this.date)return; // 종목 인덱스 — 전체 날짜 풀스캔 제거
-        (r.ex.sets||[]).filter(_isWorkSet).forEach(st=>{const v=st.weight>0?_e1Of(st.weight,st.reps):st.reps;if(v>prior)prior=v;});});
+        (r.ex.sets||[]).filter(_isWorkSet).forEach(st=>{const v=_ldW(st)>0?_e1Of(_ldW(st),st.reps):st.reps;if(v>prior)prior=v;});});
       if(prior>=0&&today>prior+0.05)prs++;
     });
     // 지난 같은 요일 세션 대비 볼륨
@@ -2896,7 +2966,7 @@ const ExLog={
     let bestE1=-1,bestReps=-1;
     for(const r of this._exFor(cn)){
       if(r.date===this.date)continue;
-      r.ex.sets.forEach(st=>{if(_isWorkSet(st)){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
+      r.ex.sets.forEach(st=>{if(_isWorkSet(st)){if(_ldW(st)>0){const e1=_e1Of(_ldW(st),st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
     }
     return this._pbCache[ck]={bestE1,bestReps};
   },
@@ -2934,22 +3004,28 @@ const ExLog={
       if(!ex||!ex.sets.length){chips.innerHTML='<span class="ex-log-empty">기록 없음</span>';return;}
       // 신기록 세트 1개만 강조 — 로딩 종목은 e1RM 최고, 맨몸 종목은 reps 최고가 과거(다른 날) 최고를 넘으면 표시
       const pb=this._priorBest(ex.name);
-      const loadedToday=ex.sets.some(st=>st.weight>0&&_isWorkSet(st));
+      const loadedToday=ex.sets.some(st=>_ldW(st)>0&&_isWorkSet(st));
       let prIdx=-1,prBest=-1;
       ex.sets.forEach((st,i)=>{
         if(!_isWorkSet(st))return;
-        if(loadedToday){if(st.weight>0){const e1=_e1Of(st.weight,st.reps);if(pb.bestE1>=0&&e1>pb.bestE1+0.05&&e1>prBest){prBest=e1;prIdx=i;}}}
+        if(loadedToday){if(_ldW(st)>0){const e1=_e1Of(_ldW(st),st.reps);if(pb.bestE1>=0&&e1>pb.bestE1+0.05&&e1>prBest){prBest=e1;prIdx=i;}}}
         else{if(pb.bestReps>=0&&st.reps>pb.bestReps&&st.reps>prBest){prBest=st.reps;prIdx=i;}}
       });
       chips.innerHTML=ex.sets.map((set,i)=>{
         const isWu=!!set.warmup;
         const cls=isWu?'wu':(set.reps>=8?'hit':set.reps>=6?'':'miss');
-        if(!isWu&&set.reps>0){totSets++;totVol+=set.weight*set.reps;}  // 워밍업은 세트·볼륨 합계 제외
+        if(!isWu&&set.reps>0){totSets++;totVol+=_ldW(set)*set.reps;}  // 워밍업은 세트·볼륨 합계 제외
         const badge=(i===prIdx)?'<span class="pr-trophy" title="개인 기록 갱신">🏆</span>':'';
         const rpeMk=set.rpe?'<i class="chip-rpe">@'+set.rpe+'</i>':'';
         const painMk=set.pain?'<i class="chip-pain" title="통증 기록됨">⚠️</i>':'';
         const wuMk=isWu?'W ':'';
-        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제">${wuMk}${set.weight}×${set.reps}${rpeMk}${painMk}${badge}</span>`;
+        const lt=this.loadTypeOf(ex.name);
+        const body=lt==='time'?(set.reps+'초'+(set.weight>0?('+'+set.weight):''))
+                 :(lt==='assist'?('보조'+set.weight+'×'+set.reps)
+                 :(lt==='bw'?((set.weight>0?('+'+set.weight):'맨몸')+'×'+set.reps)
+                 :(set.weight+'×'+set.reps)));
+        const efTip=(set.ew>0&&lt!=='normal')?(' · 실부하 '+set.ew+'kg'):'';
+        return`<span class="wl-set-chip ${cls}" data-i="${i}" onclick="ExLog.editSet(this)" title="탭하여 수정·삭제${efTip}">${wuMk}${body}${rpeMk}${painMk}${badge}</span>`;
       }).join('');
     });
     const sum=document.getElementById('sess-sum');
@@ -3037,7 +3113,7 @@ const ExLog={
       (this.data[dk].exercises||[]).forEach(e=>{
         if(this.canon(e.name)!==cn)return;
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
-        let e1=0;sets.forEach(s=>{const v=s.weight>0?_e1Of(s.weight,s.reps):0;if(v>e1)e1=v;});
+        let e1=0;sets.forEach(s=>{const v=_ldW(s)>0?_e1Of(_ldW(s),s.reps):0;if(v>e1)e1=v;});
         rows.push({dk,sets,e1});
       });
     });
@@ -3149,9 +3225,9 @@ const ExLog={
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let dayMax=-1,dayTopSet=null;
         sets.forEach(s=>{
-          const cur=s.weight>0?_e1Of(s.weight,s.reps):s.reps;
+          const cur=_ldW(s)>0?_e1Of(_ldW(s),s.reps):s.reps;
           if(cur>dayMax){dayMax=cur;dayTopSet=s;}
-          if(inWeek&&s.weight>0){const e1=_e1Of(s.weight,s.reps);if(!top||e1>top.e1)top={e1,name:e.name,w:s.weight,r:s.reps};}
+          if(inWeek&&s.weight>0){const e1=_e1Of(_ldW(s),s.reps);if(!top||e1>top.e1)top={e1,name:e.name,w:s.weight,r:s.reps};}
         });
         if(inWeek){
           const b=best[e.name];
@@ -3306,12 +3382,24 @@ const ExLog={
       if(v&&v.coef)return ' <span class="wt-var">'+v.alt+' 대비 보정 ×'+v.coef.toFixed(2)+'</span>';
       return '';})();
     const sets=prev.sets;
-    const setStr=sets.map(s=>s.weight+'×'+s.reps).join(', ');
+    const lt=this.loadTypeOf(name);
+    const setStr=sets.map(s=>lt==='time'?(s.reps+'초'+(s.weight>0?('+'+s.weight+'kg'):''))
+                          :(lt==='assist'?('보조'+s.weight+'×'+s.reps)
+                          :(s.weight+'×'+s.reps))).join(', ');
     // 직전 기록이 며칠 전인지 — 3일 전과 3주 전은 증량 기대치가 다르다 (요일 무관 최근 기록 방식의 맥락 보완)
     const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(prev.date+'T12:00:00'))/864e5);
     const agoStr=ago<=0?'오늘':(ago===1?'어제':ago+'일 전');
     const prevLbl='<span class="wt-prev">지난('+agoStr+'): '+setStr+'</span>';
-    if(this.isTimed(name))return{html:prevLbl+' → 시간 늘리기'+note,up:false};
+    if(lt==='time'){
+      // 시간 종목: 반복 칸이 초다. 마지막 세트 +5초를 다음 목표로 제시하고 역대 최고를 함께 띄운다.
+      const lastSec=sets[sets.length-1].reps;
+      const addW=sets[sets.length-1].weight||0;
+      const best=this._bestSec(name);
+      const nx=lastSec+5;
+      const bestTxt=best>lastSec?(' <span class="wt-var">역대 최고 '+best+'초</span>')
+                   :(best?' <span class="wt-var">지금이 역대 최고 ⏱</span>':'');
+      return{html:prevLbl+' → <b>'+nx+'초 도전 ⏱</b>'+(addW?(' · 추가 '+addW+'kg 유지'):'')+bestTxt+note,up:true,fillW:addW,cap:nx};
+    }
     const cap=this.repCap(name);
     const lastW=sets[sets.length-1].weight;
     // 디로드 주에는 증량 제안을 끄고 '중량 유지 · 세트 55%'로 자동 전환한다(7일 뒤 자동 복귀).
@@ -3326,14 +3414,87 @@ const ExLog={
       const inc=this.isCompound(name)?2.5:1;
       // RPE 반영: 렙 상단을 채웠어도 마지막 세션 체감 강도가 9.5+면 같은 무게 한 번 더 굳히기
       const hardest=Math.max.apply(null,sets.map(s=>s.rpe||0));
-      if(hardest>=9.5)return{html:prevLbl+' → '+lastW+'kg 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)'+note+vsuf,up:false,fillW:lastW,cap};
+      if(hardest>=9.5)return{html:prevLbl+' → '+this._wLbl(lt,lastW)+' 한 번 더 굳히기 (RPE '+hardest+' — 한계 근접)'+note+vsuf,up:false,fillW:lastW,cap};
       const ease=(hardest>0&&hardest<=8)?' (RPE '+hardest+' 여유)':'';
-      return{html:prevLbl+' → <b>'+(lastW+inc)+'kg 도전 ⬆</b>'+ease+note+vsuf,up:true,nextW:lastW+inc};
+      if(lt==='assist'){
+        // 어시스트는 보조가 줄어드는 것이 증량 — 방향을 반대로 제안한다.
+        if(lastW<=0)return{html:prevLbl+' → <b>보조 0 달성 — 반복을 더 채우거나 추가 중량 단계로 ⬆</b>'+ease+note+vsuf,up:true,nextW:0};
+        const nw=Math.max(0,Math.round((lastW-inc)*2)/2);
+        return{html:prevLbl+' → <b>보조 '+nw+'kg 도전 ⬇</b>'+ease+note+vsuf,up:true,nextW:nw};
+      }
+      return{html:prevLbl+' → <b>'+this._wLbl(lt,lastW+inc)+' 도전 ⬆</b>'+ease+note+vsuf,up:true,nextW:lastW+inc};
     }
-    return{html:prevLbl+' → '+lastW+'kg로 '+cap+'회 채우기'+note+vsuf,up:false,fillW:lastW,cap};
+    return{html:prevLbl+' → '+this._wLbl(lt,lastW)+'로 '+cap+'회 채우기'+note+vsuf,up:false,fillW:lastW,cap};
   },
   // ── 기본무게: 종목별 장비 자체 무게(바벨 20kg, 스미스 바, 머신 캐리지 등)를 등록하면
   //    세트 입력은 '추가 원판'만 받고 총 무게(기본+추가)로 저장·집계한다. 기록은 항상 총 무게 기준 ──
+  // ── 부하 유형: 종목별 설정(미설정이면 이름으로 추정). 값이 바뀌면 그 종목의 실부하를 다시 계산한다 ──
+  ltype:{},   // 주의: ExLog.load()는 기록 로딩 메서드라 필드명을 ltype으로 둔다
+  async loadLoadType(){try{const r=await window.storage.get('ex_load');if(r)this.ltype=JSON.parse(r.value)||{};}catch(_){}},
+  saveLoadType(){try{window.storage.set('ex_load',JSON.stringify(this.ltype));}catch(_){}},
+  loadTypeOf(name){const cn=this.canon(name);return this.ltype[cn]||_loadGuess(cn);},
+  setLoadType(name,t){
+    const cn=this.canon(name);
+    if(t&&LOAD_LBL[t]&&t!==_loadGuess(cn))this.ltype[cn]=t;else delete this.ltype[cn];
+    this.saveLoadType();
+    this._recalcEw(cn);                       // 유형이 바뀌면 과거 기록의 실부하도 함께 맞춘다
+    this.dataVer++;this._pbCache={};
+  },
+  // 해당 날짜 시점의 체중 — 인바디 기록 중 그 날짜 이전의 가장 최근 값.
+  // 세트 저장 시 함께 박아두므로(bw), 나중에 체중이 변해도 과거 e1RM이 흔들리지 않는다.
+  bwOn(dateKey){
+    try{
+      const L=(typeof InBody!=='undefined')?InBody._log:null;
+      if(!L||!L.length)return 0;
+      let best=0;
+      for(const r of L){if(!r||!r.wt)continue;if(!dateKey||r.date<=dateKey)best=+r.wt;}
+      if(!best)for(const r of L){if(r&&r.wt){best=+r.wt;break;}}
+      return best>0?best:0;
+    }catch(_){return 0;}
+  },
+  effW(name,rawW,dateKey,bwFixed){
+    const t=this.loadTypeOf(name);
+    const w=+rawW||0;
+    if(t==='normal')return w;
+    const bw=bwFixed>0?+bwFixed:this.bwOn(dateKey||this.date);
+    if(!bw)return w;                           // 체중 기록이 없으면 환산 보류 — 원값을 그대로 둔다
+    const e=(t==='assist')?Math.max(0,bw-w):(bw+w);
+    return Math.round(e*10)/10;
+  },
+  _recalcEw(cn){
+    let touched=false;
+    Object.keys(this.data||{}).forEach(dk=>{
+      (this.data[dk].exercises||[]).forEach(ex=>{
+        if(this.canon(ex.name)!==cn)return;
+        const t=this.loadTypeOf(ex.name);
+        (ex.sets||[]).forEach(st=>{
+          if(t==='normal'){if(st.ew!=null){delete st.ew;touched=true;}return;}
+          const bw=+st.bw||this.bwOn(dk);if(!bw)return;
+          const v=this.effW(ex.name,st.weight,dk,bw);
+          if(st.ew!==v||st.bw!==bw){st.ew=v;st.bw=bw;touched=true;}
+        });
+        if(touched)this._dirtyMonths.add(this._monthOf(dk));
+      });
+    });
+    if(touched){this.save();this._invalidateIdx&&this._invalidateIdx();}
+    return touched;
+  },
+  // 최초 1회: 기존 기록에 실부하를 채워 넣는다. 인바디 로그가 아직 없으면 다음 실행으로 미룬다.
+  async migrateEw(){
+    try{const r=await window.storage.get('ew_migrate_v2');if(r)return;}catch(_){}
+    try{if(typeof InBody!=='undefined'&&!InBody._log&&InBody.load)await InBody.load();}catch(_){}
+    if(!this.bwOn(null))return;                // 체중 데이터 없음 — 플래그도 세우지 않고 다음 기회에
+    const names={};
+    Object.keys(this.data||{}).forEach(dk=>(this.data[dk].exercises||[]).forEach(ex=>{names[this.canon(ex.name)]=1;}));
+    Object.keys(names).forEach(cn=>{if(this.loadTypeOf(cn)!=='normal')this._recalcEw(cn);});
+    try{await window.storage.set('ew_migrate_v2','1');}catch(_){}
+  },
+  _wLbl(lt,w){return lt==='assist'?('보조 '+w+'kg'):(lt==='bw'?(w>0?('추가 '+w+'kg'):'맨몸'):(w+'kg'));},
+  _bestSec(name){
+    const cn=this.canon(name);let b=0;
+    this._exFor(cn).forEach(r=>(r.ex.sets||[]).forEach(st=>{if(_isWorkSet(st)&&st.reps>b)b=st.reps;}));
+    return b;
+  },
   // ── 브랜드 체감 보정계수: 기구를 갈아탈 때 시작 무게 환산에만 쓰는 값 ──
   //    저장되는 세트 중량은 언제나 기구에 표기된 실제 중량 그대로다. 계수를 기록에 곱하면
   //    자동 목표(+2.5kg)와 정체 판정이 오염되므로 절대 섞지 않는다.
@@ -3409,6 +3570,17 @@ const ExLog={
   },
   // 총 무게 힌트: '= 총 60kg · 한쪽 20 (20)' — 기본무게 있을 때 세트 입력 밑에 표시
   _totalHint(name,addedW){
+    const lt=this.loadTypeOf(name);
+    if(lt!=='normal'){
+      // 어시스트·체중 종목: 입력값이 곧 부하가 아니므로 실부하를 그 자리에서 보여준다.
+      const bw=this.bwOn(this.date);
+      if(!bw)return '<small>체중 기록이 없어 실부하 환산 보류 — 인바디 탭에 체중을 입력하면 자동 적용됩니다</small>';
+      const add=+addedW||0;
+      const eff=this.effW(name,add,this.date,bw);
+      if(lt==='assist')return '보조 '+add+'kg → <b>실부하 '+eff+'kg</b> <small>(체중 '+bw+' − 보조 '+add+')</small>';
+      if(lt==='time')return '<b>'+eff+'kg</b>를 매단 채 버티기 <small>(체중 '+bw+(add?(' + 추가 '+add):'')+') · 반복 칸은 초</small>';
+      return (add?('추가 '+add+'kg'):'맨몸')+' → <b>실부하 '+eff+'kg</b> <small>(체중 '+bw+(add?(' + '+add):'')+')</small>';
+    }
     const base=this.baseOf(name);if(!base)return'';
     const add=+addedW||0;const total=Math.round((base+add)*100)/100;
     let h='= 총 <b>'+total+'kg</b> <small>(기본 '+base+' + 원판 '+add+')</small>';
@@ -3602,6 +3774,16 @@ const ExLog={
       rb.textContent='⏱ 휴식 '+rsec+'초'+(rCustom?' (커스텀)':'');
       // ── 브랜드 칩: 같은 동작의 기구 변형을 한 탭으로 전환 ──
       //    기록은 기구별로 분리된 상태를 유지한다(승계 확인을 띄우지 않는 이유).
+      // 부하 유형 칩 — 일반이 아니면 강조. 어시스트/체중/시간 종목의 계산 근거를 카드에서 바로 확인·수정.
+      let lb=det.querySelector('.ex-load-btn');
+      if(!lb){
+        lb=document.createElement('button');lb.className='ex-load-btn';lb.type='button';
+        lb.setAttribute('onclick','ExLog.toggleLoadType(this)');
+        det.insertBefore(lb,bb);
+      }
+      const ltc=this.loadTypeOf(name);
+      lb.classList.toggle('has',ltc!=='normal');
+      lb.textContent='⚖ '+LOAD_LBL[ltc];
       const vg=this.variantGroup(name);
       const cnName=vg.cur;
       const grpAll=vg.group;
@@ -3822,7 +4004,7 @@ const ExLog={
       (s.exercises||[]).forEach(ex=>{
         if(!ex.sets?.length)return;
         ex.sets.forEach((set,i)=>{
-          ROW(date,s.day||'',ex.name,i+1,set.weight,set.reps,Math.round(set.weight*set.reps),set.ts||null,set.warmup?1:'',set.rpe||'',set.pain?1:'');
+          ROW(date,s.day||'',ex.name,i+1,set.weight,set.reps,Math.round(_ldW(set)*set.reps),set.ts||null,set.warmup?1:'',set.rpe||'',set.pain?1:'');
         });
       });
       (s.cardio||[]).forEach((c,i)=>{
@@ -4171,7 +4353,7 @@ const PlanApp={
       }).join('')
       +'<div class="v4-note">막대 4개 = 3주 전 → 이번 주. 진한 색 = 주간 목표 달성.</div></div></details>';
   },
-  _e1rm(s){return _e1Of(s.weight,s.reps);},
+  _e1rm(s){return _e1Of(_ldW(s),s.reps);},
   _spark(vals){
     const w=84,h=26,pad=4;
     const v=vals.slice(-6);                                      // 표시 창 먼저 자르고
@@ -4361,7 +4543,7 @@ const PlanApp={
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
         (ex.sets||[]).forEach(st=>{
           if(!(_isWorkSet(st)&&st.weight>0))return;
-          const e1=_e1Of(st.weight,st.reps);
+          const e1=_e1Of(_ldW(st),st.reps);
           if(!best[cn]||e1>best[cn].e1)best[cn]={e1,w:st.weight,r:st.reps,date:dk};
         });
       });
@@ -4396,7 +4578,7 @@ const PlanApp={
         let dayMax=-1;                               // 이 날짜의 최고값 (best 갱신용 — 같은 날 세트끼리는 PR로 안 침)
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(e.name):e.name; // 별칭 기준 PR 연속성
         sets.forEach(s=>{
-          const cur=s.weight>0?_e1Of(s.weight,s.reps):s.reps;
+          const cur=_ldW(s)>0?_e1Of(_ldW(s),s.reps):s.reps;
           if(inWeek){const b=best[cn]; if(b!==undefined&&cur>b+0.05&&!seen[cn]){prCount++;seen[cn]=1;}}
           if(cur>dayMax)dayMax=cur;
         });
@@ -4470,8 +4652,8 @@ const PlanApp={
       const exLines=(d.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet))
         .map(e=>{
           const sets=e.sets.filter(_isWorkSet);
-          const top=sets.reduce((a,s)=>{return _e1Of(s.weight,s.reps)>_e1Of(a.weight,a.reps)?s:a;},sets[0]);
-          const e1=top.weight>0?' (e1RM '+_e1Of(top.weight,top.reps).toFixed(1)+')':'';
+          const top=sets.reduce((a,s)=>{return _e1Of(_ldW(s),s.reps)>_e1Of(_ldW(a),a.reps)?s:a;},sets[0]);
+          const e1=top.weight>0?' (e1RM '+_e1Of(_ldW(top),top.reps).toFixed(1)+')':'';
           return '  - '+e.name+': '+this._fmtSets(sets)+e1;
         });
       const cd=(d.cardio||[]).map(c=>c.type+' '+c.min+'분');
@@ -4685,7 +4867,7 @@ const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
 const Backup={
   KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
   PREFIXES:['wl_v2:'], // 운동 기록 월 키 (wl_v2:YYYY-MM) — 단일 키(wl_v2)는 내보내지 않음(이관 후 낡은 사본이라 백업 부풀림 방지)
-  MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias','brand_coef'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
+  MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias','brand_coef','ex_load'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
   _allowed(k){return this.KEYS.includes(k)||k==='wl_v2'/*레거시 백업 파일 가져오기 호환*/||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
   // ── 데이터 점검: 별칭 순환·미연결 중복 표기·도감 미매칭·0kg 본세트·미래 날짜 등 이상치 나열 ──
