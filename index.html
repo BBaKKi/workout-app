@@ -255,6 +255,11 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .plan-hd:first-of-type{margin-top:2px}
 .plan-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
 .plan-vol-head{font-size:11px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:8px}
+.vol-rebal{background:#F2F6F5;border:0.5px solid #cfe0db;border-radius:var(--border-radius-md);padding:9px 11px;margin-top:10px}
+.vol-rebal-hd{font-size:11.5px;font-weight:600;color:#3f5c54;margin-bottom:6px}
+.vol-rebal-row{font-size:12px;color:#4e6b64;line-height:1.7}
+.vol-rebal-row b{color:#085041}
+.vol-rebal-note{font-size:10.5px;color:#7d918b;margin-top:5px;line-height:1.45}
 .plan-vol-note{font-size:11px;color:var(--color-text-tertiary);margin-top:9px;line-height:1.45}
 .plan-vol-empty{font-size:12px;color:var(--color-text-tertiary);padding:4px 2px;line-height:1.55}
 .pv-row{display:flex;align-items:center;gap:8px;margin:5px 0}
@@ -1427,6 +1432,7 @@ const RECO_CAT={push:['가슴','측면삼각','전면삼각','후면삼각','삼
 // 승모·종아리는 목표에서 제외 — 상부 승모는 이미 과활성이라 라운드숄더 교정과 상충하고,
 // 종아리는 발달 완료로 프로그램에서 의도적으로 뺐다. 목표에 남겨두면 달성률이 영구 미달로 찍혀 신호가 죽는다.
 // (볼륨 그래프에는 계속 표시되며, 기록이 있으면 값이 보인다.)
+const RECO_TARGET_PRI={'측면삼각':2,'등':1,'가슴':1,'후면삼각':1}; // 재배분 시 먼저 채울 부위 (프레임·자세 교정 우선)
 const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':6,'후면삼각':8,'삼두':8,'이두':8,'대퇴사두':8,'후면사슬':8,'코어':6};
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","Pull B":"#0C447C","Legs A":"#3B6D11","Legs B":"#27500A",Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
@@ -1434,7 +1440,7 @@ const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","P
 //  Push — 라운드숄더로 '더딘 윗가슴'을 우선순위로: 상부 2(인클라인 프레스+인클라인 케이블 플라이)+중부 1. 라운드숄더 교정 후면삼각 2(페이스풀+리어델트), 우선순위 측면삼각 2. 중복 프레스/딥스/삼두 정리.
 //  Pull — 겹치는 헤비 로우·이두 고립 압축(등6·이두3). 로우가 라운드숄더 교정(중부등)도 겸함.
 //  Legs — 대퇴5·후면4 유지(안드로이드), 코어3으로 감량, 종아리는 이미 발달해 제외.
-const EL_DAY_EX={"Push A":["Hammer ISO-호라이즌털 벤치프레스","머신 숄더 프레스","Watson 디클라인 (isolateral)","Nautilus 래터럴 레이즈 머신","딥스 머신","페이스풀 (케이블) ⭐필수"],"Pull A":["바벨 데드리프트","머신 로우 (체스트 서포티드)","랫풀다운","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],"Push B":["Hammer ISO-인클라인 프레스","펙덱 플라이","케이블 래터럴 레이즈","리어 델트 플라이","트라이셉스 익스텐션 머신","페이스풀 (케이블) ⭐필수"],"Legs A":["V스쿼트 머신","레그 익스텐션","레그컬 (머신)","힙 어브덕션 (머신)","레그레이즈"],"Pull B":["풀업 (체중/어시스트)","T-바 로우","스트레이트암 풀다운","해머 컬","데드행"],"Legs B":["루마니안 데드리프트","시티드 레그프레스","Booty Builder 힙 쓰러스트","힙 어브덕션 (머신)","케이블 크런치"]};
+const EL_DAY_EX={"Push A":["Hammer ISO-호라이즌털 벤치프레스","머신 숄더 프레스","Watson 디클라인 (isolateral)","Nautilus 래터럴 레이즈 머신","딥스 머신","페이스풀 (케이블) ⭐필수"],"Pull A":["바벨 데드리프트","머신 로우 (체스트 서포티드)","랫풀다운","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],"Push B":["Hammer ISO-인클라인 프레스","펙덱 플라이","케이블 래터럴 레이즈","리어 델트 플라이","트라이셉스 익스텐션 머신","페이스풀 (케이블) ⭐필수"],"Legs A":["V스쿼트 머신","레그 익스텐션","레그컬 (머신)","힙 어브덕션 (머신)","페이스풀 (케이블) ⭐필수"],"Pull B":["풀업 (체중/어시스트)","T-바 로우","스트레이트암 풀다운","바이셉스 컬 머신","데드행"],"Legs B":["루마니안 데드리프트","시티드 레그프레스","힙 어덕션 머신","케이블 래터럴 레이즈","케이블 크런치"]};
 // ── PPL A/B 순환제(6세션): Push A→Pull A→Legs A→Push B→Pull B→Legs B. 요일 고정이 아니라 순서 고정이라
 //    쉬는 날이 생겨도 순환이 밀리지 않는다. 주 6일 기준 각 세션 주 1회 = 데드리프트도 약 7일 간격.
 // 순서 근거: 데드(Pull A) 다음 세션에 하체를 두지 않고 Push B를 끼워 기립근에 하루 더 준다.
@@ -1738,6 +1744,16 @@ const ExLog={
    '레그프레스':'시티드 레그프레스',
    '45도 레그프레스':'시티드 레그프레스', /* 해외 짐 전환 — 옛 기구(45도) 기록을 현 기구로 연결해 추세·PR 승계 */
    '체스트 서포티드 로우':'머신 로우',
+   /* 26.08 기록 감사: 40세션에 종목명 56개가 흩어져 추세·정체 판정이 쪼개져 있었다.
+      같은 기구·같은 동작인데 표기만 다른 것들을 시드로 묶는다. */
+   '머신 로우 (체스트 서포티드)':'머신 로우',
+   '레그컬 (머신)':'레그컬',
+   '케이블 시티드 로우':'시티드 케이블 로우',
+   '머신 바이셉스 컬':'바이셉스 컬 머신',
+   '풀업 (체중)':'풀업 (체중/어시스트)',
+   'Hammer ISO-벤치프레스':'Hammer ISO-호라이즌털 벤치프레스',
+   '힙 어브덕션':'힙 어브덕션 (머신)',
+   'Booty Builder 스탠딩 힙 어덕션':'힙 어덕션 머신',
    '덤벨 플라이 / 펙덱':'펙덱 플라이'
    /* '힙 어덕션 머신'(모음)은 어브덕션(벌림)과 다른 운동 — 연결 금지 */
   },
@@ -4335,7 +4351,38 @@ const PlanApp={
       const v=vol[m];const w=Math.round(v/max*100);const low=PRI[m]&&v<8;
       const vt=(v%1===0?String(v):v.toFixed(1));
       return '<div class="pv-row"><span class="pv-nm">'+m+(PRI[m]?' ⭐':'')+'</span><div class="pv-track"><div class="pv-fill" style="width:'+w+'%;background:'+COL[m]+'"></div></div><span class="pv-val'+(low?' low':'')+'">'+vt+(low?' ⚠':'')+'</span></div>';
-    }).join('')+'<div class="plan-vol-note">⭐ V-테이퍼 우선 부위 · 권장 주 10~20세트 (⚠ 8 미만). 보조 개입은 0.5세트로 계산.</div>'+this._vol4Html(data,order,COL);
+    }).join('')+this._rebalanceHtml(vol)+'<div class="plan-vol-note">⭐ V-테이퍼 우선 부위 · 권장 주 10~20세트 (⚠ 8 미만). 보조 개입은 0.5세트로 계산.</div>'+this._vol4Html(data,order,COL);
+  },
+  // ── 볼륨 재배분 제안 ──────────────────────────────────────────────────
+  // 부위별 미달 표시만으로는 '무엇을 줄여 무엇에 줄지'가 안 보인다. 회복 총량은 유한하므로
+  // 과다 부위에서 덜어 부족 부위로 옮기는 게 총량을 늘리는 것보다 안전하다.
+  // 우선순위(PRI: 측면삼각·등·가슴)가 부족하면 먼저 채우고, 기증자는 초과폭이 큰 부위부터.
+  _rebalanceHtml(vol){
+    const over=[],under=[];
+    for(const m in RECO_TARGET){
+      const v=vol[m]||0,t=RECO_TARGET[m];
+      if(v>=t*1.4&&v-t>=3)over.push({m,v,t,ex:v-t});
+      else if(v<=t*0.8)under.push({m,v,t,gap:t-v});
+    }
+    if(!over.length||!under.length)return'';
+    over.sort((a,b)=>b.ex-a.ex);
+    under.sort((a,b)=>(RECO_TARGET_PRI[b.m]||0)-(RECO_TARGET_PRI[a.m]||0)||b.gap-a.gap);
+    const lines=[];
+    let pool=over.map(o=>Object.assign({},o));
+    under.slice(0,2).forEach(u=>{
+      let need=Math.min(u.gap,4);                       // 한 번에 4세트 넘게 옮기지 않는다 — 급격한 이동은 폼·회복을 흔든다
+      for(const o of pool){
+        if(need<=0||o.ex<1)continue;
+        const mv=Math.min(need,o.ex,3);
+        if(mv<1)continue;
+        o.ex-=mv;need-=mv;
+        lines.push('<b>'+o.m+'</b>에서 <b>'+(mv%1?mv.toFixed(1):mv)+'세트</b> → <b>'+u.m+'</b>'+(RECO_TARGET_PRI[u.m]?' ⭐':''));
+      }
+    });
+    if(!lines.length)return'';
+    return '<div class="vol-rebal"><div class="vol-rebal-hd">♻ 재배분 제안 — 총량을 늘리지 말고 옮기세요</div>'
+      +lines.map(l=>'<div class="vol-rebal-row">'+l+'</div>').join('')
+      +'<div class="vol-rebal-note">과다 부위를 줄여 확보한 회복 여력을 부족 부위에 씁니다. ⭐는 V-테이퍼 우선 부위라 먼저 채웁니다.</div></div>';
   },
   // 최근 4주 부위별 주간 세트 추이 — 4주 누적이 주 분석 단위이므로 정체·과부족을 주 단위가 아닌 4주 흐름으로 판단
   _vol4Html(data,order,COL){
