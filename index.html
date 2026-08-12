@@ -3461,32 +3461,43 @@ const ExLog={
     const e=(t==='assist')?Math.max(0,bw-w):(bw+w);
     return Math.round(e*10)/10;
   },
-  _recalcEw(cn){
-    let touched=false;
+  _recalcEw(cn,defer){
+    let any=false;
     Object.keys(this.data||{}).forEach(dk=>{
+      let dayTouched=false;                       // 날짜별로 판정해야 실제로 바뀐 달만 저장된다
       (this.data[dk].exercises||[]).forEach(ex=>{
         if(this.canon(ex.name)!==cn)return;
         const t=this.loadTypeOf(ex.name);
         (ex.sets||[]).forEach(st=>{
-          if(t==='normal'){if(st.ew!=null){delete st.ew;touched=true;}return;}
+          if(t==='normal'){if(st.ew!=null){delete st.ew;delete st.bw;dayTouched=true;}return;}
           const bw=+st.bw||this.bwOn(dk);if(!bw)return;
           const v=this.effW(ex.name,st.weight,dk,bw);
-          if(st.ew!==v||st.bw!==bw){st.ew=v;st.bw=bw;touched=true;}
+          if(st.ew!==v||st.bw!==bw){st.ew=v;st.bw=bw;dayTouched=true;}
         });
-        if(touched)this._dirtyMonths.add(this._monthOf(dk));
       });
+      if(dayTouched){this.markDirty(dk);any=true;}
     });
-    if(touched){this.save();this._invalidateIdx&&this._invalidateIdx();}
-    return touched;
+    if(any&&!defer)this.save();
+    return any;
+  },
+  // 비일반 종목 전체의 실부하를 다시 만든다. ew·bw는 (표기 중량 + 그날 체중 + 부하 유형)에서
+  // 항상 파생되는 값이라, 시트 복원처럼 두 필드가 빠진 경로로 기록이 들어와도 이걸로 완전 복구된다.
+  async recalcAllEw(){
+    try{if(typeof InBody!=='undefined'&&!InBody._log&&InBody.load)await InBody.load();}catch(_){}
+    if(!this.bwOn(null))return 0;                 // 체중 기록이 없으면 환산 근거가 없다
+    const names={};
+    Object.keys(this.data||{}).forEach(dk=>(this.data[dk].exercises||[]).forEach(ex=>{names[this.canon(ex.name)]=1;}));
+    let n=0;
+    Object.keys(names).forEach(cn=>{if(this.loadTypeOf(cn)!=='normal'&&this._recalcEw(cn,true))n++;});
+    if(n)this._pbCache={};
+    return n;
   },
   // 최초 1회: 기존 기록에 실부하를 채워 넣는다. 인바디 로그가 아직 없으면 다음 실행으로 미룬다.
   async migrateEw(){
     try{const r=await window.storage.get('ew_migrate_v2');if(r)return;}catch(_){}
     try{if(typeof InBody!=='undefined'&&!InBody._log&&InBody.load)await InBody.load();}catch(_){}
     if(!this.bwOn(null))return;                // 체중 데이터 없음 — 플래그도 세우지 않고 다음 기회에
-    const names={};
-    Object.keys(this.data||{}).forEach(dk=>(this.data[dk].exercises||[]).forEach(ex=>{names[this.canon(ex.name)]=1;}));
-    Object.keys(names).forEach(cn=>{if(this.loadTypeOf(cn)!=='normal')this._recalcEw(cn);});
+    if(await this.recalcAllEw())await this.save();
     try{await window.storage.set('ew_migrate_v2','1');}catch(_){}
   },
   _wLbl(lt,w){return lt==='assist'?('보조 '+w+'kg'):(lt==='bw'?(w>0?('추가 '+w+'kg'):'맨몸'):(w+'kg'));},
@@ -3978,9 +3989,12 @@ const ExLog={
         if(this.data[d]&&this.data[d].cond)s.cond=this.data[d].cond; // 컨디션은 시트에 없음 — 로컬 보존
         this.data[d]=s;this.markDirty(d);dates++;
       });
+      // 시트에는 실부하(ew)·그날 체중(bw) 열이 없다 — 파생값이라 저장하지 않는 대신 복원 직후 다시 만든다.
+      // 이 단계를 건너뛰면 어시스트 기록이 '보조 무게 = 부하'로 되돌아가 추세·PR이 다시 뒤집힌다.
+      const reEw=await this.recalcAllEw();
       await this.save();
       this._dirty.clear();this._saveDirty(); // 방금 시트에서 온 데이터 — 재전송 불필요
-      alert('✓ 복원 완료 — '+dates+'일 · '+sets+'세트\n화면을 새로 고칩니다.');
+      alert('✓ 복원 완료 — '+dates+'일 · '+sets+'세트'+(reEw?('\n실부하 재계산 '+reEw+'종목 (어시스트·체중·시간)'):'')+'\n화면을 새로 고칩니다.');
       location.reload();
     }catch(err){
       alert('복원 실패: '+err.message);
