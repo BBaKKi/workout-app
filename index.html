@@ -4934,6 +4934,10 @@ const LibApp={
 // 허리 88cm: 체지방 20%(지방 −9.5kg) 도달 시 추정치이자, 도중에 복부비만 컷오프(남성 90cm)를 지나는 값.
 // 안드로이드 체형에서 어깨-허리 대비를 만드는 건 어깨(골격 고정)가 아니라 허리 쪽이라 프레임의 1순위 지표다.
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
+// ── 컷 계획선: 2026-08-11 90.0kg 기준, 주 0.4kg 감량 → 12/20 83.4kg (18주) ──
+// 목표선은 end에서 멈춘다 — 계속 내려가는 선이면 목표 도달 후 과잉 감량을 부추긴다.
+// 기준선 재설정은 from/start 두 값만 고치면 되고, 나머지 판정은 자동으로 따라온다.
+const PLAN_LINE={from:'2026-08-11',start:90.0,rate:0.4,to:'2026-12-20',end:83.4};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
   KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
@@ -5105,6 +5109,31 @@ const InBody={
           +html;
       }
     }
+    // ── 계획선 대비 진척: 최근 측정일의 목표 체중과 실측을 비교해 궤도 이탈을 양방향으로 판정 ──
+    // 지연(느림)뿐 아니라 선행(빠름)도 경고 대상 — 계획선보다 1kg 이상 앞서면 근손실 구간이라
+    // 열량을 되레 올려야 한다. 감량 앱이 흔히 놓치는 방향이라 명시적으로 분기해 둔다.
+    (function(){
+      const dayMs=864e5,wkMs=6048e5;
+      const ms=d=>new Date(String(d).slice(0,10)+'T12:00:00').getTime();
+      const a=ms(PLAN_LINE.from),n=ms(last.date);
+      if(isNaN(a)||isNaN(n)||last.wt==null)return;
+      const wk=(n-a)/wkMs;
+      if(wk<-0.5)return; // 기준선 이전 측정은 계획선 판정 대상이 아니다
+      const tgtAt=w=>Math.max(PLAN_LINE.end,PLAN_LINE.start-PLAN_LINE.rate*Math.max(0,w));
+      const tgt=tgtAt(wk),next=tgtAt(wk+1);
+      const d=+(last.wt-tgt).toFixed(1);           // + = 궤도보다 무거움(지연)
+      const left=Math.max(0,Math.ceil((ms(PLAN_LINE.to)-n)/wkMs));
+      const stale=Math.floor((Date.now()-n)/dayMs);
+      const ok=Math.abs(d)<=0.5;
+      const verdict=ok?'궤도 정상':(d>0?'궤도 대비 +'+d+'kg 지연':'궤도 대비 '+d+'kg 선행');
+      let tail='';
+      if(d<-1.0)tail='<br><small>계획보다 빠릅니다 — 이 속도가 2주 이어지면 근손실 구간입니다. 열량 +100~150kcal.</small>';
+      else if(d>1.0)tail='<br><small>4주 평균이 함께 뒤처질 때만 조정하세요. 단일 측정으로 열량을 깎지 않습니다.</small>';
+      if(stale>=10)tail+='<br><small>마지막 측정 '+stale+'일 경과 — 일요일 저녁 고정 조건으로 갱신하세요.</small>';
+      html='<div class="ib-signal '+(ok||d<0?'ok':'warn')+'">🎯 <b>'+verdict+'</b> — W'+Math.max(1,Math.round(wk))
+        +' 목표 '+tgt.toFixed(1)+'kg / 실측 '+last.wt+'kg · 다음 주 목표 <b>'+next.toFixed(1)+'kg</b>'
+        +' · 종료까지 '+left+'주'+tail+'</div>'+html;
+    })();
     // 선택 지표(허리둘레·내장지방): 기록된 항목만 카드 표시. 스파크라인은 해당 값이 있는 측정만 사용
     const optSpark=(key,col)=>{
       const vals=this._log.filter(e=>e[key]!=null).slice(-8).map(e=>e[key]);
