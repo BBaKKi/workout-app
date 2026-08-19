@@ -146,7 +146,15 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .log-nav-btn{background:none;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);width:32px;height:32px;cursor:pointer;font-size:20px;color:var(--color-text-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
 .log-date-center{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
 .log-date-txt{font-size:13px;font-weight:600;color:var(--color-text-primary)}
-.log-day-badge{font-size:10px;font-weight:600;color:#fff;border-radius:20px;padding:2px 10px}
+.log-day-badge{font-size:10px;font-weight:600;color:#fff;border-radius:20px;padding:2px 10px;cursor:pointer;border:none;font-family:inherit}
+.log-day-badge:after{content:' ▾';opacity:.75}
+.log-type-pick{display:none;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px;margin:0 0 6px;background:rgba(0,0,0,.03);border-radius:10px}
+.log-type-pick.open{display:grid}
+.log-type-pick .tp{display:flex;flex-direction:column;gap:2px;align-items:center;padding:7px 4px;border:1px solid rgba(0,0,0,.12);border-radius:9px;background:#fff;cursor:pointer;font-family:inherit}
+.log-type-pick .tp b{font-size:11px;font-weight:700;color:#fff;border-radius:20px;padding:2px 9px}
+.log-type-pick .tp small{font-size:9px;opacity:.7;line-height:1.25;text-align:center}
+.log-type-pick .tp.cur{outline:2px solid #085041;outline-offset:1px}
+.log-type-pick .tp-hint{grid-column:1/-1;font-size:10px;opacity:.65;line-height:1.4;text-align:center}
 .log-sync-btn{background:none;border:0.5px solid #185FA5;border-radius:var(--border-radius-md);width:32px;height:32px;cursor:pointer;font-size:15px;color:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .log-sync-btn.syncing{opacity:.5;pointer-events:none}
 /* 인바디 모달과 동일한 바텀시트 패턴으로 통일 (가운데 다이얼로그와 이원화되던 것 일원화) */
@@ -1444,7 +1452,12 @@ const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","P
 //  Push — 라운드숄더로 '더딘 윗가슴'을 우선순위로: 상부 2(인클라인 프레스+인클라인 케이블 플라이)+중부 1. 라운드숄더 교정 후면삼각 2(페이스풀+리어델트), 우선순위 측면삼각 2. 중복 프레스/딥스/삼두 정리.
 //  Pull — 겹치는 헤비 로우·이두 고립 압축(등6·이두3). 로우가 라운드숄더 교정(중부등)도 겸함.
 //  Legs — 대퇴5·후면4 유지(안드로이드), 코어3으로 감량, 종아리는 이미 발달해 제외.
-const EL_DAY_EX={"Push A":["Hammer ISO-호라이즌털 벤치프레스","머신 숄더 프레스","Watson 디클라인 (isolateral)","Nautilus 래터럴 레이즈 머신","딥스 머신","페이스풀 (케이블) ⭐필수"],"Pull A":["바벨 데드리프트","머신 로우 (체스트 서포티드)","랫풀다운","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],"Push B":["Hammer ISO-인클라인 프레스","펙덱 플라이","케이블 래터럴 레이즈","리어 델트 플라이","트라이셉스 익스텐션 머신","페이스풀 (케이블) ⭐필수"],"Legs A":["V스쿼트 머신","레그 익스텐션","레그컬 (머신)","힙 어브덕션 (머신)","페이스풀 (케이블) ⭐필수"],"Pull B":["풀업 (체중/어시스트)","T-바 로우","스트레이트암 풀다운","바이셉스 컬 머신","데드행"],"Legs B":["루마니안 데드리프트","Nautilus 시티드 레그프레스","힙 어덕션 머신","케이블 래터럴 레이즈","케이블 크런치"]};
+// 재분배(26.08): ① Legs에서 상체 종목 제거(페이스풀·래터럴) → Legs를 5종목 전부 하체·코어로.
+//  ② 케이블 크런치를 Legs A·B 양쪽에 = 복근 주 2회(코어 3→6세트, 목표 충족). 데드 당일·다음 날은 피하는 배치.
+//  ③ Push A의 디클라인 → 인클라인: 상부 2·중부 1로 바뀌어 "라운드숄더로 윗가슴 우선" 원칙과 실제가 일치.
+//  ④ 페이스풀을 Pull B에 추가 → 후면삼각 주 3회, Pull B도 6종목으로 균형(볼륨 복원에도 기여).
+//  ⑤ Legs B에 레그 익스텐션 → 사두 주 2회(기존 Legs B는 사두가 레그프레스뿐).
+const EL_DAY_EX={"Push A":["Hammer ISO-호라이즌털 벤치프레스","Watson 인클라인 (isolateral)","머신 숄더 프레스","Nautilus 래터럴 레이즈 머신","딥스 머신","페이스풀 (케이블) ⭐필수"],"Pull A":["바벨 데드리프트","머신 로우 (체스트 서포티드)","랫풀다운","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],"Push B":["Hammer ISO-인클라인 프레스","펙덱 플라이","케이블 래터럴 레이즈","리어 델트 플라이","트라이셉스 익스텐션 머신","페이스풀 (케이블) ⭐필수"],"Legs A":["V스쿼트 머신","레그 익스텐션","레그컬 (머신)","힙 어브덕션 (머신)","케이블 크런치"],"Pull B":["풀업 (체중/어시스트)","T-바 로우","스트레이트암 풀다운","바이셉스 컬 머신","페이스풀 (케이블) ⭐필수","데드행"],"Legs B":["루마니안 데드리프트","Nautilus 시티드 레그프레스","레그 익스텐션","힙 어덕션 머신","케이블 크런치"]};
 // ── PPL A/B 순환제(6세션): Push A→Pull A→Legs A→Push B→Pull B→Legs B. 요일 고정이 아니라 순서 고정이라
 //    쉬는 날이 생겨도 순환이 밀리지 않는다. 주 6일 기준 각 세션 주 1회 = 데드리프트도 약 7일 간격.
 // 순서 근거: 데드(Pull A) 다음 세션에 하체를 두지 않고 Push B를 끼워 기립근에 하루 더 준다.
@@ -1539,7 +1552,7 @@ const ExLog={
     await this.loadRestCfg();
     this.seedAlias();
     await this.autoConsolidate(); // 도감 표준명 기준 광범위 별칭 통합(1회)
-    try{const r0=document.getElementById('d'+(this.PANEL_DAY.indexOf(this.dayType(this.date))+1));if(r0)r0.checked=true;}catch(_){} // 오늘 타입 패널 자동 선택
+    this.syncPanel(this.dayType(this.date)); // 오늘 타입 패널 자동 선택 (switchDay와 동일 경로)
     document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
     if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.injectBar();
@@ -2305,10 +2318,13 @@ const ExLog={
     const bar=document.createElement('div');
     bar.className='log-date-bar';bar.id='ex-log-bar';
     const day=this.dayType(this.date);
-    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><span class="log-day-badge" id="log-day-badge" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</span></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
+    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><button type="button" class="log-day-badge" id="log-day-badge" onclick="ExLog.toggleTypePick()" title="루틴 직접 선택" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</button></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
     const ds=tabW.querySelector('.day-sel');if(ds)ds.insertAdjacentElement('afterend',bar);else tabW.insertBefore(bar,tabW.firstChild);
+    // 루틴 직접 선택 패널 — 순환 추천과 별개로 언제든 수동 전환 가능하게 (날짜↔루틴 분리)
+    const pick=document.createElement('div');pick.className='log-type-pick';pick.id='log-type-pick';
+    bar.insertAdjacentElement('afterend',pick);
     const prog=document.createElement('div');prog.className='log-progress';prog.id='log-progress';
-    bar.insertAdjacentElement('afterend',prog);
+    pick.insertAdjacentElement('afterend',prog);
     const brief=document.createElement('div');brief.className='log-brief';brief.id='log-brief';
     prog.insertAdjacentElement('afterend',brief);
   },
@@ -2350,7 +2366,39 @@ const ExLog={
   switchDay(t){
     if(EL_CYCLE.indexOf(t)<0)return;
     const s=this.session();s.day=t;this.setSession(s);
+    this.syncPanel(t);                       // 화면 패널도 함께 이동 — 전환 후 손으로 탭을 찾지 않게
+    const p=document.getElementById('log-type-pick');if(p)p.classList.remove('open');
     this.updateBar();this.injectTargets();this.refresh();
+  },
+  // ── 날짜 ↔ 루틴 분리: 순환은 '기본 제안'일 뿐이고, 어떤 날에든 6타입 중 무엇이든 고를 수 있다 ──
+  // 공백 후 복귀나 컨디션·기구 사정으로 순서를 건너뛰는 경우가 실제로 잦다. 순환만 강제하면
+  // 기록이 엉뚱한 타입으로 쌓여 부위별 주간 집계와 '이전 같은 타입 대비' 비교가 함께 어긋난다.
+  syncPanel(t){
+    try{const i=this.PANEL_DAY.indexOf(t);if(i<0)return;
+      const r=document.getElementById('d'+(i+1));if(r&&!r.checked)r.checked=true;}catch(_){}
+  },
+  toggleTypePick(){
+    const p=document.getElementById('log-type-pick');if(!p)return;
+    const open=!p.classList.contains('open');
+    p.classList.toggle('open',open);
+    if(open)this.renderTypePick();
+  },
+  renderTypePick(){
+    const p=document.getElementById('log-type-pick');if(!p)return;
+    const cur=this.dayType(this.date);
+    const started=((this.data[this.date]||{}).exercises||[]).some(e=>(e.sets||[]).length);
+    let h='';
+    EL_CYCLE.forEach(t=>{
+      const ago=this._lastDoneAgo(t),def=this._typeDeficit(t);
+      const agoTxt=ago>=999?'기록 없음':(ago===0?'오늘':ago+'일 전');
+      h+='<button type="button" class="tp'+(t===cur?' cur':'')+'" onclick="ExLog.switchDay(\''+t+'\')">'
+        +'<b style="background:'+(DAY_COLORS_EL[t]||'#888')+'">'+t+'</b>'
+        +'<small>'+agoTxt+(def>0?'<br>부족 '+def+'세트':'')+'</small></button>';
+    });
+    h+='<div class="tp-hint">'+(started
+      ? '⚠️ 오늘 이미 기록이 있습니다 — 타입만 바뀌고 기록은 그대로 유지됩니다.'
+      : '순환 순서와 무관하게 선택할 수 있습니다. 경과일이 길거나 부족 세트가 많은 쪽이 우선순위입니다.')+'</div>';
+    p.innerHTML=h;
   },
   // ── 오늘의 준비도: 오늘 컨디션·수면 + 최근 운동일 RPE + 최근 7일 통증을 종합한 당일 강도 가이드 ──
   // 디로드 제안(주 단위)과 달리 '오늘 증량을 갈지'의 당일 판단. 점수제(좋음 +1/나쁨 −1)로 근거를 그대로 노출하고,
@@ -2454,6 +2502,7 @@ const ExLog={
   },
 
   updateBar(){
+    const p0=document.getElementById('log-type-pick');if(p0&&p0.classList.contains('open'))this.renderTypePick();
     const t=document.getElementById('log-date-txt'),b=document.getElementById('log-day-badge');
     const day=this.dayType(this.date);
     if(t)t.textContent=this.fmt(this.date);
@@ -4309,8 +4358,8 @@ const PlanApp={
     if(/스컬|JM/.test(n))return{p:'삼두',s:[]};
     if(/노르딕|글루트햄|햄\s*컬/.test(n))return{p:'후면사슬',s:[]};
     if(/업라이트/.test(n))return{p:'측면삼각',s:['승모']};
-    if(/래터럴|레터럴|사이드\s*레이즈/.test(n)&&!/벤치|프레스|풀다운/.test(n))return /벤트오버|리어/.test(n)?{p:'등',s:[]}:{p:'측면삼각',s:[]};
-    if(/페이스풀|리어|후면\s*삼각|리버스\s*펙|리버스\s*플라이|외회전/.test(n))return{p:'등',s:[]};
+    if(/래터럴|레터럴|사이드\s*레이즈/.test(n)&&!/벤치|프레스|풀다운/.test(n))return /벤트오버|리어/.test(n)?{p:'후면삼각',s:['등']}:{p:'측면삼각',s:[]};
+    if(/페이스풀|리어|후면\s*삼각|리버스\s*펙|리버스\s*플라이|외회전/.test(n))return{p:'후면삼각',s:['등']};
     if(/숄더\s*?프레스|오버헤드\s*?프레스|밀리터리|OHP|아놀드|파이크|바이킹|랜드마인/i.test(n))return{p:'전면삼각',s:['삼두','측면삼각']};
     if(/프론트\s*레이즈/.test(n))return{p:'전면삼각',s:[]};
     if(/리스트\s*컬|손목|파머스/.test(n))return{p:'전완',s:[]};
