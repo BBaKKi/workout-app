@@ -40,8 +40,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dl{font-size:9.5px;font-weight:600;color:#8e8e93}
 #d1:checked~.tab-w .lbl-d1{background:#D85A30;border-color:#D85A30}
 #d2:checked~.tab-w .lbl-d2{background:#185FA5;border-color:#185FA5}
-#d3:checked~.tab-w .lbl-d3{background:#BA7517;border-color:#BA7517}
-#d4:checked~.tab-w .lbl-d4{background:#3B6D11;border-color:#3B6D11}
+#d3:checked~.tab-w .lbl-d3{background:#3B6D11;border-color:#3B6D11}
+#d4:checked~.tab-w .lbl-d4{background:#BA7517;border-color:#BA7517}
 #d5:checked~.tab-w .lbl-d5{background:#0C447C;border-color:#0C447C}
 #d6:checked~.tab-w .lbl-d6{background:#27500A;border-color:#27500A}
 #d1:checked~.tab-w .lbl-d1 .dn,#d1:checked~.tab-w .lbl-d1 .dl,#d2:checked~.tab-w .lbl-d2 .dn,#d2:checked~.tab-w .lbl-d2 .dl,#d3:checked~.tab-w .lbl-d3 .dn,#d3:checked~.tab-w .lbl-d3 .dl,#d4:checked~.tab-w .lbl-d4 .dn,#d4:checked~.tab-w .lbl-d4 .dl,#d5:checked~.tab-w .lbl-d5 .dn,#d5:checked~.tab-w .lbl-d5 .dl,#d6:checked~.tab-w .lbl-d6 .dn,#d6:checked~.tab-w .lbl-d6 .dl{color:#fff}
@@ -670,6 +670,15 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-load-opt b{display:inline-block;min-width:56px;color:#3d3d38}
 .ex-load-opt span{color:#8a8a82;font-size:11px}
 .ex-load-opt.on{background:#F3E7E0;border-color:#d9bfb1;box-shadow:inset 0 0 0 1px #d9bfb1}
+/* 핵심/선택 경계 — 시간 없는 날의 커트라인 */
+.ex-tier{margin:10px 0 9px;padding:9px 12px;border-radius:9px;background:#F2F6F5;border:.5px solid #cfe0db;
+  font-size:11.5px;color:#4e6b64;line-height:1.55;display:flex;flex-direction:column;gap:2px}
+.ex-tier b{color:#085041;font-weight:700}
+.ex-tier span{font-size:10.5px;opacity:.8}
+/* 슈퍼세트 짝 배지 */
+.ex-ss-badge{display:inline-block;margin-top:4px;font-size:10px;color:#6b5518;background:#F6F1E3;
+  border:.5px solid #e6dcc2;border-radius:20px;padding:2px 8px;line-height:1.5;white-space:nowrap;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis}
 /* 브랜드 칩 — 같은 동작의 기구 변형을 한 탭으로 전환 */
 .ex-brand-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 7px}
 .ex-brand-lb{font-size:10px;color:#8a8a82;margin-right:2px}
@@ -843,13 +852,13 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="day-sel">
 <label class="day-lbl lbl-d1" for="d1"><span class="dn">Push A</span><span class="dl">가슴·어깨·삼두</span></label>
 <label class="day-lbl lbl-d2" for="d2"><span class="dn">Pull A</span><span class="dl">데드·등 두께</span></label>
-<label class="day-lbl lbl-d3" for="d3"><span class="dn">Push B</span><span class="dl">상부·측면·후면</span></label>
-<label class="day-lbl lbl-d4" for="d4"><span class="dn">Legs A</span><span class="dl">사두·코어</span></label>
+<label class="day-lbl lbl-d3" for="d3"><span class="dn">Legs A</span><span class="dl">데드·사두·코어</span></label>
+<label class="day-lbl lbl-d4" for="d4"><span class="dn">Push B</span><span class="dl">상부·측면·후면</span></label>
 <label class="day-lbl lbl-d5" for="d5"><span class="dn">Pull B</span><span class="dl">풀업·너비</span></label>
 <label class="day-lbl lbl-d6" for="d6"><span class="dn">Legs B</span><span class="dl">후면사슬·둔근</span></label>
 </div>
 <div class="day-panel dp1">
-<div class="day-header"><span class="hbadge" style="background:#D85A30">Push A</span><div class="hinfo">수평 프레스·오버헤드·삼두(짧은 각) · 복합 3분 / 고립 2분 / 펌프성 90초<br><b>순서 근거</b>: 수평 중량 → 수직 프레스(어깨 우선) → 하부 → 측면 → 삼두 → 후면삼각 마무리</div></div>
+<div class="day-header"><span class="hbadge" style="background:#D85A30">Push A</span><div class="hinfo">수평 프레스·오버헤드·삼두(짧은 각) · 복합 3분 / 고립 2분 / 펌프성 90초<br><b>순서 근거</b>: 수평 중량 → 삼두 복합 → <b>측면삼각</b> → 하부(디클라인) → 수직 프레스 → 페이스풀<br><b>핵심 3종목</b>: 벤치·딥스·래터럴 — 시간이 없어도 삼두 직접 자극과 측면삼각이 살아남게 한 배치다. 전면삼각(숄더프레스)은 라운드숄더에서 억제 대상이라 선택 구간</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>흉추 신전</b> — 폼롤러/벤치 등받이에 등 상부 걸고 10회 <span style="color:#8e8e93">(라운드숄더 가동성)</span></div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 외회전</b> — 팔꿈치 90도 고정 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>가슴(소흉근) 스트레칭</b> — 문틀 30초 × 2</div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>첫 종목 램프업</b> — 본세트 50%×10 → 75%×5</div></div></div></details>
 <div class="done-banner"><div class="di">💪</div><div class="dt">Push A 완료!</div><div class="ds">Push A 완주! 단백질 40g + 크레아틴. 다음 세션은 <b>Pull A(데드 데이)</b> — 이번 주 유일한 데드리프트이니 컨디션을 남겨둘 것.</div></div>
 <div class="ex-list">
@@ -862,7 +871,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 </div>
 <div class="day-panel dp2">
-<div class="day-header"><span class="hbadge" style="background:#185FA5">Pull A</span><div class="hinfo">힌지 + 수평 당김(두께) · <b>주 1회 데드 데이</b> · 수축 1초 / 신장 2~3초<br><b>순서 근거</b>: 데드(최대 중량) → 허리 무부하 로우 → 수직 → <b>측면삼각</b> → 이두 → 데드행 감압<br><b>조정</b>: 하이 로우 제거(같은 세션 머신 로우와 중복) → 그 자리에 래터럴 — 몸통 두께 대신 어깨 너비로</div></div>
+<div class="day-header"><span class="hbadge" style="background:#185FA5">Pull A</span><div class="hinfo">힌지 + 수평 당김(두께) · <b>주 1회 데드 데이</b> · 수축 1초 / 신장 2~3초<br><b>순서 근거</b>: 허리 무부하 로우 → 수직 당기기 → 이두 → 광배 고립 → 데드행 감압<br><b>핵심 3종목</b>: 머신로우·랫풀다운·바이셉스컬 — <b>데드리프트는 Legs A로 옮겼다</b>. 순환이 ABC ABC로 바뀌면서 Pull 다음이 항상 Legs가 되는데, 데드가 여기 있으면 후면사슬이 1.2일 간격으로 붙는다. 이 날을 체스트 서포티드 로우만 남겨 허리를 비워두는 것이 다음 세션의 데드리프트를 위한 배치다<br><b>조정</b>: 하이 로우 제거(같은 세션 머신 로우와 중복) → 그 자리에 래터럴 — 몸통 두께 대신 어깨 너비로</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 + 견갑 활성화 (10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2 (그립·광배 활성·척추 감압)</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>캣카우·힙힌지 드릴</b> — 각 10회</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>폼롤러 흉추 신전</b> — 롤러 가로, 등 상부(T4~T8) <b>60초</b> <span style="color:#8e8e93">(흉추가 굽으면 견갑이 모일 자리가 없다)</span></div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 어깨선보다 약간 아래 <b>30초 × 2</b> <span style="color:#8e8e93">(라운드숄더 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근 · 어깨 앞 통증 시 생략)</span></div></div><div class="wu-item"><div class="wu-num">6</div><div class="wu-txt"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이~2kg <b>12~15회</b> <span style="color:#8e8e93">(하부 승모 활성 — 상부 승모 과활성은 하부가 쉬어서 생긴다)</span></div></div><div class="wu-item"><div class="wu-num">7</div><div class="wu-txt"><b>월 슬라이드</b> — <b>10회</b> <span style="color:#8e8e93">(전거근·견갑 상방회전)</span></div></div><div class="wu-item"><div class="wu-num">8</div><div class="wu-txt"><b>데드 램프업</b> — 40×8 → 60×5 → 75×3</div></div><div class="wu-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다 — 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div></details>
 <div class="done-banner"><div class="di">🎯</div><div class="dt">Pull A 완료!</div><div class="ds">Pull A 완주! 데드 락아웃이 중립에서 끝났는지 확인. 다음 세션은 <b>Push B(상부 가슴)</b> — 기립근에 하루 더 여유를 준다.</div></div>
 <div class="ex-list">
@@ -873,8 +882,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="ex-wrap"><input type="checkbox" id="c2_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c2_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">데드행</div><div class="ex-meta"><span class="tag t-s">2×30초</span><span class="tag t-e">풀업 바</span><span class="tag t-m">전완·광배·척추 감압</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">매달린 채 <b>견갑을 아래로 끌어내리는</b> 힘 — 어깨가 귀에 붙으면 목적 상실.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft"><b>데드 직후 세션의 마무리</b> — 축 압박을 받은 척추를 감압하는 자리다. 견갑 하강(패킹)을 유지한 채 버티면 하부 승모 학습까지 함께 간다. 회복 부담이 사실상 0이라 아무리 힘든 날에도 거르지 말 것.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">어깨 통증 시 중단. 반동으로 흔들리지 않게, 턱은 살짝 당긴 중립.</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">바를 어깨너비로 잡고 매달리기</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">견갑 아래로 끌어내리고 갈비뼈 닫기</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">30초 유지 — 코로 호흡</div></div><div class="fstep"><div class="snum">4</div><div class="stxt">턱 당겨 목 중립 유지</div></div></div></details></div></details></div>
 </div>
 </div>
-<div class="day-panel dp3">
-<div class="day-header"><span class="hbadge" style="background:#BA7517">Push B</span><div class="hinfo">인클라인·플라이(신장) + 측면·후면삼각 · <b>라운드숄더 교정 비중이 가장 높은 날</b><br><b>순서 근거</b>: 상부 가슴(최우선) → 스트레치 → 측면 → 후면삼각 → 삼두(신장) → 페이스풀</div></div>
+<div class="day-panel dp4">
+<div class="day-header"><span class="hbadge" style="background:#BA7517">Push B</span><div class="hinfo">인클라인·플라이(신장) + 측면·후면삼각 · <b>라운드숄더 교정 비중이 가장 높은 날</b><br><b>순서 근거</b>: 상부 가슴(최우선) → 측면 → 페이스풀 → <b>상부 스트레치</b> → 후면삼각 → 삼두(신장)<br><b>핵심 3종목</b>: 인클라인 프레스·케이블 래터럴·페이스풀 — 펙덱(중부)을 인클라인 플라이(상부)로 바꿔 이 날을 상부 전담으로 만들었고, 라운드숄더 교정은 핵심에 고정했다</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>흉추 신전</b> — 폼롤러/벤치 등받이에 등 상부 걸고 10회 <span style="color:#8e8e93">(라운드숄더 가동성)</span></div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>밴드 외회전</b> — 15회 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>첫 종목 램프업</b> — 본세트 50%×10 → 75%×5</div></div></div></details>
 <div class="done-banner"><div class="di">🔥</div><div class="dt">Push B 완료!</div><div class="ds">Push B 완주! 다음 세션은 <b>Legs A(사두)</b> — 데드로부터 이틀 지나 기립근이 회복된 시점이다.</div></div>
 <div class="ex-list">
@@ -886,8 +895,8 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <div class="ex-wrap"><input type="checkbox" id="c3_6" class="exck"><details class="ex-card"><summary><label class="ck-btn" for="c3_6" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">페이스풀 (케이블) ⭐필수</div><div class="ex-meta"><span class="tag t-s">3×15~20</span><span class="tag t-e">케이블</span><span class="tag t-m">후면삼각·외회전근</span></div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft"><b>어깨 건강 보험</b> — 얼굴 쪽으로 당기며 외회전. 프레스 볼륨의 균형추.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">Push A·B 양쪽 고정 = <b>주 2회</b>. <b>Push B에서는 리어 델트 플라이와 짝</b> — 플라이가 후면삼각을 순수 고립한다면 이쪽은 외회전근(극하근·소원근)까지 함께 가져간다. 라운드숄더 교정 비중이 가장 높은 날의 마무리.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">무게 욕심 금지 — 폼이 전부. <b>승모가 으쓱하면 즉시 무게를 낮춘다</b>(상부 승모는 이미 과활성).</div></div></div><details class="flow-d"><summary>📋 동작 순서</summary><div class="flow-steps"><div class="fstep"><div class="snum">1</div><div class="stxt">로프 얼굴 높이</div></div><div class="fstep"><div class="snum">2</div><div class="stxt">당기며 외회전</div></div><div class="fstep"><div class="snum">3</div><div class="stxt">정점 1초</div></div></div></details></div></details></div>
 </div>
 </div>
-<div class="day-panel dp4">
-<div class="day-header"><span class="hbadge" style="background:#3B6D11">Legs A</span><div class="hinfo">무릎 지배(사두 강조) + 중둔근·하복부 · <b>종아리 직접 운동 제외</b>(이미 발달) · 운동 후 탄수 보충 OK<br><b>순서 근거</b>: 복합 스쿼트 → 사두 고립 → 햄 → 중둔근 → 코어</div></div>
+<div class="day-panel dp3">
+<div class="day-header"><span class="hbadge" style="background:#3B6D11">Legs A</span><div class="hinfo">무릎 지배(사두 강조) + 중둔근·하복부 · <b>종아리 직접 운동 제외</b>(이미 발달) · 운동 후 탄수 보충 OK<br><b>순서 근거</b>: <b>데드리프트(최대 중량)</b> → 사두 고립 → 코어(앱 휠) → 햄 → 중둔근<br><b>핵심 3종목</b>: 데드리프트·레그익스텐션·앱 휠 — 데드를 Pull A에서 이 날 1번으로 옮겨 힌지를 Legs A·Legs B로 나눴다(둘 사이 3.5일). 직전 세션인 Pull A가 허리 무부하 로우만 하므로 기립근이 비어 있는 상태로 들어온다. 코어는 6주 연속 기록이 0이었던 부위라 핵심에 넣었다</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>고관절 오프너</b> — 90/90·월드 그레이티스트 각 8회</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>발목 배측굴곡 드릴</b> — 무릎을 발끝 너머로 10회 × 2 <span style="color:#8e8e93">(종아리 발달형은 발목이 뻣뻣하다)</span></div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>둔근 활성</b> — 밴드 사이드워크 15보 × 2</div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>V스쿼트 램프업</b> — 50%×10 → 75%×5</div></div></div></details>
 <div class="done-banner"><div class="di">🦵</div><div class="dt">Legs A 완료!</div><div class="ds">Legs A 완주! 인슐린 민감도 상승 — 밥 증량 OK · 23:00 카제인+견과류. 다음 세션은 <b>Pull B(풀업·T바)</b>.</div></div>
 <div class="ex-list">
@@ -899,7 +908,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 </div>
 <div class="day-panel dp5">
-<div class="day-header"><span class="hbadge" style="background:#0C447C">Pull B</span><div class="hinfo">수직 당김(너비) + 프리웨이트 로우 · <b>데드 없는 날</b> — 기립근 여유를 로우에 쓴다<br><b>순서 근거</b>: 체중 수직(그립 신선할 때) → 프리 로우 → 견갑 하강 → 팔 → 데드행<br><b>조정</b>: 케이블 시티드 로우 제거(T바와 중복) — 세션 단축분은 회복(수면)에 돌린다</div></div>
+<div class="day-header"><span class="hbadge" style="background:#0C447C">Pull B</span><div class="hinfo">수직 당김(너비) + 프리웨이트 로우 · <b>데드 없는 날</b> — 기립근 여유를 로우에 쓴다<br><b>순서 근거</b>: 체중 수직(그립 신선할 때) → 프리 로우 → 페이스풀 → <b>측면삼각</b> → 팔 → 데드행<br><b>핵심 3종목</b>: 풀업·T바로우·페이스풀 — 페이스풀은 Push B와 함께 주 2일을 핵심으로 고정했다. 프리 로우가 있는 날이라 다음 세션 Legs B의 힌지는 가벼운 루마니안으로 뒀다<br><b>조정</b>: 케이블 시티드 로우 제거(T바와 중복) — 세션 단축분은 회복(수면)에 돌린다</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 + 견갑 활성화 (10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>데드행</b> — 20~30초 × 2</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>폼롤러 흉추 신전</b> — 롤러 가로, 등 상부(T4~T8) <b>60초</b> <span style="color:#8e8e93">(흉추가 굽으면 견갑이 모일 자리가 없다)</span></div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>문틀 소흉근 스트레치</b> — 팔꿈치 90도, 어깨선보다 약간 아래 <b>30초 × 2</b> <span style="color:#8e8e93">(라운드숄더 주범은 대흉근이 아니라 견갑을 전방경사시키는 소흉근 · 어깨 앞 통증 시 생략)</span></div></div><div class="wu-item"><div class="wu-num">5</div><div class="wu-txt"><b>프론 Y-레이즈</b> — 엎드려 Y자, 무게 없이~2kg <b>12~15회</b> <span style="color:#8e8e93">(하부 승모 활성 — 상부 승모 과활성은 하부가 쉬어서 생긴다)</span></div></div><div class="wu-item"><div class="wu-num">6</div><div class="wu-txt"><b>월 슬라이드</b> — <b>10회</b> <span style="color:#8e8e93">(전거근·견갑 상방회전)</span></div></div><div class="wu-item"><div class="wu-num">7</div><div class="wu-txt"><b>풀업 램프업</b> — 어시스트 높게 8회 → 본세트 설정</div></div><div class="wu-cue">💬 <b>큐 교정</b> — "견갑을 모아라"가 아니라 <b>"가슴을 천장으로 들어라"</b>. 후인만 지시하면 상부 승모가 으쓱하고 끝난다 — 필요한 건 <b>후인 + 하강</b>이 한 세트다. 첫 종목 전 <b>스캡 로우</b>(팔은 편 채 견갑만 당겼다 놓기) 10회 1세트를 넣으면 본세트에서 감각이 살아난다.</div></div></details>
 <div class="done-banner"><div class="di">🦾</div><div class="dt">Pull B 완료!</div><div class="ds">Pull B 완주! 다음 세션은 <b>Legs B(후면사슬)</b> — RDL은 데드와 4세션 간격이니 폼 우선으로 가볍게 시작.</div></div>
 <div class="ex-list">
@@ -911,7 +920,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
 </div>
 </div>
 <div class="day-panel dp6">
-<div class="day-header"><span class="hbadge" style="background:#27500A">Legs B</span><div class="hinfo">고관절 지배(후면사슬·둔근) + 사두 보조·코어 · 데드와 4세션 간격 · <b>카프 레이즈 제외</b><br><b>순서 근거</b>: 힌지(신장) → 레그프레스(사두 보조) → 둔근 수축 → 중둔근 → 코어</div></div>
+<div class="day-header"><span class="hbadge" style="background:#27500A">Legs B</span><div class="hinfo">고관절 지배(후면사슬·둔근) + 사두 보조·코어 · 데드와 4세션 간격 · <b>카프 레이즈 제외</b><br><b>순서 근거</b>: 복합 스쿼트 → 힌지(신장) → 코어 → 레그프레스 → 둔근 수축<br><b>핵심 3종목</b>: V스쿼트·루마니안·케이블 크런치 — 직전 세션 Pull B에 프리 로우(T-바)가 있어 이 날 힌지는 데드가 아니라 <b>더 가벼운 루마니안</b>이 맡는다. 중둔근은 Legs A가 담당하고 이 날은 대둔(힙 쓰러스트)만 남겼다</div></div>
 <details class="info-card wu-card"><summary>🔥 워밍업 (7~10분)<span class="ic">▾</span></summary><div class="info-body"><div class="wu-item"><div class="wu-num">1</div><div class="wu-txt"><b>친 턱(턱 당기기)</b> — 뒤통수를 위로 밀며 턱만 당겨 5초 × 10회 <span style="color:#8e8e93">(심부 목 굴곡근·거북목)</span></div></div><div class="wu-item"><div class="wu-num">2</div><div class="wu-txt"><b>고관절 오프너</b> — 90/90 각 8회</div></div><div class="wu-item"><div class="wu-num">3</div><div class="wu-txt"><b>둔근 활성</b> — 밴드 사이드워크 15보 × 2</div></div><div class="wu-item"><div class="wu-num">4</div><div class="wu-txt"><b>RDL 램프업</b> — 빈 바 10회 → 본세트 60%×8</div></div></div></details>
 <div class="done-banner"><div class="di">🔚</div><div class="dt">Legs B 완료!</div><div class="ds">6세션 순환 완주! 🎉 인슐린 민감도 상승 — 밥 증량 OK · 23:00 카제인+견과류. 다음은 <b>Push A</b>. 휴식일 20:00 인바디.</div></div>
 <div class="ex-list">
@@ -1248,7 +1257,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
     <span class="plan-badge" style="background:#185FA5">에스트로겐 우세 가능</span>
   </div>
   <div class="plan-body-list">
-    <div class="plan-body-row"><span class="plan-body-icon">⚠️</span><span>내장지방레벨 <b>10</b>(11→10 개선) → 식단 적자 우선, 저강도 유산소는 <b>주 2~3회 × 20~30분 추가</b>(웨이트 대체 금지)</span></div><div class="plan-body-row"><span class="plan-body-icon">📉</span><span><b>컷 국면 18주</b>(~12/20) — 90.0kg·27.3% → 83~84kg·20% · 주 0.4kg · 4주 평균으로만 판정</span></div><div class="plan-body-row"><span class="plan-body-icon">📊</span><span><b>주간 볼륨 68,000~72,000 복원이 1순위</b> — 8월 41,000까지 하락. 볼륨이 빠지면 감량이 근손실로 전환</span></div><div class="plan-body-row"><span class="plan-body-icon">🔁</span><span>6주 블록 + 디로드 1주(세트 −40%·<b>중량 유지</b>) — W7(10/4), W14(11/22)</span></div>
+    <div class="plan-body-row"><span class="plan-body-icon">⚠️</span><span>내장지방레벨 <b>10</b>(11→10 개선) → 식단 적자 우선, 저강도 유산소는 <b>주 2~3회 × 20~30분 추가</b>(웨이트 대체 금지)</span></div><div class="plan-body-row"><span class="plan-body-icon">📉</span><span><b>컷 국면 18주</b>(~12/20) — 90.0kg·27.3% → 83~84kg·20% · 주 0.4kg · 4주 평균으로만 판정</span></div><div class="plan-body-row"><span class="plan-body-icon">📊</span><span><b>KPI는 볼륨도 출석 일수도 아니라 「순환 완주 일수 ≤ 8일」</b>이다. 볼륨이 낮았던 주는 강도가 떨어진 게 아니라 <b>시간이 없어 세션이 짧거나 빠진 주</b>였다 — 일당 볼륨은 10,119±21%로 내내 안정적이었고, 주간 볼륨 편차(23%)는 거의 전부 훈련 일수로 설명된다. 그래서 총량 목표는 시간이 없는 주에 달성 불가능한 숙제가 될 뿐이다. 대신 <b>핵심 3종목(30~40분)만 해도 한 세션으로 인정</b>하고, 6타입 한 바퀴를 8일 안에 닫는 것만 본다. 한 바퀴가 닫히면 각 부위 주기가 지켜지고 볼륨은 따라온다(6일 주간 61,000 / 4~5일 45,600). ※ 종전 목표 68,000~72,000은 최고 주(7/6~ 6일 74,974)를 기준선으로 삼은 값이고, 데드행 이중계산이 섞여 8월 수치가 6% 부풀려져 있었다</span></div><div class="plan-body-row"><span class="plan-body-icon">🔁</span><span>6주 블록 + 디로드 1주(세트 −40%·<b>중량 유지</b>) — W7(10/4), W14(11/22)</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">💪</span><span>하체(데드·스쿼트) 진전이 가장 빠름 → 집중 투자</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">🧠</span><span>상체 고립 → 무게보다 마인드머슬 연결 우선</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">💧</span><span>다한증 → 운동 중 전해질(물+소금) 필수</span></div>
@@ -1445,7 +1454,7 @@ const RECO_CAT={push:['가슴','측면삼각','전면삼각','후면삼각','삼
 // 종아리는 발달 완료로 프로그램에서 의도적으로 뺐다. 목표에 남겨두면 달성률이 영구 미달로 찍혀 신호가 죽는다.
 // (볼륨 그래프에는 계속 표시되며, 기록이 있으면 값이 보인다.)
 const RECO_TARGET_PRI={'측면삼각':2,'등':1,'가슴':1,'후면삼각':1}; // 재배분 시 먼저 채울 부위 (프레임·자세 교정 우선)
-const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':6,'후면삼각':8,'삼두':8,'이두':8,'대퇴사두':8,'후면사슬':8,'코어':6};
+const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':3,'후면삼각':8,'삼두':8,'이두':8,'대퇴사두':8,'후면사슬':8,'코어':6}; // 전면삼각 6→3: 라운드숄더에서 억제 대상으로 정해놓고 목표를 6으로 두면 앱이 매 세션 '전면삼각 부족'을 띄우고 오버헤드 프레스를 추천한다 — 프로그램이 스스로와 싸우던 부분
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","Pull B":"#0C447C","Legs A":"#3B6D11","Legs B":"#27500A",Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 // 재배치(26.07): 안드로이드·라운드숄더·발달된 종아리 반영.
@@ -1457,12 +1466,46 @@ const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","P
 //  ③ Push A의 디클라인 → 인클라인: 상부 2·중부 1로 바뀌어 "라운드숄더로 윗가슴 우선" 원칙과 실제가 일치.
 //  ④ 페이스풀을 Pull B에 추가 → 후면삼각 주 3회, Pull B도 6종목으로 균형(볼륨 복원에도 기여).
 //  ⑤ Legs B에 레그 익스텐션 → 사두 주 2회(기존 Legs B는 사두가 레그프레스뿐).
-const EL_DAY_EX={"Push A":["Hammer ISO-호라이즌털 벤치프레스","Watson 인클라인 (isolateral)","머신 숄더 프레스","Nautilus 래터럴 레이즈 머신","딥스 머신","페이스풀 (케이블) ⭐필수"],"Pull A":["바벨 데드리프트","머신 로우 (체스트 서포티드)","랫풀다운","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],"Push B":["Hammer ISO-인클라인 프레스","펙덱 플라이","케이블 래터럴 레이즈","리어 델트 플라이","트라이셉스 익스텐션 머신","페이스풀 (케이블) ⭐필수"],"Legs A":["V스쿼트 머신","레그 익스텐션","레그컬 (머신)","힙 어브덕션 (머신)","케이블 크런치"],"Pull B":["풀업 (체중/어시스트)","T-바 로우","스트레이트암 풀다운","바이셉스 컬 머신","페이스풀 (케이블) ⭐필수","데드행"],"Legs B":["루마니안 데드리프트","Nautilus 시티드 레그프레스","레그 익스텐션","힙 어덕션 머신","케이블 크런치"]};
+const EL_DAY_EX={
+"Push A":["Hammer ISO-호라이즌털 벤치프레스","딥스 머신","Nautilus 래터럴 레이즈 머신","Watson 디클라인 (isolateral)","머신 숄더 프레스","페이스풀 (케이블) ⭐필수"],
+"Pull A":["머신 로우 (체스트 서포티드)","랫풀다운","바이셉스 컬 머신","스트레이트암 풀다운","데드행"],
+"Legs A":["바벨 데드리프트","레그 익스텐션","앱 휠 롤아웃","레그컬 (머신)","힙 어브덕션 (머신)"],
+"Push B":["Hammer ISO-인클라인 프레스","케이블 래터럴 레이즈","페이스풀 (케이블) ⭐필수","인클라인 케이블 플라이","리어 델트 플라이","트라이셉스 익스텐션 머신"],
+"Pull B":["풀업 (체중/어시스트)","T-바 로우","페이스풀 (케이블) ⭐필수","케이블 래터럴 레이즈","바이셉스 컬 머신","데드행"],
+"Legs B":["V스쿼트 머신","루마니안 데드리프트","케이블 크런치","시티드 레그프레스","Booty Builder 힙 쓰러스트"]};
+// 재배치(26.08-d): 순환을 ABC ABC로 바꾸고 데드리프트를 Pull에서 Legs로 옮겼다.
+//   [문제] 이전 순환(Push A→Pull A→Push B→Legs A→Pull B→Legs B)은 짝을 2/4로 갈라놓아
+//     가슴·대퇴사두·후면사슬이 최소 2.3일(주 6일 기준) 간격이었다. 컷 국면에서 큰 근육에 2.3일은 얇다.
+//   [해결] Push→Pull→Legs를 두 번 도는 ABC ABC로 바꾸면 모든 짝이 정확히 3세션 = 3.5일이 된다.
+//     다만 ABC ABC는 Pull 다음이 항상 Legs라, 데드리프트가 Pull A에 있으면 후면사슬이 1.2일로 붙어버린다.
+//     그래서 데드리프트를 Legs A의 1번으로 옮겼다 — 힌지가 Legs A(데드)·Legs B(루마니안)로 나뉘어
+//     둘 사이도 3.5일이 된다(이전 2.3일).
+//   [기립근 순서] Pull A는 머신 로우(체스트 서포티드, 허리 무부하)만 남겨 다음 세션의 데드리프트와 겹치지 않게 했다.
+//     프리 로우(T-바)는 Pull B에 두고, 그 다음 Legs B의 힌지는 데드보다 가벼운 루마니안이 맡는다.
+//   [결과] 큰 근육 4개 전부 3.5일 · 힌지 3.5일 · 핵심만 돌아도 0세트 부위 없음 · 총 117세트(이전 120).
+//     어깨(측면·후면삼각)만 1.2일 간격인데, 가벼운 소도구·교정 운동이라 회복 요구가 1일이어서 문제되지 않는다.
+// 이전 판(26.08-c)에서 이어지는 결정들:
+//   ① 핵심 3종목은 '무거운 것'이 아니라 '빠지면 목표에서 가장 멀어지는 것'으로 선정(전수 탐색).
+//   ② 전면삼각(숄더 프레스)은 핵심 금지 — 라운드숄더 억제 대상. RECO_TARGET도 6→3으로 내렸다.
+//   ③ Push A는 벤치(중부), Push B는 인클라인(상부)으로 시작. 상부 우선은 순서가 아니라 종목 수로
+//      (Push B의 펙덱(중부) → 인클라인 케이블 플라이(상부)).
+//   ④ Legs 날은 코어를 핵심에 — 6주 연속 미기록 재발 방지. 앱 휠은 힌지가 가벼운 Legs A에.
+//   ⑤ 종아리는 이미 발달해 계속 제외.
+// ── 핵심 종목 수: 앞에서 이만큼이 그날의 최소 단위. 시간이 없으면 여기까지만 해도 세션으로 친다 ──
+const EL_DAY_CORE={"Push A":3,"Pull A":3,"Push B":3,"Legs A":3,"Pull B":3,"Legs B":3};
+// ── 선택 구간 슈퍼세트: 길항근/비경합 근육을 짝지어 휴식을 공유한다(라운드 사이 60~90초) ──
+const EL_DAY_SS={
+"Push A":[["머신 숄더 프레스","페이스풀 (케이블) ⭐필수"]],
+"Pull A":[["스트레이트암 풀다운","데드행"]],
+"Push B":[["리어 델트 플라이","트라이셉스 익스텐션 머신"]],
+"Legs A":[["레그컬 (머신)","힙 어브덕션 (머신)"]],
+"Pull B":[["케이블 래터럴 레이즈","바이셉스 컬 머신"]],
+"Legs B":[["시티드 레그프레스","Booty Builder 힙 쓰러스트"]]};
 // ── PPL A/B 순환제(6세션): Push A→Pull A→Legs A→Push B→Pull B→Legs B. 요일 고정이 아니라 순서 고정이라
 //    쉬는 날이 생겨도 순환이 밀리지 않는다. 주 6일 기준 각 세션 주 1회 = 데드리프트도 약 7일 간격.
 // 순서 근거: 데드(Pull A) 다음 세션에 하체를 두지 않고 Push B를 끼워 기립근에 하루 더 준다.
 // 데드(2번째) ↔ RDL(6번째)은 4세션 간격, 휴식일까지 끼면 실제 3~4일 — 후면사슬 주 2회를 안전하게 유지.
-const EL_CYCLE=['Push A','Pull A','Push B','Legs A','Pull B','Legs B'];
+const EL_CYCLE=['Push A','Pull A','Legs A','Push B','Pull B','Legs B']; // ABC ABC — 같은 부위가 정확히 3세션(주 6일이면 3.5일) 간격
 const EL_BASE={'Push':'Push A','Pull':'Pull A','Legs':'Legs A','Push+':'Push B','Pull+':'Pull B','Legs+':'Legs B'}; // 구버전(3세션 순환·옛 6일제) 기록을 신 A/B 타입으로 흡수
 const EL_GROUP=t=>/^Push/.test(t)?'push':/^Pull/.test(t)?'pull':'legs'; // 타입→부위 그룹 (A/B 공통)
 
@@ -1559,6 +1602,7 @@ const ExLog={
     this.injectLogs();
     this.injectAddBtns();
     this.injectDeleteBtns();
+    this.reconcilePanels(); // 정적 카드를 EL_DAY_EX에 맞춘 뒤에 슬롯을 굳힌다 — 둘이 어긋나 있던 원인 제거
     this._assignSlots();   // applyPlan(→_sortDay)보다 먼저 — HTML 순서를 슬롯으로 굳힌 뒤에 재배치를 허용
     this.applyPlan();
     this.injectTargets();
@@ -1694,7 +1738,40 @@ const ExLog={
     if(r.plateau>=2)sig.push('복합 '+r.plateau+'종 3회 연속 정체');
     const wk=this.blockWeek()||0;
     if(wk>=5)sig.push('블록 '+wk+'주차');
-    return{signals:sig,suggest:sig.length>=2,day:this.deloadDay()};
+    // ── 사각지대 보고 ────────────────────────────────────────────────────
+    // 6개 신호 중 '통증'과 '블록 주차'는 각각 통증 플래그·블록 시작일이 있어야만 켜진다.
+    // 둘 다 비어 있으면 판정이 사실상 RPE 3종으로만 이뤄지는데, RPE가 내려가는 국면에서는
+    // 그 3종도 켜지지 않아 suggest 임계(2개)에 영영 못 닿는다. 화면에는 '이상 없음'으로만 보이므로
+    // 왜 조용한지를 함께 돌려준다. 컷처럼 회복이 느린 국면에서 디로드를 놓치는 경로가 여기다.
+    const blind=[];
+    if(!wk)blind.push('훈련 블록이 시작되지 않아 「블록 5주차+」 신호가 꺼져 있습니다');
+    if(!this._painEver())blind.push('통증 플래그를 한 번도 쓰지 않아 「통증 2회+/7일」 신호가 꺼져 있습니다');
+    return{signals:sig,suggest:sig.length>=2,day:this.deloadDay(),blind};
+  },
+  // 통증 플래그가 기록에 한 번이라도 쓰였는지 — dataVer로 메모이즈
+  _painEver(){
+    if(this._painEverCache&&this._painEverCache.k===this.dataVer)return this._painEverCache.v;
+    let found=false;
+    for(const dk in this.data){
+      if(found)break;
+      (this.data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(st=>{if(st&&st.pain)found=true;});});
+    }
+    this._painEverCache={k:this.dataVer,v:found};
+    return found;
+  },
+
+  // ── 유산소 실적: 계획은 '주 2~3회 × 20~30분'인데 10주간 1회뿐이었다 ──────────
+  // 웨이트 볼륨·강도는 매 세션 화면에 뜨지만 유산소는 어디에도 집계되지 않아, 안 하고 있다는 사실
+  // 자체가 보이지 않았다. 내장지방 레벨이 11→10에서 7주째 멈춰 있는 것과 같은 자리의 문제다.
+  weekCardio(){
+    const base=new Date(this.date+'T12:00:00');
+    let n=0,min=0;
+    for(const k in this.data){
+      const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
+      if(ago<0||ago>=7)continue;
+      ((this.data[k]||{}).cardio||[]).forEach(c=>{const m=+c.min||0;if(m>0){n++;min+=m;}});
+    }
+    return{n,min,need:2,needMin:20};   // 계획: 주 2~3회 × 20~30분 (웨이트 대체 금지)
   },
 
   // ── 회복 병목(수면): 디로드와 분리한다 ────────────────────────────────────
@@ -1977,7 +2054,7 @@ const ExLog={
   setSession(s){this.data[this.date]=s;this.markDirty(this.date);this.save();this._dirty.add(this.date);this._saveDirty();},
 
   // ── 데이 플랜 편집 (DB에서 구성 · 추가/삭제 · 영속) ──
-  PANEL_DAY:['Push A','Pull A','Push B','Legs A','Pull B','Legs B'],
+  PANEL_DAY:['Push A','Pull A','Legs A','Push B','Pull B','Legs B'], // EL_CYCLE과 동일 — 탭 순서와 순환 순서를 한 축으로
   DAY_CATS:{'Push A':['push','small'],'Pull A':['pull','small'],'Legs A':['legs','core'],'Push B':['push','small'],'Pull B':['pull','small'],'Legs B':['legs','core']},
   panelDayOf(panel){const m=((panel&&panel.className)||'').match(/dp([1-9])/);return m?this.PANEL_DAY[+m[1]-1]:'Push A';},
   async loadPlan(){try{const r=await window.storage.get('plan_v2');if(r)this.plan=JSON.parse(r.value);}catch(_){}},
@@ -2261,6 +2338,56 @@ const ExLog={
       this._sortDay(panel); // 추가 종목만 배치 (기본 슬롯 순서는 보존)
     });
   },
+  // ── 패널 ↔ EL_DAY_EX 정합 ──────────────────────────────────────────────
+  // 정적 카드와 EL_DAY_EX를 따로 손으로 관리하다 26.08 개편이 목록에만 반영되어 4개 타입이 어긋났었다
+  // (운동 탭은 여전히 디클라인인데 목록은 인클라인, Legs A는 레그레이즈 vs 케이블 크런치 …).
+  // 이제 EL_DAY_EX가 유일한 기준이다: 목록 순서대로 카드를 재배치하고, 없는 종목은 도감에서 만들어 붙이고,
+  // 목록에 없는 정적 카드는 숨긴다(삭제하지 않아 plan.add로 언제든 되살릴 수 있다).
+  // _assignSlots보다 먼저 돌아야 슬롯 번호가 목록 기준으로 굳는다.
+  reconcilePanels(){
+    document.querySelectorAll('.day-panel').forEach(panel=>{
+      const list=panel.querySelector('.ex-list');if(!list)return;
+      const day=this.panelDayOf(panel);
+      const want=EL_DAY_EX[day];if(!want||!want.length)return;
+      const nameOf=w=>(w.dataset.swapto||w.dataset.cname||w.querySelector('.ex-nm')?.textContent||'').trim();
+      const have=new Map();
+      [...list.querySelectorAll('.ex-wrap')].forEach(w=>{const n=nameOf(w);if(n&&!have.has(n))have.set(n,w);});
+      want.forEach(n=>{
+        let w=have.get(n);
+        if(!w){ w=this.buildCardEl(n); w.classList.remove('custom-ex'); delete w.dataset.cname; have.set(n,w); }
+        w.style.display='';
+        list.appendChild(w);            // 기존 노드면 끝으로 이동 → want 순서가 그대로 DOM 순서가 된다
+      });
+      // 목록에서 빠진 카드는 숨기고 뒤로 보낸다 — _assignSlots가 DOM 순서로 슬롯을 매기므로
+      // 앞에 남아 있으면 보이지도 않는 카드가 1번 슬롯을 차지한다.
+      have.forEach((w,n)=>{ if(!want.includes(n)){ w.style.display='none'; list.appendChild(w); } });
+      this._markTiers(panel,day,list);
+    });
+  },
+  // 핵심/선택 경계선과 슈퍼세트 배지 — '시간이 없으면 어디까지'를 카드에서 바로 읽게 한다
+  _markTiers(panel,day,list){
+    list.querySelectorAll('.ex-tier').forEach(el=>el.remove());
+    panel.querySelectorAll('.ex-ss-badge').forEach(el=>el.remove());
+    const want=EL_DAY_EX[day]||[], core=EL_DAY_CORE[day]||0;
+    const wraps=[...list.querySelectorAll('.ex-wrap')].filter(w=>w.style.display!=='none');
+    if(core>0&&wraps[core]){
+      const d=document.createElement('div');d.className='ex-tier';
+      d.innerHTML='<b>여기까지가 핵심 '+core+'종목</b> · 대략 30~40분 — 시간이 없는 날은 여기서 끝내도 한 세션으로 친다'
+                 +'<span>아래는 여유 있을 때 · 슈퍼세트로 묶으면 10분 안쪽</span>';
+      list.insertBefore(d,wraps[core]);
+    }
+    (EL_DAY_SS[day]||[]).forEach((pair,pi)=>{
+      pair.forEach((nm,i)=>{
+        const w=wraps.find(x=>((x.dataset.swapto||x.dataset.cname||x.querySelector('.ex-nm')?.textContent||'').trim())===nm);
+        const sm=w&&w.querySelector('summary .ex-info');
+        if(!sm||sm.querySelector('.ex-ss-badge'))return;
+        const b=document.createElement('span');b.className='ex-ss-badge';
+        b.textContent='🔗 슈퍼세트 '+(i===0?'A':'B')+' — '+pair[1-i];
+        b.title='두 종목을 번갈아 하고 라운드 사이에만 60~90초 쉰다';
+        sm.appendChild(b);
+      });
+    });
+  },
   // ── 기본 카드에 슬롯 번호 부여: HTML에 손으로 짠 순서(day-header의 '순서 근거')를 1급 데이터로 고정 ──
   // 최초 1회 DOM 순서대로 부여하므로 HTML을 수동 편집할 필요가 없다. 스왑은 _transformWrap이 제자리 변환이라 슬롯이 승계된다.
   _assignSlots(){
@@ -2512,7 +2639,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" style="display:none" title="이 세트에서 통증 발생 표시">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div><div class="wl-rep-chips" style="display:none"></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-alias-btn" onclick="ExLog.toggleAlias(this)" title="과거 기록 연결 (장비·이름 변경 시)">🔗</button><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">✓</button><button class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" title="이 세트에서 통증 발생 — 확정 전에 눌러두면 함께 저장됩니다">⚠️</button><button class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">✕</button></div><div class="wl-rep-chips" style="display:none"></div>`;
   },
 
   injectLogs(){
@@ -2706,7 +2833,7 @@ const ExLog={
     const sn=log.querySelector('.ex-log-sn');
     log.dataset.editIdx='';                                  // 신규 입력 모드
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
-    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='none';pb.classList.remove('on');}
+    const pb=inp.querySelector('.wl-pain-btn');if(pb)pb.classList.remove('on');
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
     const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.remove('on');
     const s=this.session();
@@ -2769,7 +2896,7 @@ const ExLog={
     if(wi)this._updateTotalHint(wi);
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value=ex.sets[i].rpe?String(ex.sets[i].rpe):'';
     const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.toggle('on',!!ex.sets[i].warmup);
-    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='';pb.classList.toggle('on',!!ex.sets[i].pain);}
+    const pb=inp.querySelector('.wl-pain-btn');if(pb)pb.classList.toggle('on',!!ex.sets[i].pain);
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
     const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
     inp.style.display='flex';
@@ -2826,6 +2953,8 @@ const ExLog={
     const rpe=rpeSel?parseFloat(rpeSel.value)||0:0;          // RPE는 선택 입력 — 있을 때만 세트에 저장
     const wuBtn=inp.querySelector('.wl-wu-btn');
     const wuOn=!!(wuBtn&&wuBtn.classList.contains('on'));    // 워밍업 세트 — 기록은 남기되 집계 제외
+    const painBtn=inp.querySelector('.wl-pain-btn');
+    const painOn=!!(painBtn&&painBtn.classList.contains('on')); // 통증 — RPE·워밍업과 같은 방식으로 확정 시 함께 저장
     const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
@@ -2833,7 +2962,7 @@ const ExLog={
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
       // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
       const old=ex.sets[+editIdx];
-      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},this._loadMeta(log.dataset.exname,w),old.pain?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
+      ex.sets[+editIdx]=Object.assign({weight:w,reps:r,ts:old.ts||new Date().toISOString()},this._loadMeta(log.dataset.exname,w),painOn?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
@@ -2842,7 +2971,7 @@ const ExLog={
     }
     // 신규 세트 (워밍업은 PR 판정 대상 아님)
     const isPR=wuOn?false:this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},this._loadMeta(log.dataset.exname,w),rpe?{rpe}:{},wuOn?{warmup:true}:{}));
+    ex.sets.push(Object.assign({weight:w,reps:r,ts:new Date().toISOString()},this._loadMeta(log.dataset.exname,w),rpe?{rpe}:{},wuOn?{warmup:true}:{},painOn?{pain:true}:{}));
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
@@ -2909,7 +3038,7 @@ const ExLog={
     const rc=log.querySelector('.wl-rep-chips');if(rc)rc.style.display='none';
     log.dataset.editIdx='';
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
-    const pb=inp.querySelector('.wl-pain-btn');if(pb){pb.style.display='none';pb.classList.remove('on');}
+    const pb=inp.querySelector('.wl-pain-btn');if(pb)pb.classList.remove('on');
     const ab=log.querySelector('.ex-log-add-btn');
     if(ab)ab.style.display='';
   },
@@ -2919,7 +3048,11 @@ const ExLog={
     const inp=el.closest('.ex-log-input');
     const log=inp.closest('.ex-log');
     const editIdx=log.dataset.editIdx;
-    if(editIdx===''||editIdx==null)return;                   // 신규 입력 모드에서는 비활성 (버튼 자체가 숨김)
+    // 신규 입력 모드: 버튼 상태만 켜두고 confirmSet이 저장한다.
+    // 이전에는 수정 모드에서만 눌 수 있어서, 통증을 남기려면 세트를 확정한 뒤 칩을 눌러 수정으로 들어가야 했다.
+    // 통증은 세트 도중에 생기는데 기록에 두 단계가 더 필요했던 셈이고, 857세트 중 0건이 그 결과다.
+    // 디로드 신호 「통증 2회+/7일」과 '같은 종목 재도전 시 통증 이력 상기'가 둘 다 이 플래그에 걸려 있다.
+    if(editIdx===''||editIdx==null){el.classList.toggle('on');return;}
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(!ex||!ex.sets[+editIdx])return;
@@ -2967,20 +3100,36 @@ const ExLog={
   _deleteFromSheet(date,name,setNo){
     if(!date||!name||!setNo)return;
     this._delQ.push({date,name,setNo});this._saveDelQ();
-    this._flushDeletes();
+    this._flushDeletes();   // 화면 조작을 막지 않도록 여기서는 기다리지 않는다 — syncToSheets가 대신 기다린다
   },
-  async _flushDeletes(){
-    if(this._delFlushing||!this._delQ.length)return;
-    const url=await this.getScriptUrl();if(!url)return;
-    this._delFlushing=true;
-    try{
-      const keys=this._delQ.slice(); // 스냅샷 — 전송 중 새로 큐잉되는 삭제는 다음 회차로
-      const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'delete',keys}),redirect:'follow'});
-      let okFlag=res.ok;
-      try{const j=await res.json();okFlag=j.ok!==false;}catch(_){} // 본문 못 읽으면 res.ok로 판단
-      if(okFlag){this._delQ=this._delQ.slice(keys.length);this._saveDelQ();} // 새 삭제는 push라 앞쪽 keys.length개가 정확히 스냅샷
-    }catch(_){/* 오프라인 등 — 큐 유지, 다음 기회에 재전송 */}
-    finally{this._delFlushing=false;}
+  // 진행 중인 전송이 있으면 '그 약속을 그대로' 돌려준다. 성공 여부를 boolean으로 반환.
+  // 이전에는 _delFlushing 가드가 undefined를 즉시 반환해서, 호출부에 await를 붙여도
+  // 하필 전송 중일 때(=레이스가 나는 바로 그 상황) 기다려지지 않고 통과했다.
+  _flushDeletes(){
+    if(this._delFlushP)return this._delFlushP;        // 이미 비행 중 — 같은 약속을 공유
+    if(!this._delQ.length)return Promise.resolve(true);
+    const p=(async()=>{
+      const url=await this.getScriptUrl();if(!url)return false;
+      try{
+        const keys=this._delQ.slice(); // 스냅샷 — 전송 중 새로 큐잉되는 삭제는 다음 회차로
+        const res=await fetch(url,{method:'POST',body:JSON.stringify({mode:'delete',keys}),redirect:'follow'});
+        let okFlag=res.ok;
+        try{const j=await res.json();okFlag=j.ok!==false;}catch(_){} // 본문 못 읽으면 res.ok로 판단
+        if(okFlag){this._delQ=this._delQ.slice(keys.length);this._saveDelQ();} // 새 삭제는 push라 앞쪽 keys.length개가 정확히 스냅샷
+        return okFlag;
+      }catch(_){return false;/* 오프라인 등 — 큐 유지, 다음 기회에 재전송 */}
+    })().finally(()=>{if(this._delFlushP===p)this._delFlushP=null;});
+    this._delFlushP=p;
+    return p;
+  },
+  // 큐가 빌 때까지 반복 — 전송 중 새로 쌓인 삭제도 upsert보다 먼저 나가야 한다.
+  // 시트에서 행을 지우면 아래 행 번호가 앞당겨지므로, 그 전에 읽은 행 번호로 upsert가 쓰면
+  // 엉뚱한 세트를 덮어쓴다. 서버 락이 두 요청을 직렬화해 주지만 '순서'까지 정해주지는 않는다.
+  async _drainDeletes(max){
+    for(let i=0;i<(max||3)&&this._delQ.length;i++){
+      if(!await this._flushDeletes())return false;    // 실패(오프라인 등) — 큐 유지, 다음 동기화 때 재시도
+    }
+    return !this._delQ.length;
   },
 
   // 다른 날짜(오늘 제외) 기준 최고 — 토스트(checkPR)·주간요약과 동일한 e1RM(맨몸은 reps) 기준으로 통일
@@ -4103,15 +4252,38 @@ const ExLog={
     });
     return rows;
   },
-  async syncToSheets(url,full){
+  // ── 동시 실행 가드 ────────────────────────────────────────────────────
+  // 이전에는 디바운스 동기화가 비행 중일 때 ☁️를 누르면 upsert 두 개가 겹쳤다. 서버 락이
+  // 직렬화해 주므로 데이터는 안전하지만 뒤 요청이 락 대기(최대 25초) 동안 묶인다.
+  // 코얼레싱만 하고 끝내면 비행 중 생긴 변경이 다음 _syncSoon(1.5초)까지 밀리므로,
+  // '후행 1회'를 예약해 마지막 상태가 반드시 한 번은 전송되게 한다.
+  // full 요청이 하나라도 끼어 있으면 후행도 full — 전체 스냅샷 요구가 증분으로 격하되지 않도록.
+  syncToSheets(url,full){
+    if(this._syncP){
+      const nx=this._syncNext;
+      this._syncNext={url:url||(nx&&nx.url)||null, full:!!full||!!(nx&&nx.full)};
+      return this._syncP;
+    }
+    const p=this._syncRun(url,full)
+      .catch(err=>{console.error('sync error',err);})   // 항상 resolve — 후행 예약이 건너뛰어지지 않게
+      .finally(()=>{
+        if(this._syncP===p)this._syncP=null;
+        const nx=this._syncNext;this._syncNext=null;
+        if(nx)this.syncToSheets(nx.url,nx.full);        // 비행 중 쌓인 변경 반영
+      });
+    this._syncP=p;
+    return p;
+  },
+  async _syncRun(url,full){
     // full=true(수동 저장&동기화)면 전체 스냅샷, 아니면 dirty 날짜만 증분 전송.
     // 서버 upsert가 (날짜·종목·세트) 키 기반이라 부분 전송해도 시트의 다른 행은 안전.
     url=url||(await this.getScriptUrl());
     if(!url)return;
     clearTimeout(this._syncTimer);            // 대기 중 디바운스가 있으면 취소(중복 전송 방지)
-    this._flushDeletes();                     // 큐에 남은 삭제 키도 이 기회에 재전송
     const btn=document.getElementById('log-sync-btn');
     if(btn){btn.classList.add('syncing');btn.textContent='⏳';}
+    await this._drainDeletes();               // 삭제를 먼저 끝낸 뒤 upsert — 행 번호가 밀린 채 쓰는 것을 막는다.
+                                              // 실패해도 계속 진행: 큐는 남아 다음 동기화에서 재시도된다.
     // dirty 스냅샷: 전송 중 새로 생기는 변경(다음 세트 입력)은 지우지 않도록 사본으로 고정
     const dirtySnap=(!full&&this._dirty.size)?new Set(this._dirty):null;
     try{
@@ -4230,6 +4402,19 @@ const PlanApp={
     }else if(st.suggest){
       h='🪫 <b>디로드 검토 신호 '+st.signals.length+'개</b> — '+st.signals.join(' · ')
         +'<span class="bc-act" onclick="ExLog.startDeload()">이번 주 디로드 시작</span>';
+    }
+    // 신호가 하나도 안 켜졌는데 그 이유가 '데이터가 없어서'라면, 조용한 것과 안전한 것은 다르다.
+    else if(st.blind&&st.blind.length){
+      h='🔌 <b>디로드 판정이 반쪽입니다</b> — '+st.blind.join(' · ')
+        +'. 6개 신호 중 '+st.blind.length+'개가 꺼져 있어 「2개 이상」 조건에 닿기 어렵습니다.'
+        +(st.blind.some(x=>/블록/.test(x))?'<span class="bc-act" onclick="ExLog.startBlock()">블록 시작</span>':'');
+    }
+    // 유산소는 웨이트와 다른 축이라 별도 줄로 — 볼륨을 늘려도 내장지방은 안 빠진다.
+    let cd=null;try{cd=ExLog.weekCardio();}catch(_){}
+    if(cd&&cd.n<cd.need){
+      h+=(h?'<div class="dl-sep"></div>':'')
+        +'🏃 <b>유산소 이번 주 '+cd.n+'회'+(cd.min?' · '+cd.min+'분':'')+'</b> — 계획은 주 '+cd.need+'~3회 × 20~30분입니다. '
+        +'내장지방은 웨이트 볼륨이 아니라 여기서 움직입니다. 웨이트 뒤 15~20분도 1회로 칩니다.';
     }
     // 수면 병목은 디로드와 독립적으로 표시한다 — 볼륨을 줄이는 것으로는 해결되지 않는 축이라 처방이 다르다.
     if(sb){
