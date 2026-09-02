@@ -797,6 +797,14 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* 칼로리 조정 신호 */
 .ib-signal{font-size:12px;line-height:1.6;border-radius:var(--border-radius-md);padding:9px 11px;margin-bottom:10px}
 .ib-signal.warn{color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2}
+/* 목표 3조건 판정 — 어느 것이 병목인지 한눈에 (26.09-b) */
+.goal-chk{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:7px;margin:0 0 9px}
+.gchk{border:1px solid #E3E0D6;border-radius:9px;padding:9px 11px;background:#fff}
+.gchk .gk{display:block;font-size:10px;font-weight:800;letter-spacing:.04em;color:#8A8C82}
+.gchk .gv{display:block;font-size:17px;font-weight:800;margin-top:4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gchk .gm{display:block;font-size:11px;color:#8A8C82;margin-top:3px;line-height:1.45}
+.gchk.ok{border-color:#3F6E15} .gchk.ok .gv{color:#3F6E15}
+.gchk.no{border-color:#B4531F} .gchk.no .gv{color:#B4531F} .gchk.no .gk{color:#B4531F}
 .ib-signal.ok{color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8}
 /* 컨디션·수면 */
 .cond-row{display:flex;align-items:center;gap:8px;background:#F7F7F2;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 10px;margin-bottom:8px;font-size:12px}
@@ -1281,7 +1289,11 @@ details.plan-fold[open]>summary::after{content:'▴'}
 <!-- 데이터 백업 -->
 <details class="plan-fold"><summary class="plan-hd">❓ 판정 규칙 — 이 숫자는 어떻게 나오나</summary>
 <div class="plan-card rules-card">
-<div class="rule"><b>🎯 자동 목표</b> — 같은 종목(별칭 연결 포함)의 가장 최근 기록 기준. 전 세트가 렙 상한(도감 sets 표기에서 파싱, 예: 4×6~8 → 8)을 채우면 복합 +2.5kg / 고립 +1kg 도전 제안. 단, 그 세션 최고 RPE가 9.5+면 같은 무게 한 번 더 굳히기.</div>
+<div class="rule"><b>🎯 자동 목표</b> — 같은 종목(별칭 연결 포함)의 가장 최근 기록 기준. 전 세트가 렙 상한(도감 sets 표기에서 파싱, 예: 4×6~8 → 8)을 채우면 증량 제안. 증량분(복합 2.5 / 고립 1kg)은 그 기구의 <b>스택 단위 배수로 올림</b>한다 — 케이블·머신은 기록에서 최소 간격을 추론하고 바벨은 2.5 고정. 한 칸이 현재 무게의 25%를 넘으면 무게 대신 <b>한 팔씩 · 세트 +1 · 하강 3초</b>를 제안한다. 그 세션 최고 RPE가 9.5+면 같은 무게 한 번 더 굳히기.</div>
+<div class="rule"><b>🧭 목표 3조건</b> — 체중 ≤84 · 체지방률 ≤20% · SMM ≥38은 <b>등식이 아니라 부등식</b>이다. 이 셋 중 실제로 구속하는 건 <b>SMM 하나</b>뿐 — 체지방률 20%를 만족하는 지점에서 체중은 자동으로 82~83이 되어 여유가 남는다. 체지방률 ≤20% ⟺ <b>지방 ≤ 0.25 × 제지방</b>이므로, 근육이 붙을수록 지방을 덜 빼도 된다.</div>
+<div class="rule"><b>🧬 SMM 환산</b> — SMM/제지방 전신 비율은 0.568이지만 저항운동 <b>증분</b>의 비율은 실측 <b>0.62</b>(7/06→8/30 ΔLBM +1.46 / ΔSMM +0.90)다. 이 비율로 SMM 38에 필요한 제지방은 <b>66.75kg</b>(현재 +1.45).</div>
+<div class="rule"><b>📉 체지방 계획선</b> — 판정 축은 체중이 아니라 <b>체지방량(kg)</b>이다. 체중은 수분에 ±1kg 흔들리고 리컴프 창에서는 계획상 오히려 오른다. 17주 4국면: 1블록 8주(0.70%/주) → 디로드 1주 → 2블록 5주(0.70%/주) → <b>리컴프 창 3주(적자 0)</b>. 리컴프 창에서 체지방이 멈추는 것은 정체가 아니라 계획이며 조정 대상이 아니다.</div>
+<div class="rule"><b>🛡 제지방 방어선 64.8kg</b> — 3주 이동평균이 이 아래로 내려가면 다른 어떤 판정보다 먼저 뜨고, 즉시 적자 30% 축소 + 2주 유지 칼로리로 간다. 병목이 근육이므로 <b>제지방 판정이 지방 판정보다 우선</b>한다.</div>
 <div class="rule"><b>🔋 준비도</b> — 오늘 수면 · 컨디션(≥4 +1 / ≤2 −1) · 최근 운동일 평균 RPE · 최근 7일 통증(2회+ −1)의 합산. 수면과 RPE는 고정값이 아니라 <b>최근 28일 내 기준선(중앙값) 대비</b>로 판정한다 — 수면은 평소보다 1h 이상 부족할 때, RPE는 기준선 +0.4 이상일 때 감점. <b>−2 이하 = 낮음</b>(증량 보류), <b>+2 이상 = 좋음</b>(도전 적기). 중립이면 표시 안 함.</div>
 <div class="rule"><b>📌 오늘 추천</b> — 타입별 점수 = 마지막 수행 경과일(14일 포화)×2 + 담당 부위 주간 목표 부족 세트. 순환 다음 타입보다 3점 이상 높고 2일 이상 더 밀렸을 때만 제안. 세 타입 모두 수행 이력이 있어야 작동.</div>
 <div class="rule"><b>🪫 디로드 신호</b> — ① 최근 7일 평균 RPE ≥ 내 기준선 +0.3 ② RPE 전주 대비 +0.3 ③ 통증 2회+/7일 ④ 볼륨 −10%인데 RPE 유지↑ ⑤ 복합 2종 이상 3회 연속 정체 ⑥ 블록 5주차+ 중 <b>2개 이상</b>이면 배너 표시. 계획 탭·추세 탭 배너가 같은 판정을 공유한다. <b>디로드 시작</b>을 누르면 7일간 자동 목표가 '중량 유지 · 세트 55%'로 바뀌고 기간이 끝나면 스스로 복귀한다.<br><b>🛏 회복 병목(수면)</b>은 디로드와 별개로 판정한다 — 주간 평균 수면이 2주 연속 6.5h 미만이면 별도 표시. 수면 부족은 볼륨을 줄여도 원인이 남기 때문이다.</div>
@@ -1464,7 +1476,7 @@ const RECO_CAT={push:['가슴','측면삼각','전면삼각','후면삼각','삼
 // 종아리는 발달 완료로 프로그램에서 의도적으로 뺐다. 목표에 남겨두면 달성률이 영구 미달로 찍혀 신호가 죽는다.
 // (볼륨 그래프에는 계속 표시되며, 기록이 있으면 값이 보인다.)
 const RECO_TARGET_PRI={'측면삼각':2,'등':1,'가슴':1,'후면삼각':1}; // 재배분 시 먼저 채울 부위 (프레임·자세 교정 우선)
-const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':3,'후면삼각':8,'삼두':8,'이두':8,'대퇴사두':8,'후면사슬':8,'코어':6}; // 전면삼각 6→3: 라운드숄더에서 억제 대상으로 정해놓고 목표를 6으로 두면 앱이 매 세션 '전면삼각 부족'을 띄우고 오버헤드 프레스를 추천한다 — 프로그램이 스스로와 싸우던 부분
+const RECO_TARGET={'가슴':10,'등':10,'측면삼각':10,'전면삼각':3,'후면삼각':8,'삼두':8,'이두':8,'대퇴사두':10,'후면사슬':8,'코어':6}; // 대퇴사두 8→10(26.09): 최근 4주 평균 7세트로 무너져 컷 중 가장 먼저 깎이는 부위. 목표를 올려 앱이 하체를 먼저 추천하게 한다 // 전면삼각 6→3: 라운드숄더에서 억제 대상으로 정해놓고 목표를 6으로 두면 앱이 매 세션 '전면삼각 부족'을 띄우고 오버헤드 프레스를 추천한다 — 프로그램이 스스로와 싸우던 부분
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","Pull B":"#0C447C","Legs A":"#3B6D11","Legs B":"#27500A",Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 // 재배치(26.07): 안드로이드·라운드숄더·발달된 종아리 반영.
@@ -1549,7 +1561,7 @@ const TARGET_NOTES={
   '풀업 (체중/어시스트)':'보조 70kg 4주 동결(8/25에 60을 한 세트 성공) — <b>67.5kg 10회×4</b>가 다음 목표. 숫자가 내려가야 진전이다',
   '루마니안 데드리프트':'데드와 3세션 간격 — 무게보다 햄 텐션이 기준, 허리 굽는 지점 전에서 정지',
   '레그컬 (머신)':'발목 배측굴곡(발끝 정강이 쪽) 유지 — 종아리 발달형은 비복근이 무릎 굽힘을 뺏어간다',
-  '시티드 레그프레스':'Legs B 핵심 1번(26.09) — 무릎 90도 이상 깊게, 사두 주 2회의 두 번째 자리',
+  '시티드 레그프레스':'Legs B 핵심 1번(26.09) — 무릎 90도 이상 깊게. 대퇴사두 목표를 8→10세트로 올렸다(26.09-b): 컷에서 가장 먼저 깎이는 부위이고 이번 블록의 병목이 근육이라 하체일에 칼로리를 몰아준다',
   '데드행':'풀 세션 마무리 고정 — 견갑 하강·척추 감압. ⚠️ <b>무게는 0으로 입력</b>(체중 종목인데 91을 넣으면 볼륨이 두 배로 잡힌다)',
 };
 const EX_CUES={
@@ -5265,7 +5277,56 @@ const LibApp={
 // 허리 88cm: 체지방 20%(지방 −9.5kg) 도달 시 추정치이자, 도중에 복부비만 컷오프(남성 90cm)를 지나는 값.
 // 안드로이드 체형에서 어깨-허리 대비를 만드는 건 어깨(골격 고정)가 아니라 허리 쪽이라 프레임의 1순위 지표다.
 const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
-// ── 컷 계획선: 2026-08-30 89.7kg 기준, 주 0.4kg 감량 → 12/20 83.4kg (16주) ──
+// ── 목표 모델(26.09-b): 세 목표는 등식이 아니라 부등식이다 ─────────────────────────
+//   체중 ≤ 84 · 체지방률 ≤ 20% · SMM ≥ 38
+//   [발견] 이 셋 중 실제로 구속하는 건 SMM 하나뿐이다. 체지방률 20%를 만족하는 지점에서
+//     체중은 자동으로 82~83이 되어 1kg 이상 여유가 남고, 체지방률은 지방을 충분히 빼면 달성된다.
+//   [증분 비율] SMM/제지방 전신 비율은 0.568이지만, 저항운동으로 붙는 증분은 대부분 근육이라
+//     비율이 더 높다. 본인 실측(7/06→8/30) ΔLBM +1.46 / ΔSMM +0.90 = 0.62를 쓴다.
+//     이 비율로 풀면 SMM 38에 필요한 제지방이 +1.90 → +1.45kg로 줄어든다.
+//   [파생] 체지방률 ≤ 20% ⟺ 지방 ≤ 0.25 × 제지방 — 지방 목표는 고정값이 아니라 제지방의 함수다.
+//     근육이 붙을수록 지방을 덜 빼도 된다. 두 목표가 같은 방향을 가리킨다.
+const GOAL_MODEL={
+  smmRatio:0.62,                 // ΔSMM / ΔLBM (실측)
+  lbmNeed:66.75,                 // SMM 38에 필요한 제지방 = 65.30 + (38-37.1)/0.62
+  lbmFloor:64.8,                 // 제지방 방어선 — 3주 이동평균이 이 아래면 즉시 적자 축소
+  fatOf:(wt,bf)=>wt*bf/100,      // 체지방량 kg
+  lbmOf:(wt,bf)=>wt-wt*bf/100,   // 제지방 kg
+  fatCapFor:lbm=>0.25*lbm,       // 체지방률 20% 상한을 만족하는 지방량
+  // 세 조건 판정 — 어느 것이 병목인지까지 돌려준다
+  judge(wt,bf,sm){
+    const fat=this.fatOf(wt,bf), lbm=this.lbmOf(wt,bf);
+    const c=[{k:'체중 ≤ 84',ok:wt<=IB_GOALS.wt,v:wt.toFixed(1)+'kg',
+              m:wt<=IB_GOALS.wt?('여유 '+(IB_GOALS.wt-wt).toFixed(1)+'kg'):('초과 '+(wt-IB_GOALS.wt).toFixed(1)+'kg')},
+             {k:'체지방률 ≤ 20',ok:bf<=IB_GOALS.bf,v:bf.toFixed(1)+'%',
+              m:'지방 상한 '+this.fatCapFor(lbm).toFixed(2)+'kg / 현재 '+fat.toFixed(2)},
+             {k:'SMM ≥ 38',ok:sm!=null&&sm>=IB_GOALS.sm,v:(sm!=null?sm.toFixed(1)+'kg':'—'),
+              m:sm==null?'골격근 미기록'
+                :(sm>=IB_GOALS.sm?'달성'
+                  :(this.lbmNeed-lbm>0?'제지방 '+(this.lbmNeed-lbm).toFixed(2)+'kg 더 필요'
+                                      :'제지방은 충분 — 측정 조건(수분·공복) 확인'))}];
+    return{cond:c,fat:fat,lbm:lbm,pass:c.filter(x=>x.ok).length,
+           bind:c.filter(x=>!x.ok).map(x=>x.k)};
+  }
+};
+// ── 체지방 계획선(17주 · 4국면): 균일 적자가 아니라 국면마다 한쪽에 몰아준다 ──
+//   1블록 8주(0.70%/주) → 디로드 1주 → 2블록 5주(0.70%/주) → 리컴프 창 3주(적자 0)
+//   리컴프 창은 적자를 끊어 근단백 합성을 반등시키고, 글리코겐을 기준점(8/30) 조건으로 되돌려
+//   최종 측정이 과소평가되지 않게 한다. 이 3주에 체지방이 멈추는 것은 정체가 아니라 계획이다.
+const FAT_PLAN=(function(){
+  const L0=65.30,F0=24.40,CAP=0.70;
+  const kind=w=>w<=8?'cut':(w===9?'deload':(w<=14?'cut':'recomp'));
+  const lean={cut:0.010,deload:0.070,recomp:0.120};
+  const out=[];let fat=F0,lbm=L0;
+  for(let w=1;w<=17;w++){
+    const k=kind(w),cur=fat+lbm;
+    fat-=k==='recomp'?0:(k==='deload'?0.25:cur*CAP/100);
+    lbm+=lean[k];
+    out.push({w:w,kind:k,fat:fat,lbm:lbm});
+  }
+  return{from:'2026-08-30',to:'2026-12-27',cap:CAP,weeks:out};
+})();
+// ── (구) 체중 계획선 — 그래프 목표선 렌더에 계속 쓰인다. 판정은 위 FAT_PLAN이 맡는다 ──
 // 목표선은 end에서 멈춘다 — 계속 내려가는 선이면 목표 도달 후 과잉 감량을 부추긴다.
 // 기준선 재설정은 from/start 두 값만 고치면 되고, 나머지 판정은 자동으로 따라온다.
 // [재설정 26.09] 이전 기준(8/11 · 90.0)에서 19일간 실제 변화는 체중 −0.3 / 지방 −0.1 / 골격근 −0.1이었다.
@@ -5273,7 +5334,7 @@ const IB_GOALS={wt:84,sm:38,bf:20,ab:0.90,vf:10,waist:88};
 //   목표일과 목표체중을 유지한 채 시작점만 실측으로 옮기면 필요 속도가 주 0.394kg으로 드러난다.
 //   이건 유산소로 만들 수 있는 크기가 아니다 — 주 0.4kg ≈ 하루 430kcal 적자이고,
 //   주 2회 20분 유산소는 주 400~500kcal(= 주 0.06kg)에 불과하다. 이 차이는 식사에서 나와야 한다.
-const PLAN_LINE={from:'2026-08-30',start:89.7,rate:0.4,to:'2026-12-20',end:83.4};
+const PLAN_LINE={from:'2026-08-30',start:89.7,rate:0.44,to:'2026-12-27',end:82.2};
 // ── 데이터 백업: 알려진 키만 화이트리스트로 내보내기/가져오기 ──
 const Backup={
   KEYS:['plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
@@ -5458,30 +5519,67 @@ const InBody={
           +html;
       }
     }
-    // ── 계획선 대비 진척: 최근 측정일의 목표 체중과 실측을 비교해 궤도 이탈을 양방향으로 판정 ──
-    // 지연(느림)뿐 아니라 선행(빠름)도 경고 대상 — 계획선보다 1kg 이상 앞서면 근손실 구간이라
-    // 열량을 되레 올려야 한다. 감량 앱이 흔히 놓치는 방향이라 명시적으로 분기해 둔다.
+    // ── 목표 3조건 판정 + 체지방 계획선 대비 진척 (26.09-b) ─────────────────────────
+    // [바뀐 것] 판정 축을 체중 → 체지방량(kg)으로 옮겼다. 체중은 수분·글리코겐에 ±1kg 흔들리고,
+    //   리컴프 창에서는 계획상 오히려 올라가므로 체중 계획선으로는 옳게 판정할 수 없다.
+    // [순서] 제지방 방어선 → 3조건 → 국면별 체지방 궤도. 병목이 근육이므로 제지방이 지방보다 먼저다.
     (function(){
       const dayMs=864e5,wkMs=6048e5;
       const ms=d=>new Date(String(d).slice(0,10)+'T12:00:00').getTime();
-      const a=ms(PLAN_LINE.from),n=ms(last.date);
-      if(isNaN(a)||isNaN(n)||last.wt==null)return;
-      const wk=(n-a)/wkMs;
-      if(wk<-0.5)return; // 기준선 이전 측정은 계획선 판정 대상이 아니다
-      const tgtAt=w=>Math.max(PLAN_LINE.end,PLAN_LINE.start-PLAN_LINE.rate*Math.max(0,w));
-      const tgt=tgtAt(wk),next=tgtAt(wk+1);
-      const d=+(last.wt-tgt).toFixed(1);           // + = 궤도보다 무거움(지연)
-      const left=Math.max(0,Math.ceil((ms(PLAN_LINE.to)-n)/wkMs));
+      const a=ms(FAT_PLAN.from),n=ms(last.date);
+      if(isNaN(a)||isNaN(n)||last.wt==null||last.bf==null)return;
+      const J=GOAL_MODEL.judge(+last.wt,+last.bf,last.sm!=null?+last.sm:null);
       const stale=Math.floor((Date.now()-n)/dayMs);
-      const ok=Math.abs(d)<=0.5;
-      const verdict=ok?'궤도 정상':(d>0?'궤도 대비 +'+d+'kg 지연':'궤도 대비 '+d+'kg 선행');
-      let tail='';
-      if(d<-1.0)tail='<br><small>계획보다 빠릅니다 — 이 속도가 2주 이어지면 근손실 구간입니다. 열량 +100~150kcal.</small>';
-      else if(d>1.0)tail='<br><small>4주 평균이 함께 뒤처질 때만 조정하세요. 단일 측정으로 열량을 깎지 않습니다.</small>';
-      if(stale>=10)tail+='<br><small>마지막 측정 '+stale+'일 경과 — 일요일 저녁 고정 조건으로 갱신하세요.</small>';
-      html='<div class="ib-signal '+(ok||d<0?'ok':'warn')+'">🎯 <b>'+verdict+'</b> — W'+Math.max(1,Math.round(wk))
-        +' 목표 '+tgt.toFixed(1)+'kg / 실측 '+last.wt+'kg · 다음 주 목표 <b>'+next.toFixed(1)+'kg</b>'
-        +' · 종료까지 '+left+'주'+tail+'</div>'+html;
+
+      // ① 목표 3조건 카드 — 어느 것이 병목인지 한눈에
+      const cards=J.cond.map(c=>'<div class="gchk'+(c.ok?' ok':' no')+'">'
+        +'<span class="gk">'+c.k+(c.ok?'':' · 병목')+'</span>'
+        +'<span class="gv">'+c.v+' '+(c.ok?'✓':'✗')+'</span>'
+        +'<span class="gm">'+c.m+'</span></div>').join('');
+      let head='<div class="goal-chk">'+cards+'</div>';
+
+      // ② 제지방 방어선 — 다른 어떤 판정보다 우선한다
+      if(J.lbm<GOAL_MODEL.lbmFloor){
+        head+='<div class="ib-signal warn">🛡 <b>제지방 '+J.lbm.toFixed(2)+'kg — 방어선('
+          +GOAL_MODEL.lbmFloor+') 아래</b> · 3주 이동평균으로 확인되면 즉시 적자 30% 축소 + 2주 유지 칼로리.'
+          +'<br><small>이 규칙은 계획보다 우선합니다. 병목은 근육이지 지방이 아닙니다.</small></div>';
+      }
+
+      // ③ 국면별 체지방 궤도
+      const wk=Math.round((n-a)/wkMs);
+      const P=FAT_PLAN.weeks[Math.min(Math.max(wk,1),17)-1];
+      if(wk>=1&&P){
+        const d=+(J.fat-P.fat).toFixed(2);       // + = 계획보다 지방이 많음(지연)
+        const left=Math.max(0,Math.ceil((ms(FAT_PLAN.to)-n)/wkMs));
+        const phaseLbl={cut:'감량 블록',deload:'디로드',recomp:'리컴프 창'}[P.kind];
+        const ok=Math.abs(d)<=0.35;
+        let msg,cls;
+        if(P.kind==='recomp'){
+          cls='ok';
+          msg='🌱 <b>리컴프 창 — 체지방이 멈추는 것이 계획입니다.</b> 조정하지 않습니다. '
+            +'이 3주에 할 일은 단백질 175~185g · 수면 7시간+ · 하체 볼륨을 채우는 것뿐입니다.';
+        }else if(d<-0.60){
+          cls='warn';
+          msg='🚀 <b>'+FAT_PLAN.cap+'%/주 상한을 넘고 있습니다</b> (계획 '+P.fat.toFixed(2)
+            +' / 실측 '+J.fat.toFixed(2)+'kg) · 섭취 +150kcal.'
+            +'<br><small>이 속도의 초과분은 지방이 아니라 제지방에서 나옵니다.</small>';
+        }else if(d>0.60){
+          cls='warn';
+          msg='🐢 <b>궤도 대비 +'+d+'kg 지연</b> (계획 '+P.fat.toFixed(2)+' / 실측 '+J.fat.toFixed(2)+'kg)'
+            +'<br><small>2주 누적으로 확인되면 섭취 −150kcal. 조정 전에 섭취 기록부터 검증하세요.</small>';
+        }else if(J.cond[1].ok&&!J.cond[2].ok){
+          cls='ok';
+          msg='🎯 <b>체지방률은 통과 — 남은 건 SMM 하나입니다.</b> 레버는 단백질 185g · 수면 7시간+ · '
+            +'하체 10세트 · 순환 완주율.<br><small>여기서 적자를 더 키우는 건 역효과입니다 — 유일하게 부족한 항목을 깎게 됩니다.</small>';
+        }else{
+          cls='ok';
+          msg='🎯 <b>'+(ok?'궤도 정상':'궤도 근접')+'</b> — W'+wk+' '+phaseLbl+' · 목표 지방 '
+            +P.fat.toFixed(2)+'kg / 실측 '+J.fat.toFixed(2)+'kg · 종료까지 '+left+'주';
+        }
+        if(stale>=10)msg+='<br><small>마지막 측정 '+stale+'일 경과 — 일요일 저녁 고정 조건으로 갱신하세요.</small>';
+        head+='<div class="ib-signal '+cls+'">'+msg+'</div>';
+      }
+      html=head+html;
     })();
     // 선택 지표(허리둘레·내장지방): 기록된 항목만 카드 표시. 스파크라인은 해당 값이 있는 측정만 사용
     const optSpark=(key,col)=>{
