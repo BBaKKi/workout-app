@@ -813,6 +813,11 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .cond-dot{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e8e8e2;color:#9a9a94;font-size:11px;cursor:pointer;font-weight:600}
 .cond-dot.on{background:#3B6D11;color:#fff}
 .cond-sleep{width:66px;margin-left:auto;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:4px 7px;font-size:12px;text-align:center}
+.intake-row .intake-kcal{margin-left:auto}
+.intake-row .intake-pro{margin-left:6px;width:76px}
+.intake-hint{font-size:10.5px;margin-left:8px;color:var(--color-text-tertiary);white-space:nowrap}
+.intake-hint.ok{color:#3F6E15;font-weight:700}
+.intake-hint.low{color:#B4531F;font-weight:700}
 /* 브리핑 */
 .brief-card{background:#EAF1F8;border:0.5px solid #CBDDEE;border-radius:var(--border-radius-md);padding:8px 11px;margin-bottom:8px;font-size:12px;line-height:1.6}
 .brief-hd{font-size:11px;font-weight:600;color:#153A5E;margin-bottom:3px}
@@ -1240,30 +1245,38 @@ details.plan-fold[open]>summary::after{content:'▴'}
     <div style="flex:1;background:var(--color-border-tertiary)"></div>
   </div>
   <div class="plan-phase-labels">
-    <span id="ph-label">Phase 1 진행 중</span>
+    <span id="ph-label">1블록 진행 중</span>
     <span id="ph-days"></span>
   </div>
 </div>
 <div class="plan-phase-cards">
   <div class="plan-phase-card current">
-    <div class="plan-phase-badge" style="background:#3B6D11">Phase 1</div>
-    <div class="plan-phase-kcal">2,400 kcal</div>
-    <div class="plan-phase-months">1~3개월</div>
-    <div class="plan-phase-focus">적자 확립 · 리컴프</div>
+    <div class="plan-phase-badge" style="background:#B4531F">1블록</div>
+    <div class="plan-phase-kcal">2,500 / 2,050 / 1,800</div>
+    <div class="plan-phase-months">9/02~10/25 · 8주</div>
+    <div class="plan-phase-focus">지방 −0.70%/주 · 제지방 유지</div>
   </div>
   <div class="plan-phase-card future">
-    <div class="plan-phase-badge" style="background:#185FA5">Phase 2</div>
-    <div class="plan-phase-kcal">2,200 kcal</div>
-    <div class="plan-phase-months">4~5개월</div>
-    <div class="plan-phase-focus">적자 유지 · 근손실 방지</div>
+    <div class="plan-phase-badge" style="background:#1A5A96">디로드</div>
+    <div class="plan-phase-kcal">2,525 균일</div>
+    <div class="plan-phase-months">10/26~11/01 · 1주</div>
+    <div class="plan-phase-focus">중량 유지 · 세트 55%</div>
   </div>
   <div class="plan-phase-card future">
-    <div class="plan-phase-badge" style="background:#BA7517">Phase 3</div>
-    <div class="plan-phase-kcal">2,400 kcal</div>
-    <div class="plan-phase-months">6~7개월</div>
-    <div class="plan-phase-focus">유지 전환 · 마무리</div>
+    <div class="plan-phase-badge" style="background:#B4531F">2블록</div>
+    <div class="plan-phase-kcal">2,600 / 2,100 / 1,800</div>
+    <div class="plan-phase-months">11/02~12/06 · 5주</div>
+    <div class="plan-phase-focus">지방 −0.70%/주 · 볼륨은 줄여도 중량 사수</div>
+  </div>
+  <div class="plan-phase-card future">
+    <div class="plan-phase-badge" style="background:#3F6E15">리컴프 창</div>
+    <div class="plan-phase-kcal">3,000 / 2,800 / 2,400</div>
+    <div class="plan-phase-months">12/07~12/27 · 3주</div>
+    <div class="plan-phase-focus">적자 0 · 제지방 +0.12kg/주</div>
   </div>
 </div>
+<div class="plan-body-row" style="margin-top:10px"><span class="plan-body-icon">🍚</span><span><b>칼로리는 균일이 아니라 요일별</b>로 나눈다 — 표기는 <b>하체일 / 일반 훈련일 / 휴식일</b> 순. TDEE 2,800(훈련 + 하루 9,000~10,000보) 기준이며, 섭취 기록이 2주 모이면 관리 탭에서 <b>실측 TDEE</b>로 대체된다. <b>하체일에 몰아주는 것이 요점</b> — 대퇴사두가 최근 4주 평균 7세트로 가장 취약한데, 그 세션에 연료를 주면 볼륨을 감당할 수 있다. 단백질은 전 국면 <b>175~185g</b>(4끼 균등).</span></div>
+<div class="plan-body-row"><span class="plan-body-icon">🌱</span><span><b>리컴프 창에서 체지방이 멈추는 것은 정체가 아니라 계획</b>이다. 적자를 끊어 근단백 합성을 반등시키고, 글리코겐을 기준점(8/30) 조건으로 되돌려 최종 측정이 과소평가되지 않게 한다. 이 3주는 조정 대상이 아니다.</span></div>
 </details>
 
 <!-- 6주 블록 -->
@@ -1275,7 +1288,7 @@ details.plan-fold[open]>summary::after{content:'▴'}
     <span class="plan-badge" style="background:#185FA5">에스트로겐 우세 가능</span>
   </div>
   <div class="plan-body-list">
-    <div class="plan-body-row"><span class="plan-body-icon">⚠️</span><span>내장지방레벨 <b>10</b>(11→10 개선) → 식단 적자 우선, 저강도 유산소는 <b>주 2~3회 × 20~30분 추가</b>(웨이트 대체 금지)</span></div><div class="plan-body-row"><span class="plan-body-icon">📉</span><span><b>컷 국면 18주</b>(~12/20) — 90.0kg·27.3% → 83~84kg·20% · 주 0.4kg · 4주 평균으로만 판정</span></div><div class="plan-body-row"><span class="plan-body-icon">📊</span><span><b>KPI는 볼륨도 출석 일수도 아니라 「순환 완주 일수 ≤ 8일」</b>이다. 볼륨이 낮았던 주는 강도가 떨어진 게 아니라 <b>시간이 없어 세션이 짧거나 빠진 주</b>였다 — 일당 볼륨은 10,119±21%로 내내 안정적이었고, 주간 볼륨 편차(23%)는 거의 전부 훈련 일수로 설명된다. 그래서 총량 목표는 시간이 없는 주에 달성 불가능한 숙제가 될 뿐이다. 대신 <b>핵심 3종목(30~40분)만 해도 한 세션으로 인정</b>하고, 6타입 한 바퀴를 8일 안에 닫는 것만 본다. 한 바퀴가 닫히면 각 부위 주기가 지켜지고 볼륨은 따라온다(6일 주간 61,000 / 4~5일 45,600). ※ 종전 목표 68,000~72,000은 최고 주(7/6~ 6일 74,974)를 기준선으로 삼은 값이고, 데드행 이중계산이 섞여 8월 수치가 6% 부풀려져 있었다</span></div><div class="plan-body-row"><span class="plan-body-icon">🔁</span><span>6주 블록 + 디로드 1주(세트 −40%·<b>중량 유지</b>) — W7(10/4), W14(11/22)</span></div>
+    <div class="plan-body-row"><span class="plan-body-icon">⚠️</span><span>내장지방레벨 <b>10</b>(11→10 개선) → 식단 적자 우선, 저강도 유산소는 <b>주 2~3회 × 20~30분 추가</b>(웨이트 대체 금지)</span></div><div class="plan-body-row"><span class="plan-body-icon">📉</span><span><b>컷 국면 17주</b>(9/02~12/27) — 8/30 89.7kg·27.2% 기준 · <b>판정 축은 체중이 아니라 체지방량(kg)</b> · 감량 상한 0.70%/주 · 2주 누적으로만 판정<br><b>목표는 부등식</b>: 체중 ≤84 · 체지방률 ≤20% · SMM ≥38 — 이 셋 중 실제로 구속하는 건 <b>SMM 하나</b>다. 체지방률 20%를 만족하는 지점에서 체중은 자동으로 82~83이 되어 여유가 남는다</span></div><div class="plan-body-row"><span class="plan-body-icon">📊</span><span><b>KPI는 볼륨도 출석 일수도 아니라 「순환 완주 일수 ≤ 8일」</b>이다. 볼륨이 낮았던 주는 강도가 떨어진 게 아니라 <b>시간이 없어 세션이 짧거나 빠진 주</b>였다 — 일당 볼륨은 10,119±21%로 내내 안정적이었고, 주간 볼륨 편차(23%)는 거의 전부 훈련 일수로 설명된다. 그래서 총량 목표는 시간이 없는 주에 달성 불가능한 숙제가 될 뿐이다. 대신 <b>핵심 3종목(30~40분)만 해도 한 세션으로 인정</b>하고, 6타입 한 바퀴를 8일 안에 닫는 것만 본다. 한 바퀴가 닫히면 각 부위 주기가 지켜지고 볼륨은 따라온다(6일 주간 61,000 / 4~5일 45,600). ※ 종전 목표 68,000~72,000은 최고 주(7/6~ 6일 74,974)를 기준선으로 삼은 값이고, 데드행 이중계산이 섞여 8월 수치가 6% 부풀려져 있었다</span></div><div class="plan-body-row"><span class="plan-body-icon">🔁</span><span>4국면 구조 — 1블록 8주 · 디로드 1주(세트 −45%·<b>중량 유지</b>, 10/26~11/01) · 2블록 5주 · <b>리컴프 창 3주</b></span></div>
     <div class="plan-body-row"><span class="plan-body-icon">💪</span><span>하체(데드·스쿼트) 진전이 가장 빠름 → 집중 투자</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">🧠</span><span>상체 고립 → 무게보다 마인드머슬 연결 우선</span></div>
     <div class="plan-body-row"><span class="plan-body-icon">💧</span><span>다한증 → 운동 중 전해질(물+소금) 필수</span></div>
@@ -2712,6 +2725,17 @@ const ExLog={
       cd.className='cond-row';
       cd.innerHTML='<span class="cond-lbl">😴 컨디션</span><span class="cond-dots">'+[1,2,3,4,5].map(n=>'<b class="cond-dot" data-n="'+n+'" onclick="ExLog.setCond('+n+')">'+n+'</b>').join('')+'</span><input type="number" class="cond-sleep" step="0.5" min="0" max="14" inputmode="decimal" placeholder="수면 h" onchange="ExLog.setSleep(this.value)">';
       panel.insertBefore(cd,panel.firstChild);
+      // ── 섭취 기록(26.09-b): 하루에 숫자 두 개만 받는다 ────────────────────────────
+      // 이 블록의 병목은 훈련이 아니라 식사인데, 앱은 946세트를 세트 단위로 기록하면서
+      // 정작 그 축은 측정조차 하지 않았다. 2주치가 쌓이면 관리 탭에서 실측 TDEE를 역산한다
+      // (추정 2,800이 아니라 본인 값 — 조정 규칙 전체가 이 숫자 위에 선다).
+      const ik=document.createElement('div');
+      ik.className='cond-row intake-row';
+      ik.innerHTML='<span class="cond-lbl">🍚 섭취</span>'
+        +'<input type="number" class="cond-sleep intake-kcal" step="10" min="0" max="9000" inputmode="numeric" placeholder="kcal" onchange="ExLog.setIntake(\'kcal\',this.value)">'
+        +'<input type="number" class="cond-sleep intake-pro" step="5" min="0" max="500" inputmode="numeric" placeholder="단백질 g" onchange="ExLog.setIntake(\'pro\',this.value)">'
+        +'<span class="intake-hint"></span>';
+      panel.insertBefore(ik,cd.nextSibling);
       // 세션 노트 — 컨디션 점수로 못 담는 맥락(통증·특이사항·환경) 한 줄 기록
       const nr=document.createElement('div');
       nr.className='note-row';
@@ -2750,6 +2774,15 @@ const ExLog={
     s.cond=s.cond||{};if(h>0)s.cond.sleep=h;else delete s.cond.sleep;
     this.setSession(s);if(this._syncSoon)this._syncSoon();
   },
+  // 섭취 기록 — cond에 함께 저장해 기존 동기화·백업 경로를 그대로 탄다(스키마 추가 없음)
+  INTAKE_PRO:{lo:175,hi:185},          // 제지방 65.3kg × 2.7 — 적자에서 제지방 보존의 1순위 레버
+  setIntake(k,v){
+    const n=parseFloat(v);const s=this.session();
+    s.cond=s.cond||{};
+    if(n>0)s.cond[k]=Math.round(n);else delete s.cond[k];
+    this.setSession(s);this.renderCond();if(this._syncSoon)this._syncSoon();
+    if(typeof PlanApp!=='undefined'&&PlanApp.renderIntake)PlanApp.renderIntake();
+  },
   setNote(v){
     const s=this.session();
     const t=String(v||'').trim().slice(0,200);
@@ -2760,8 +2793,17 @@ const ExLog={
     const ses=this.session();const c=ses.cond||{};
     document.querySelectorAll('.cond-row').forEach(row=>{
       row.querySelectorAll('.cond-dot').forEach(d=>d.classList.toggle('on',+d.dataset.n<=(c.rate||0)));
-      const sl=row.querySelector('.cond-sleep');
+      const sl=row.querySelector('.cond-sleep:not(.intake-kcal):not(.intake-pro)');
       if(sl&&document.activeElement!==sl)sl.value=c.sleep||'';
+      const ik=row.querySelector('.intake-kcal'),ip=row.querySelector('.intake-pro');
+      if(ik&&document.activeElement!==ik)ik.value=c.kcal||'';
+      if(ip&&document.activeElement!==ip)ip.value=c.pro||'';
+      const hint=row.querySelector('.intake-hint');
+      if(hint){
+        const P=this.INTAKE_PRO;
+        hint.textContent=c.pro?(c.pro>=P.lo?'✓ 단백질 충족':'단백질 '+(P.lo-c.pro)+'g 부족'):'';
+        hint.className='intake-hint'+(c.pro?(c.pro>=P.lo?' ok':' low'):'');
+      }
     });
     document.querySelectorAll('.sess-note').forEach(inp=>{
       if(document.activeElement!==inp)inp.value=ses.note||'';   // 날짜 이동 시 해당 세션 노트 반영
@@ -4415,17 +4457,21 @@ const PlanApp={
     this.renderSleep();this.renderBlock();this.renderWeek();this.renderVolume();this.renderVolTrend();this.renderTrends();this.renderWeekSummary();this.renderPRBoard();this.renderCalendar();
   },
   jumpTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},
+  // 진행 표시를 컷 17주(9/02~12/27) 4국면 기준으로 맞춘다 — 카드가 4장으로 바뀌었다
+  PHASES:[{n:'1블록',w:8},{n:'디로드',w:1},{n:'2블록',w:5},{n:'리컴프 창',w:3}],
   renderPhase(){
-    const start=new Date('2026-05-25T00:00:00');
+    const start=new Date('2026-09-02T00:00:00');
     const now=new Date();
     const daysElapsed=Math.max(0,Math.floor((now-start)/864e5));
     const weekNum=Math.floor(daysElapsed/7)+1;
-    const pct=Math.min(Math.round(daysElapsed/220*100),100);
-    const phaseIdx=daysElapsed<91?1:(daysElapsed<152?2:3);
+    const TOTAL=119;                                  // 17주
+    const pct=Math.min(Math.round(daysElapsed/TOTAL*100),100);
+    let acc=0,phaseIdx=1;
+    for(let i=0;i<this.PHASES.length;i++){acc+=this.PHASES[i].w;if(weekNum<=acc){phaseIdx=i+1;break;}phaseIdx=i+1;}
     const el=document.getElementById('ph-prog');const lbl=document.getElementById('ph-label');const days=document.getElementById('ph-days');
     if(el)el.style.width=pct+'%';
-    if(lbl)lbl.textContent='Phase '+phaseIdx+' 진행 중 ('+weekNum+'주차)';
-    if(days)days.textContent=daysElapsed+'일 경과 / 총 220일';
+    if(lbl)lbl.textContent=this.PHASES[phaseIdx-1].n+' 진행 중 ('+Math.min(weekNum,17)+'/17주)';
+    if(days)days.textContent=daysElapsed+'일 경과 / 총 '+TOTAL+'일 · 12/27 최종 측정';
     document.querySelectorAll('.plan-phase-cards .plan-phase-card').forEach((c,i)=>{
       c.classList.toggle('current',i+1===phaseIdx);
       c.classList.toggle('future',i+1!==phaseIdx);
@@ -4437,6 +4483,71 @@ const PlanApp={
   // ── 수면: 지금 이 사람의 최대 제약이 훈련량이 아니라 수면인데, 앱은 기록만 하고 목표도 피드백도 없었다.
   // 볼륨·RPE에는 목표·추세·배너가 다 있으면서 정작 병목 축만 측정에 머물면 행동이 바뀌지 않는다.
   SLEEP_GOAL:7,
+  // ── 실측 TDEE 역산 (26.09-b) ───────────────────────────────────────────────
+  // [왜] 계획의 조정 규칙(2주마다 ±150kcal)이 전부 "현재 섭취를 안다"를 전제하는데 그 값이 없었다.
+  //   TDEE 추정치는 ±200kcal 오차이고 그건 주 0.18kg = 17주에 3kg — 목표 달성 여부를 통째로 뒤집는다.
+  // [식] TDEE = 평균 섭취 + (체중 변화 × 7700 ÷ 일수). 체중 변화는 인바디 첫·끝 측정으로 잡는다.
+  //   체중은 수분에 흔들리므로 14일 이상 + 인바디 2회 이상이 모일 때까지 침묵한다.
+  tdeeEstimate(){
+    if(typeof ExLog==='undefined'||typeof InBody==='undefined')return null;
+    const data=ExLog.data||{}, log=(InBody._log||[]).filter(e=>e&&e.wt>0);
+    if(log.length<2)return null;
+    const days=Object.keys(data).filter(k=>+((data[k].cond||{}).kcal)>0).sort();
+    if(days.length<7)return{need:'days',have:days.length};
+    const a=days[0],b=days[days.length-1];
+    const span=Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/864e5)+1;
+    if(span<14)return{need:'span',have:span,logged:days.length};
+    // 기록 구간과 겹치는 인바디만 사용 — 구간 밖 측정으로 체중 변화를 잡으면 엉뚱한 값이 나온다
+    const inRange=log.filter(e=>e.date>=a&&e.date<=b);
+    if(inRange.length<2)return{need:'inbody',have:inRange.length};
+    const first=inRange[0],lastE=inRange[inRange.length-1];
+    const dWt=lastE.wt-first.wt;
+    const ibSpan=Math.round((new Date(lastE.date+'T12:00:00')-new Date(first.date+'T12:00:00'))/864e5);
+    if(ibSpan<10)return{need:'inbody',have:inRange.length};
+    const avg=days.reduce((t,k)=>t+ +data[k].cond.kcal,0)/days.length;
+    const coverage=days.length/span;                 // 기록 누락 비율 — 낮으면 평균이 실제보다 낮게 잡힌다
+    const tdee=avg-(dWt*7700/ibSpan);
+    return{tdee:Math.round(tdee),avg:Math.round(avg),dWt:+dWt.toFixed(1),days:ibSpan,
+           logged:days.length,span:span,coverage:coverage,from:first.date,to:lastE.date};
+  },
+  // ── 순환 완주 추적 ─────────────────────────────────────────────────────────
+  // KPI를 「순환 완주 8일 이내」로 정해놓고 화면에는 없었다. 8/22~8/30 사이클에서 Legs A가
+  // 통째로 빠진 것도 사후에 기록을 뒤져서야 발견했다. 진행 중인 한 바퀴를 실시간으로 보여준다.
+  cycleProgress(){
+    if(typeof ExLog==='undefined')return null;
+    const data=ExLog.data||{}, today=_todayKey();
+    const done=Object.keys(data).filter(k=>k<=today&&(data[k].exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))
+      .sort().reverse();
+    if(!done.length)return null;
+    const base=t=>(typeof EL_BASE!=='undefined'&&EL_BASE[t])||t;
+    const seen=new Map();                            // 타입 → 가장 최근 수행일
+    for(const k of done){
+      const t=base((data[k].day||'').trim());
+      if(EL_CYCLE.indexOf(t)<0)continue;
+      if(!seen.has(t))seen.set(t,k);
+      if(seen.size===EL_CYCLE.length)break;
+    }
+    // 현재 한 바퀴 = 마지막으로 '완주가 닫힌' 지점 이후. 가장 오래된 타입의 수행일을 사이클 시작으로 본다
+    const missing=EL_CYCLE.filter(t=>!seen.has(t));
+    const dates=[...seen.values()].sort();
+    const startK=dates[0]||done[done.length-1];
+    const elapsed=Math.round((new Date(today+'T12:00:00')-new Date(startK+'T12:00:00'))/864e5)+1;
+    const next=(typeof ExLog.nextType==='function')?ExLog.nextType():null;
+    return{done:EL_CYCLE.length-missing.length,total:EL_CYCLE.length,missing:missing,
+           elapsed:elapsed,start:startK,next:next,over:elapsed>8&&missing.length>0};
+  },
+  // 최근 7일 수면 미달 일수 — SMM 경고에 병기한다(제지방 보존의 단일 최대 레버)
+  sleepShortfall(){
+    if(typeof ExLog==='undefined')return null;
+    const data=ExLog.data||{}, base=new Date(_todayKey()+'T12:00:00');
+    let n=0,rec=0;
+    for(const k in data){
+      const h=+((data[k].cond||{}).sleep||0);if(!(h>0))continue;
+      const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
+      if(ago>=0&&ago<7){rec++;if(h<this.SLEEP_GOAL)n++;}
+    }
+    return rec>=3?{short:n,rec:rec}:null;
+  },
   renderSleep(){
     const el=document.getElementById('sleep-card');if(!el)return;
     if(typeof ExLog==='undefined'){el.innerHTML='';return;}
@@ -5497,8 +5608,12 @@ const InBody={
 
     let html='<div class="plan-stat-grid">';
     FIELDS.forEach(f=>{
-      const v=last[f.key];const p=pct(f,v);
-      const vStr=f.key==='ab'?v.toFixed(2):v;
+      const v=last[f.key];
+      // 복부지방률(ab)은 선택 입력이라 비어 있을 수 있다 — 그대로 toFixed를 부르면
+      // forEach 전체가 죽어 체성분 카드가 한 장도 안 그려졌다. 값 없는 지표는 건너뛴다.
+      if(v==null||v===''||(typeof v==='number'&&isNaN(v)))return;
+      const p=pct(f,v);
+      const vStr=f.key==='ab'?(+v).toFixed(2):v;
       html+='<div class="plan-stat-card"'+(f.wide?' style="grid-column:1/-1"':'')+'>'+
         '<div class="plan-stat-lbl">'+f.lbl+'</div>'+
         '<div class="plan-stat-vals"><span class="plan-stat-cur">'+vStr+'</span><span class="plan-stat-unit">'+f.unit+'</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">'+f.goal+(f.unit==='%'?'%':'')+(f.unit==='kg'?'kg':'')+'</span></div>'+
@@ -5577,7 +5692,50 @@ const InBody={
             +P.fat.toFixed(2)+'kg / 실측 '+J.fat.toFixed(2)+'kg · 종료까지 '+left+'주';
         }
         if(stale>=10)msg+='<br><small>마지막 측정 '+stale+'일 경과 — 일요일 저녁 고정 조건으로 갱신하세요.</small>';
+        // 수면은 SMM 갭을 메우는 단일 최대 레버라, SMM이 미달일 때 함께 띄운다
+        if(!J.cond[2].ok&&typeof PlanApp!=='undefined'&&PlanApp.sleepShortfall){
+          const sf=PlanApp.sleepShortfall();
+          if(sf&&sf.short>=3)msg+='<br><small>🛏 최근 7일 중 <b>'+sf.short+'일이 7시간 미만</b> — '
+            +'같은 적자에서 수면 부족은 제지방 손실을 늘립니다. SMM 갭에 가장 크게 작용하는 레버입니다.</small>';
+        }
         head+='<div class="ib-signal '+cls+'">'+msg+'</div>';
+      }
+
+      // ④ 실측 TDEE — 조정 규칙 전체가 이 숫자 위에 선다
+      if(typeof PlanApp!=='undefined'&&PlanApp.tdeeEstimate){
+        const T=PlanApp.tdeeEstimate();
+        if(T&&T.tdee){
+          const cov=Math.round(T.coverage*100);
+          const eat=T.tdee-468;                       // 0.60kg/주 ≈ 하루 660 / 여기선 0.425kg 기준 표기
+          head+='<div class="ib-signal ok">🍚 <b>실측 TDEE '+T.tdee.toLocaleString()+' kcal</b>'
+            +' <small>(평균 섭취 '+T.avg.toLocaleString()+' · 체중 '+(T.dWt>=0?'+':'')+T.dWt+'kg / '+T.days+'일)</small>'
+            +'<br><small>추정 2,800이 아니라 본인 값입니다. 1·2블록 목표 섭취는 <b>'
+            +(T.tdee-660).toLocaleString()+'~'+(T.tdee-600).toLocaleString()+' kcal</b>'
+            +(cov<70?(' · ⚠️ 기록률 '+cov+'% — 빠진 날이 많으면 평균이 실제보다 낮게 잡힙니다'):' · 기록률 '+cov+'%')
+            +'</small></div>';
+        }else if(T){
+          const m={days:'섭취 기록이 '+T.have+'일치입니다 — 7일 이상 모이면 계산합니다',
+                   span:'기록 구간이 '+T.have+'일입니다 — 14일 이상 필요합니다',
+                   inbody:'기록 구간 안의 인바디가 '+T.have+'회입니다 — 10일 이상 간격으로 2회 필요합니다'}[T.need];
+          head+='<div class="ib-signal">🍚 <b>실측 TDEE 계산 대기</b> — <small>'+m
+            +'. 운동 탭 상단에서 하루 kcal·단백질만 넣으면 됩니다.</small></div>';
+        }else{
+          head+='<div class="ib-signal">🍚 <b>섭취 기록을 시작하세요</b> — <small>운동 탭 상단 🍚 칸에 하루 kcal·단백질 두 숫자만. '
+            +'2주 모이면 실측 TDEE를 역산합니다 — 이 블록의 병목은 훈련이 아니라 식사입니다.</small></div>';
+        }
+      }
+
+      // ⑤ 순환 완주 — KPI인데 화면에 없었다
+      if(typeof PlanApp!=='undefined'&&PlanApp.cycleProgress){
+        const C=PlanApp.cycleProgress();
+        if(C){
+          const miss=C.missing.length?(' · 미완 <b>'+C.missing.join(', ')+'</b>'):' · <b>한 바퀴 완주</b>';
+          head+='<div class="ib-signal '+(C.over?'warn':'ok')+'">🔁 <b>순환 '+C.done+'/'+C.total+'</b>'
+            +' · '+C.elapsed+'일째'+miss
+            +(C.next?(' · 다음 <b>'+C.next+'</b>'):'')
+            +(C.over?'<br><small>KPI(8일 이내)를 넘겼습니다. 시간이 없으면 <b>핵심 3종목만</b> 해도 한 세션으로 인정합니다.</small>':'')
+            +'</div>';
+        }
       }
       html=head+html;
     })();
