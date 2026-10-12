@@ -3,15 +3,15 @@
    갱신 결과가 기존 캐시와 다르면(ETag/Last-Modified 비교) 클라이언트에 'sw-updated' 메시지를 보내
    index.html이 "새 버전" 토스트를 띄운다. network-first 대비: 느린 네트워크에서 최대 4초 기다리던
    실행 지연이 사라지고, 배포 반영은 토스트 새로고침 또는 다음 실행에 이뤄진다. */
-const CACHE = 'fit-tracker-v6'; // 배포본 구성이 바뀌면 올린다 — activate에서 옛 캐시를 통째로 삭제하고 6개를 새로 프리캐시
-const PRECACHE = ['./', './index.html', './exercise-library.js', './manifest.json', './icon192.png', './icon512.png'];
+const CACHE = 'fit-tracker-v9-20261012'; // 파일 구성이 바뀌면 버전을 올립니다.
+const CORE = ['./', './index.html', './exercise-library.js', './training-plan.js', './app-enhancements.js', './app-enhancements.css', './manifest.json'];
+const OPTIONAL = ['./icon192.png', './icon512.png'];
 
 self.addEventListener('install', e => {
-  // allSettled: 파일 1개가 404여도(아이콘 교체 등) 나머지 프리캐시와 SW 설치는 진행.
-  // addAll은 하나만 실패해도 설치 전체가 실패해 오프라인 지원이 통째로 죽는다.
+  // 필수 코드가 모두 준비된 경우에만 새 버전으로 전환합니다. 아이콘은 기존 배포 파일을 사용합니다.
   e.waitUntil(
     caches.open(CACHE)
-      .then(c => Promise.allSettled(PRECACHE.map(u => c.add(u))))
+      .then(async c => { await c.addAll(CORE); await Promise.allSettled(OPTIONAL.map(u => c.add(u))); })
       .then(() => self.skipWaiting())
   );
 });
@@ -19,7 +19,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('fit-tracker-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
