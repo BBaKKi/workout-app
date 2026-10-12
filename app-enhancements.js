@@ -7,8 +7,8 @@
  const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f;}catch(_){return f;}};
  const shift=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return _localKey(x);};
  const nameOf=w=>(w.querySelector('.ex-nm')?.textContent||'').trim();
- const PREF_KEYS=['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','brand_coef','ex_alias','block_v1','deload_v1'];
- const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',brand_coef:'기구 환산 설정',ex_alias:'종목 연결',block_v1:'훈련 블록',deload_v1:'디로드 설정'};
+ const PREF_KEYS=['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','brand_coef','ex_alias','block_v1','deload_v1','training_config_v1'];
+ const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',brand_coef:'기구 환산 설정',ex_alias:'종목 연결',block_v1:'훈련 블록',deload_v1:'디로드 설정',training_config_v1:'계획 기간·목표'};
  const A=window.AppFeatures={ready:false,focus:read('focus_mode',true),selected:{},weights:read('daily_weight_v1',{}),conflict:null,settingsMessage:'',syncing:false,
   canonical(n){return ExLog.canon(ExLog.libByName(n)?.name||n);},
   priority(name){
@@ -42,7 +42,7 @@
    const wraps=[...list.children].filter(w=>w.classList.contains('ex-wrap'));
    wraps.sort((a,b)=>(order.get(nameOf(a))?.rank??1e6)-(order.get(nameOf(b))?.rank??1e6));
    wraps.forEach(w=>{list.appendChild(w);const row=order.get(nameOf(w));if(row){w.dataset.orderWeight=String(row.weight);w.dataset.orderPhase=row.phase;w.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+row.phase;tag.textContent=row.label+' · '+row.weight;tag.title=row.reason;w.querySelector('.ex-meta')?.prepend(tag);}});
-   this.markPhases(panel);const rec=list.querySelector('.day-reco');if(rec)list.appendChild(rec);
+   const info=panel.querySelector('.hinfo');if(info&&TRAINING_PLAN.mode==='current')info.textContent=this.routine(day).slice(0,2).map(x=>x.name).join(' → ')+' · 복합 2–3분 / 고립 1–2분 휴식';this.markPhases(panel);const rec=list.querySelector('.day-reco');if(rec)list.appendChild(rec);
   },
   markPhases(panel){
    const list=panel.querySelector('.ex-list');if(!list)return;list.querySelectorAll('.ex-tier,.ex-stage').forEach(el=>el.remove());
@@ -101,14 +101,14 @@
    await this.putWeight({date,wt,updatedAt:new Date().toISOString()});$('#weight-message').textContent=date+' · '+wt+'kg 저장됨';$('#weight-value').value='';
   },
   async putWeight(entry){
-   this.weights[entry.date]=entry;const q=read('daily_weight_dirty',{});q[entry.date]=entry;
+   this.weights[entry.date]=entry;const q=read('daily_weight_dirty',{});q[entry.date]=entry;DataSync.noteLocal('weight',entry.date);
    // Save the pending record first. A failed second write can be recovered from the queue on boot.
-   await window.storage.set('daily_weight_dirty',JSON.stringify(q));await window.storage.set('daily_weight_v1',JSON.stringify(this.weights));this.renderWeights();ExLog._syncSoon();ExLog.renderSyncStatus();
+   SafeStore.transaction({daily_weight_dirty:JSON.stringify(q),daily_weight_v1:JSON.stringify(this.weights)},[],true);this.renderWeights();ExLog._syncSoon();ExLog.renderSyncStatus();
   },
   async removeWeight(date){await this.putWeight({date,deleted:true,updatedAt:new Date().toISOString()});$('#weight-message').textContent=date+' 기록 삭제됨';},
   renderWeights(){
-   if(!this.ready)return;const s=this.weightStats(), mean=s.mean===null?'—':s.mean.toFixed(1), state=s.mean===null?'측정값을 입력해 주세요':s.mean<83.5?'목표 범위 아래':s.mean>84.5?'목표 범위 위':'목표 범위 안';
-   $('#weight-summary').innerHTML='<div class="af-number">'+mean+'<small> kg</small></div><b>최근 7일 평균 · '+s.count+'/7일 기록</b><p>'+s.start.slice(5)+'–'+s.end.slice(5)+' · '+state+'<br>유지 범위 83.5–84.5kg'+(s.delta!==null?'<br>직전 7일 평균 대비 '+(s.delta>0?'+':'')+s.delta.toFixed(1)+'kg ('+s.previousCount+'/7일 기록)':'')+'</p>';
+   if(!this.ready)return;const s=this.weightStats(), mean=s.mean===null?'—':s.mean.toFixed(1), state=s.mean===null?'측정값을 입력해 주세요':s.mean<TRAINING_PLAN.config.weightMin?'목표 범위 아래':s.mean>TRAINING_PLAN.config.weightMax?'목표 범위 위':'목표 범위 안';
+   $('#weight-summary').innerHTML='<div class="af-number">'+mean+'<small> kg</small></div><b>최근 7일 평균 · '+s.count+'/7일 기록</b><p>'+s.start.slice(5)+'–'+s.end.slice(5)+' · '+state+'<br>유지 범위 '+TRAINING_PLAN.config.weightMin+'–'+TRAINING_PLAN.config.weightMax+'kg'+(s.delta!==null?'<br>직전 7일 평균 대비 '+(s.delta>0?'+':'')+s.delta.toFixed(1)+'kg ('+s.previousCount+'/7일 기록)':'')+'</p>';
    const rows=Object.values(this.weights).filter(x=>!x.deleted).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
    $('#weight-history').innerHTML=rows.length?rows.map(r=>'<div class="af-history-row"><span>'+esc(r.date)+'</span><b>'+r.wt+'kg</b><button type="button" data-edit-weight="'+r.date+'">수정</button><button type="button" data-delete-weight="'+r.date+'" aria-label="'+r.date+' 체중 삭제">삭제</button></div>').join(''):'아직 일일 체중 기록이 없어요.';
   },
@@ -127,16 +127,7 @@
   prefState(url){const all=read('settings_sync_v1',{});return all[url]||{revision:0,base:null};},
   savePrefState(url,state){const all=read('settings_sync_v1',{});all[url]=state;localStorage.setItem('settings_sync_v1',JSON.stringify(all));},
   normalizedPrefs(data){return Object.fromEntries(PREF_KEYS.map(k=>[k,typeof data?.[k]==='string'?data[k]:null]));},
-  async api4(url,body){try{const j=await ExLog.api(url,body);if(j.apiVersion<4)throw new Error('Apps Script API v4 배포가 필요합니다. 로컬 저장은 유지됩니다.');return j;}catch(e){if(/지원하지 않는 mode/.test(e.message))throw new Error('새 기능 동기화에는 Apps Script API v4 배포가 필요합니다. 로컬 저장은 유지됩니다.');throw e;}},
-  async syncWeights(url,full){
-   const q=read('daily_weight_dirty',{}),entries=clone(Object.values(full?this.weights:q));
-   if(entries.length){const j=await this.api4(url,{mode:'weight',weightRows:entries});if(j.type!=='weight'||j.written!==entries.length)throw new Error('체중 저장 확인이 일치하지 않습니다.');const now=read('daily_weight_dirty',{});entries.forEach(e=>{if(same(now[e.date],e))delete now[e.date];});await window.storage.set('daily_weight_dirty',JSON.stringify(now));}
-   const remote=await this.api4(url,{mode:'weight_get'});if(!Array.isArray(remote.weights))throw new Error('체중 목록 응답이 없습니다.');await this.mergeWeights(remote.weights);
-  },
-  async mergeWeights(rows){
-   const q=read('daily_weight_dirty',{});rows.forEach(x=>{if(x&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&!q[x.date]&&(x.deleted||Number.isFinite(x.wt)))this.weights[x.date]=x;});
-   await window.storage.set('daily_weight_v1',JSON.stringify(this.weights));this.renderWeights();
-  },
+  async api4(url,body){try{const j=await ExLog.api(url,body);if(j.apiVersion<5)throw new Error('Apps Script API v5 배포가 필요합니다. 로컬 저장은 유지됩니다.');return j;}catch(e){if(/지원하지 않는 mode/.test(e.message))throw new Error('새 기능 동기화에는 Apps Script API v5 배포가 필요합니다. 로컬 저장은 유지됩니다.');throw e;}},
   async syncPreferences(url,choice){
    const server=await this.api4(url,{mode:'settings_get'});if(server.type!=='settings'||!Number.isInteger(server.revision))throw new Error('설정 응답이 올바르지 않습니다.');
    const remote=this.normalizedPrefs(server.data),local=this.snapshot(),state=this.prefState(url);
@@ -147,7 +138,7 @@
     // Guard against another device changing again while the comparison was open.
     if(this.conflict&&this.conflict.revision!==server.revision){this.conflict={url,revision:server.revision,data:remote,updatedAt:server.updatedAt};this.settingsMessage='확인 중 서버 설정이 바뀌었어요. 다시 비교해 주세요.';return;}
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:1,exported:_todayKey(),data:old}));
-    this.applying=true;try{for(const k of PREF_KEYS){if(remote[k]===null)await window.storage.delete(k);else await window.storage.set(k,remote[k]);}this.savePrefState(url,{revision:server.revision,base:remote});}finally{this.applying=false;}
+    const values=Object.fromEntries(PREF_KEYS.filter(k=>remote[k]!==null).map(k=>[k,remote[k]]));if(Object.keys(values).length)SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:values}));this.applying=true;try{SafeStore.transaction(values,PREF_KEYS.filter(k=>remote[k]===null));this.savePrefState(url,{revision:server.revision,base:remote});}finally{this.applying=false;}
     location.reload();return;
    }
    if(choice==='local'&&this.conflict&&server.revision!==this.conflict.revision){this.conflict={url,revision:server.revision,data:remote,updatedAt:server.updatedAt};this.settingsMessage='다른 기기가 다시 수정했어요. 최신 내용을 확인해 주세요.';return;}
@@ -156,7 +147,7 @@
    if(result.type!=='settings'||!Number.isInteger(result.revision)||!same(this.normalizedPrefs(result.data),sent))throw new Error('설정 저장 확인이 일치하지 않습니다.');
    this.savePrefState(url,{revision:result.revision,base:sent});this.conflict=null;this.settingsMessage=same(sent,this.snapshot())?'루틴·기구 설정 동기화 완료':'추가 변경 사항 전송 대기';
   },
-  async syncExtras(url,full){await this.syncWeights(url,full);await this.syncPreferences(url);this.renderSettings();},
+
   async syncSettings(choice){
    if(this.syncing)return;const url=await ExLog.getScriptUrl();if(!url){ExLog.openSync();return;}
    this.syncing=true;this.settingsMessage='설정을 확인하고 있어요…';this.renderSettings();
@@ -174,7 +165,7 @@
   async renderSyncStatus(){
    const el=$('#sync-status');if(!el)return;const url=await ExLog.getScriptUrl(),ib=read('inbody_dirty',{}),w=read('daily_weight_dirty',{}),state=this.prefState(url),prefs=url&&(!state.base||!same(this.snapshot(),state.base));
    const n=ExLog._dirty.size+ExLog._delQ.length+Object.keys(ib).length+Object.keys(w).length+(prefs?1:0);
-   el.dataset.state=ExLog.syncMessage?'error':n||this.conflict?'pending':'ok';el.textContent=ExLog.syncMessage||(ExLog._syncP?'전송 중 · 로컬 저장됨':this.conflict?'기록 전송됨 · 설정 선택 필요 (관리 탭)':url?n?'로컬 저장됨 · 전송 대기 '+n+'건':'Google Sheets 연결 · 전송 대기 없음':'이 기기에 저장 중 · Google Sheets 연결 설정');
+   el.dataset.state=SafeStore.error||ExLog.syncMessage?'error':n||this.conflict?'pending':'ok';el.textContent=SafeStore.error||(DataSync.conflicts.length?'기록 차이 '+DataSync.conflicts.length+'건 · 관리 탭에서 확인':ExLog.syncMessage)||(ExLog._syncP?'전송 중 · 로컬 저장됨':this.conflict?'기록 전송됨 · 설정 선택 필요 (관리 탭)':url?n?'로컬 저장됨 · 전송 대기 '+n+'건':'Google Sheets 연결 · 전송 대기 없음':'이 기기에 저장 중 · Google Sheets 연결 설정');
   },
   mount(){
    const bar=document.createElement('section');bar.className='af-tools';bar.innerHTML='<div class="af-tool-row"><button id="focus-toggle" type="button" onclick="AppFeatures.toggleFocus()"></button><button type="button" onclick="AppFeatures.openEditor()">자동 순서·루틴</button></div><div id="af-focus-nav"><button id="focus-prev" type="button" aria-label="이전 운동" onclick="AppFeatures.moveFocus(-1)">‹</button><select id="focus-exercise" aria-label="집중할 운동"></select><button id="focus-next" type="button" aria-label="다음 운동" onclick="AppFeatures.moveFocus(1)">›</button></div><div id="af-focus-help">준비운동 후 가벼운 준비 세트부터 · <button type="button" id="coach-toggle">운동 설명 보기</button></div><div id="af-status" class="af-muted" role="status"></div>';
@@ -200,13 +191,13 @@
  ExLog._sortDay=function(panel){A.sort(panel);};
  ExLog._markTiers=function(panel){A.markPhases(panel);};
  const savePlan=ExLog.savePlan;ExLog.savePlan=function(){if(A.ready)document.querySelectorAll('.day-panel').forEach(p=>A.sort(p));return savePlan.call(this);};
- const init=ExLog.init;ExLog.init=async function(){await init.call(this);A.mount();};
+ const init=ExLog.init;ExLog.init=async function(){await init.call(this);A.mount();DataSync.mount();};
  const refresh=ExLog.refresh;ExLog.refresh=function(){refresh.call(this);if(A.ready){A.renderFocus();A.renderWeekly();}};
  const analysis=PlanApp.renderAnalysis;PlanApp.renderAnalysis=function(...args){analysis.apply(this,args);A.renderWeekly();};
  const renderLibrary=LibApp.render;LibApp.render=function(...args){renderLibrary.apply(this,args);A.decorateLibrary();};
  const buildLibrary=LibApp._build;LibApp._build=function(d){buildLibrary.call(this,d);A.decorateLibraryDetail(d);};
  ExLog.renderSyncStatus=function(){return A.renderSyncStatus();};
- const ibSync=ExLog.syncInBody;ExLog.syncInBody=async function(url,full){await ibSync.call(this,url,full);await A.syncExtras(url,full);};
+
  const selectRoutine=ExLog.selectRoutine;ExLog.selectRoutine=async function(mode){await window.storage.set('routine_profile',mode==='legacy'?'legacy':'current');return selectRoutine.call(this,mode);};
  // Local preference edits trigger a retry. Snapshot comparison protects changes made during a request.
  const set=window.storage.set.bind(window.storage);window.storage.set=async(k,v)=>{const out=await set(k,v);if(PREF_KEYS.includes(k)&&A.ready&&!A.applying){A.settingsMessage='설정 변경됨 · 전송 대기';A.renderSettings();ExLog._syncSoon();ExLog.renderSyncStatus();}return out;};
