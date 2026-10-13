@@ -1,5 +1,10 @@
 {
-  "dependencies": {
-    "jsdom": "^30.0.0"
-  }
+  "name": "fitness-tracker",
+  "private": true,
+  "version": "5.0.0",
+  "scripts": {
+    "test": "node tests/backend.test.cjs && node tests/browser.test.cjs && node tests/pwa.test.cjs",
+    "release": "python3 tools/build-release.py"
+  },
+  "devDependencies": {"playwright": "1.62.1"}
 }
