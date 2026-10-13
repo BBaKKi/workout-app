@@ -99,14 +99,17 @@
       }
       // Keep destructive and infrequent actions away from set entry.
       document.querySelectorAll('.ex-wrap').forEach(w => {
-        if (w.querySelector('.exercise-actions')) return;
         const detail = w.querySelector('.ex-detail');if(!detail)return;
-        const actions = document.createElement('details');actions.className='exercise-actions';
-        const summary=document.createElement('summary');summary.textContent='운동 변경';actions.append(summary);
+        let actions=w.querySelector('.exercise-actions');
+        if(!actions){actions=document.createElement('details');actions.className='exercise-actions';
+         const summary=document.createElement('summary');summary.textContent='운동 변경';actions.append(summary);detail.append(actions);}
         for (const [selector, label] of [['.ex-swap-btn','대체 운동 선택'],['.ex-del-btn','건너뛰기·루틴에서 제외']]) {
           const b=w.querySelector(selector);if(b){b.textContent=label;b.setAttribute('aria-label',label);actions.append(b);}
         }
-        detail.append(actions);
+        let settings=w.querySelector('.exercise-settings');
+        if(!settings){settings=document.createElement('details');settings.className='exercise-settings';settings.innerHTML='<summary>기구·중량·휴식 설정</summary><div class="exercise-settings-body"></div>';detail.append(settings);}
+        const body=settings.querySelector('.exercise-settings-body');
+        for(const selector of ['.equipment-button','.ex-load-btn','.ex-brand-row','.ex-base-btn','.ex-memo-btn','.ex-rest-btn','.ex-grip-chip']){const control=detail.querySelector(selector);if(control&&control.parentElement!==body)body.append(control);}
       });
       document.querySelectorAll('.ex-log-input').forEach(form => {
         for (const [selector, title] of [['.wl-kg-input','중량 (kg)'],['.wl-rp-input','반복·시간·거리']]) {
@@ -125,7 +128,7 @@
         chip.tabIndex=0;chip.setAttribute('role','button');chip.setAttribute('aria-label',chip.textContent+' 수정');
         chip.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chip.click();}};
       });
-      $('#session-context').hidden = !AppFeatures.focus;
+      $('#session-context').hidden = false;
       const cond = ExLog.session().cond || {};
       for (const [id,value] of [['context-rate',cond.rate||''],['context-sleep',cond.sleep??''],['context-note',ExLog.session().note||'']]) {
         const input=$('#'+id);if(document.activeElement!==input)input.value=value;
@@ -144,7 +147,7 @@
       const skipped=document.createElement('div');skipped.id='skipped-exercises';skipped.className='af-card';$('.af-tools').after(skipped);
       const context=document.createElement('details');context.id='session-context';context.className='af-card';
       context.innerHTML='<summary>컨디션·수면·메모</summary><div class="af-fields"><label>컨디션<select id="context-rate"><option value="">미입력</option><option value="1">1 · 매우 낮음</option><option value="2">2 · 낮음</option><option value="3">3 · 보통</option><option value="4">4 · 좋음</option><option value="5">5 · 매우 좋음</option></select></label><label>수면 (시간)<input id="context-sleep" type="number" inputmode="decimal" min="0" max="24" step="0.5"></label></div><label>운동 메모<input id="context-note" maxlength="200" type="text" placeholder="오늘 운동에서 기억할 점"></label><p>이 날짜의 기록과 함께 동기화됩니다.</p>';
-      $('.af-tools').after(context);
+      $('#weekly-report').before(context);
       $('#context-rate').onchange=e=>{if(e.target.value)ExLog.setCond(+e.target.value);else{const s=ExLog.session();s.cond||={};delete s.cond.rate;ExLog.data[ExLog.date]=s;WorkoutTools.touch(ExLog.date);}this.refresh();};
       $('#context-sleep').onchange=e=>{ExLog.setSleep(e.target.value);this.refresh();};$('#context-note').onchange=e=>ExLog.setNote(e.target.value);
       if (WorkoutTools.offeredResume) {
@@ -155,7 +158,7 @@
       }
       const filters=document.createElement('div');filters.className='library-filters';
       filters.innerHTML='<label>목록<select id="library-scope"><option value="all">전체 운동</option><option value="favorites">즐겨찾기</option><option value="recent">최근 사용</option></select></label><label>기구·브랜드<select id="library-equipment"><option value="all">전체</option>'+['Hammer','Watson','Nautilus','Booty Builder','덤벨','바벨','케이블'].map(n=>'<option>'+n+'</option>').join('')+'</select></label>';
-      $('#lib-list').before(filters);$('#library-scope').onchange=e=>{this.filter=e.target.value;LibApp.render();};$('#library-equipment').onchange=e=>{this.equipment=e.target.value;LibApp.render();};
+      const filterDetails=document.createElement('details');filterDetails.className='library-filter-panel';filterDetails.innerHTML='<summary>도감·기구 필터</summary>';filterDetails.append(filters);$('#lib-list').before(filterDetails);$('#library-scope').onchange=e=>{this.filter=e.target.value;LibApp.render();};$('#library-equipment').onchange=e=>{this.equipment=e.target.value;LibApp.render();};
       document.querySelectorAll('.top-nav label,.day-sel label').forEach(label=>{
         label.tabIndex=0;label.setAttribute('role','button');
         label.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();label.click();}};
@@ -163,6 +166,9 @@
       $('#swap-scope').setAttribute('aria-labelledby','swap-title');$('#equipment-dialog').setAttribute('aria-labelledby','equipment-title');
       // Place optional analysis below immediate results.
       const analysis=$('.tab-p .plan-wrap');
+      analysis.append($('#weekly-report'));
+      analysis.insertAdjacentHTML('afterbegin','<div class="page-heading"><h1>기록의 흐름</h1><p>이번 주의 수행과 꾸준히 쌓인 변화를 확인하세요.</p></div>');
+      $('.tab-b .plan-wrap').insertAdjacentHTML('afterbegin','<div class="page-heading"><h1>나의 관리</h1><p>몸의 변화, 기록 백업, 시트 연결을 한곳에서.</p></div>');
       for(const selector of ['#sec-sleep','#sec-block']){const heading=analysis.querySelector(selector);if(heading){const card=heading.nextElementSibling;analysis.append(heading);if(card)analysis.append(card);}}
       const nav=$('.top-nav');const resize=()=>document.documentElement.style.setProperty('--top-nav-height',nav.getBoundingClientRect().height+'px');new ResizeObserver(resize).observe(nav);resize();
       GymInventory.mount();

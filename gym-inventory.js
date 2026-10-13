@@ -64,7 +64,7 @@
     },
     open(){
       document.querySelector('.lbl-l').click();this.select('allday-gamil');
-      document.querySelector('#library-catalog').focus();
+      document.querySelector('.library-filter-panel').open=true;document.querySelector('#library-catalog').focus();
     },
     refresh(){
       const active=this.catalog==='allday-gamil';

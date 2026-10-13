@@ -1,5 +1,5 @@
 const ExLog={
-  prescription(name,day){return TRAINING_PLAN.prescription(name,day||this.dayType(this.date),this.date);},
+  prescription(name,day){return AppFeatures.prescription(name,day||this.dayType(this.date));},
   initRoutineUI(){
     document.querySelectorAll('.day-panel').forEach((panel)=>{
       const day=this.panelDayOf(panel),i=this.PANEL_DAY.indexOf(day),label=document.querySelector('.lbl-d'+(i+1));
@@ -55,7 +55,6 @@ const ExLog={
     this.injectAddBtns();
     this.injectDeleteBtns();
     this.reconcilePanels(); // 정적 카드를 EL_DAY_EX에 맞춘 뒤에 슬롯을 굳힌다 — 둘이 어긋나 있던 원인 제거
-    this._assignSlots();   // applyPlan(→_sortDay)보다 먼저 — HTML 순서를 슬롯으로 굳힌 뒤에 재배치를 허용
     this.applyPlan();
     this.injectTargets();
     this.refresh();
@@ -344,10 +343,9 @@ const ExLog={
 
   dbCardInner(e,name){
     const nm=_esc(name||(e&&e.name)||'');
-    if(!e){return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">도감 미등록 종목 — 주동근이 <b>늘어났다 조여지는 느낌</b>에 집중.</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">첫 세트는 가볍게 폼 확인 후 증량. 수축 정점 1초·신장 2초.</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">날카로운 통증이 느껴지면 즉시 중단. 반동 금지.</div></div><div class="fb link"><div class="fl">🔍 도감 미연결</div><div class="ft">이름을 도감 표기와 맞추면 폼·세팅 정보와 부위 집계가 연결됩니다. 운동 기록은 입력한 종목별로 따로 보관합니다.</div></div></div></div></details>';}
-    const stim=e.target||'';const tip=e.tip||e.grip||'';const warn=e.warn||'통증이 느껴지면 즉시 중단.';
-    const tags='<span class="tag t-s">'+(e.sets||'')+'</span>'+(e.mus?'<span class="tag t-m">'+e.mus+'</span>':'');
-    return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail"><div class="focus-grid"><div class="fb stim"><div class="fl">🎯 자극점</div><div class="ft">'+stim+'</div></div><div class="fb tip"><div class="fl">💡 요령</div><div class="ft">'+tip+'</div></div><div class="fb warn"><div class="fl">⚠ 주의</div><div class="ft">'+warn+'</div></div></div></div></details>';
+    const tags=e?'<span class="tag t-s">'+_esc(e.sets||'')+'</span><span class="tag t-m">'+_esc(e.mus||'')+'</span>':'';
+    const help=e?'':'<div class="exercise-coaching coach-unknown">직접 입력한 운동입니다. 기구 안내와 자세를 확인하고 가벼운 준비 세트부터 시작하세요. 도감에서 운동을 선택하면 상세 가이드를 볼 수 있어요.</div>';
+    return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail">'+help+'</div></details>';
   },
   _addDelBtn(card,name){
     const sm=card.querySelector('summary');if(!sm||card.querySelector('.ex-del-btn'))return;
@@ -551,7 +549,6 @@ const ExLog={
   // (운동 탭은 여전히 디클라인인데 목록은 인클라인, Legs A는 레그레이즈 vs 케이블 크런치 …).
   // 이제 EL_DAY_EX가 유일한 기준이다: 목록 순서대로 카드를 재배치하고, 없는 종목은 도감에서 만들어 붙이고,
   // 목록에 없는 정적 카드는 숨긴다(삭제하지 않아 plan.add로 언제든 되살릴 수 있다).
-  // _assignSlots보다 먼저 돌아야 슬롯 번호가 목록 기준으로 굳는다.
   reconcilePanels(){
     document.querySelectorAll('.day-panel').forEach(panel=>{
       const list=panel.querySelector('.ex-list');if(!list)return;
@@ -566,82 +563,14 @@ const ExLog={
         w.style.display='';
         list.appendChild(w);            // 기존 노드면 끝으로 이동 → want 순서가 그대로 DOM 순서가 된다
       });
-      // 목록에서 빠진 카드는 숨기고 뒤로 보낸다 — _assignSlots가 DOM 순서로 슬롯을 매기므로
+      // 현재 계획에서 빠진 카드는 숨깁니다.
       // 앞에 남아 있으면 보이지도 않는 카드가 1번 슬롯을 차지한다.
       have.forEach((w,n)=>{ if(!want.includes(n)){ w.style.display='none'; list.appendChild(w); } });
       this._markTiers(panel,day,list);
     });
   },
-  // 핵심/선택 경계선과 슈퍼세트 배지 — '시간이 없으면 어디까지'를 카드에서 바로 읽게 한다
-  _markTiers(panel,day,list){
-    list.querySelectorAll('.ex-tier').forEach(el=>el.remove());
-    panel.querySelectorAll('.ex-ss-badge').forEach(el=>el.remove());
-    const want=EL_DAY_EX[day]||[], core=EL_DAY_CORE[day]||0;
-    const wraps=[...list.querySelectorAll('.ex-wrap')].filter(w=>w.style.display!=='none');
-    if(core>0&&wraps[core]){
-      const d=document.createElement('div');d.className='ex-tier';
-      d.innerHTML='<b>우선순위 '+core+'종목</b><span>시간이 부족하면 여기까지. 전체 세트 목표를 채웠다는 뜻은 아닙니다.</span>';
-      list.insertBefore(d,wraps[core]);
-    }
-    (EL_DAY_SS[day]||[]).forEach((pair,pi)=>{
-      pair.forEach((nm,i)=>{
-        const w=wraps.find(x=>((x.dataset.swapto||x.dataset.cname||x.querySelector('.ex-nm')?.textContent||'').trim())===nm);
-        const sm=w&&w.querySelector('summary .ex-info');
-        if(!sm||sm.querySelector('.ex-ss-badge'))return;
-        const b=document.createElement('span');b.className='ex-ss-badge';
-        b.textContent='🔗 슈퍼세트 '+(i===0?'A':'B')+' — '+pair[1-i];
-        b.title='두 종목을 번갈아 하고 라운드 사이에만 60~90초 쉰다';
-        sm.appendChild(b);
-      });
-    });
-  },
-  // ── 기본 카드에 슬롯 번호 부여: HTML에 손으로 짠 순서(day-header의 '순서 근거')를 1급 데이터로 고정 ──
-  // 최초 1회 DOM 순서대로 부여하므로 HTML을 수동 편집할 필요가 없다. 스왑은 _transformWrap이 제자리 변환이라 슬롯이 승계된다.
-  _assignSlots(){
-    document.querySelectorAll('.day-panel').forEach(panel=>{
-      const list=panel.querySelector('.ex-list');if(!list)return;
-      let i=0;
-      [...list.children].forEach(el=>{
-        if(!el.classList||!el.classList.contains('ex-wrap'))return;
-        if(el.classList.contains('custom-ex'))return;      // 사용자가 추가한 종목은 슬롯 없음
-        if(!el.dataset.slot)el.dataset.slot=String(++i);else i=+el.dataset.slot;
-      });
-    });
-  },
-  // ── 하루 운동 순서 ────────────────────────────────────────────────────────
-  // 이전: 매번 전체를 MUSCLE_SESSION_ORDER로 재정렬 → 스왑/추가가 하나라도 있는 날은 손으로 짠 순서가 통째로 깨졌다
-  //       (예: Push B에서 인클라인 프레스가 3번으로 밀리고 페이스풀·리어델트가 1·2번을 차지).
-  // 이제: 슬롯이 있는 기본 카드는 HTML 순서를 그대로 유지하고, 슬롯이 없는 추가 종목만
-  //       '같은 부위 그룹의 마지막 카드 뒤'에 끼워넣는다.
-  _sortDay(panel){
-    if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
-    const list=panel.querySelector('.ex-list');if(!list)return;
-    const wraps=[...list.children].filter(el=>el.classList&&el.classList.contains('ex-wrap'));
-    if(wraps.length<2)return;
-    const nameOf=w=>(w.dataset.cname||w.dataset.swapto||w.querySelector('.ex-nm')?.textContent||'').trim();
-    const grpOf=w=>{
-      const n=nameOf(w);const m=PlanApp.muscleOf(n);
-      const b=_effBucket(n,m?m.p:null);
-      const g=b?MUSCLE_SESSION_ORDER.indexOf(b):-1;
-      return g<0?MUSCLE_SESSION_ORDER.length:g;                  // 미상/미등록 부위 → 맨 뒤
-    };
-    const slotted=wraps.filter(w=>w.dataset.slot).sort((a,b)=>(+a.dataset.slot)-(+b.dataset.slot));
-    const extra=wraps.filter(w=>!w.dataset.slot);                // 추가 종목 — 추가한 순서 유지
-    const out=slotted.slice();
-    extra.forEach(w=>{
-      const g=grpOf(w);
-      let at=-1;
-      for(let i=0;i<out.length;i++)if(grpOf(out[i])<=g)at=i;     // 같은/앞선 부위의 마지막 위치
-      out.splice(at+1,0,w);                                      // at<0 이면 맨 앞
-    });
-    let changed=out.length!==wraps.length;
-    if(!changed)for(let i=0;i<out.length;i++)if(out[i]!==wraps[i]){changed=true;break;}
-    if(!changed)return;                                          // 이미 제 순서 → DOM 미변경
-    const frag=document.createDocumentFragment();
-    out.forEach(w=>frag.appendChild(w));
-    list.appendChild(frag);                                      // .ex-list엔 카드만 있음(+추가 행은 panel 직속)
-    const rc=list.querySelector('.day-reco');if(rc)list.appendChild(rc); // 추천 카드는 항상 맨 아래
-  },
+  _markTiers(panel){AppFeatures.markPhases(panel);},
+  _sortDay(panel){AppFeatures.sort(panel);},
 
   prev(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()-1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
   next(){const d=new Date(this.date+'T12:00:00');d.setDate(d.getDate()+1);this.date=_localKey(d);this.updateBar();this.injectTargets();this.refresh();},
@@ -847,7 +776,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">📊 오늘 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">세트 저장</button><button aria-label="통증 표시" class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" title="이 세트에서 통증 발생 — 확정 전에 눌러두면 함께 저장됩니다">⚠️</button><button aria-label="세트 삭제" class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">취소</button></div><div class="wl-rep-chips" style="display:none"></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">세트 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">세트 저장</button><button aria-label="통증 표시" class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" title="이 세트에서 통증 발생 — 확정 전에 눌러두면 함께 저장됩니다">⚠️</button><button aria-label="세트 삭제" class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">취소</button></div><div class="wl-rep-chips" style="display:none"></div>`;
   },
 
   injectLogs(){
@@ -1760,7 +1689,7 @@ const ExLog={
     const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
     const cur=+this.restCfg[this.canon(name)]||'';
     const def=this.isCompound(name)?180:120;
-    panel=document.createElement('div');panel.className='ex-base-panel';
+    panel=document.createElement('div');panel.className='ex-base-panel ex-rest-panel';
     panel.innerHTML='<div class="ex-base-hd">⏱ 이 종목의 세트 간 <b>휴식시간</b>을 조정합니다. 비우면 기본('+def+'초)으로 돌아갑니다.</div>'
       +'<div class="ex-base-row"><input type="number" class="ex-rest-inp" step="15" min="15" max="600" inputmode="numeric" placeholder="기본 '+def+'초" value="'+cur+'">'
       +'<button class="ex-base-save" onclick="ExLog.saveRestFromUI(this)">저장</button>'
@@ -1770,13 +1699,13 @@ const ExLog={
   saveRestFromUI(el){
     const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
     this.setRestCfg(log.dataset.exname,parseFloat(det.querySelector('.ex-rest-inp').value)||0);
-    det.querySelector('.ex-base-panel').remove();
+    el.closest('.ex-rest-panel').remove();
     this.injectTargets();
   },
   clearRestFromUI(el){
     const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
     this.setRestCfg(log.dataset.exname,0);
-    det.querySelector('.ex-base-panel').remove();
+    el.closest('.ex-rest-panel').remove();
     this.injectTargets();
   },
   repCap(name){
@@ -2040,7 +1969,7 @@ const ExLog={
   },
   toggleBase(btn){
     const det=btn.closest('.ex-detail');if(!det)return;
-    let panel=det.querySelector('.ex-base-panel');
+    let panel=det.querySelector('.ex-base-panel:not(.ex-rest-panel)');
     if(panel){panel.remove();return;}
     const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
     const cur=this.baseOf(name);
@@ -2056,17 +1985,17 @@ const ExLog={
     const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');const name=log.dataset.exname;
     const kg=parseFloat(det.querySelector('.ex-base-inp').value)||0;
     this.setBase(name,kg);
-    det.querySelector('.ex-base-panel').remove();
+    el.closest('.ex-base-panel').remove();
     this.injectTargets();this.refresh();
   },
   clearBaseFromUI(el){
     const det=el.closest('.ex-detail');const log=det.querySelector('.ex-log');
     this.setBase(log.dataset.exname,0);
-    det.querySelector('.ex-base-panel').remove();
+    el.closest('.ex-base-panel').remove();
     this.injectTargets();this.refresh();
   },
 
-  // ── 데드리프트 오버언더 그립 교대: 세트마다 언더 손을 좌우 교대 (이두 파열 예방 프로토콜) ──
+  // ── 혼합 그립을 선택한 경우의 시작손 메모 ──
   _gripStartMem:null, // 메모리 우선 + localStorage 영속 시도 (localStorage 불가 환경에서도 세션 내 동작 보장)
   _gripStart(){
     if(this._gripStartMem)return this._gripStartMem;
@@ -2086,7 +2015,7 @@ const ExLog={
     const setNo=done+1;
     const start=this._gripStart();
     const under=(setNo%2===1)?start:(start==='왼'?'오른':'왼');
-    return'🤝 '+setNo+'세트 언더그립: <b>'+under+'손</b><span class="grip-note">언더 팔꿈치 완전 신전 유지 · 탭하면 시작손 변경</span>';
+    return'혼합 그립 사용 시 · '+setNo+'세트 언더그립: <b>'+under+'손</b><span class="grip-note">언더 팔꿈치 완전 신전 유지 · 탭하면 시작손 변경</span>';
   },
   updateGripChips(){
     document.querySelectorAll('.ex-grip-chip').forEach(ch=>{
@@ -2118,52 +2047,6 @@ const ExLog={
       bc.innerHTML='<div class="brief-hd">📋 오늘의 앵커</div>'+lines.join('');
     });
   },
-  _round25(x){return Math.max(0,Math.round(x/2.5)*2.5);},
-  _warmupRows(w,base){
-    if(!(w>0))return'<div class="ex-wu-empty">본세트 무게를 입력하면 단계가 계산됩니다.</div>';
-    base=+base||0;
-    const steps=[[0.4,8],[0.6,5],[0.8,3]];
-    const plate=t=>{ // 기본무게 있으면 단계별 원판 안내 (총무게 기준 반올림 후 원판 환산)
-      if(!base||t<=base)return'';
-      const ps=(t-base)/2;const sp=this._plateSplit(ps);
-      return' <span class="ex-wu-plate">한쪽 '+(Math.round(ps*100)/100)+(sp.combo.length&&sp.rem===0?' ['+sp.combo.join('+')+']':'')+'</span>';
-    };
-    return steps.map(([p,r],i)=>{const t=this._round25(w*p);return'<div class="ex-wu-row"><span class="ex-wu-step">'+(i+1)+'단계</span><b>'+t+'kg</b> × '+r+'회 <span class="ex-wu-pct">('+Math.round(p*100)+'%)</span>'+plate(t)+'<button type="button" class="ex-wu-log" onclick="ExLog.logWarmup(this,'+t+','+r+')">기록</button></div>';}).join('')
-      +'<div class="ex-wu-note">세트 간 휴식 짧게(30~60초) → 본세트 '+w+'kg'+plate(w)+'</div>';
-  },
-  // 램프 단계 원탭 기록 — W 플래그 세트로 저장 + 60초 짧은 휴식 시작 (계산만 하고 수동 입력하던 흐름 제거)
-  logWarmup(btn,wt,reps){
-    const det=btn.closest('.ex-detail');if(!det)return;
-    const log=det.querySelector('.ex-log');if(!log)return;
-    const name=log.dataset.exname;
-    const s=this.session();
-    let ex=s.exercises.find(e=>e.name===name);
-    if(!ex){ex={name,sets:[]};s.exercises.push(ex);}
-    ex.sets.push({weight:wt,reps,ts:new Date().toISOString(),warmup:true});
-    this.setSession(s);
-    this.refresh();
-    if(this.date===_todayKey()){this._askNotify();this.startRest(name,60);}
-    this._syncSoon();
-    btn.textContent='✓';btn.disabled=true;
-  },
-  toggleWarmup(btn){
-    const det=btn.closest('.ex-detail');if(!det)return;
-    let panel=det.querySelector('.ex-warmup');
-    if(panel){panel.remove();return;}
-    const log=det.querySelector('.ex-log');const name=log?log.dataset.exname:'';
-    // 본세트 무게 추정: 직전 세션 탑세트 → 없으면 빈칸
-    let w=0;const prev=this.prevSession(name);
-    if(prev&&prev.sets.length){w=Math.max.apply(null,prev.sets.map(s=>s.weight||0));}
-    panel=document.createElement('div');panel.className='ex-warmup';
-    const wbase=this.baseOf(name);
-    panel.dataset.base=wbase;
-    panel.innerHTML='<div class="ex-wu-hd">🔥 워밍업 램프업 <input type="number" class="ex-wu-inp" step="2.5" inputmode="decimal" placeholder="본세트 총 kg" value="'+(w||'')+'" oninput="ExLog._updateWarmup(this)"></div><div class="ex-wu-body">'+this._warmupRows(w,wbase)+'</div>';
-    btn.insertAdjacentElement('afterend',panel);
-  },
-  _updateWarmup(inp){
-    const panel=inp.closest('.ex-warmup');
-    panel.querySelector('.ex-wu-body').innerHTML=this._warmupRows(parseFloat(inp.value)||0,+panel.dataset.base||0);
-  },
   injectTargets(){
     document.querySelectorAll('.ex-log').forEach(log=>{
       const name=log.dataset.exname;
@@ -2174,17 +2057,14 @@ const ExLog={
       else{
         if(!badge){badge=document.createElement('div');det.insertBefore(badge,det.firstChild);}
         badge.className='ex-week-target'+(sug.up?' up':'');
-        badge.innerHTML='📈 '+sug.html;
+        badge.innerHTML=sug.html;
       }
-      // 워밍업 세트 제거(사용자 요청) — 종목별 램프업 버튼/패널을 표시하지 않고, 이전에 주입된 것도 정리
-      const wuBtn=det.querySelector('.ex-warmup-btn');if(wuBtn)wuBtn.remove();
-      const wuPanel=det.querySelector('.ex-warmup');if(wuPanel)wuPanel.remove();
       // 기본무게 설정 칩 (모든 종목 — 상태를 라벨에 표시)
       let bb=det.querySelector('.ex-base-btn');
       if(!bb){
         bb=document.createElement('button');bb.className='ex-base-btn';bb.type='button';
         bb.setAttribute('onclick','ExLog.toggleBase(this)');
-        const anchorB=det.querySelector('.ex-warmup-btn')||det.querySelector('.ex-week-target');
+        const anchorB=det.querySelector('.ex-week-target');
         if(anchorB)det.insertBefore(bb,anchorB.nextSibling);else det.insertBefore(bb,det.firstChild);
       }
       const bkg=this.baseOf(name);
@@ -2194,7 +2074,7 @@ const ExLog={
       if(!mb2){
         mb2=document.createElement('button');mb2.className='ex-memo-btn';mb2.type='button';
         mb2.setAttribute('onclick','ExLog.toggleMemo(this)');
-        det.insertBefore(mb2,bb.nextSibling);
+        bb.insertAdjacentElement('afterend',mb2);
       }
       const mm=this.memoOf(name);
       mb2.classList.toggle('has',!!mm);
@@ -2204,7 +2084,7 @@ const ExLog={
       if(!rb){
         rb=document.createElement('button');rb.className='ex-rest-btn';rb.type='button';
         rb.setAttribute('onclick','ExLog.toggleRestCfg(this)');
-        det.insertBefore(rb,mb2.nextSibling);
+        mb2.insertAdjacentElement('afterend',rb);
       }
       const rsec=this.restSec(name);
       const rCustom=!!(+this.restCfg[this.canon(name)]);
@@ -2217,7 +2097,7 @@ const ExLog={
       if(!lb){
         lb=document.createElement('button');lb.className='ex-load-btn';lb.type='button';
         lb.setAttribute('onclick','ExLog.toggleLoadType(this)');
-        det.insertBefore(lb,bb);
+        bb.before(lb);
       }
       const ltc=this.loadTypeOf(name);
       lb.classList.toggle('has',ltc!=='normal');
@@ -2228,7 +2108,7 @@ const ExLog={
       let brow=det.querySelector('.ex-brand-row');
       if(grpAll.length<2){if(brow)brow.remove();}
       else{
-        if(!brow){brow=document.createElement('div');brow.className='ex-brand-row';det.insertBefore(brow,bb);}
+        if(!brow){brow=document.createElement('div');brow.className='ex-brand-row';bb.before(brow);}
         const sig=this.dataVer+'|'+cnName;
         if(brow.dataset.sig!==sig){ // 기록/종목이 바뀔 때만 재계산 — 매 refresh마다 prevSession 반복 호출 방지
           brow.dataset.sig=sig;
@@ -2246,7 +2126,7 @@ const ExLog={
       let pw=det.querySelector('.ex-pain-warn');
       const ph2=this._lastPain(name);
       if(ph2){
-        if(!pw){pw=document.createElement('div');pw.className='ex-pain-warn';det.insertBefore(pw,mb2.nextSibling);}
+        if(!pw){pw=document.createElement('div');pw.className='ex-pain-warn';log.prepend(pw);}
         const pd=new Date(ph2.date+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'});
         pw.innerHTML='⚠️ <b>통증 이력</b> '+pd+' '+(ph2.w>0?ph2.w+'kg':'맨몸')+'×'+ph2.r+' — 워밍업 충분히, 날카로운 통증이면 즉시 중단';
       }else if(pw){pw.remove();}
@@ -2257,14 +2137,11 @@ const ExLog={
         if(!gc){
           gc=document.createElement('div');gc.className='ex-grip-chip';
           gc.setAttribute('onclick','ExLog.flipGripStart()');
-          const anchor3=det.querySelector('.ex-warmup-btn')||det.querySelector('.ex-week-target');
+          const anchor3=det.querySelector('.ex-week-target');
           if(anchor3)det.insertBefore(gc,anchor3.nextSibling);else det.insertBefore(gc,det.firstChild);
         }
         gc.innerHTML=this._gripChipHtml(name);
       }else if(gc){gc.remove();}
-      // 통합(가독성): '💡 폼 & 자극점'(EX_CUES) 박스는 상단 focus-grid(🎯자극점·💡요령·⚠주의)와 내용이 중복 → 제거.
-      // 기술 상세는 focus-grid(개인 코칭) + 📐 그립·세팅·ROM(ex-more, 도감)로 일원화. 이전에 주입된 박스도 정리.
-      const cue=det.querySelector('.ex-cue');if(cue)cue.remove();
     });
     this.injectBrief();                                      // 목표 배지 주입 후 브리핑 갱신
   },
