@@ -1,23 +1,28 @@
-/** 운동기록 API v5 — 기존 배포를 '새 버전'으로 업데이트하면 URL을 유지합니다.
+/** 운동기록 API v7 — 기존 배포를 '새 버전'으로 업데이트하면 URL을 유지합니다.
  * 기존 열은 이동/삭제하지 않고, 없는 열만 뒤에 추가합니다.
  * POST: authenticated sync_pull / sync_write / settings_get / settings_put. GET: status only.
  * 이전 flag 열과 새 wu/rpe/pain 열, 한글·영문 헤더를 모두 읽습니다.
  */
-var API_VERSION = 5;
+var API_VERSION = 7;
 var WORKOUT_SHEET = '운동기록';
 var INBODY_SHEET = '인바디기록';
 var WEIGHT_SHEET = '체중기록';
 var SETTINGS_SHEET = '앱설정';
+var SESSION_SHEET = '운동세션';
+var SESSION_FIELDS = ['date','sessionJson'];
+var SESSION_HEADER = ['날짜','세션계획JSON'];
 var WEIGHT_FIELDS = ['date','wt','deleted','updatedAt'];
 var WEIGHT_HEADER = ['날짜','체중(kg)','삭제','수정시각'];
 var SETTINGS_FIELDS = ['prefKey','prefValue','revision','updatedAt'];
 var SETTINGS_HEADER = ['설정키','설정값','버전','수정시각'];
-var SETTINGS_KEYS = ['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','brand_coef','ex_alias','block_v1','deload_v1','training_config_v1'];
-var WORKOUT_FIELDS = ['date','day','name','setNo','weight','reps','vol','ts','wu','rpe','pain','setId','deleted'];
-var WORKOUT_HEADER = ['날짜','요일','종목','세트','무게(kg)','횟수','볼륨(kg)','기록시각','워밍업','RPE','통증','세트ID','삭제'];
+var SETTINGS_KEYS = ['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','block_v1','deload_v1','training_config_v1','ex_equipment_v1','exercise_favorites_v1'];
+var WORKOUT_FIELDS = ['date','day','name','setNo','weight','reps','vol','ts','wu','rpe','pain','setId','deleted','recordMeta'];
+var WORKOUT_HEADER = ['날짜','요일','종목','세트','무게(kg)','횟수','볼륨(kg)','기록시각','워밍업','RPE','통증','세트ID','삭제','기록정보JSON'];
 var INBODY_FIELDS = ['date','wt','sm','bf','ab','waist','vf','pa','bmr'];
 var INBODY_HEADER = ['날짜','체중(kg)','골격근량(kg)','체지방률(%)','복부지방률','허리둘레(cm)','내장지방레벨','위상각','기초대사량'];
 var HEADER_ALIASES = {
+ recordMeta:['기록정보JSON','recordMeta'],
+ sessionJson:['세션계획JSON','sessionJson'],
  setId:['세트ID','setId'],deleted:['삭제','deleted'],updatedAt:['수정시각','updatedAt'],prefKey:['설정키','prefKey'],prefValue:['설정값','prefValue'],revision:['버전','revision'],
  date:['날짜','date'],day:['요일','day'],name:['종목','name'],setNo:['세트','setNo'],
  weight:['무게(kg)','weight'],reps:['횟수','reps'],vol:['볼륨(kg)','vol'],ts:['기록시각','ts'],
@@ -44,7 +49,7 @@ function doPost(e) {
   if(b.mode==='sync_write')return _json(_syncWrite(b));
   if(b.mode==='settings_get')return _json(_settingsGet());
   if(b.mode==='settings_put')return _json(_settingsPut(b));
-  throw new Error('API v5 앱으로 업데이트하세요. 이전 방식의 전체 업로드·삭제는 차단됩니다.');
+  throw new Error('API v7 앱으로 업데이트하세요. 이전 방식의 전체 업로드·삭제는 차단됩니다.');
  }catch(err){return _json({ok:false,apiVersion:API_VERSION,error:String(err.message||err)});}
  finally{if(lock&&lock.hasLock())lock.releaseLock();}
 }
@@ -95,7 +100,7 @@ function _settingsGet(){
 function _settingsPut(b){
  var expected=_number(b.expectedRevision,'expectedRevision',0,1000000000);if(expected%1)throw new Error('버전은 정수여야 합니다.');
  if(!b.data||Array.isArray(b.data)||typeof b.data!=='object')throw new Error('설정 객체가 필요합니다.');
- var data={};SETTINGS_KEYS.forEach(function(k){var v=b.data[k];if(v!==null&&typeof v!=='string')throw new Error('설정 형식이 잘못되었습니다: '+k);if(v!==null&&k!=='routine_profile'){var parsed=JSON.parse(v);if(parsed!==null&&(typeof parsed!=='object'||Array.isArray(parsed)))throw new Error('설정 객체가 필요합니다: '+k);}if(k==='routine_profile'&&v!==null&&v!=='current'&&v!=='legacy')throw new Error('루틴 프로필이 올바르지 않습니다.');data[k]=v;});
+ var data={};SETTINGS_KEYS.forEach(function(k){var v=b.data[k]===undefined?null:b.data[k];if(v!==null&&typeof v!=='string')throw new Error('설정 형식이 잘못되었습니다: '+k);if(v!==null&&k!=='routine_profile'){var parsed=JSON.parse(v);if(parsed!==null&&(typeof parsed!=='object'||Array.isArray(parsed)))throw new Error('설정 객체가 필요합니다: '+k);}if(k==='routine_profile'&&v!==null&&v!=='current'&&v!=='legacy')throw new Error('루틴 프로필이 올바르지 않습니다.');data[k]=v;});
  var json=JSON.stringify(data);if(json.length>45000)throw new Error('설정이 시트 셀 저장 한도를 넘습니다. 전체 JSON 백업을 사용하세요.');
  var current=_settingsGet();if(current.revision!==expected){current.conflict=true;return current;}
  var revision=current.revision+1,updatedAt=new Date().toISOString(),t=_table(SETTINGS_SHEET,SETTINGS_FIELDS,SETTINGS_HEADER,true);
@@ -113,6 +118,7 @@ function _schema(kind){
  if(kind==='workout')return [WORKOUT_SHEET,WORKOUT_FIELDS,WORKOUT_HEADER];
  if(kind==='weight')return [WEIGHT_SHEET,WEIGHT_FIELDS,WEIGHT_HEADER];
  if(kind==='inbody')return [INBODY_SHEET,INBODY_FIELDS,INBODY_HEADER];
+ if(kind==='session')return [SESSION_SHEET,SESSION_FIELDS,SESSION_HEADER];
  throw new Error('지원하지 않는 기록 유형입니다.');
 }
 function _readKind(kind,write){
@@ -128,7 +134,7 @@ function _readKind(kind,write){
 }
 function _cleanRow(r){
  var f=_flags(r);
- return {date:r.date,day:String(r.day||''),name:String(r.name||''),setNo:Number(r.setNo),weight:Number(r.weight)||0,reps:Number(r.reps)||0,vol:Number(r.vol)||0,ts:r.ts instanceof Date?r.ts.toISOString():String(r.ts||''),wu:f.wu,rpe:f.rpe,pain:f.pain,setId:String(r.setId||_legacyId(r)),deleted:_truth(r.deleted)};
+ return {date:r.date,day:String(r.day||''),name:String(r.name||''),setNo:Number(r.setNo),weight:Number(r.weight)||0,reps:Number(r.reps)||0,vol:Number(r.vol)||0,ts:r.ts instanceof Date?r.ts.toISOString():String(r.ts||''),wu:f.wu,rpe:f.rpe,pain:f.pain,setId:String(r.setId||_legacyId(r)),deleted:_truth(r.deleted),meta:_validateRecordMeta(r.meta||(r.recordMeta?JSON.parse(r.recordMeta):{}))};
 }
 function _records(t,kind){
  var groups=Object.create(null);
@@ -144,6 +150,7 @@ function _records(t,kind){
    if(entries.length!==1)throw new Error(date+' '+kind+' 날짜가 시트에서 중복됩니다.');
    var x=entries[0],entry={date:date};
    if(kind==='weight'){entry.deleted=_truth(x.deleted);entry.wt=entry.deleted?null:Number(x.wt);entry.updatedAt=x.updatedAt instanceof Date?x.updatedAt.toISOString():String(x.updatedAt||'');if(!entry.deleted)_number(entry.wt,'wt',20,300);}
+   else if(kind==='session'){entry=JSON.parse(x.sessionJson);_validateSession(entry,date);}
    else INBODY_FIELDS.slice(1).forEach(function(k){if(x[k]!==undefined&&x[k]!==''&&x[k]!==null)entry[k]=Number(x[k]);});
    out[date]={date:date,revision:_digest(entry),deleted:!!entry.deleted,entry:entry};
   }
@@ -151,7 +158,7 @@ function _records(t,kind){
 }
 function _syncPull(){
  var out={ok:true,apiVersion:API_VERSION,type:'snapshot'};
- ['workout','weight','inbody'].forEach(function(kind){out[kind]=Object.values(_records(_readKind(kind,false),kind));});return out;
+ ['workout','weight','inbody','session'].forEach(function(kind){out[kind]=Object.values(_records(_readKind(kind,false),kind));});return out;
 }
 function _emptyRecord(date,kind){return kind==='workout'?{date:date,revision:'0',deleted:true,rows:[]}:{date:date,revision:'0',deleted:true,entry:null};}
 function _comparable(record,kind){
@@ -174,6 +181,7 @@ function _validateItem(item,kind){
  }else{
   var x=item.entry;if(!x||x.date!==item.date)throw new Error('기록 날짜가 일치하지 않습니다.');
   if(kind==='weight'){if(!x.deleted)_number(x.wt,'wt',20,300);item.entry={date:x.date,wt:x.deleted?null:Number(x.wt),deleted:!!x.deleted,updatedAt:String(x.updatedAt||'')};}
+  else if(kind==='session'){_validateSession(x,item.date);item.entry=x;}
   else{var e={date:x.date};['wt','sm','bf'].forEach(function(k){e[k]=_number(x[k],k,.01,k==='bf'?100:500);});['ab','waist','vf','pa','bmr'].forEach(function(k){if(x[k]!==''&&x[k]!=null)e[k]=_number(x[k],k,0,10000);});item.entry=e;}
  }
 }
@@ -197,11 +205,11 @@ function _syncWrite(b){
    var ix=index[x.date]||[];
    if(kind==='workout'){
     var byId=Object.create(null),wanted=Object.create(null);ix.forEach(function(i){var r=_cleanRow(_object(t,t.rows[i]));byId[r.setId]=i;});
-    x.rows.forEach(function(r){wanted[r.setId]=true;put(byId[r.setId],r);});
+    x.rows.forEach(function(r){wanted[r.setId]=true;put(byId[r.setId],Object.assign({},r,{recordMeta:JSON.stringify(r.meta||{})}));});
     ix.forEach(function(i){var old=_cleanRow(_object(t,t.rows[i]));if(!wanted[old.setId])put(i,{setId:old.setId,deleted:true});});
    }else{
-    var e=Object.assign({},x.entry);
-    // An omitted optional InBody field means explicitly cleared in API v5.
+    var e=kind==='session'?{date:x.date,sessionJson:JSON.stringify(x.entry)}:Object.assign({},x.entry);
+    // An omitted optional InBody field means explicitly cleared in API v7.
     if(kind==='inbody')INBODY_FIELDS.forEach(function(k){if(e[k]===undefined)e[k]='';});
     put(ix[0],e);
    }
@@ -221,3 +229,40 @@ function _flushManaged(t,first,last,fields){
   t.sheet.getRange(first+2,s[0]+1,last-first+1,s[1]-s[0]+1).setValues(values);
  });
 }
+
+ function _validateSession(entry,date){
+  const obj=x=>x&&typeof x==='object'&&!Array.isArray(x), bad=()=>{throw new Error('세션 계획 형식 오류');};
+  const name=s=>{if(typeof s!=='string'||!s.trim()||s.length>200||/[<>]/.test(s))bad();};
+  const tree=x=>{if(!x||typeof x!=='object')return;for(const k of Object.keys(x)){if(['__proto__','prototype','constructor'].includes(k))bad();tree(x[k]);}};
+  const days=['Push A','Pull A','Legs A','Push B','Pull B','Legs B'];
+  if(!obj(entry)||entry.date!==date||JSON.stringify(entry).length>45000)bad();tree(entry);
+  if(!obj(entry.snapshots)||!obj(entry.overrides))bad();
+  for(const [day,s] of Object.entries(entry.snapshots)){
+   if(!days.includes(day)||!obj(s)||s.day!==day||!Array.isArray(s.rows)||s.rows.length>150||!['recorded','reconstructed'].includes(s.source)||typeof s.capturedAt!=='string')bad();
+   const names=new Set(),originals=new Set();
+   s.rows.forEach(r=>{if(!obj(r))bad();name(r.name);name(r.original);if(names.has(r.name)||originals.has(r.original))bad();names.add(r.name);originals.add(r.original);
+    ['sets','baseSets','min','max','weight','index'].forEach(k=>{if(!Number.isFinite(r[k])||r[k]<0)bad();});
+    if(!Number.isInteger(r.sets)||r.sets<1||r.sets>20||!Number.isInteger(r.baseSets)||r.baseSets<1||r.baseSets>20||!Number.isInteger(r.min)||!Number.isInteger(r.max)||r.min<1||r.max<r.min||r.max>1000)bad();
+    if(r.skipped!==undefined&&typeof r.skipped!=='boolean')bad();
+   });
+  }
+  for(const [day,v] of Object.entries(entry.overrides)){if(!days.includes(day)||!obj(v))bad();Object.entries(v).forEach(([a,b])=>{name(a);name(b);});}
+  if(entry.context!==undefined){
+   const c=entry.context;if(!obj(c)||!obj(c.cond)||typeof c.note!=='string'||c.note.length>200)bad();
+   if(c.cond.rate!==undefined&&(!Number.isInteger(c.cond.rate)||c.cond.rate<1||c.cond.rate>5))bad();
+   if(c.cond.sleep!==undefined&&(!Number.isFinite(c.cond.sleep)||c.cond.sleep<0||c.cond.sleep>24))bad();
+  }
+  return entry;
+ }
+ function _validateRecordMeta(meta){
+  if(meta==null)return {};
+  const bad=()=>{throw new Error('기록 단위·부하 정보 형식 오류');};
+  if(typeof meta!=='object'||Array.isArray(meta)||JSON.stringify(meta).length>5000)bad();
+  for(const [key,v] of Object.entries(meta)){
+   if(key==='exerciseId'){if(typeof v!=='string'||!v.startsWith('exercise:')||v.length>2000)bad();}
+   else if(key==='unit'){if(!['reps','seconds','meters'].includes(v))bad();}
+   else if(['bw','ew','km','incline'].includes(key)){if(!Number.isFinite(v)||v<0||v>({bw:500,ew:100500,km:2000,incline:100}[key]))bad();}
+   else bad();
+  }
+  return meta;
+ }

@@ -25,7 +25,7 @@
  const config={start:'2026-10-12',end:'2026-12-31',weightMin:83.5,weightMax:84.5};
  try{const c=JSON.parse(localStorage.getItem('training_config_v1')||'null');if(c&&/^\d{4}-\d{2}-\d{2}$/.test(c.start)&&/^\d{4}-\d{2}-\d{2}$/.test(c.end)&&c.end>c.start&&Number.isFinite(c.weightMin)&&Number.isFinite(c.weightMax)&&c.weightMin>=20&&c.weightMax<=300&&c.weightMax>c.weightMin)Object.assign(config,c);}catch(_){}
  const offset=d=>Math.floor((Date.parse(d+'T12:00:00Z')-Date.parse(config.start+'T12:00:00Z'))/864e5);
- const P=window.TRAINING_PLAN={version:'2026-10-12.5',config,mode,items,defaults,focus,cycle:mode==='legacy'?legacyCycle:cycle,
+ const P=window.TRAINING_PLAN={version:'2026-10-13.7',config,mode,items,defaults,focus,cycle:mode==='legacy'?legacyCycle:cycle,
   storageKey:mode==='legacy'?'plan_v2':'plan_v3',start:config.start,end:config.end,
   exercises:mode==='legacy'?legacy:Object.fromEntries(cycle.map(d=>[d,items[d].map(x=>x[0])])),
   phase(date){const day=offset(date);

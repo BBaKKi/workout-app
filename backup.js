@@ -10,8 +10,9 @@
  function workout(data,month){
   if(!object(data))fail('운동 기록 객체가 필요합니다.');
   for(const [d,s] of Object.entries(data)){date(d);if(month&&d.slice(0,7)!==month)fail('기록 날짜와 월 파일이 일치하지 않습니다.');if(!object(s)||!Array.isArray(s.exercises))fail('운동 세션 형식 오류');
-   for(const e of s.exercises){safeName(e.name);if(!Array.isArray(e.sets))fail('세트 배열 오류');for(const v of e.sets){if(!object(v))fail('세트 형식 오류');number(v.weight,0,100000);number(v.reps,0,100000);if(v.rpe!=null)number(v.rpe,0,10);}}
-   if(s.cardio!==undefined){if(!Array.isArray(s.cardio))fail('유산소 배열 오류');s.cardio.forEach(c=>{safeName(c.type);number(c.min,0,100000);});}
+   for(const e of s.exercises){safeName(e.name);if(!Array.isArray(e.sets))fail('세트 배열 오류');for(const v of e.sets){if(!object(v))fail('세트 형식 오류');number(v.weight,0,100000);number(v.reps,0,100000);if(v.rpe!=null)number(v.rpe,0,10);validateRecordMeta(Object.fromEntries(['unit','bw','ew','exerciseId'].filter(k=>v[k]!=null).map(k=>[k,v[k]])));}}
+   if(s.routineSnapshots||s.dayOverrides||s.cond||s.note!==undefined)validateSession({date:d,snapshots:s.routineSnapshots||{},overrides:s.dayOverrides||{},context:{cond:s.cond||{},note:s.note||''}},d);
+   if(s.cardio!==undefined){if(!Array.isArray(s.cardio))fail('유산소 배열 오류');s.cardio.forEach(c=>{safeName(c.type);number(c.min,0,100000);validateRecordMeta(Object.fromEntries(['km','incline'].filter(k=>c[k]!=null).map(k=>[k,c[k]])));});}
   }
  }
  function inbody(entries){if(!Array.isArray(entries))fail('인바디 배열 오류');const seen=new Set();entries.forEach(e=>{date(e.date);if(seen.has(e.date))fail('인바디 날짜 중복');seen.add(e.date);['wt','sm','bf'].forEach(k=>number(e[k],.01,k==='bf'?100:500));['ab','waist','vf','pa','bmr'].forEach(k=>{if(e[k]!=null)number(e[k],0,10000);});});}
@@ -35,6 +36,9 @@
     }else if(key==='sync_dirty'){if(!Array.isArray(v))fail('전송 대기 날짜 배열 오류');v.forEach(date);}
     else if(key==='sync_del'){if(!Array.isArray(v))fail('삭제 대기 배열 오류');v.forEach(x=>{date(x.date);safeName(x.name);number(x.setNo,1,100000);});}
     else if(key==='training_config_v1'){if(!object(v))fail('계획 설정 오류');date(v.start);date(v.end);if(v.end<=v.start||new Date(v.start+'T12:00:00').getDay()!==1)fail('계획 기간 오류');number(v.weightMin,20,300);number(v.weightMax,20,300);if(v.weightMin>=v.weightMax)fail('목표 체중 범위 오류');}
+    else if(key==='ex_equipment_v1'){if(!object(v))fail('기구 세팅 오류');Object.entries(v).forEach(([n,x])=>{safeName(n);if(!object(x))fail('기구 세팅 오류');for(const [k,s] of Object.entries(x))if(!['seat','backrest','grip','pulley','stance','note'].includes(k)||typeof s!=='string'||s.length>(k==='note'?240:80))fail('기구 세팅 값 오류');});}
+    else if(key==='session_dirty_v1'){if(!object(v))fail('계획 대기열 오류');Object.keys(v).forEach(date);}
+    else if(key==='exercise_favorites_v1'){if(!object(v))fail('즐겨찾기 형식 오류');Object.entries(v).forEach(([n,on])=>{safeName(n);if(typeof on!=='boolean')fail('즐겨찾기 값 오류');});}
     else if(key==='focus_mode'){if(typeof v!=='boolean')fail('집중 모드 오류');}
     else if(v!==null&&!object(v))fail(key+': 설정 객체 오류');
     values[key]=raw;
@@ -49,8 +53,8 @@
     clearTimeout(ExLog._syncTimer);if(ExLog._syncP)await ExLog._syncP;
     if(DataSync.busy)throw new Error('동기화가 끝난 뒤 다시 시도하세요.');
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:2,exported:new Date().toISOString(),data:old}));
-    const keys=Object.keys(values),hasWorkout=keys.some(k=>k==='wl_v2'||k.startsWith('wl_v2:')),remove=['record_sync_v5','settings_sync_v1'];
-    if(hasWorkout){remove.push(...Object.keys(localStorage).filter(k=>k.startsWith('wl_v2:')),'wl_v2');const months={};for(const k of keys.filter(k=>k==='wl_v2'||k.startsWith('wl_v2:'))){Object.entries(JSON.parse(values[k])).forEach(([d,s])=>(months[d.slice(0,7)]||={})[d]=s);delete values[k];}for(const [m,v] of Object.entries(months))values['wl_v2:'+m]=JSON.stringify(v);values.sync_dirty=JSON.stringify(Object.values(months).flatMap(x=>Object.keys(x)));values.sync_del='[]';}
+    const keys=Object.keys(values),hasWorkout=keys.some(k=>k==='wl_v2'||k.startsWith('wl_v2:')),remove=['record_sync_v5','settings_sync_v1','workout_resume_v1','workout_drafts_v1','workout_undo_v1'];
+    if(hasWorkout){remove.push(...Object.keys(localStorage).filter(k=>k.startsWith('wl_v2:')),'wl_v2');const months={};for(const k of keys.filter(k=>k==='wl_v2'||k.startsWith('wl_v2:'))){Object.entries(JSON.parse(values[k])).forEach(([d,s])=>(months[d.slice(0,7)]||={})[d]=s);delete values[k];}for(const [m,v] of Object.entries(months))values['wl_v2:'+m]=JSON.stringify(v);values.sync_dirty=JSON.stringify(Object.values(months).flatMap(x=>Object.keys(x)));values.sync_del='[]';values.session_dirty_v1=JSON.stringify(Object.fromEntries(Object.values(months).flatMap(x=>Object.entries(x)).filter(([,s])=>s.routineSnapshots||s.dayOverrides||s.cond||s.note!==undefined).map(([d])=>[d,true])));}
     for(const key of Backup.MERGE_KEYS)if(values[key])values[key]=JSON.stringify({...JSON.parse(localStorage.getItem(key)||'{}'),...JSON.parse(values[key])});
     if(values.inbody_log)values.inbody_dirty=JSON.stringify(Object.fromEntries(JSON.parse(values.inbody_log).map(x=>[x.date,x])));
     if(values.daily_weight_v1)values.daily_weight_dirty=values.daily_weight_v1;

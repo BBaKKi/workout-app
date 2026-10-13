@@ -7,10 +7,10 @@
  const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f;}catch(_){return f;}};
  const shift=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return _localKey(x);};
  const nameOf=w=>(w.querySelector('.ex-nm')?.textContent||'').trim();
- const PREF_KEYS=['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','brand_coef','ex_alias','block_v1','deload_v1','training_config_v1'];
- const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',brand_coef:'기구 환산 설정',ex_alias:'종목 연결',block_v1:'훈련 블록',deload_v1:'디로드 설정',training_config_v1:'계획 기간·목표'};
+ const PREF_KEYS=['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','block_v1','deload_v1','training_config_v1','ex_equipment_v1','exercise_favorites_v1'];
+ const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',block_v1:'훈련 블록',deload_v1:'디로드 설정',training_config_v1:'계획 기간·목표',ex_equipment_v1:'기구별 구조화 세팅',exercise_favorites_v1:'운동 즐겨찾기'};
  const A=window.AppFeatures={ready:false,focus:read('focus_mode',true),selected:{},weights:read('daily_weight_v1',{}),conflict:null,settingsMessage:'',syncing:false,
-  canonical(n){return ExLog.canon(ExLog.libByName(n)?.name||n);},
+  canonical(n){return n;},
   priority(name){
    const e=ExLog.libByName(name),weight=Number.isFinite(e?.weight)?e.weight:400;
    const phase=weight<200?'early':weight<300?'middle':weight<400?'late':'unclassified';
@@ -22,7 +22,8 @@
    const e=ExLog.libByName(original), m=String(e?.sets||'').match(/(\d+)\s*[×x]\s*(\d+)(?:\s*[–~\-]\s*(\d+))?/);
    return {sets:m?+m[1]:3,min:m?+m[2]:8,max:m?+(m[3]||m[2]):12};
   },
-  routine(day,date=ExLog.date){
+  routine(day,date=ExLog.date){const snap=ExLog.data[date]?.routineSnapshots?.[day];return snap?clone(snap.rows).filter(r=>!r.skipped):this.templateRoutine(day,date);},
+  templateRoutine(day,date=ExLog.date){
    const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercises[day]||[], names=base.concat((p.add||[]).filter(n=>!base.includes(n))), seen=new Set();
    return names.map((original,index)=>{
     const name=(p.swap||{})[original]||original;if((p.rm||[]).includes(original)||seen.has(name))return null;seen.add(name);
@@ -59,8 +60,8 @@
   },
   activeDay(){const i=ExLog.PANEL_DAY.findIndex((_,i)=>$('#d'+(i+1))?.checked);return ExLog.PANEL_DAY[Math.max(0,i)];},
   openEditor(day=this.activeDay()){
-   this.editorDay=day;this.editorRows=this.routine(day);const dialog=$('#routine-editor');
-   $('#edit-day').value=day;$('#edit-hint').textContent=TRAINING_PLAN.phase(ExLog.date).limited&&TRAINING_PLAN.mode==='current'?'기본 세트 수를 편집합니다. 복귀·적응 기간에는 최대 2세트로 표시합니다.':'세트·반복은 요일별로 편집할 수 있어요.';
+   this.editorDay=day;this.editorRows=window.WorkoutTools?WorkoutTools.template(day):this.routine(day);const dialog=$('#routine-editor');
+   $('#edit-day').value=day;$('#edit-hint').textContent=TRAINING_PLAN.phase(ExLog.date).limited&&TRAINING_PLAN.mode==='current'?'기본 세트 수를 편집합니다. 복귀·적응 기간에는 최대 2세트로 표시합니다.':'앞으로 쓸 세트·반복을 편집해요. 이미 시작한 날짜의 계획은 유지됩니다.';
    $('#edit-rows').innerHTML=this.editorRows.map((r,i)=>'<div class="af-edit-row" data-row="'+i+'"><b>'+esc(r.name)+'</b><span class="ex-order '+r.phase+'">'+r.label+' · '+r.weight+'</span><p class="af-order-reason">'+esc(r.reason)+'</p><div class="af-fields">'+[['sets','세트',r.baseSets,'1','1','20'],['min','최소 반복',r.min,'1','1','1000'],['max','최대 반복',r.max,'1','1','1000']].map(([k,label,v,step,min,max])=>'<label>'+label+'<input aria-label="'+esc(r.name+' '+label)+'" name="'+k+'" type="number" inputmode="numeric" step="'+step+'" min="'+min+'" max="'+max+'" value="'+v+'" required></label>').join('')+'</div></div>').join('');
    $('#edit-error').textContent='';if(!dialog.open)dialog.showModal();
   },
@@ -87,7 +88,7 @@
    $('#focus-prev').disabled=at<=0;$('#focus-next').disabled=at<0||at>=rows.length-1;
    document.querySelectorAll('.day-panel').forEach(panel=>{
     const pDay=ExLog.panelDayOf(panel);panel.querySelectorAll('.ex-wrap').forEach(w=>{const on=pDay===day&&nameOf(w)===this.selected[day];w.classList.toggle('af-current',on);if(on&&this.focus){const det=w.querySelector('details');if(det)det.open=true;}
-     if(on){const prev=ExLog.prevSession(nameOf(w));let info=w.querySelector('.af-prev');if(!info){info=document.createElement('div');info.className='af-prev';w.querySelector('.ex-detail')?.prepend(info);}const sets=(prev?.sets||[]).filter(_isWorkSet);info.textContent=sets.length?'지난 기록 · '+prev.date+' · '+sets.map(s=>s.weight+'kg × '+s.reps).join(' / '):'지난 본세트 기록이 없어요. 가벼운 준비 세트부터 시작하세요.';}
+     if(on){const prev=ExLog.prevSession(nameOf(w));let info=w.querySelector('.af-prev');if(!info){info=document.createElement('div');info.className='af-prev';w.querySelector('.ex-detail')?.prepend(info);}const sets=(prev?.sets||[]).filter(_isWorkSet);info.textContent=sets.length?'지난 기록 · '+prev.date+' · '+sets.map(s=>RecordModel.formatSet(nameOf(w),s)).join(' / '):'첫 기록 · 준비 세트부터 시작하세요.';}
     });
    });
   },
@@ -113,21 +114,35 @@
    $('#weight-history').innerHTML=rows.length?rows.map(r=>'<div class="af-history-row"><span>'+esc(r.date)+'</span><b>'+r.wt+'kg</b><button type="button" data-edit-weight="'+r.date+'">수정</button><button type="button" data-delete-weight="'+r.date+'" aria-label="'+r.date+' 체중 삭제">삭제</button></div>').join(''):'아직 일일 체중 기록이 없어요.';
   },
   weekly(date=ExLog.date){
-   const dow=new Date(date+'T12:00:00').getDay(),start=shift(date,-((dow+6)%7)),end=shift(start,6), planned=new Map(),actual=new Map();let sessions=0;
-   for(let i=0;i<7;i++){const d=shift(start,i);if(TRAINING_PLAN.mode==='current'&&(d<TRAINING_PLAN.start||d>TRAINING_PLAN.end))continue;const day=TRAINING_PLAN.mode==='legacy'?TRAINING_PLAN.cycle[i]:TRAINING_PLAN.schedule(d);if(!day||!TRAINING_PLAN.cycle.includes(day))continue;sessions++;
-    this.routine(day,d).forEach(r=>{const key=this.canonical(r.name);const a=planned.get(key)||{name:r.name,planned:0};a.planned+=r.sets;planned.set(key,a);});}
-   Object.entries(ExLog.data).filter(([d])=>d>=start&&d<=end&&d<=_todayKey()).forEach(([,s])=>(s.exercises||[]).forEach(e=>{const key=this.canonical(e.name),n=(e.sets||[]).filter(_isWorkSet).length;if(n)actual.set(key,(actual.get(key)||0)+n);}));
-   const rows=[...planned].map(([key,v])=>({...v,actual:actual.get(key)||0})),extra=[...actual].filter(([key])=>!planned.has(key)).reduce((n,[,v])=>n+v,0);
-   return {start,end,sessions,rows,extra,total:rows.reduce((n,r)=>n+r.planned,0),done:rows.reduce((n,r)=>n+r.actual,0),matched:rows.reduce((n,r)=>n+Math.min(r.actual,r.planned),0)};
+   const dates=RecordModel.weekDates(date),start=dates[0],end=dates[6],planned=new Map(),actual=new Map(),validDates=new Set();
+   let sessions=0,unknown=0,reconstructed=0,unplannedSets=0,matched=0;
+   for(const d of dates){
+    const snaps=Object.values(ExLog.data[d]?.routineSnapshots||{});
+    const day=ExLog.data[d]?.day||TRAINING_PLAN.schedule(d);
+    if(!snaps.length&&(d<TRAINING_PLAN.start||d>TRAINING_PLAN.end||!TRAINING_PLAN.cycle.includes(day)))continue;
+    if(d<_todayKey()&&!snaps.length){unknown++;continue;}
+    validDates.add(d);sessions++;reconstructed+=snaps.filter(x=>x.source==='reconstructed').length;
+    const dayRows=snaps.length?snaps.flatMap(x=>x.rows).filter(r=>!r.skipped):this.routine(day,d);
+    const dayPlan=new Map();dayRows.forEach(row=>dayPlan.set(row.name,(dayPlan.get(row.name)||0)+row.sets));
+    for(const [name,count] of dayPlan){const row=planned.get(name)||{name,planned:0};row.planned+=count;planned.set(name,row);}
+    if(d<=_todayKey())for(const e of ExLog.data[d]?.exercises||[]){
+     const n=e.sets.filter(_isWorkSet).length;actual.set(e.name,(actual.get(e.name)||0)+n);
+     const target=dayPlan.get(e.name)||0;matched+=Math.min(n,target);dayPlan.set(e.name,Math.max(0,target-n));
+    }
+   }
+   for(const d of dates)if(d<=_todayKey()&&!validDates.has(d))for(const e of ExLog.data[d]?.exercises||[])unplannedSets+=e.sets.filter(_isWorkSet).length;
+   const rows=[...planned].map(([name,v])=>({...v,actual:actual.get(name)||0}));
+   const extra=[...actual].filter(([name])=>!planned.has(name)).reduce((n,[,v])=>n+v,0);
+   return {start,end,sessions,unknown,reconstructed,unplannedSets,rows,extra,total:rows.reduce((n,x)=>n+x.planned,0),done:rows.reduce((n,x)=>n+x.actual,0),matched};
   },
   renderWeekly(){
-   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 전체 계획 · 현재 편집 루틴 기준</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>워밍업 제외 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.extra)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+' · 빠진 날의 운동을 몰아서 할 필요는 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
+   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 확인된 계획 · 시작한 날은 저장된 목표 기준'+(w.unknown?' · 과거 목표 미보관 '+w.unknown+'일 제외':'')+(w.reconstructed?' · 사후 입력 계획 '+w.reconstructed+'개':'')+'</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>워밍업 제외 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.extra)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+' · 빠진 날의 운동을 몰아서 할 필요는 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
   },
   snapshot(){return Object.fromEntries(PREF_KEYS.map(k=>[k,localStorage.getItem(k)]));},
   prefState(url){const all=read('settings_sync_v1',{});return all[url]||{revision:0,base:null};},
   savePrefState(url,state){const all=read('settings_sync_v1',{});all[url]=state;localStorage.setItem('settings_sync_v1',JSON.stringify(all));},
   normalizedPrefs(data){return Object.fromEntries(PREF_KEYS.map(k=>[k,typeof data?.[k]==='string'?data[k]:null]));},
-  async api4(url,body){try{const j=await ExLog.api(url,body);if(j.apiVersion<5)throw new Error('Apps Script API v5 배포가 필요합니다. 로컬 저장은 유지됩니다.');return j;}catch(e){if(/지원하지 않는 mode/.test(e.message))throw new Error('새 기능 동기화에는 Apps Script API v5 배포가 필요합니다. 로컬 저장은 유지됩니다.');throw e;}},
+  async api4(url,body){try{const j=await ExLog.api(url,body);if(j.apiVersion<7)throw new Error('Apps Script API v7 배포가 필요합니다. 로컬 저장은 유지됩니다.');return j;}catch(e){if(/지원하지 않는 mode/.test(e.message))throw new Error('새 기능 동기화에는 Apps Script API v7 배포가 필요합니다. 로컬 저장은 유지됩니다.');throw e;}},
   async syncPreferences(url,choice){
    const server=await this.api4(url,{mode:'settings_get'});if(server.type!=='settings'||!Number.isInteger(server.revision))throw new Error('설정 응답이 올바르지 않습니다.');
    const remote=this.normalizedPrefs(server.data),local=this.snapshot(),state=this.prefState(url);
@@ -139,13 +154,13 @@
     if(this.conflict&&this.conflict.revision!==server.revision){this.conflict={url,revision:server.revision,data:remote,updatedAt:server.updatedAt};this.settingsMessage='확인 중 서버 설정이 바뀌었어요. 다시 비교해 주세요.';return;}
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:1,exported:_todayKey(),data:old}));
     const values=Object.fromEntries(PREF_KEYS.filter(k=>remote[k]!==null).map(k=>[k,remote[k]]));if(Object.keys(values).length)SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:values}));this.applying=true;try{SafeStore.transaction(values,PREF_KEYS.filter(k=>remote[k]===null));this.savePrefState(url,{revision:server.revision,base:remote});}finally{this.applying=false;}
-    location.reload();return;
+    DataSync.log('settings','settings',[],'시트 설정 불러오기 완료');location.reload();return;
    }
    if(choice==='local'&&this.conflict&&server.revision!==this.conflict.revision){this.conflict={url,revision:server.revision,data:remote,updatedAt:server.updatedAt};this.settingsMessage='다른 기기가 다시 수정했어요. 최신 내용을 확인해 주세요.';return;}
    const sent=clone(local),result=await this.api4(url,{mode:'settings_put',expectedRevision:server.revision,data:sent});
    if(result.conflict){this.conflict={url,revision:result.revision,data:this.normalizedPrefs(result.data),updatedAt:result.updatedAt};this.settingsMessage='전송 중 다른 기기가 수정했어요. 덮어쓰지 않고 보관했습니다.';return;}
    if(result.type!=='settings'||!Number.isInteger(result.revision)||!same(this.normalizedPrefs(result.data),sent))throw new Error('설정 저장 확인이 일치하지 않습니다.');
-   this.savePrefState(url,{revision:result.revision,base:sent});this.conflict=null;this.settingsMessage=same(sent,this.snapshot())?'루틴·기구 설정 동기화 완료':'추가 변경 사항 전송 대기';
+   this.savePrefState(url,{revision:result.revision,base:sent});DataSync.log('settings','settings',[],'시트에 설정 저장 완료');this.conflict=null;this.settingsMessage=same(sent,this.snapshot())?'루틴·기구 설정 동기화 완료':'추가 변경 사항 전송 대기';
   },
 
   async syncSettings(choice){
@@ -164,8 +179,8 @@
   pretty(s){try{return JSON.stringify(JSON.parse(s),null,2);}catch(_){return s;}},
   async renderSyncStatus(){
    const el=$('#sync-status');if(!el)return;const url=await ExLog.getScriptUrl(),ib=read('inbody_dirty',{}),w=read('daily_weight_dirty',{}),state=this.prefState(url),prefs=url&&(!state.base||!same(this.snapshot(),state.base));
-   const n=ExLog._dirty.size+ExLog._delQ.length+Object.keys(ib).length+Object.keys(w).length+(prefs?1:0);
-   el.dataset.state=SafeStore.error||ExLog.syncMessage?'error':n||this.conflict?'pending':'ok';el.textContent=SafeStore.error||(DataSync.conflicts.length?'기록 차이 '+DataSync.conflicts.length+'건 · 관리 탭에서 확인':ExLog.syncMessage)||(ExLog._syncP?'전송 중 · 로컬 저장됨':this.conflict?'기록 전송됨 · 설정 선택 필요 (관리 탭)':url?n?'로컬 저장됨 · 전송 대기 '+n+'건':'Google Sheets 연결 · 전송 대기 없음':'이 기기에 저장 중 · Google Sheets 연결 설정');
+   const pending=new Set([...ExLog._dirty,...ExLog._delQ.map(x=>x.date)]);const n=pending.size+Object.keys(ib).length+Object.keys(w).length+Object.keys(read('session_dirty_v1',{})).length+(prefs?1:0);
+   el.dataset.state=SafeStore.error||ExLog.syncMessage?'error':n||this.conflict||DataSync.conflicts.length?'pending':'ok';el.textContent=SafeStore.error||(DataSync.conflicts.length?'기록 차이 '+DataSync.conflicts.length+'건 · 관리 탭에서 확인':ExLog.syncMessage)||(ExLog._syncP?'전송 중 · 로컬 저장됨':this.conflict?'기록 전송됨 · 설정 선택 필요 (관리 탭)':url?n?'로컬 저장됨 · 전송 대기 '+n+'건':'Google Sheets 연결 · 전송 대기 없음':'이 기기에 저장 중 · Google Sheets 연결 설정');
   },
   mount(){
    const bar=document.createElement('section');bar.className='af-tools';bar.innerHTML='<div class="af-tool-row"><button id="focus-toggle" type="button" onclick="AppFeatures.toggleFocus()"></button><button type="button" onclick="AppFeatures.openEditor()">자동 순서·루틴</button></div><div id="af-focus-nav"><button id="focus-prev" type="button" aria-label="이전 운동" onclick="AppFeatures.moveFocus(-1)">‹</button><select id="focus-exercise" aria-label="집중할 운동"></select><button id="focus-next" type="button" aria-label="다음 운동" onclick="AppFeatures.moveFocus(1)">›</button></div><div id="af-focus-help">준비운동 후 가벼운 준비 세트부터 · <button type="button" id="coach-toggle">운동 설명 보기</button></div><div id="af-status" class="af-muted" role="status"></div>';
@@ -191,9 +206,9 @@
  ExLog._sortDay=function(panel){A.sort(panel);};
  ExLog._markTiers=function(panel){A.markPhases(panel);};
  const savePlan=ExLog.savePlan;ExLog.savePlan=function(){if(A.ready)document.querySelectorAll('.day-panel').forEach(p=>A.sort(p));return savePlan.call(this);};
- const init=ExLog.init;ExLog.init=async function(){await init.call(this);A.mount();DataSync.mount();};
- const refresh=ExLog.refresh;ExLog.refresh=function(){refresh.call(this);if(A.ready){A.renderFocus();A.renderWeekly();}};
- const analysis=PlanApp.renderAnalysis;PlanApp.renderAnalysis=function(...args){analysis.apply(this,args);A.renderWeekly();};
+
+
+
  const renderLibrary=LibApp.render;LibApp.render=function(...args){renderLibrary.apply(this,args);A.decorateLibrary();};
  const buildLibrary=LibApp._build;LibApp._build=function(d){buildLibrary.call(this,d);A.decorateLibraryDetail(d);};
  ExLog.renderSyncStatus=function(){return A.renderSyncStatus();};

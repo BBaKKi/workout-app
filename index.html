@@ -313,7 +313,7 @@
 <!-- 운동 캘린더 -->
 <details class="plan-fold" open><summary class="plan-hd">현재 훈련 계획</summary><div class="plan-card"><div id="ph-label"></div><div id="ph-days"></div><div class="plan-phase-track"><div id="ph-prog"></div></div><p>복귀 1주: 웨이트 4회, 종목당 2세트<br>적응 2주: 회복에 따라 5–6회로 확대<br>3주차부터: 기본 루틴과 반복 수·중량의 점진적 증가<br>계획 마지막 11일: 유지 및 점검, 피로가 누적됐다면 세트 수 약 ⅓ 감소</p><p>설정한 체중 범위에 도달하면 유지로 전환합니다. 단일 체성분 측정으로 식사량을 자동 조정하지 않습니다.</p></div></details><!-- 6주 블록 -->
 <!-- 데이터 백업 -->
-<details class="plan-fold"><summary class="plan-hd">기록과 추천은 어떻게 계산하나요?</summary><div class="plan-card rules-card"><div class="rule"><b>자동 목표</b> — 현재 루틴의 반복 범위를 우선 사용합니다. 같은 중량으로 예정 세트의 반복 상한을 채우고 1회 이상 여유가 남으면 최소 단위 증량을 제안합니다. 복귀 단계·통증·낮은 준비도에서는 증량을 보류합니다.</div><div class="rule"><b>주간 세트</b> — 워밍업을 제외한 주동근 직접 세트입니다. 복합운동의 보조근 개입은 중복 합산하지 않습니다. 목표는 기본 루틴을 위한 참고량이며 부족 표시가 추가 운동 지시는 아닙니다. 후면사슬은 햄스트링·둔근을 합친 분류입니다.</div><div class="rule" id="weight-rule"><b>체중 유지</b> — 목표 범위 83.5–84.5kg. 인바디 카드의 체중은 단일 측정값이므로 실제 유지 여부는 아침 체중의 7일 평균과 함께 판단하세요.</div><div class="rule"><b>체성분 참고 목표</b> — 기본 목표 골격근량 약 37kg·체지방률 23–24%, 도전 목표 약 37.5kg·22–23%. 측정 오차와 회복 속도를 고려한 계획값이며 보장되는 예측은 아닙니다.</div><div class="rule"><b>저장 범위</b> — 운동·유산소·인바디·일일 체중은 Google Sheets에 동기화됩니다. 루틴 편집·기구 설정은 관리 탭에서 충돌을 비교하고 동기화할 수 있습니다. 수면·컨디션·세션 메모까지 옮기려면 전체 JSON 백업을 사용하세요.</div></div></details><div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
+<details class="plan-fold"><summary class="plan-hd">기록과 추천은 어떻게 계산하나요?</summary><div class="plan-card rules-card"><div class="rule"><b>자동 목표</b> — 현재 루틴의 반복 범위를 우선 사용합니다. 같은 중량으로 예정 세트의 반복 상한을 채우고 1회 이상 여유가 남으면 최소 단위 증량을 제안합니다. 복귀 단계·통증·낮은 준비도에서는 증량을 보류합니다.</div><div class="rule"><b>주간 세트</b> — 워밍업을 제외한 주동근 직접 세트입니다. 복합운동의 보조근 개입은 중복 합산하지 않습니다. 목표는 기본 루틴을 위한 참고량이며 부족 표시가 추가 운동 지시는 아닙니다. 후면사슬은 햄스트링·둔근을 합친 분류입니다.</div><div class="rule" id="weight-rule"><b>체중 유지</b> — 목표 범위 83.5–84.5kg. 인바디 카드의 체중은 단일 측정값이므로 실제 유지 여부는 아침 체중의 7일 평균과 함께 판단하세요.</div><div class="rule"><b>체성분 참고 목표</b> — 기본 목표 골격근량 약 37kg·체지방률 23–24%, 도전 목표 약 37.5kg·22–23%. 측정 오차와 회복 속도를 고려한 계획값이며 보장되는 예측은 아닙니다.</div><div class="rule"><b>저장 범위</b> — 운동·유산소·인바디·일일 체중은 Google Sheets에 동기화됩니다. 루틴 편집·기구 설정은 관리 탭에서 충돌을 비교하고 동기화할 수 있습니다. 날짜별 계획·수면·컨디션·세션 메모도 함께 동기화됩니다.</div></div></details><div class="plan-hd" id="sec-bk">💾 데이터 백업</div>
 <div class="bk-card">
 <div class="bk-desc">운동 기록·플랜·인바디 데이터를 JSON으로 내보내고 다시 불러올 수 있습니다. <b>기기 변경·초기화 전에 꼭 내보내 두세요.</b></div>
 <textarea class="bk-ta" id="bk-ta" placeholder="[내보내기]를 누르면 여기에 백업 JSON이 채워집니다. 복원하려면 백업 JSON을 붙여넣고 [가져오기]를 누르세요." spellcheck="false"></textarea>
@@ -332,11 +332,20 @@
 </div><!-- tab-body tab-b -->
 
 <script src="storage.js"></script>
+<script src="session-schema.js"></script>
 <script src="exercise-library.js"></script>
-<script src="training-plan.js"></script><script src="app.js"></script>
+<script src="gym-inventory.js"></script>
+<script src="record-model.js"></script>
+<script src="training-plan.js"></script><script src="app-core.js"></script>
+<script src="workout-log.js"></script>
+<script src="analytics.js"></script>
+<script src="exercise-ui.js"></script>
+<script src="app.js"></script>
 <script src="./app-enhancements.js"></script>
 <script src="./sync-engine.js"></script>
 <script src="./backup.js"></script>
+<script src="./workout-tools.js"></script>
+<script src="./interface-tools.js"></script>
 <script src="./pwa.js"></script>
 <!-- 동기화 설정 모달 -->
 <div class="sync-modal" id="sync-modal" onclick="if(event.target===this)ExLog.closeSync()">
