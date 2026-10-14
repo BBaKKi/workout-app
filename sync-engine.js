@@ -6,7 +6,21 @@
  const kinds=['weight','inbody','workout','session'];
  const read=(k,f)=>{const v=localStorage.getItem(k);return v===null?f:JSON.parse(v);};
  const copy=x=>JSON.parse(JSON.stringify(x)),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const D=window.DataSync={conflicts:[],busy:false,
+ const D=window.DataSync={conflicts:[],busy:false,visibleConflicts:8,
+  kindLabel(kind){return {workout:'운동',weight:'체중',inbody:'인바디',session:'당일 계획'}[kind]||kind;},
+  async diagnose(){
+   const box=document.getElementById('sync-diagnosis');box.hidden=false;box.textContent='시트를 읽어 연결 상태를 확인하고 있어요…';
+   try{const url=localStorage.getItem('gs_script_url');if(!url)throw new Error('연결 설정에서 URL과 연결키를 먼저 저장하세요.');
+    const result=await this.request(url,{mode:'sync_diagnose'});if(result.type!=='diagnosis'||!result.source)throw new Error('Apps Script 7.2.0 이상을 새 버전으로 배포하세요.');
+    this.source=result.source;this.serverBuild=result.serverBuild;this.renderDiagnosis();
+   }catch(e){box.textContent=e.message;}
+  },
+  renderDiagnosis(){
+   const s=this.source,box=document.getElementById('sync-diagnosis');if(!s||!box)return;box.hidden=false;
+   box.innerHTML='<b>'+esc(s.name)+'</b><p>서버 '+esc(this.serverBuild||'')+' · 연결된 파일을 직접 확인하세요.</p>'+
+    (/^[A-Za-z0-9_-]+$/.test(s.id)?'<a href="https://docs.google.com/spreadsheets/d/'+s.id+'/edit" target="_blank" rel="noopener noreferrer">연결된 구글 시트 열기 ↗</a>':'')+
+    '<div class="sync-source-rows">'+kinds.map(k=>{const d=s.sheets[k]||{};return '<div><strong>'+this.kindLabel(k)+'</strong><span>'+esc(d.error||(d.status==='missing'?'해당 탭 없음':(d.name+' · '+d.rows+'행 / 유효 기록 '+d.activeDates+'일')))+'</span></div>';}).join('')+'</div><p>파일의 탭: '+esc((s.tabs||[]).join(' · '))+'</p><small>진단은 셀을 변경하지 않습니다. 빈 목록은 삭제의 증거가 아닙니다.</small>';
+  },
   activity:read('sync_activity_v1',[]),
   log(action,kind,dates,note=''){
    if(!dates.length&&!note)return;this.activity.unshift({at:new Date().toISOString(),action,kind,dates:[...new Set(dates)],note});this.activity=this.activity.slice(0,100);window.storage.set('sync_activity_v1',JSON.stringify(this.activity)).catch(e=>SafeStore.report(e));this.renderActivity();
@@ -99,6 +113,10 @@
     await InBody.load();await this.prepareIds();
     const snapshot=await ExLog.api(url,{mode:'sync_pull'});this.validateSnapshot(snapshot);
     const state=this.state(url),conflicts=[];
+    if(snapshot.source){this.source=snapshot.source;this.serverBuild=snapshot.serverBuild;this.renderDiagnosis();
+     if(state.sourceId&&state.sourceId!==snapshot.source.id)throw new Error('같은 배포 URL의 연결 파일이 변경됐습니다. 연결 진단에서 파일을 확인하고 기존 기록 파일로 연결하세요.');
+     state.sourceId=snapshot.source.id;
+    }
     for(const kind of kinds){
      const remote=Object.fromEntries(snapshot[kind].map(r=>[r.date,r])),locals=this.local(kind),base=state.base[kind],writes=[],received=[];
      const dates=new Set([...Object.keys(remote),...Object.keys(locals),...Object.keys(base)]);
@@ -109,6 +127,9 @@
        // Adopt stable IDs on the first connection without modifying the recorded kg/reps.
        if(kind==='workout'&&r.rows.length)this.apply(r,kind);
        base[date]={revision:r.revision,hash:lh};this.acknowledge(kind,date,lh);
+      }else if(!remote[date]&&locals[date]&&b&&b.revision!=='0'){
+       // A missing tab/date is not a deletion tombstone. Never erase local history.
+       conflicts.push(this.conflict(kind,l,r));
       }else if(b&&b.revision===r.revision&&dirty){
        writes.push({date,expectedRevision:r.revision,...(kind==='workout'?{rows:l.rows}:{entry:l.entry})});
       }else if((b&&!dirty)||(!b&&!locals[date]&&!dirty)){
@@ -138,11 +159,14 @@
   },
   async resolve(index,choice){
    if(this.busy||ExLog._syncP)return;const c=this.conflicts[index];if(!c)return;
+   if(choice==='cloud'&&c.remote.revision==='0'){ExLog.syncMessage='시트에 없는 기록은 삭제로 적용하지 않습니다. 연결 진단을 먼저 확인하세요.';ExLog.renderSyncStatus();return;}
    const local=this.local(c.kind)[c.date]||this.empty(c.date,c.kind);
    if(this.fingerprint(local,c.kind)!==c.localHash){ExLog.syncMessage='비교 중 이 기기 기록이 바뀌었어요. 다시 동기화해 비교하세요.';ExLog.renderSyncStatus();return;}
    const url=await ExLog.getScriptUrl();if(c.url&&c.url!==url){ExLog.syncMessage='연결 대상이 바뀌었어요. 다시 동기화해 비교하세요.';ExLog.renderSyncStatus();return;}this.busy=true;this.render();
    try{
-    const all=await ExLog.api(url,{mode:'sync_pull'});this.validateSnapshot(all);const r=all[c.kind].find(x=>x.date===c.date)||this.empty(c.date,c.kind);
+    const all=await ExLog.api(url,{mode:'sync_pull'});this.validateSnapshot(all);
+    const knownSource=this.state(url).sourceId;if(knownSource&&all.source?.id&&knownSource!==all.source.id)throw new Error('연결된 파일이 변경됐습니다. 기록을 적용하지 않았습니다.');
+    const r=all[c.kind].find(x=>x.date===c.date)||this.empty(c.date,c.kind);
     if(r.revision!==c.remote.revision){this.conflicts[index]=this.conflict(c.kind,local,r);throw new Error('비교 중 시트 기록이 바뀌었어요. 최신 내용을 다시 선택하세요.');}
     // Always make a durable recovery copy before resolving a disagreement.
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:2,data:old,exported:new Date().toISOString()}));
@@ -169,17 +193,23 @@
    catch(e){SafeStore.report(e);}
   },
   summary(record,kind){
-   if(kind==='workout')return record.rows.length?record.rows.map(r=>r.name+' #'+r.setNo+' · '+r.weight+'kg × '+r.reps+(r.wu?' (워밍업)':'')+(r.rpe?' · RPE '+r.rpe:'')+(r.pain?' · 통증':'' )).join('\n'):'기록 없음 / 삭제';
-   if(!record.entry||record.entry.deleted)return '기록 없음 / 삭제';return JSON.stringify(record.entry,null,2);
+   const empty=record.revision==='0'?'해당 날짜의 기록을 받지 못했습니다. 미저장·탭 누락·연결 대상을 확인하세요.':'삭제된 기록 / 빈 세트';
+   if(kind==='workout')return record.rows.length?record.rows.map(r=>r.name+' #'+r.setNo+' · '+RecordModel.formatSet(r.name,{weight:+r.weight,reps:+r.reps,...(r.meta||{})})+(r.wu?' (워밍업)':'')+(r.rpe?' · RPE '+r.rpe:'')+(r.pain?' · 통증':'' )).join('\n'):empty;
+   if(!record.entry||record.entry.deleted)return empty;
+   const e=record.entry;
+   if(kind==='session')return [...Object.entries(e.snapshots||{}).flatMap(([day,s])=>[day,...(s.rows||[]).map(r=>'  '+r.name+' · '+r.sets+'세트 × '+r.min+'–'+r.max+(r.skipped?' · 건너뜀':''))]),...Object.entries(e.overrides||{}).flatMap(([day,v])=>Object.entries(v).map(([from,to])=>day+' 교체: '+from+' → '+to)),e.context?.cond?.rate?'컨디션: '+e.context.cond.rate:'',e.context?.cond?.sleep!=null?'수면: '+e.context.cond.sleep+'시간':'',e.context?.note?'메모: '+e.context.note:''].filter(Boolean).join('\n')||'해당 날짜의 계획·메모가 비어 있습니다.';
+   const labels={wt:'체중 (kg)',sm:'골격근량 (kg)',bf:'체지방률 (%)',ab:'복부지방률',waist:'허리둘레 (cm)',vf:'내장지방레벨',pa:'위상각',bmr:'기초대사량'};
+   return Object.entries(labels).filter(([k])=>e[k]!=null).map(([k,label])=>label+': '+e[k]).join('\n');
   },
   render(){
    const box=document.getElementById('record-conflicts');if(!box)return;
    box.hidden=!this.conflicts.length;
-   box.innerHTML='<div class="af-card-title">기록 차이 확인 · '+this.conflicts.length+'건</div><p>처음 연결했거나 양쪽에서 수정된 기록입니다. 날짜별로 적용할 내용을 선택하세요. 선택 전 현재 기록을 백업합니다.</p>'+this.conflicts.map((c,i)=>'<article class="sync-diff"><b>'+esc(c.date)+' · '+({workout:'운동',weight:'체중',inbody:'인바디',session:'당일 계획'}[c.kind])+'</b><details><summary>양쪽 기록 비교</summary><div class="af-pref-values"><div><b>이 기기</b><pre>'+esc(this.summary(c.local,c.kind))+'</pre></div><div><b>시트</b><pre>'+esc(this.summary(c.remote,c.kind))+'</pre></div></div></details><button type="button" data-choice="local" data-index="'+i+'" '+(this.busy?'disabled':'')+'>이 기기 기록 사용</button><button type="button" data-choice="cloud" data-index="'+i+'" '+(this.busy?'disabled':'')+'>시트 기록 사용</button></article>').join('');
+   box.innerHTML='<div class="af-card-title">기록 차이 확인 <span class="count-badge">'+this.conflicts.length+'</span></div><p>날짜·종류별 차이입니다. 중복행 수가 아닙니다. 시트 쪽이 비어 있다면 연결 진단부터 확인하세요.</p><button type="button" data-diagnose>연결 진단 · 읽기 전용</button>'+this.conflicts.slice(0,this.visibleConflicts).map((c,i)=>'<details class="sync-diff"><summary><b>'+esc(c.date)+'</b><span>'+this.kindLabel(c.kind)+'</span><small>'+(c.remote.revision==='0'?'이 기기에만 있음':'양쪽 기록 다름')+'</small></summary><div class="af-pref-values"><div><b>이 기기</b><pre>'+esc(this.summary(c.local,c.kind))+'</pre></div><div><b>시트</b><pre>'+esc(this.summary(c.remote,c.kind))+'</pre></div></div><p>선택 전 이 기기의 복구용 백업을 보관합니다.</p><div class="af-tool-row"><button type="button" data-choice="local" data-index="'+i+'" '+(this.busy?'disabled':'')+'>이 기기 기록을 시트에 저장</button><button type="button" data-choice="cloud" data-index="'+i+'" '+(this.busy||c.remote.revision==='0'?'disabled':'')+'>시트 기록 적용</button></div></details>').join('')+(this.conflicts.length>this.visibleConflicts?'<button type="button" data-more>다음 8건 보기</button>':'');
   },
   refreshUI(){this.render();if(AppFeatures.ready){AppFeatures.renderWeights();ExLog.refresh();ExLog.injectTargets();PlanApp.renderAnalysis(true);InBody.render();ExLog.renderSyncStatus();}},
   mount(){
-   const box=document.createElement('section');box.id='record-conflicts';box.className='af-card';box.hidden=true;document.getElementById('daily-weight').before(box);box.addEventListener('click',e=>{const btn=e.target.closest('[data-choice]');if(btn)this.resolve(+btn.dataset.index,btn.dataset.choice);});
+   const diagnostics=document.createElement('section');diagnostics.className='af-card';diagnostics.innerHTML='<details id="connection-details"><summary>시트 연결 확인</summary><p>기록이 없다고 나오면 실제로 연결된 파일과 읽기 상태를 확인하세요.</p><button type="button" id="diagnose-sync">연결 진단 · 읽기 전용</button><div id="sync-diagnosis" hidden role="status"></div></details>';document.getElementById('daily-weight').before(diagnostics);document.getElementById('diagnose-sync').onclick=()=>this.diagnose();
+   const box=document.createElement('section');box.id='record-conflicts';box.className='af-card';box.hidden=true;diagnostics.after(box);box.addEventListener('click',e=>{const btn=e.target.closest('[data-choice]');if(btn)this.resolve(+btn.dataset.index,btn.dataset.choice);if(e.target.closest('[data-more]')){this.visibleConflicts+=8;this.render();}if(e.target.closest('[data-diagnose]')){document.getElementById('connection-details').open=true;diagnostics.scrollIntoView({block:'center'});this.diagnose();}});
    this.render();
    const history=document.createElement('section');history.className='af-card';history.innerHTML='<details><summary>동기화 활동 내역 · 최근 100건</summary><div id="sync-activity"></div></details>';box.after(history);this.renderActivity();
    // A second tab must reload before writing stale in-memory data over another tab.

@@ -1,4 +1,29 @@
-# 운동 설명 전체 검토 — 2026-10-12
+# 운동 설명 전체 검토 — 2026-10-13
+
+## v7.2 상세 수행 안내
+
+일반 도감 205개(선택 가능한 199개·과거 표기 6개)와 올데이 초안 10개에 `exercise-coaching.js`의 안내를 표시합니다. 52개의 동작 유형에 종목별 자세 차이와 기존 기구의 세팅·그립·가동범위·주의를 결합합니다. 설명을 공유하는 것과 운동 기록을 연결하는 것은 별개이며 이름별 기록은 계속 분리됩니다.
+
+- 수행 중 바로 확인하는 3가지 핵심 자세
+- 팔꿈치·손목·견갑·흉곽·골반·무릎·발의 위치와 움직임
+- 어느 관절이 움직이고 목표 근육이 어떤 힘을 내는지, 어디에서 긴장을 확인할지
+- 한 반복의 준비·힘쓰기·되돌림 순서
+- 반동·과도한 허리 신전·관절 끼임 등 실수와 수정 방법
+- 호흡과 속도, 통증·저림처럼 멈춰 확인할 신호
+
+인클라인/평벤치, 해머/인클라인/프리처 컬, 라잉/시티드 레그컬, 스모/트랩바 데드리프트, 사이드 플랭크, 케이블/리버스 크런치 등은 위치와 동작 차이를 별도로 설명합니다. 모든 사람에게 같은 팔꿈치 각도·깊이·발 간격을 강요하지 않으며 펌프나 자극감만을 효과의 기준으로 제시하지 않습니다.
+
+일반 수행 안내를 다음 1차 자료와 교차 확인했습니다. 기구별 실물·정확한 모델이나 개인 자세를 확인한 것은 아니며 현장 확인이 필요한 초안 표시는 유지합니다.
+
+- [ACE Chest Press](https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/)
+- [ACE Lateral Raise](https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/)
+- [ACE Seated Lat Pulldown](https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/)
+- [ACE Seated Leg Press](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/)
+- [ACE Seated Row](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/)
+- [NSCA Romanian Deadlift](https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/)
+
+## 이전 항목 검토와 이름 정리
+
 
 기존 198개 항목 모두의 설명을 다시 작성했습니다. 새 선택 목록은 199개이며, 기존 이름 6개는 중복·혼합·오표기를 정리해 목록에서 제외했습니다. 이 6개는 과거 기록을 읽기 위한 데이터로 남아 있습니다. 서로 다른 도구·모드의 기록을 분리하기 위해 7개 항목을 추가했습니다. 기존 세트·중량·이름은 일괄 수정하지 않습니다.
 

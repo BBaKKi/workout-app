@@ -61,23 +61,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ex-card[open] .chev{transform:rotate(180deg)}
 .ex-detail{border-top:1px solid #f2f2f7;padding:9px 14px 0}
 /* 카드 상세 통일 레이아웃 — 모든 줄(칩·자극/요령/주의·그립/세팅/ROM/순서·기록)이 같은 14px 좌측 여백에 정렬 */
-.focus-grid{display:flex;flex-direction:column;gap:0;padding:2px 0 0}
-.fb{display:block;padding:7px 0;border-top:.5px solid #f1f1f3}
-.focus-grid>.fb:first-child{border-top:none}
-.fb.link{background:#FDF7EC;border:.5px solid #EAD9B0;border-radius:8px;padding:8px 10px;margin-top:6px}
-.fl{display:block;font-size:10.5px;font-weight:800;letter-spacing:.2px;margin:0 0 3px;line-height:1.3}
-.fb.stim .fl{color:#1b5e20}
-.fb.tip .fl{color:#0d47a1}
-.fb.warn .fl{color:#b71c1c}
-.fb.link .fl{color:#8a6d2f}
-.ft{display:block;font-size:12.5px;line-height:1.65;color:#2c2c2e}
-.ft b{font-weight:700;color:#000}
-.flow-d{padding:0 12px 10px}
-.flow-d>summary{font-size:12px;font-weight:700;color:#636366;cursor:pointer;list-style:none;padding:2px 0}
-.flow-d>summary::-webkit-details-marker{display:none}
-.flow-d>summary::after{content:" ▾";color:#b0b0b5;font-size:10px}
-.flow-d[open]>summary::after{content:" ▴"}
-.flow-d>.flow-steps{margin-top:7px}
 .flow-steps{display:flex;flex-direction:column;gap:5px}
 .fstep{display:flex;align-items:flex-start;gap:8px}
 .snum{width:18px;height:18px;border-radius:50%;background:#f2f2f7;border:.5px solid #d1d1d6;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#636366;flex-shrink:0;margin-top:1px}
@@ -385,23 +368,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .lib-add.added{background:#3B6D11}
 .lib-add:disabled{opacity:.85}
 .lib-empty{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:20px 0}
-.ex-more{margin:0;padding:0 0 6px;border:none;display:flex;flex-direction:column;gap:0}
-.ex-more-cap{display:none}
-.exx-row{display:block;padding:7px 0;border-top:.5px solid #f1f1f3}
-.exx-l{display:block;font-weight:800;font-size:10.5px;letter-spacing:.2px;margin:0 0 3px;line-height:1.3}
-.exx-row span:last-child{display:block;font-size:12.5px;line-height:1.65;color:#2c2c2e}
-.exx-row span:last-child b{font-weight:700;color:#000}
-.exx-l.lgrip{color:#5B3A6B}
-.exx-l.lset{color:#8a5a1a}
-.exx-l.lrom{color:#0C447C}
-.exx-l.lseq{color:#555}
-.exx-l.lbr{color:#0b6b5a}
-.exx-l.lmiss{color:#8a5300}
-.exx-l.lalt{color:#5a4b8a}
-.exx-row .exx-alts{display:flex;flex-wrap:wrap;gap:4px}
-.exx-row .exx-altb{background:#EFEDE7;border:.5px solid #DAD6CC;border-radius:7px;padding:4px 8px;font-size:11px;font-weight:600;color:#3a3a38;font-family:inherit}
-.exx-row .stp-seq b.stp-n{display:inline-block;min-width:15px;height:15px;line-height:15px;text-align:center;background:#eceafc;border-radius:50%;font-size:9px;color:#4a3ab0;font-weight:800;margin-right:3px}
-.exx-row .stp-sep{color:#c7c7cc;margin:0 3px}
 /* 체성분 카드 */
 .plan-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
 .plan-stat-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px}
@@ -601,15 +567,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ex-alias-list{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto}
 .ex-alias-empty{font-size:12px;color:#8e8e93}
 /* 워밍업 램프업 */
-.ex-warmup-btn{font-size:11px;color:#BA7517;background:#F7EFE2;border:none;border-radius:var(--border-radius-md);padding:5px 10px;margin-bottom:8px;cursor:pointer;display:block}
-.ex-warmup{background:#FBF6EC;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:10px;margin-bottom:8px;font-size:12px}
-.ex-wu-hd{display:flex;align-items:center;gap:8px;font-weight:600;color:#7a5a12;margin-bottom:8px}
-.ex-wu-inp{width:90px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:4px 8px;font-size:13px}
-.ex-wu-row{display:flex;align-items:center;gap:8px;padding:3px 0;color:#4a4a45}
-.ex-wu-step{font-size:10px;color:#a0906a;width:40px}
-.ex-wu-pct{color:#8e8e93;font-size:11px}
-.ex-wu-note{margin-top:6px;font-size:11px;color:#8e8e93}
-.ex-wu-empty{color:#8e8e93;font-size:12px}
 /* 데드 그립 교대 칩 */
 .ex-grip-chip{font-size:10.5px;color:#5B3A6B;background:#F1EAF6;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;line-height:1.5;cursor:pointer;display:inline-block;vertical-align:middle}
 .grip-note{display:block;color:#9a8aa8;font-size:10px}
@@ -627,7 +584,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .v4-val{font-size:10px;color:#8e8e93}
 .v4-note{font-size:10px;color:#8e8e93;margin-top:6px}
 /* 도감 미연결 힌트 */
-.fb.link .fl{color:#185FA5}
 /* 6주 블록 */
 .block-chip{font-size:11px;color:#4a4a45;background:#F4F1EA;border-radius:var(--border-radius-md);padding:6px 10px;margin:6px 16px 0;display:flex;align-items:center;justify-content:center;gap:8px}
 .bc-act{margin-left:6px;color:#185FA5;cursor:pointer;font-weight:600}
@@ -744,8 +700,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .dn-t2{font-size:12px;opacity:.9;margin-top:2px}
 .dn-t3{font-size:11px;color:#7ee2c3;margin-top:2px}
 /* 워밍업 램프 원탭 기록 버튼 */
-.ex-wu-log{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;color:#fff;background:#085041;border:none;border-radius:7px;padding:5px 10px;cursor:pointer}
-.ex-wu-log:disabled{background:#9fbfb5;cursor:default}
 /* 세션 진행률 — 날짜 바 아래 얇은 바 (기록 기반 자동) */
 .log-progress{display:none;align-items:center;justify-content:center;gap:8px;padding:5px 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
 .lp-bar{flex:0 1 240px;height:4px;background:#eceef0;border-radius:2px;overflow:hidden}
@@ -782,7 +736,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .hist-close{display:block;margin:14px auto 0;padding:10px 26px;border:none;border-radius:12px;background:#f2f2f7;color:#1c1c1e;font-size:14px;font-weight:600;cursor:pointer}
 .tr-nm{cursor:pointer}
 .wl-total-hint{flex-basis:100%;font-size:11px;color:#085041;padding-top:4px}
-.ex-wu-plate{font-size:10px;color:#8a7340}
 /* 칼로리 조정 신호 */
 .ib-signal{font-size:12px;line-height:1.6;border-radius:var(--border-radius-md);padding:9px 11px;margin-bottom:10px}
 .ib-signal.warn{color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2}

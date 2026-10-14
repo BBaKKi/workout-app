@@ -42,7 +42,7 @@
    const order=new Map(this.routine(day).map((x,i)=>[x.name,{...x,rank:i}]));
    const wraps=[...list.children].filter(w=>w.classList.contains('ex-wrap'));
    wraps.sort((a,b)=>(order.get(nameOf(a))?.rank??1e6)-(order.get(nameOf(b))?.rank??1e6));
-   wraps.forEach(w=>{list.appendChild(w);const row=order.get(nameOf(w));if(row){w.dataset.orderWeight=String(row.weight);w.dataset.orderPhase=row.phase;w.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+row.phase;tag.textContent=row.label+' · '+row.weight;tag.title=row.reason;w.querySelector('.ex-meta')?.prepend(tag);}});
+   wraps.forEach(w=>{list.appendChild(w);const row=order.get(nameOf(w));if(row){w.dataset.orderWeight=String(row.weight);w.dataset.orderPhase=row.phase;w.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+row.phase;tag.textContent=row.label;tag.title=row.reason;w.querySelector('.ex-meta')?.prepend(tag);}});
    const info=panel.querySelector('.hinfo');if(info&&TRAINING_PLAN.mode==='current')info.textContent=this.routine(day).slice(0,2).map(x=>x.name).join(' → ')+' · 복합 2–3분 / 고립 1–2분 휴식';this.markPhases(panel);const rec=list.querySelector('.day-reco');if(rec)list.appendChild(rec);
   },
   markPhases(panel){
@@ -51,8 +51,7 @@
   },
   decorateLibrary(){
    const list=$('#lib-list');if(!list)return;
-   if(!$('#lib-order-guide')){const guide=document.createElement('div');guide.id='lib-order-guide';guide.className='af-order-guide';guide.textContent='운동마다 정해진 가중치로 자동 정렬 · 초반 100번대 → 중반 200번대 → 후반 300번대. 도감에서 추가해도 알맞은 위치에 들어가요. 본세트 기준이며 가벼운 준비운동은 먼저 진행하세요.';list.before(guide);}
-   list.querySelectorAll('.lib-card').forEach(d=>{const e=LibApp._items?.[+d.dataset.i];if(!e)return;const p=this.priority(e.name),name=d.querySelector('.lib-nm');name?.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+p.phase;tag.textContent=p.label+' · '+p.weight;tag.title=p.reason;name?.appendChild(tag);});
+   list.querySelectorAll('.lib-card').forEach(d=>{const e=LibApp._items?.[+d.dataset.i];if(!e)return;const p=this.priority(e.name),name=d.querySelector('.lib-nm');name?.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+p.phase;tag.textContent=p.label;tag.title=p.reason;name?.appendChild(tag);});
   },
   decorateLibraryDetail(d){
    const e=LibApp._items?.[+d?.dataset.i],body=d?.querySelector('.lib-body');if(!e||!body||body.querySelector('.lib-order-detail'))return;
@@ -62,7 +61,7 @@
   openEditor(day=this.activeDay()){
    this.editorDay=day;this.editorRows=window.WorkoutTools?WorkoutTools.template(day):this.routine(day);const dialog=$('#routine-editor');
    $('#edit-day').value=day;$('#edit-hint').textContent=TRAINING_PLAN.phase(ExLog.date).limited&&TRAINING_PLAN.mode==='current'?'기본 세트 수를 편집합니다. 복귀·적응 기간에는 최대 2세트로 표시합니다.':'앞으로 쓸 세트·반복을 편집해요. 이미 시작한 날짜의 계획은 유지됩니다.';
-   $('#edit-rows').innerHTML=this.editorRows.map((r,i)=>'<div class="af-edit-row" data-row="'+i+'"><b>'+esc(r.name)+'</b><span class="ex-order '+r.phase+'">'+r.label+' · '+r.weight+'</span><p class="af-order-reason">'+esc(r.reason)+'</p><div class="af-fields">'+[['sets','세트',r.baseSets,'1','1','20'],['min','최소 반복',r.min,'1','1','1000'],['max','최대 반복',r.max,'1','1','1000']].map(([k,label,v,step,min,max])=>'<label>'+label+'<input aria-label="'+esc(r.name+' '+label)+'" name="'+k+'" type="number" inputmode="numeric" step="'+step+'" min="'+min+'" max="'+max+'" value="'+v+'" required></label>').join('')+'</div></div>').join('');
+   $('#edit-rows').innerHTML=this.editorRows.map((r,i)=>'<div class="af-edit-row" data-row="'+i+'"><b>'+esc(r.name)+'</b><span class="ex-order '+r.phase+'">'+r.label+'</span><p class="af-order-reason">'+esc(r.reason)+'</p><div class="af-fields">'+[['sets','세트',r.baseSets,'1','1','20'],['min','최소 반복',r.min,'1','1','1000'],['max','최대 반복',r.max,'1','1','1000']].map(([k,label,v,step,min,max])=>'<label>'+label+'<input aria-label="'+esc(r.name+' '+label)+'" name="'+k+'" type="number" inputmode="numeric" step="'+step+'" min="'+min+'" max="'+max+'" value="'+v+'" required></label>').join('')+'</div></div>').join('');
    $('#edit-error').textContent='';if(!dialog.open)dialog.showModal();
   },
   async saveEditor(e){
@@ -73,13 +72,13 @@
     config[row.original]={...(config[row.original]||{}),...v};
    }
    ExLog.planFor(this.editorDay).config=config;await ExLog.savePlan();
-   document.querySelectorAll('.day-panel').forEach(p=>this.sort(p));ExLog.injectTargets();ExLog.refresh();$('#routine-editor').close();this.announce('목표를 저장하고 도감 가중치 순으로 정렬했어요.');return true;
+   document.querySelectorAll('.day-panel').forEach(p=>this.sort(p));ExLog.injectTargets();ExLog.refresh();$('#routine-editor').close();this.announce('루틴 목표를 저장했어요.');return true;
   },
   announce(t){$('#af-status').textContent=t;},
   toggleFocus(){this.focus=!this.focus;localStorage.setItem('focus_mode',JSON.stringify(this.focus));this.renderFocus();},
   moveFocus(n){const day=this.activeDay(),rows=this.routine(day),at=Math.max(0,rows.findIndex(r=>r.name===this.selected[day]));this.selected[day]=rows[Math.max(0,Math.min(rows.length-1,at+n))]?.name;this.renderFocus();},
   renderFocus(){
-   if(!this.ready)return;document.body.classList.toggle('af-focus',this.focus);$('#focus-toggle').textContent=this.focus?'전체 운동 보기':'운동 집중 모드';$('#focus-toggle').setAttribute('aria-pressed',String(this.focus));
+   if(!this.ready)return;document.body.classList.toggle('af-focus',this.focus);$('#focus-toggle').textContent=this.focus?'전체 목록':'한 종목씩';$('#focus-toggle').setAttribute('aria-pressed',String(this.focus));
    const day=this.activeDay(),rows=this.routine(day),key=day+'|'+ExLog.date;
    if(this.focusDate!==key){this.focusDate=key;this.selected[day]=null;}
    if(!rows.some(r=>r.name===this.selected[day]))this.selected[day]=rows.find(r=>{const e=(ExLog.data[ExLog.date]?.exercises||[]).find(e=>e.name===r.name);return (e?.sets||[]).filter(_isWorkSet).length<r.sets;})?.name||rows[0]?.name;
@@ -88,7 +87,7 @@
    $('#focus-prev').disabled=at<=0;$('#focus-next').disabled=at<0||at>=rows.length-1;
    document.querySelectorAll('.day-panel').forEach(panel=>{
     const pDay=ExLog.panelDayOf(panel);panel.querySelectorAll('.ex-wrap').forEach(w=>{const on=pDay===day&&nameOf(w)===this.selected[day];w.classList.toggle('af-current',on);if(on&&this.focus){const det=w.querySelector('details');if(det)det.open=true;}
-     if(on){const prev=ExLog.prevSession(nameOf(w));let info=w.querySelector('.af-prev');if(!info){info=document.createElement('div');info.className='af-prev';w.querySelector('.ex-detail')?.prepend(info);}const sets=(prev?.sets||[]).filter(_isWorkSet);info.textContent=sets.length?'지난 기록 · '+prev.date+' · '+sets.map(s=>RecordModel.formatSet(nameOf(w),s)).join(' / '):'첫 기록 · 준비 세트부터 시작하세요.';}
+     if(on){const prev=ExLog.prevSession(nameOf(w));let info=w.querySelector('.af-prev');if(!info){info=document.createElement('div');info.className='af-prev';w.querySelector('.ex-detail')?.prepend(info);}const sets=(prev?.sets||[]).filter(_isWorkSet);info.hidden=!sets.length;info.textContent=sets.length?'지난 기록 · '+prev.date+' · '+sets.map(s=>RecordModel.formatSet(nameOf(w),s)).join(' / '):'첫 기록 · 준비 세트부터 시작하세요.';}
     });
    });
   },
@@ -183,35 +182,30 @@
    el.dataset.state=SafeStore.error||ExLog.syncMessage?'error':n||this.conflict||DataSync.conflicts.length?'pending':'ok';el.textContent=SafeStore.error||(DataSync.conflicts.length?'기록 차이 '+DataSync.conflicts.length+'건 · 관리 탭에서 확인':ExLog.syncMessage)||(ExLog._syncP?'전송 중 · 로컬 저장됨':this.conflict?'기록 전송됨 · 설정 선택 필요 (관리 탭)':url?n?'로컬 저장됨 · 전송 대기 '+n+'건':'Google Sheets 연결 · 전송 대기 없음':'이 기기에 저장 중 · Google Sheets 연결 설정');
   },
   mount(){
-   const bar=document.createElement('section');bar.className='af-tools';bar.innerHTML='<div class="af-tool-row"><button id="focus-toggle" type="button" onclick="AppFeatures.toggleFocus()"></button><button type="button" onclick="AppFeatures.openEditor()">자동 순서·루틴</button></div><div id="af-focus-nav"><button id="focus-prev" type="button" aria-label="이전 운동" onclick="AppFeatures.moveFocus(-1)">‹</button><select id="focus-exercise" aria-label="집중할 운동"></select><button id="focus-next" type="button" aria-label="다음 운동" onclick="AppFeatures.moveFocus(1)">›</button></div><div id="af-focus-help">준비운동 후 가벼운 준비 세트부터 · <button type="button" id="coach-toggle">운동 설명 보기</button></div><div id="af-status" class="af-muted" role="status"></div>';
+   const bar=document.createElement('section');bar.className='af-tools';bar.innerHTML='<div class="af-tool-row"><button id="focus-toggle" type="button" onclick="AppFeatures.toggleFocus()"></button><button type="button" onclick="AppFeatures.openEditor()">루틴 편집</button></div><div id="af-focus-nav"><button id="focus-prev" type="button" aria-label="이전 운동" onclick="AppFeatures.moveFocus(-1)">‹</button><select id="focus-exercise" aria-label="집중할 운동"></select><button id="focus-next" type="button" aria-label="다음 운동" onclick="AppFeatures.moveFocus(1)">›</button></div><div id="af-status" class="af-muted" role="status"></div>';
    $('#log-progress').insertAdjacentElement('afterend',bar);
    const weight=document.createElement('section');weight.className='af-card';weight.id='daily-weight';weight.innerHTML='<div class="af-card-title">일일 체중</div><div id="weight-summary"></div><form id="weight-form" class="af-weight-form"><label>측정일<input id="weight-date" type="date" required value="'+_todayKey()+'" max="'+_todayKey()+'"></label><label>체중 (kg)<input id="weight-value" type="number" inputmode="decimal" step="0.1" min="20" max="300" placeholder="84.0" required></label><button type="submit">저장</button></form><p id="weight-message" role="status"></p><p>가능하면 기상 후 같은 조건에서 측정하세요. 입력한 날만 평균에 포함하며, 인바디 기록은 별도로 보관해요.</p><details><summary>최근 14개 기록 · 수정/삭제</summary><div id="weight-history"></div></details>';
    $('.tab-b .plan-wrap').prepend(weight);
    const weekly=document.createElement('section');weekly.id='weekly-plan';weekly.className='af-card';$('.tab-p .plan-wrap').prepend(weekly);
-   const settings=document.createElement('section');settings.className='af-card';settings.innerHTML='<div class="af-card-title">기기 간 설정</div><p id="settings-message" role="status"></p><button id="settings-sync-btn" type="button" onclick="AppFeatures.syncSettings()">설정 동기화</button><div id="settings-conflict" hidden><div id="settings-diff"></div><p>선택한 설정 전체를 적용해요. 시트 설정을 불러오기 전 현재 앱의 백업을 보관합니다.</p><div class="af-tool-row"><button id="settings-local" type="button" onclick="AppFeatures.syncSettings(\'local\')">이 기기 설정 사용</button><button id="settings-cloud" type="button" onclick="AppFeatures.syncSettings(\'cloud\')">시트 설정 불러오기</button></div></div>';
+   const settings=document.createElement('section');settings.className='af-card';settings.innerHTML='<details><summary>기기 간 설정 동기화</summary><p id="settings-message" role="status"></p><button id="settings-sync-btn" type="button" onclick="AppFeatures.syncSettings()">설정 동기화</button><div id="settings-conflict" hidden><div id="settings-diff"></div><p>선택한 설정 전체를 적용해요. 시트 설정을 불러오기 전 현재 앱의 백업을 보관합니다.</p><div class="af-tool-row"><button id="settings-local" type="button" onclick="AppFeatures.syncSettings(\'local\')">이 기기 설정 사용</button><button id="settings-cloud" type="button" onclick="AppFeatures.syncSettings(\'cloud\')">시트 설정 불러오기</button></div></div></details>';
    weight.insertAdjacentElement('afterend',settings);
-   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">자동 순서·루틴</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>도감에 설정된 운동별 가중치로 자동 정렬해요.<br>초반 → 중반 → 후반 순이며 운동을 추가·교체해도 같은 기준을 적용합니다. 숫자가 같으면 기존 순서를 유지해요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
+   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">루틴 편집</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>주요 운동 → 보조 운동 → 마무리 순으로 자동 정렬해요. 운동별 세트와 반복 목표를 조절하세요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
    document.body.appendChild(dialog);
    $('#routine-edit-form').addEventListener('submit',e=>this.saveEditor(e));$('#edit-day').addEventListener('change',e=>this.openEditor(e.target.value));$('#weight-form').addEventListener('submit',e=>this.saveWeight(e));
    $('#weight-history').addEventListener('click',e=>{const edit=e.target.closest('[data-edit-weight]'),del=e.target.closest('[data-delete-weight]');if(edit){const r=this.weights[edit.dataset.editWeight];$('#weight-date').value=r.date;$('#weight-value').value=r.wt;$('#weight-value').focus();}if(del)this.removeWeight(del.dataset.deleteWeight);});
    $('#focus-exercise').addEventListener('change',e=>{const day=this.activeDay();this.selected[day]=this.routine(day)[+e.target.value]?.name;this.renderFocus();});
-   $('#coach-toggle').addEventListener('click',()=>{const on=document.body.classList.toggle('af-coach');$('#coach-toggle').textContent=on?'운동 설명 접기':'운동 설명 보기';});
    document.querySelectorAll('input[name="day"]').forEach(r=>r.addEventListener('change',()=>this.renderFocus()));
    document.querySelectorAll('.day-sel label').forEach(r=>r.addEventListener('click',()=>setTimeout(()=>this.renderFocus(),0)));
    this.ready=true;this.weights={...this.weights,...read('daily_weight_dirty',{})};document.querySelectorAll('.day-panel').forEach(p=>this.sort(p));this.renderFocus();this.renderWeights();this.renderWeekly();this.renderSettings();
   }
  };
  // Integration points: do not replace the existing set editor, load calculation or log storage.
- ExLog.prescription=function(name,day){return A.prescription(name,day||this.dayType(this.date));};
- ExLog._sortDay=function(panel){A.sort(panel);};
- ExLog._markTiers=function(panel){A.markPhases(panel);};
  const savePlan=ExLog.savePlan;ExLog.savePlan=function(){if(A.ready)document.querySelectorAll('.day-panel').forEach(p=>A.sort(p));return savePlan.call(this);};
 
 
 
  const renderLibrary=LibApp.render;LibApp.render=function(...args){renderLibrary.apply(this,args);A.decorateLibrary();};
  const buildLibrary=LibApp._build;LibApp._build=function(d){buildLibrary.call(this,d);A.decorateLibraryDetail(d);};
- ExLog.renderSyncStatus=function(){return A.renderSyncStatus();};
 
  const selectRoutine=ExLog.selectRoutine;ExLog.selectRoutine=async function(mode){await window.storage.set('routine_profile',mode==='legacy'?'legacy':'current');return selectRoutine.call(this,mode);};
  // Local preference edits trigger a retry. Snapshot comparison protects changes made during a request.

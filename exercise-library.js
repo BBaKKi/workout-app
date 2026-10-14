@@ -6,6 +6,11 @@ window.EXERCISE_GUIDE={
   "general": "가벼운 준비 세트로 자세와 범위를 확인하세요. 동작은 통제하며 수행하고, 표기된 각도·높이는 개인과 기구에 맞춰 조절합니다. 통증을 단순 피로로 단정하지 마세요.",
   "record": "덤벨 한 손 중량, 바벨 총중량, 머신 원판 합계/한쪽 기준을 기구 세팅 메모에 적고 매번 같은 기준으로 기록하세요. 다른 기구의 kg은 직접 비교하지 않습니다.",
   "sources": {
+    "루마니안 데드리프트 · NSCA": "https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/",
+    "체스트 프레스 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+    "래터럴 레이즈 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+    "레그프레스 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/",
+    "시티드 로우 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/",
     "일반 수행·호흡": "https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/weight-training/art-20045842",
     "랫풀다운": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
     "스쿼트 무릎 위치 연구": "https://pubmed.ncbi.nlm.nih.gov/14636100/",

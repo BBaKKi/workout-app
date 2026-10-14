@@ -52,7 +52,6 @@ function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 function _escJs(s){return _esc(String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"));} // onclick 속성 안 JS 문자열용: JS 이스케이프 후 HTML 이스케이프
 // ── 운동 배치 규칙 ──
 // 부위 세션 순서: 큰 근육·프라임무버 먼저 → 팔·측면삼각·종아리 등 보조근 뒤 → 코어 맨 뒤 (복합 수행/복압 보호로 볼륨 보존)
-const MUSCLE_SESSION_ORDER=['대퇴사두','후면사슬','등','가슴','전면삼각','측면삼각','후면삼각','승모','이두','삼두','전완','종아리','코어','내전근'];
 // 유효 부위 버킷 — 도감의 vol.p는 카테고리 편의상 페이스풀·리어델트를 '등'에 묶어 놨다.
 // 그대로 쓰면 ① 세션 순서에서 후면삼각 마무리 종목이 가슴보다 앞으로 튀어나오고
 // ② 주간 볼륨에서 후면삼각 9세트가 통째로 '등'으로 계상돼 등이 과다로, 후면삼각이 0으로 보인다.
@@ -150,8 +149,6 @@ const RECO_TARGET=TRAINING_PLAN.targets(_todayKey());
 // ── ExLog: 운동+기록 통합 ──
 const DAY_COLORS_EL={"Push A":"#D85A30","Push B":"#BA7517","Pull A":"#185FA5","Pull B":"#0C447C","Legs A":"#3B6D11","Legs B":"#27500A",Push:"#D85A30","Push+":"#BA7517",Pull:"#185FA5","Pull+":"#0C447C",Legs:"#3B6D11","Legs+":"#27500A",REST:"#888780"};
 const EL_DAY_EX=TRAINING_PLAN.exercises;
-const EL_DAY_CORE=Object.fromEntries(TRAINING_PLAN.cycle.map(d=>[d,3]));
-const EL_DAY_SS={};
 const EL_CYCLE=TRAINING_PLAN.cycle;
 const EL_BASE={'Push':'Push A','Pull':'Pull A','Legs':'Legs A','Push+':'Push B','Pull+':'Pull B','Legs+':'Legs B'}; // 구버전(3세션 순환·옛 6일제) 기록을 신 A/B 타입으로 흡수
 const EL_GROUP=t=>/^Push/.test(t)?'push':/^Pull/.test(t)?'pull':'legs'; // 타입→부위 그룹 (A/B 공통)

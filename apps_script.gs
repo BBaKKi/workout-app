@@ -4,6 +4,8 @@
  * 이전 flag 열과 새 wu/rpe/pain 열, 한글·영문 헤더를 모두 읽습니다.
  */
 var API_VERSION = 7;
+var SERVER_BUILD = '7.2.0';
+var _requestDateZone = null;
 var WORKOUT_SHEET = '운동기록';
 var INBODY_SHEET = '인바디기록';
 var WEIGHT_SHEET = '체중기록';
@@ -41,11 +43,13 @@ function _authorize(b) {
 }
 function doGet() {return _json({ok:true,alive:true,apiVersion:API_VERSION,authRequired:true});}
 function doPost(e) {
+ _requestDateZone=null;
  var b=_parseBody(e),lock;
  try {
   _authorize(b); // Authentication must precede any spreadsheet access or lock acquisition.
   lock=LockService.getScriptLock();lock.waitLock(20000);
   if(b.mode==='sync_pull')return _json(_syncPull());
+  if(b.mode==='sync_diagnose')return _json(_diagnose());
   if(b.mode==='sync_write')return _json(_syncWrite(b));
   if(b.mode==='settings_get')return _json(_settingsGet());
   if(b.mode==='settings_put')return _json(_settingsPut(b));
@@ -53,21 +57,53 @@ function doPost(e) {
  }catch(err){return _json({ok:false,apiVersion:API_VERSION,error:String(err.message||err)});}
  finally{if(lock&&lock.hasLock())lock.releaseLock();}
 }
-function _parseBody(e){try{return JSON.parse(e.postData.contents);}catch(_){try{return {mode:e.parameter.mode||'upsert',rows:JSON.parse(e.parameter.rows)};}catch(__){return null;}}}
+function _parseBody(e){try{return JSON.parse(e.postData.contents);}catch(_){return null;}}
 function _has(o,k){return Object.prototype.hasOwnProperty.call(o,k);}
 function _number(v,k,min,max){if(v===''||v===null||v===undefined||!isFinite(Number(v))||Number(v)<min||Number(v)>max)throw new Error(k+' 값이 올바르지 않습니다.');return Number(v);}
 function _date(d){if(typeof d!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(d)||isNaN(Date.parse(d+'T12:00:00Z'))||new Date(d+'T12:00:00Z').toISOString().slice(0,10)!==d)throw new Error('날짜가 올바르지 않습니다.');return d;}
 function _validateKey(r){if(!r||!r.name||typeof r.name!=='string')throw new Error('종목명이 필요합니다.');_date(r.date);var n=_number(r.setNo,'setNo',1,100000);if(n%1)throw new Error('세트 번호는 정수여야 합니다.');}
-function _dstr(v){return v instanceof Date?Utilities.formatDate(v,Session.getScriptTimeZone(),'yyyy-MM-dd'):String(v||'').slice(0,10);}
+function _dstr(v){if(!(v instanceof Date))return String(v||'').slice(0,10);if(!_requestDateZone)_requestDateZone=_spreadsheet().getSpreadsheetTimeZone();return Utilities.formatDate(v,_requestDateZone,'yyyy-MM-dd');}
 function _key(r){return JSON.stringify([r.date,r.name,Number(r.setNo)]);}
 function _headerMap(header){var map={};Object.keys(HEADER_ALIASES).forEach(function(k){var aliases=HEADER_ALIASES[k];for(var i=0;i<header.length;i++)if(aliases.indexOf(String(header[i]).trim())>=0){map[k]=i;break;}});return map;}
+function _spreadsheet(){
+ var id=PropertiesService.getScriptProperties().getProperty('FIT_SPREADSHEET_ID');
+ var ss=id?SpreadsheetApp.openById(id.trim()):SpreadsheetApp.getActiveSpreadsheet();
+ if(!ss)throw new Error('연결된 스프레드시트가 없습니다. 기록 파일에서 Apps Script를 열거나 FIT_SPREADSHEET_ID를 설정하세요.');
+ return ss;
+}
+function _sheetAliases(name){
+ if(name===WORKOUT_SHEET)return [name,'운동 기록'];
+ if(name===INBODY_SHEET)return [name,'InBody','인바디','인바디 기록'];
+ if(name===WEIGHT_SHEET)return [name,'체중 기록'];
+ return [name];
+}
+function _resolveSheet(ss,name){
+ var aliases=_sheetAliases(name).map(function(n){return n.toLowerCase().replace(/\s/g,'');});
+ var candidates=ss.getSheets().filter(function(s){return aliases.indexOf(s.getName().toLowerCase().replace(/\s/g,''))>=0;});
+ var populated=candidates.filter(function(s){return s.getLastRow()>1;});
+ if(populated.length>1)throw new Error('읽을 탭이 여러 개입니다: '+populated.map(function(s){return s.getName();}).join(', ')+'. 기록을 합치거나 덮어쓰지 않았습니다. 사용할 탭을 확인하세요.');
+ return populated[0]||candidates.find(function(s){return s.getName()===name;})||candidates[0]||null;
+}
+function _requiredFields(name){
+ if(name===WORKOUT_SHEET)return ['date','name','weight','reps'];
+ if(name===INBODY_SHEET)return ['date','wt','sm','bf'];
+ if(name===WEIGHT_SHEET)return ['date','wt'];
+ if(name===SESSION_SHEET)return ['date','sessionJson'];
+ return ['prefKey','prefValue','revision'];
+}
 function _table(name,fields,header,write){
- var ss=SpreadsheetApp.getActiveSpreadsheet(),s=ss.getSheetByName(name);
+ var ss=_spreadsheet(),s=_resolveSheet(ss,name);
  if(!s){if(!write)return null;s=ss.insertSheet(name);}
  var width=s.getLastColumn(),h=width?s.getRange(1,1,1,width).getValues()[0]:[],map=_headerMap(h);
+ if(width){
+  var missing=_requiredFields(name).filter(function(k){return map[k]===undefined;});
+  if(missing.length)throw new Error(s.getName()+' 첫 행의 필수 열을 확인하세요: '+missing.map(function(k){return HEADER_ALIASES[k].join(' / ');}).join(', ')+'. 빈 기록으로 처리하지 않았습니다.');
+  Object.keys(map).forEach(function(k){var count=h.filter(function(v){return HEADER_ALIASES[k].indexOf(String(v).trim())>=0;}).length;if(count>1)throw new Error(s.getName()+' 첫 행에 같은 의미의 열이 여러 개입니다: '+k);});
+ }
  if(write){fields.forEach(function(k,i){if(map[k]===undefined){map[k]=h.length;h.push(header[i]);}});
   if(h.length!==width){s.getRange(1,width+1,1,h.length-width).setValues([h.slice(width)]);s.setFrozenRows(1);}}
  var n=s.getLastRow(),rows=n>1&&h.length?s.getRange(2,1,n-1,h.length).getValues():[];
+ rows.forEach(function(row,i){if(fields.indexOf('date')>=0&&!row[map.date]&&fields.some(function(k){var v=row[map[k]];return v!==undefined&&v!==null&&v!=='';}))throw new Error(s.getName()+' '+(i+2)+'행에 날짜가 없습니다. 해당 행을 건너뛰지 않았습니다.');});
  return {sheet:s,fields:fields,header:h,map:map,rows:rows};
 }
 function _object(t,row){var out={};Object.keys(t.map).forEach(function(k){out[k]=row[t.map[k]];});if(out.date)out.date=_dstr(out.date);if(row._fitId){out.setId=row._fitId;out.setNo=row._fitNo;}return out;}
@@ -77,15 +113,6 @@ function _flags(r){
  return {wu:_has(r,'wu')&&r.wu!==''?+truth(r.wu):(/(?:^|[\s,;|])W(?:$|[\s,;|])/.test(f)?1:0),
  rpe:_has(r,'rpe')&&r.rpe!==''?Number(r.rpe)||'':(m?Number(m[1]):''),
  pain:_has(r,'pain')&&r.pain!==''?+truth(r.pain):(/(?:^|[\s,;|])P(?:$|[\s,;|])/.test(f)?1:0)};
-}
-function _flagString(r){return [r.wu?'W':'',r.rpe?'RPE'+r.rpe:'',r.pain?'P':''].filter(Boolean).join(' ');}
-function _workout(r){
- var x={date:r.date,day:r.day||'',name:r.name,setNo:Number(r.setNo),weight:Number(r.weight),reps:Number(r.reps),vol:r.vol!=null?Number(r.vol):Math.round(r.weight*r.reps),ts:r.ts||new Date().toISOString()};
- // 이전 클라이언트가 보내지 않은 항목은 보존하고, 명시적인 빈칸은 해제로 처리합니다.
- if(_has(r,'flag')||_has(r,'wu')||_has(r,'rpe')||_has(r,'pain')){
-  var f=_flags(r);x.wu=f.wu;x.rpe=f.rpe;x.pain=f.pain;x.flag=_flagString(f);
- }
- return x;
 }
 function _upsert(t,x,keys){
  var at=-1;for(var i=0;i<t.rows.length;i++){var o=_object(t,t.rows[i]);if(keys.every(function(k){return String(o[k])===String(x[k]);})){at=i;break;}}
@@ -107,7 +134,7 @@ function _settingsPut(b){
  _upsert(t,{prefKey:'preferences',prefValue:json,revision:revision,updatedAt:updatedAt},['prefKey']);
  return {ok:true,apiVersion:API_VERSION,type:'settings',revision:revision,data:data,updatedAt:updatedAt};
 }
-function _json(o){return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
+function _json(o){o.serverBuild=SERVER_BUILD;return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
 
 // Date-level compare-and-swap. Revision is a digest of managed sheet values;
 // direct edits to managed cells also change it. Deleted sets are retained as tombstones.
@@ -125,10 +152,21 @@ function _readKind(kind,write){
  var a=_schema(kind),t=_table(a[0],a[1],a[2],write);if(kind!=='workout'||!t)return t;
  // Old exports may restart setNo for the same exercise on one date. Keep EVERY
  // row, in sheet order, while assigning a unique logical number and stable ID.
- var next=Object.create(null);
- t.rows.forEach(function(row){var r=_object(t,row);if(!r.date||!r.name)return;var key=JSON.stringify([r.date,r.name.indexOf('🏃')===0?'__cardio':r.name]);
+ var next=Object.create(null),reservedNumbers=Object.create(null),reservedIds=Object.create(null);
+ function group(r){return JSON.stringify([r.date,r.name.indexOf('🏃')===0?'__cardio':r.name]);}
+ function idKey(r){return JSON.stringify([r.date,String(r.setId)]);}
+ // Reserve ALL persisted identities before generating any missing ones. A row
+ // with an ID may appear later after sorting or an interrupted migration.
+ // Include tombstones: a deleted ID must not be assigned to a different set.
+ t.rows.forEach(function(row){var r=_object(t,row);if(!r.date||!r.name||!r.setId)return;
+  var key=group(r);(reservedNumbers[key]||(reservedNumbers[key]=Object.create(null)))[Number(r.setNo)]=true;
+  reservedIds[idKey(r)]=true;
+ });
+ t.rows.forEach(function(row){var r=_object(t,row);if(!r.date||!r.name)return;var key=group(r);
   if(r.setId){next[key]=Math.max(next[key]||0,Number(r.setNo)||0);return;}
-  r.setNo=next[key]=(next[key]||0)+1;row._fitNo=r.setNo;row._fitId=_legacyId(r);
+  var numbers=reservedNumbers[key]||(reservedNumbers[key]=Object.create(null));
+  do{r.setNo=next[key]=(next[key]||0)+1;r.setId=_legacyId(r);}while(numbers[r.setNo]||reservedIds[idKey(r)]);
+  numbers[r.setNo]=true;reservedIds[idKey(r)]=true;row._fitNo=r.setNo;row._fitId=r.setId;
   if(write){row[t.map.setNo]=r.setNo;row[t.map.setId]=row._fitId;delete row._fitId;delete row._fitNo;t.migrate=true;}
  });return t;
 }
@@ -138,13 +176,17 @@ function _cleanRow(r){
 }
 function _records(t,kind){
  var groups=Object.create(null);
- if(t)t.rows.forEach(function(v){var x=_object(t,v);if(!x.date)return;_date(x.date);(groups[x.date]||(groups[x.date]=[])).push(x);});
+ if(t)t.rows.forEach(function(v,i){var x=_object(t,v);if(!x.date)return;_date(x.date);x._sheetRow=i+2;(groups[x.date]||(groups[x.date]=[])).push(x);});
  var out=Object.create(null);
  Object.keys(groups).forEach(function(date){
   var entries=groups[date];
   if(kind==='workout'){
-   var all=entries.filter(function(x){return x.name;}).map(_cleanRow).sort(function(a,b){return a.setId.localeCompare(b.setId);});
-   var ids=Object.create(null);all.forEach(function(x){if(ids[x.setId])throw new Error(date+' 중복 세트가 있습니다. 시트에서 중복 행을 확인하세요.');ids[x.setId]=true;});
+   var ids=Object.create(null);
+   var all=entries.filter(function(x){return x.name;}).map(function(x){
+    var r=_cleanRow(x),previous=ids[r.setId];
+    if(previous)throw new Error(date+' 세트ID 충돌: '+WORKOUT_SHEET+' '+previous+'행과 '+x._sheetRow+'행의 세트ID가 같습니다. 기록 내용이 중복이라는 뜻은 아닙니다. 해당 두 행의 세트ID와 삭제 표시를 확인하세요.');
+    ids[r.setId]=x._sheetRow;return r;
+   }).sort(function(a,b){return a.setId.localeCompare(b.setId);});
    out[date]={date:date,revision:_digest(all),deleted:all.every(function(x){return x.deleted;}),rows:all.filter(function(x){return !x.deleted;})};
   }else{
    if(entries.length!==1)throw new Error(date+' '+kind+' 날짜가 시트에서 중복됩니다.');
@@ -156,9 +198,16 @@ function _records(t,kind){
   }
  });return out;
 }
+function _source(){var ss=_spreadsheet();return {id:ss.getId(),name:ss.getName(),tabs:ss.getSheets().map(function(s){return s.getName();}),sheets:{}};}
+function _sheetStatus(t,records){return {name:t?t.sheet.getName():null,status:!t?'missing':records.length?'present':'empty',rows:t?t.rows.filter(function(r){return r.some(function(v){return v!==''&&v!==null;});}).length:0,dates:records.length,activeDates:records.filter(function(r){return !r.deleted;}).length};}
 function _syncPull(){
- var out={ok:true,apiVersion:API_VERSION,type:'snapshot'};
- ['workout','weight','inbody','session'].forEach(function(kind){out[kind]=Object.values(_records(_readKind(kind,false),kind));});return out;
+ var out={ok:true,apiVersion:API_VERSION,type:'snapshot',source:_source()};
+ ['workout','weight','inbody','session'].forEach(function(kind){var t=_readKind(kind,false);out[kind]=Object.values(_records(t,kind));out.source.sheets[kind]=_sheetStatus(t,out[kind]);});return out;
+}
+// Read-only diagnosis also reports malformed tabs, without reading tokens or writing cells.
+function _diagnose(){
+ var out={ok:true,apiVersion:API_VERSION,type:'diagnosis',source:_source()};
+ ['workout','weight','inbody','session'].forEach(function(kind){try{var t=_readKind(kind,false);out.source.sheets[kind]=_sheetStatus(t,Object.values(_records(t,kind)));}catch(e){out.source.sheets[kind]={status:'error',error:String(e.message||e)};}});return out;
 }
 function _emptyRecord(date,kind){return kind==='workout'?{date:date,revision:'0',deleted:true,rows:[]}:{date:date,revision:'0',deleted:true,entry:null};}
 function _comparable(record,kind){
