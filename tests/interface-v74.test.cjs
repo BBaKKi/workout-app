@@ -11,7 +11,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.clock.install({time:new Date('2026-10-26T10:00:00Z')});
   await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);
   await p.evaluate(()=>{ExLog.date=_todayKey();ExLog.syncPanel('Push A');ExLog.updateBar();ExLog.injectTargets();ExLog.refresh();});
-  assert.equal(await p.locator('.brand-version').innerText(),'7.5.0');
+  assert.equal(await p.locator('.brand-version').innerText(),require('../package.json').version);
   // Simulate a standalone phone's top safe area; the sticky date row must clear it too.
   await p.evaluate(()=>document.documentElement.style.setProperty('--safe-top','24px'));
   assert.equal(await p.locator('.app-brand').evaluate(x=>getComputedStyle(x).paddingTop),'42px');
