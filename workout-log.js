@@ -18,9 +18,10 @@ const ExLog={
   },
   renderRoutineUI(){
     const el=document.getElementById('routine-brief');if(!el)return;
+    const heading=document.querySelector('.session-heading h1');if(heading)heading.textContent=this.date===_todayKey()?'오늘의 운동':'날짜별 운동';
     const ph=TRAINING_PLAN.phase(this.date),planned=TRAINING_PLAN.schedule(this.date),legacy=TRAINING_PLAN.mode==='legacy';
-    el.innerHTML='<b>'+(legacy?'기존 편집 루틴':ph.label)+'</b><span>'+(legacy?'새 루틴과 편집 내용을 따로 보관합니다.':('예정: '+planned+' · '+(ph.limited?'종목당 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')))+'</span><small>'
-      +(legacy?'기록·기구 설정은 두 루틴에서 함께 사용합니다.':(ph.limited?'유산소 15–20분 × 주 3회부터. 복귀 1주는 월·화·목·토 웨이트.':'상체 운동 후 유산소 20–30분, 주 4회까지. 피로가 남으면 줄이세요.'))+'</small>';
+    el.innerHTML='<b>'+(legacy?'기존 편집 루틴':(this.date>=TRAINING_PLAN.equipmentDate?'올데이 · ':'')+ph.label)+'</b><span>'+(legacy?'새 루틴과 편집 내용을 따로 보관합니다.':('예정: '+planned+' · '+(ph.limited?'종목당 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')))+'</span><small>'
+      +(legacy?'기록·기구 설정은 두 루틴에서 함께 사용합니다.':(ph.limited?'유산소 15–20분 × 주 3회부터. 복귀 1주는 월·화·목·토 웨이트.':'상체 운동 후 걷기 20–30분, 주 2–3회부터. 새 기구는 가벼운 준비 세트로 중량을 정하세요.'))+'</small>';
     document.querySelectorAll('.day-panel .ex-wrap').forEach(w=>{
       const nm=(w.querySelector('.ex-nm')?.textContent||'').trim(),day=this.panelDayOf(w.closest('.day-panel')),p=this.prescription(nm,day);
       const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent=p.sets+'×'+p.min+'–'+p.max;
@@ -342,7 +343,9 @@ const ExLog={
   _tagBtn(n){return '<button class="wl-picker-tag" onclick="ExLog.addEx(\''+_escJs(n)+'\',this)">'+_esc(n)+'</button>';},
 
   dbCardInner(e,name){
-    const nm=_esc(name||(e&&e.name)||'');
+    const rawName=name||(e&&e.name)||'';
+    // Keep exact textContent: existing records are keyed by the full exercise name.
+    const split=rawName.indexOf(' · '),nm=split<0?_esc(rawName):'<span class="ex-location">'+_esc(rawName.slice(0,split+3))+'</span><span class="ex-title">'+_esc(rawName.slice(split+3))+'</span>';
     const tags=e?'<span class="tag t-s">'+_esc(e.sets||'')+'</span><span class="tag t-m">'+_esc(e.mus||'')+'</span>':'';
     const help=e?'':'<div class="exercise-coaching coach-unknown">직접 입력한 운동입니다. 기구 안내와 자세를 확인하고 가벼운 준비 세트부터 시작하세요. 도감에서 운동을 선택하면 상세 가이드를 볼 수 있어요.</div>';
     return '<details class="ex-card"><summary><label class="ck-btn" onclick="event.stopPropagation()"><span class="ck-icon">✓</span></label><div class="ex-info"><div class="ex-nm">'+nm+'</div><div class="ex-meta">'+tags+'</div></div><span class="chev">▾</span></summary><div class="ex-detail">'+help+'</div></details>';
@@ -581,7 +584,7 @@ const ExLog={
     const bar=document.createElement('div');
     bar.className='log-date-bar';bar.id='ex-log-bar';
     const day=this.dayType(this.date);
-    bar.innerHTML=`<button class="log-nav-btn" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><button type="button" class="log-day-badge" id="log-day-badge" onclick="ExLog.toggleTypePick()" title="루틴 직접 선택" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</button></div><button class="log-nav-btn" onclick="ExLog.next()">›</button><button class="log-sync-btn" id="log-sync-btn" onclick="ExLog.openSync()" title="Google Sheets 동기화">☁️</button>`;
+    bar.innerHTML=`<button class="log-nav-btn" aria-label="이전 날짜" onclick="ExLog.prev()">‹</button><div class="log-date-center"><span class="log-date-txt" id="log-date-txt">${this.fmt(this.date)}</span><button type="button" class="log-day-badge" id="log-day-badge" onclick="ExLog.toggleTypePick()" title="루틴 직접 선택" style="background:${DAY_COLORS_EL[day]||'#888'}">${day}</button></div><button class="log-nav-btn" aria-label="다음 날짜" onclick="ExLog.next()">›</button>`;
     const ds=tabW.querySelector('.day-sel');if(ds)ds.insertAdjacentElement('afterend',bar);else tabW.insertBefore(bar,tabW.firstChild);
     // 루틴 직접 선택 패널 — 순환 추천과 별개로 언제든 수동 전환 가능하게 (날짜↔루틴 분리)
     const pick=document.createElement('div');pick.className='log-type-pick';pick.id='log-type-pick';
@@ -912,7 +915,7 @@ const ExLog={
     const tagId='pt_'+Date.now();
     const L=(window.EXERCISE_LIBRARY||[]).filter(e=>!e.archived);
     picker.innerHTML='<div class="wl-picker-title">'+day+' 운동 추가 · 도감 '+L.length+'종에서</div>'
-      +'<button type="button" class="gym-picker-link" onclick="GymInventory.open()">올데이 감일 기구 초안 보기 ↗</button>'
+      +'<button type="button" class="gym-picker-link" onclick="GymInventory.open()">올데이 · 사진 확인 기구 보기 ↗</button>'
       +'<input class="wl-picker-search" placeholder="🔍 전체 검색 (이름·부위)..." oninput="ExLog.filterPicker(this,\''+tagId+'\')">'
       +'<div class="wl-picker-tags" id="'+tagId+'"></div>'
       +'<div class="wl-custom-row"><input class="wl-custom-input" id="el-ci" placeholder="직접 입력..."><button class="wl-confirm-btn" onclick="ExLog.addEx(document.getElementById(\'el-ci\').value,this)">추가</button><button class="wl-cancel-btn" onclick="this.closest(\'.ex-add-picker\').style.display=\'none\'">✕</button></div>';
@@ -2057,7 +2060,9 @@ const ExLog={
       else{
         if(!badge){badge=document.createElement('div');det.insertBefore(badge,det.firstChild);}
         badge.className='ex-week-target'+(sug.up?' up':'');
-        badge.innerHTML=sug.html;
+        const note=this.libByName(name)?.recordingNote,tail=note?' · '+_esc(note):'';
+        const expanded=badge.querySelector('.target-note')?.open;
+        badge.innerHTML=tail&&sug.html.endsWith(tail)?sug.html.slice(0,-tail.length)+'<details class="target-note"'+(expanded?' open':'')+'><summary>이 기구의 중량 기록 기준</summary><p>'+_esc(note)+'</p></details>':sug.html;
       }
       // 기본무게 설정 칩 (모든 종목 — 상태를 라벨에 표시)
       let bb=det.querySelector('.ex-base-btn');
@@ -2169,43 +2174,51 @@ const ExLog={
     this.rest={name,endAt:Date.now()+total*1000,total,int:setInterval(()=>this.tickRest(),500),hint,notified:false};
     this.tickRest();
   },
-  // 휴식 타이머 표시는 스티키 미니바 하나로 통일 — 카드 상태·스크롤 위치와 무관하게 항상 같은 자리
+  // A compact bottom dock. Countdown state stays independent of UI expansion.
   _restMini(){
     let m=document.getElementById('rest-mini');
     if(!m){
       m=document.createElement('div');m.id='rest-mini';m.className='rest-mini';
-      m.innerHTML='<div class="rm-left"><span class="rm-nm"></span><span class="rm-hint"></span></div><span class="rm-time">0:00</span><button class="rm-btn" onclick="ExLog.addRest(30)">+30초</button><button class="rm-btn" onclick="ExLog.skipRest()">스킵</button><div class="rm-bar"></div>';
+      m.setAttribute('role','region');m.setAttribute('aria-label','세트 사이 휴식');
+      m.innerHTML='<button type="button" class="rm-toggle" aria-expanded="false" aria-controls="rest-controls" onclick="ExLog.toggleRest()"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="14" r="8"/><path d="M9 2h6m-3 4V2m0 7v5l3 2"/></svg><span class="rm-label">휴식</span><span class="rm-time" role="timer" aria-live="off">0:00</span><span class="rm-chevron" aria-hidden="true">⌃</span></button><div class="rm-controls" id="rest-controls" hidden><span class="rm-nm"></span><div class="rm-hint"></div><div class="rm-actions"><button type="button" class="rm-btn" onclick="ExLog.addRest(30)">+30초</button><button type="button" class="rm-btn rm-end" onclick="ExLog.skipRest()">휴식 끝내기</button></div></div><div class="rm-track" aria-hidden="true"><div class="rm-bar"></div></div><span class="visually-hidden rm-status" role="status"></span>';
+      m.addEventListener('keydown',e=>{if(e.key==='Escape'){this.toggleRest(false);m.querySelector('.rm-toggle').focus();}});
       document.body.appendChild(m);
     }
     return m;
   },
+  toggleRest(expanded){
+    const m=this._restMini(),open=expanded??!m.classList.contains('expanded');
+    m.classList.toggle('expanded',open);m.querySelector('.rm-toggle').setAttribute('aria-expanded',String(open));
+    m.querySelector('.rm-controls').hidden=!open;
+  },
   tickRest(){
     const r=this.rest;if(!r.name)return;
-    const remain=Math.max(0,Math.round((r.endAt-Date.now())/1000));
-    const mm=Math.floor(remain/60),ss=remain%60;
-    const tstr=mm+':'+String(ss).padStart(2,'0');
-    const pct=(r.total?Math.max(0,remain/r.total*100):0)+'%';
-    const mini=this._restMini();
-    mini.classList.add('show');
+    const remain=Math.max(0,Math.ceil((r.endAt-Date.now())/1000));
+    const mini=this._restMini(),wasDone=mini.classList.contains('done');
+    mini.classList.add('show');document.body.classList.add('has-rest');
     mini.classList.toggle('done',remain<=0);
-    mini.querySelector('.rm-nm').textContent='⏱ '+r.name;
-    mini.querySelector('.rm-hint').innerHTML=r.hint?('다음: '+r.hint):'';
-    mini.querySelector('.rm-time').textContent=tstr;
-    mini.querySelector('.rm-bar').style.width=pct;
+    mini.querySelector('.rm-label').textContent=remain?'휴식':'완료';
+    mini.querySelector('.rm-nm').textContent=this.libByName(r.name)?.displayName||r.name;
+    if(mini._hint!==r.hint){mini.querySelector('.rm-hint').innerHTML=r.hint?('다음 세트 · '+r.hint):'';mini._hint=r.hint;}
+    mini.querySelector('.rm-time').textContent=Math.floor(remain/60)+':'+String(remain%60).padStart(2,'0');
+    mini.querySelector('.rm-bar').style.width=(r.total?Math.min(100,remain/r.total*100):0)+'%';
+    if(remain<=0&&!wasDone)mini.querySelector('.rm-status').textContent='휴식이 끝났어요. 다음 세트를 준비하세요.';
+    if(remain>0&&wasDone)mini.querySelector('.rm-status').textContent='휴식 시간을 늘렸어요.';
     if(remain<=0&&r.int){
-      clearInterval(r.int);this.rest.int=null;
+      clearInterval(r.int);r.int=null;
       try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(_){}
-      // 화면을 벗어나 있으면 시스템 알림으로 휴식 종료 통지 (권한 있을 때만)
       if(!r.notified){
         r.notified=true;
-        try{if(document.hidden&&'Notification' in window&&Notification.permission==='granted')new Notification('⏱ 휴식 끝',{body:'다음 세트: '+r.name,tag:'rest-timer'});}catch(_){}
+        try{if(document.hidden&&'Notification' in window&&Notification.permission==='granted')new Notification('휴식 끝',{body:'다음 세트: '+r.name,tag:'rest-timer'});}catch(_){}
       }
-      setTimeout(()=>{if(!this.rest.int&&this.rest.name===r.name)this.stopRest();},8000);
+      // A previous timeout must never close a new timer for the same exercise.
+      setTimeout(()=>{if(this.rest===r&&!r.int)this.stopRest();},8000);
     }
   },
   addRest(sec){
-    if(!this.rest.name)return;
-    this.rest.endAt+=sec*1000;this.rest.total+=sec;
+    if(!this.rest.name||!Number.isFinite(sec)||sec<=0)return;
+    this.rest.endAt=Math.max(Date.now(),this.rest.endAt)+sec*1000;this.rest.total+=sec;
+    this.rest.notified=false;
     if(!this.rest.int)this.rest.int=setInterval(()=>this.tickRest(),500);
     this.tickRest();
   },
@@ -2213,7 +2226,12 @@ const ExLog={
   stopRest(){
     if(this.rest.int)clearInterval(this.rest.int);
     this.rest={name:'',endAt:0,total:0,int:null};
-    const m=document.getElementById('rest-mini');if(m)m.classList.remove('show','done');
+    const m=document.getElementById('rest-mini');
+    if(m){
+      if(m.contains(document.activeElement))document.querySelector('.top-nav label[for="'+document.querySelector('.tab-r:checked')?.id+'"]')?.focus({preventScroll:true});
+      m.classList.remove('show','done');this.toggleRest(false);m.querySelector('.rm-status').textContent='';
+    }
+    document.body.classList.remove('has-rest');
   },
 
   // ── 주 1회 자동 전체 동기화(일요일 첫 실행): 증분 동기화가 남길 수 있는 시트 엣지(잔여 행 등) 자가 치유 ──

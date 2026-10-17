@@ -66,7 +66,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await a.locator('.dp1 .cardio-add').click();await a.locator('.dp1 .cd-min').fill('20.5');await a.locator('.dp1 .cd-km').fill('2.1');await a.locator('.dp1 .cd-incline').fill('5');await a.locator('.dp1 .cd-ok').click();await sync(a);await sync(b);
   assert.deepEqual(await b.evaluate(()=>{const c=ExLog.session().cardio[0];return {min:c.min,km:c.km,incline:c.incline};}),{min:20.5,km:2.1,incline:5});
   await a.evaluate(()=>InterfaceTools.favorite('랫풀다운'));await sync(a);assert.equal(JSON.parse(cloud.post({mode:'settings_get'}).data.exercise_favorites_v1)['랫풀다운'],true);
-  await a.locator('.lbl-l').click();await a.locator('.library-filter-panel>summary').click();await a.locator('#library-scope').selectOption('favorites');assert.equal(await a.locator('.lib-card').count(),1);assert((await a.locator('.lib-card').innerText()).includes('랫풀다운'));
+  await a.locator('.lbl-l').click();await a.evaluate(()=>GymInventory.select('general'));await a.locator('.library-filter-panel>summary').click();await a.locator('#library-scope').selectOption('favorites');assert.equal(await a.locator('.lib-card').count(),1);assert((await a.locator('.lib-card').innerText()).includes('랫풀다운'));
   await a.evaluate(async()=>{const values=await Backup._collect();SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:values}));});
   console.log('PASS: scoped add/skip/restore, preserved recorded sets, context sync/clear, distance/cardio metadata, explicit set save and favorites backup/sync');
 
@@ -85,7 +85,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(regression.st.bw,70);assert.equal(regression.st.ew,50);assert.equal(regression.beforeFirstWeight,0);assert(regression.status.includes('전송 대기 1건'));assert.equal(regression.weekly.matched,0);assert.equal(regression.weekly.unplannedSets,2);assert.equal(regression.planned,4);
   const yesterday=await defects.evaluate(()=>RecordModel.shift(_todayKey(),-1));
   const resume=await page({workout_resume_v1:{date:yesterday,day:'Push A',selected:{}}});assert.equal(await resume.evaluate(()=>ExLog.date===_todayKey()),true);
-  const draftName=await resume.evaluate(()=>WorkoutTools.template('Push A')[0].name);
+  const draftName=await resume.evaluate(date=>WorkoutTools.template('Push A',date)[0].name,yesterday);
   const draft=await page({workout_resume_v1:{date:yesterday,day:'Push A',selected:{'Push A':draftName}},workout_drafts_v1:{[JSON.stringify([yesterday,'Push A',draftName])]:{kg:'25',reps:'8',rpe:'',updatedAt:Date.now()}}});
   assert.equal(await draft.evaluate(()=>ExLog.date===_todayKey()),true);await draft.locator('#resume-offer button').first().click();assert.equal(await draft.evaluate(()=>ExLog.date),yesterday);assert.equal(await draft.locator('.dp1 .af-current .wl-kg-input').inputValue(),'25');
   console.log('PASS: past-date bodyweight, zero unknown weight, metadata-only pending state, dated weekly matching, phase target and opt-in historical draft resume');

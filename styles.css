@@ -127,8 +127,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .log-type-pick .tp small{font-size:9px;opacity:.7;line-height:1.25;text-align:center}
 .log-type-pick .tp.cur{outline:2px solid #085041;outline-offset:1px}
 .log-type-pick .tp-hint{grid-column:1/-1;font-size:10px;opacity:.65;line-height:1.4;text-align:center}
-.log-sync-btn{background:none;border:0.5px solid #185FA5;border-radius:var(--border-radius-md);width:32px;height:32px;cursor:pointer;font-size:15px;color:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.log-sync-btn.syncing{opacity:.5;pointer-events:none}
 /* 인바디 모달과 동일한 바텀시트 패턴으로 통일 (가운데 다이얼로그와 이원화되던 것 일원화) */
 .sync-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:flex-end}
 .sync-modal.open{display:flex}
@@ -186,9 +184,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-week-target .wt-prev{color:#8e8e93;font-weight:400}
 .ex-week-target .wt-var{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#EEF2F7;color:#4A5A6E;font-size:10.5px;font-weight:600}
 .ex-week-target .wt-dl{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#F7EFE2;color:#7A5A12;font-size:10.5px;font-weight:600}
-/* 휴식 타이머 */
-/* 휴식 타이머는 스티키 미니바 하나로 통일 — 카드 내 인라인 타이머 제거(위치가 카드 상태·스크롤에 따라 달라지던 것 일원화) */
-@keyframes rmflash{0%,100%{background:#7f1d1d}50%{background:#a03c3c}}
 .sess-sum{margin:10px 16px 0;padding:9px 13px;background:#eef3f7;border:1px solid #cdd9e3;border-radius:10px;font-size:13px;color:#33415c;text-align:center}
 .sess-sum b{color:#185FA5}
 .sess-pace{display:block;margin-top:4px;font-size:11px;color:#5b6b7c}
@@ -668,18 +663,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* Claude 보고용 요약 복사 */
 .copy-report-btn{display:block;width:100%;margin:8px 0 0;padding:11px;background:none;border:1.5px dashed #185FA5;border-radius:12px;font-size:13px;color:#185FA5;font-weight:700;cursor:pointer;letter-spacing:.2px}
 .copy-report-btn.ok{border-color:#3B6D11;color:#3B6D11}
-/* 스티키 미니 휴식 타이머 — 유일한 휴식 표시 지점 (인라인 카드 타이머와 이원화되던 것 통일) */
-.rest-mini{display:none;position:fixed;top:42px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:98;background:#0b3d33;color:#fff;padding:7px 14px;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
-.rest-mini.show{display:flex}
-.rest-mini.done{background:#7f1d1d;animation:rmflash .6s ease-in-out 3}
-.rm-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.rm-nm{font-size:12px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rm-hint{font-size:10px;opacity:.85;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rm-hint:empty{display:none}
-.rm-hint b{color:#7ee2c3}
-.rm-time{font-size:16px;font-weight:800;font-family:var(--font-mono);flex-shrink:0}
-.rm-bar{position:absolute;left:0;bottom:0;height:2.5px;background:#7ee2c3;transition:width .4s linear}
-.rm-btn{flex-shrink:0;font-size:11px;font-weight:700;color:#0b3d33;background:#cfeee2;border:none;border-radius:8px;padding:6px 10px;cursor:pointer}
 /* 오늘의 브리핑 — 남은 도전·채우기 목표 (탭하면 해당 카드로 점프) */
 .log-brief{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 16px 9px;background:#fff;border-bottom:1px solid #f0f0f0}
 .lb-lbl{font-size:10px;font-weight:700;color:var(--color-text-tertiary);flex-shrink:0}

@@ -18,7 +18,7 @@
       for (const [date, session] of Object.entries(ExLog.data)) {
         for (const e of session.exercises || []) if (e.sets.length && (!recent.has(e.name) || recent.get(e.name) < date)) recent.set(e.name, date);
       }
-      const result = items.filter(e => (this.filter !== 'favorites' || favorites[e.name]) && (this.filter !== 'recent' || recent.has(e.name)) && (this.equipment === 'all' || e.name.toLowerCase().includes(this.equipment.toLowerCase())));
+      const result = items.filter(e => (this.filter !== 'favorites' || favorites[e.name]) && (this.filter !== 'recent' || recent.has(e.name)) && (this.equipment === 'all' || e.brand === this.equipment || e.name.toLowerCase().includes(this.equipment.toLowerCase())));
       if (this.filter === 'recent') result.sort((a,b) => recent.get(b.name).localeCompare(recent.get(a.name)));
       return result;
     },
@@ -61,14 +61,14 @@
         }
         if (permanent) {
           plan.rm = (plan.rm || []).filter(n => n !== c.name);
-          if (!(TRAINING_PLAN.exercises[c.day] || []).includes(c.name) && !(plan.add || []).includes(c.name)) (plan.add ||= []).push(c.name);
+          if (!TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.name) && !(plan.add || []).includes(c.name)) (plan.add ||= []).push(c.name);
         }
         AppFeatures.selected[c.day] = c.name;
       } else {
         const row = snapshot.rows.find(r => r.original === c.original);
         if (row) row.skipped = true;
         if (permanent) {
-          if ((TRAINING_PLAN.exercises[c.day] || []).includes(c.original)) { if (!(plan.rm || []).includes(c.original)) (plan.rm ||= []).push(c.original); }
+          if (TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.original)) { if (!(plan.rm || []).includes(c.original)) (plan.rm ||= []).push(c.original); }
           else plan.add = (plan.add || []).filter(n => n !== c.original);
         }
       }
@@ -167,10 +167,22 @@
       // Place optional analysis below immediate results.
       const analysis=$('.tab-p .plan-wrap');
       analysis.append($('#weekly-report'));
-      analysis.insertAdjacentHTML('afterbegin','<div class="page-heading"><h1>기록의 흐름</h1><p>이번 주의 수행과 꾸준히 쌓인 변화를 확인하세요.</p></div>');
-      $('.tab-b .plan-wrap').insertAdjacentHTML('afterbegin','<div class="page-heading"><h1>나의 관리</h1><p>몸의 변화, 기록 백업, 시트 연결을 한곳에서.</p></div>');
+      analysis.insertAdjacentHTML('afterbegin','<div class="page-heading"><span class="page-kicker">YOUR PROGRESS</span><h1>기록의 흐름</h1><p>이번 주의 수행과 꾸준히 쌓인 변화를 확인하세요.</p></div>');
+      $('.tab-b .plan-wrap').insertAdjacentHTML('afterbegin','<div class="page-heading"><span class="page-kicker">MY WORKOUT NOTE</span><h1>나의 관리</h1><p>몸의 변화, 기록 백업, 시트 연결을 한곳에서.</p></div>');
       for(const selector of ['#sec-sleep','#sec-block']){const heading=analysis.querySelector(selector);if(heading){const card=heading.nextElementSibling;analysis.append(heading);if(card)analysis.append(card);}}
-      const nav=$('.top-nav');const resize=()=>document.documentElement.style.setProperty('--top-nav-height',nav.getBoundingClientRect().height+'px');new ResizeObserver(resize).observe(nav);resize();
+      const nav=$('.top-nav');
+      const resize=()=>document.documentElement.style.setProperty('--mobile-nav-height',nav.getBoundingClientRect().height+'px');
+      new ResizeObserver(resize).observe(nav);resize();
+      const updateNavigation=()=>document.querySelectorAll('.top-nav label').forEach(label=>label.setAttribute('aria-pressed',String(document.getElementById(label.htmlFor).checked)));
+      document.querySelectorAll('.tab-r').forEach(r=>r.addEventListener('change',()=>{updateNavigation();window.scrollTo({top:0,behavior:'instant'});}));updateNavigation();
+      // Leave the input area clear when the on-screen keyboard reduces the viewport.
+      const keyboard=()=>{
+        const vv=window.visualViewport,active=document.activeElement;
+        const editing=active?.matches('input:not([type=radio]):not([type=checkbox]),textarea,select');
+        document.body.classList.toggle('keyboard-open',!!(editing&&vv&&innerHeight-vv.height>140));
+      };
+      window.visualViewport?.addEventListener('resize',keyboard);
+      document.addEventListener('focusin',keyboard);document.addEventListener('focusout',()=>requestAnimationFrame(keyboard));
       GymInventory.mount();
       this.ready=true;this.refresh();
     }

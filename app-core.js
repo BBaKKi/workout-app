@@ -40,6 +40,8 @@ const LOAD_DESC={
   time:'반복 칸에 초를 기록 — 실부하 = 체중 + 추가, 진행은 시간'
 };
 function _loadGuess(n){
+  const declared=window.GymInventory?.find(n)?.loadType;
+  if(declared)return declared;
   if(/파머스 워크/.test(n))return 'distance';
   n=n||'';
   if(/플랭크|데드행/.test(n))return 'time';
@@ -115,6 +117,8 @@ const MOVE_PAT=[
   [/카프|종아리/,'종아리']
 ];
 function _movePat(n){
+  const declared=window.GymInventory?.find(n)?.movementPattern;
+  if(declared)return declared;
   n=n||'';
   for(const [re,lbl] of MOVE_PAT)if(re.test(n))return lbl;
   return null;
