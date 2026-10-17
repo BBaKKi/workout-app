@@ -66,7 +66,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await a.locator('.dp1 .cardio-add').click();await a.locator('.dp1 .cd-min').fill('20.5');await a.locator('.dp1 .cd-km').fill('2.1');await a.locator('.dp1 .cd-incline').fill('5');await a.locator('.dp1 .cd-ok').click();await sync(a);await sync(b);
   assert.deepEqual(await b.evaluate(()=>{const c=ExLog.session().cardio[0];return {min:c.min,km:c.km,incline:c.incline};}),{min:20.5,km:2.1,incline:5});
   await a.evaluate(()=>InterfaceTools.favorite('랫풀다운'));await sync(a);assert.equal(JSON.parse(cloud.post({mode:'settings_get'}).data.exercise_favorites_v1)['랫풀다운'],true);
-  await a.locator('.lbl-l').click();await a.locator('.library-filter-panel>summary').click();await a.locator('#library-scope').selectOption('favorites');assert.equal(await a.locator('.lib-card').count(),1);assert((await a.locator('.lib-card').innerText()).includes('랫풀다운'));
+  await a.locator('.lbl-l').click();await a.evaluate(()=>GymInventory.select('general'));await a.locator('.library-filter-panel>summary').click();await a.locator('#library-scope').selectOption('favorites');assert.equal(await a.locator('.lib-card').count(),1);assert((await a.locator('.lib-card').innerText()).includes('랫풀다운'));
   await a.evaluate(async()=>{const values=await Backup._collect();SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:values}));});
   console.log('PASS: scoped add/skip/restore, preserved recorded sets, context sync/clear, distance/cardio metadata, explicit set save and favorites backup/sync');
 

@@ -786,6 +786,9 @@
  const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const G=window.ExerciseCoaching={profiles,
   get(e){
+   // Model-specific guides replace the movement template, including its steps.
+   // In particular, a seated dip must not inherit assisted/bodyweight dip cues.
+   if(e.coaching)return {...e.coaching,cues:[...e.coaching.cues],steps:[...e.coaching.steps],variant:[...(e.coaching.variant||[])]};
    const p=profiles[e.movement];if(!p)return null;
    const g={...p,cues:[...p.cues],steps:[...p.steps],variant:[]};
    const n=e.name;

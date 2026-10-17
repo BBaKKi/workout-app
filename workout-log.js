@@ -912,7 +912,7 @@ const ExLog={
     const tagId='pt_'+Date.now();
     const L=(window.EXERCISE_LIBRARY||[]).filter(e=>!e.archived);
     picker.innerHTML='<div class="wl-picker-title">'+day+' 운동 추가 · 도감 '+L.length+'종에서</div>'
-      +'<button type="button" class="gym-picker-link" onclick="GymInventory.open()">올데이 감일 기구 초안 보기 ↗</button>'
+      +'<button type="button" class="gym-picker-link" onclick="GymInventory.open()">올데이 · 사진 확인 기구 보기 ↗</button>'
       +'<input class="wl-picker-search" placeholder="🔍 전체 검색 (이름·부위)..." oninput="ExLog.filterPicker(this,\''+tagId+'\')">'
       +'<div class="wl-picker-tags" id="'+tagId+'"></div>'
       +'<div class="wl-custom-row"><input class="wl-custom-input" id="el-ci" placeholder="직접 입력..."><button class="wl-confirm-btn" onclick="ExLog.addEx(document.getElementById(\'el-ci\').value,this)">추가</button><button class="wl-cancel-btn" onclick="this.closest(\'.ex-add-picker\').style.display=\'none\'">✕</button></div>';

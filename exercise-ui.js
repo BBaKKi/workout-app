@@ -159,7 +159,7 @@ const LibApp={
     }
     const q=this.q.trim().toLowerCase();
     const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
-    const items=InterfaceTools.filterExercises(lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(GymInventory.catalog!=='allday-gamil'||GymInventory.status==='all'||e.status===GymInventory.status)&&(!q||(e.searchTerms||'').toLowerCase().includes(q)||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0))));
+    const items=InterfaceTools.filterExercises(lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(GymInventory.catalog==='general'||GymInventory.status==='all'||e.status===GymInventory.status)&&(!q||(e.searchTerms||'').toLowerCase().includes(q)||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0))));
     this._items=items;
     if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
     // Detailed guidance is built only when an exercise is opened.
@@ -197,7 +197,7 @@ const LibApp={
   search(v){this.q=v;clearTimeout(this._t);this._t=setTimeout(()=>this.render(),120);},
   // 대체 종목 칩 → 그 종목으로 검색을 좁히고 카드를 펼친다(전체 카테고리로 되돌려야 검색이 걸린다).
   goto(name){
-    GymInventory.select(GymInventory.find(name)?'allday-gamil':'general');
+    GymInventory.select(GymInventory.catalogFor(name));
     this.cat='all';this.q=name;
     const inp=document.querySelector('.lib-search');if(inp)inp.value=name;
     document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c==='all'));
