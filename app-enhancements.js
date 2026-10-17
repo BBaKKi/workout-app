@@ -55,7 +55,7 @@
   },
   decorateLibraryDetail(d){
    const e=LibApp._items?.[+d?.dataset.i],body=d?.querySelector('.lib-body');if(!e||!body||body.querySelector('.lib-order-detail'))return;
-   const p=this.priority(e.name),box=document.createElement('div');box.className='lib-r lib-order-detail';box.innerHTML='<span class="lib-l">순서</span><span><b>'+p.label+'</b><br>'+esc(p.reason)+'</span>';body.prepend(box);
+   const p=this.priority(e.name),box=document.createElement('details');box.className='lib-order-detail';box.innerHTML='<summary>루틴에 배치할 순서 · '+p.label+'</summary><p>'+esc(p.reason)+'</p>';body.append(box);
   },
   activeDay(){const i=ExLog.PANEL_DAY.findIndex((_,i)=>$('#d'+(i+1))?.checked);return ExLog.PANEL_DAY[Math.max(0,i)];},
   openEditor(day=this.activeDay()){
