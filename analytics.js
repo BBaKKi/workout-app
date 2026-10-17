@@ -31,7 +31,7 @@ const PlanApp={
   // 통째로 빠진 것도 사후에 기록을 뒤져서야 발견했다. 진행 중인 한 바퀴를 실시간으로 보여준다.
   cycleProgress(){
     if(typeof ExLog==='undefined')return null;
-    const data=ExLog.data||{}, today=_todayKey();
+    const data=ExLog.activeData||{}, today=_todayKey();
     const done=Object.keys(data).filter(k=>k<=today&&(data[k].exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))
       .sort().reverse();
     if(!done.length)return null;
@@ -55,7 +55,7 @@ const PlanApp={
   // 최근 7일 수면 미달 일수 — SMM 경고에 병기한다(제지방 보존의 단일 최대 레버)
   sleepShortfall(){
     if(typeof ExLog==='undefined')return null;
-    const data=ExLog.data||{}, base=new Date(_todayKey()+'T12:00:00');
+    const data=ExLog.activeData||{}, base=new Date(_todayKey()+'T12:00:00');
     let n=0,rec=0;
     for(const k in data){
       const h=+((data[k].cond||{}).sleep||0);if(!(h>0))continue;
@@ -67,7 +67,7 @@ const PlanApp={
   renderSleep(){
     const el=document.getElementById('sleep-card');if(!el)return;
     if(typeof ExLog==='undefined'){el.innerHTML='';return;}
-    const G=this.SLEEP_GOAL, data=ExLog.data||{}, base=new Date(_todayKey()+'T12:00:00');
+    const G=this.SLEEP_GOAL, data=ExLog.activeData||{}, base=new Date(_todayKey()+'T12:00:00');
     const day=[];                                   // 최근 28일 [{ago, h}]
     for(const k in data){
       const h=+((data[k].cond||{}).sleep||0); if(!(h>0))continue;
@@ -228,10 +228,10 @@ const PlanApp={
   },
   // ── 로그 분석: 부위별 주간 볼륨 + 종목 추세 ──
   // 이미 ExLog가 메모리에 들고 있는 파싱본을 재사용(플랜 탭에서 4개 렌더가 각자 JSON.parse 하던 것 제거). 없을 때만 storage 폴백.
-  async _logData(){try{if(typeof ExLog!=='undefined'&&ExLog.data&&Object.keys(ExLog.data).length)return ExLog.data;}catch(_){}try{
+  async _logData(){try{if(typeof ExLog!=='undefined'&&ExLog.activeData&&Object.keys(ExLog.activeData).length)return ExLog.activeData;}catch(_){}try{
       const l=await window.storage.list('wl_v2:');const out={};
       for(const k of ((l&&l.keys)||[]).sort()){const v=await window.storage.get(k);if(v)Object.assign(out,JSON.parse(v.value)||{});}
-      return out;
+      return RecordModel.activeData(out);
     }catch(_){return{};}},
   _weekRange(){
     const now=new Date();const dow=now.getDay();

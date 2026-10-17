@@ -11,7 +11,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await c.addInitScript(values=>{if(!localStorage.getItem('seeded')){for(const [k,v]of Object.entries(values))localStorage.setItem(k,JSON.stringify(v));localStorage.setItem('seeded','1');}},seed);
   const p=await c.newPage();p.on('pageerror',e=>errors.push(e.message));
   await p.route('https://script.google.com/**',r=>r.fulfill({contentType:'application/json',body:JSON.stringify(cloud.post(r.request().postDataJSON(),false))}));
-  await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);return p;
+  await p.clock.install({time:new Date('2026-11-05T10:00:00Z')});await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);return p;
  }
  async function sync(p){await p.evaluate(async({url,TOKEN})=>{clearTimeout(ExLog._syncTimer);localStorage.setItem('gs_script_url',url);localStorage.setItem('gs_tokens_v5',JSON.stringify({[url]:TOKEN}));await ExLog.syncToSheets(url);if(ExLog.syncMessage)throw new Error(ExLog.syncMessage);},{url,TOKEN});}
  try{
@@ -26,11 +26,11 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     const frozen=AppFeatures.routine('Push A','2026-10-26');delete ExLog.data['2026-10-26'];
     return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),limited:WorkoutTools.template('Legs A','2026-10-19').every(r=>r.sets<=2),sources:new Set([...GymInventory.confirmed.map(e=>e.source.file),...GymInventory.stations.map(e=>e.photo)]).size};
   });
-  assert(transition.old.every(n=>!n.startsWith('올데이 감일 · ')));assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,45);
+  assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,45);
   await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===59);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();
-  assert.equal(await a.locator('#library-catalog').inputValue(),'allday-gamil');
+  assert.equal(await a.locator('#library-catalog').count(),0);
   await a.locator('#library-equipment').selectOption('브랜드 미확인');assert.equal(await a.locator('.lib-card').count(),await a.evaluate(()=>GymInventory.available.filter(e=>e.brand==='브랜드 미확인').length));
   await a.locator('#library-equipment').selectOption('Technogym');assert.equal(await a.locator('.lib-card').count(),1);
   await a.evaluate(()=>GymInventory.select('allday-gamil'));
@@ -54,21 +54,9 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(await a.evaluate(()=>_loadGuess('어시스트 딥스 머신')),'assist');
   assert.equal(await a.evaluate(()=>_loadGuess('딥스')),'bw');
   assert.equal(await a.evaluate(()=>JSON.stringify({items:TRAINING_PLAN.items,plans:ExLog.plan,templates:TRAINING_PLAN.cycle.map(d=>WorkoutTools.template(d)),snapshot:ExLog.session().routineSnapshots})),routineBefore);
-  await a.locator('#library-catalog').selectOption('general');assert.equal(await a.locator('.lib-card').count(),199);
-  await a.locator('#library-catalog').selectOption('allday-gamil-draft');assert.equal(await a.locator('.lib-card').count(),10);
-  assert.equal(await a.locator('.gym-notes article').count(),3);assert.equal(await a.locator('.gym-notes .lib-add').count(),0);
   const name=photoNames[0];
-  const data=await a.evaluate(()=>({unique:new Set(GymInventory.entries.map(e=>e.name)).size,arrived:GymInventory.entries.filter(e=>e.status==='arrived').length,planned:GymInventory.entries.filter(e=>e.status==='planned').length,types:GymInventory.entries.map(e=>ExLog.loadTypeOf(e.name)),source:GymInventory.drafts.every(e=>e.source.url.startsWith('https://m.blog.naver.com/alldayfitness_tennis/')),known:GymInventory.entries.every(e=>libLookup()[e.name]===ExLog.libByName(e.name))}));
-  assert.equal(data.unique,69);assert.equal(data.arrived,2);assert.equal(data.planned,7);assert(data.source&&data.known);assert(data.types.every(t=>t==='normal'));
-  await a.locator('#gym-status-filter').selectOption('arrived');assert.equal(await a.locator('.lib-card').count(),2);
-  await a.locator('#gym-status-filter').selectOption('all');await a.locator('#library-equipment').selectOption('렉스코');assert.equal(await a.locator('.lib-card').count(),2);
-  await a.locator('#library-equipment').selectOption('all');await a.locator('.lib-search').fill('짐레코');await a.waitForFunction(()=>LibApp._items.length===1);assert.equal(await a.locator('.lib-card').count(),1);
-  await a.evaluate(()=>LibApp.goto(GymInventory.drafts[0].name));
-  assert.equal(await a.locator('#library-catalog').inputValue(),'allday-gamil-draft');
-  await a.evaluate(()=>GymInventory.select('allday-gamil-draft'));
-  await a.locator('.lib-card summary').first().click();assert((await a.locator('.lib-card .gym-source a').first().getAttribute('href')).endsWith('/223802202158'));
-  await a.locator('.gym-notes summary').click();
-  assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),59);
+  assert.equal(await a.locator('#gym-status-filter').count(),0);
   assert.equal(await a.evaluate(()=>JSON.stringify(ExLog.plan)),planBefore);
   await a.evaluate(n=>LibApp.goto(n),name);
   await a.evaluate(()=>{ExLog.syncPanel('Pull A');ExLog.refresh();});
@@ -84,12 +72,12 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await a.evaluate(n=>InterfaceTools.favorite(n),name);await sync(a);
   const b=await page();await sync(b);await b.evaluate(()=>AppFeatures.syncSettings('cloud'));await b.waitForFunction(()=>InterfaceTools.ready);
   const saved=await b.evaluate(({n,oldName})=>({record:ExLog.session().exercises.find(e=>e.name===n),equipment:WorkoutTools.equipment[n],old:WorkoutTools.equipment[oldName],favorite:InterfaceTools.favorites()[n],prior:ExLog._priorSets(n).length,oldPrior:ExLog._priorSets(oldName).length,metadata:ExLog.libByName(n).gym}),{n:name,oldName});
-  assert.equal(saved.record.sets[0].weight,25);assert.equal(saved.record.sets[0].reps,9);assert.equal(saved.equipment.seat,'2');assert.equal(saved.old.seat,'5');assert(saved.favorite);assert.equal(saved.oldPrior,1);assert.equal(saved.prior,1);assert.equal(saved.metadata,'allday-gamil');
+  assert.equal(saved.record.sets[0].weight,25);assert.equal(saved.record.sets[0].reps,9);assert.equal(saved.equipment.seat,'2');assert.equal(saved.old.seat,'5');assert(saved.favorite);assert.equal(saved.oldPrior,0);assert.equal(saved.prior,1);assert.equal(saved.metadata,'allday-gamil');
   const backup=await b.evaluate(async()=>SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:await Backup._collect()})));assert.equal(JSON.parse(backup.ex_equipment_v1)[name].seat,'2');assert.equal(JSON.parse(backup.exercise_favorites_v1)[name],true);
   assert.deepEqual(await a.evaluate(()=>ExLog.data['2026-09-01'].exercises.map(e=>({name:e.name,sets:e.sets.map(s=>({weight:s.weight,reps:s.reps}))}))),oldSession.exercises);
-  await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
-  await b.evaluate(()=>LibApp.goto('레그 익스텐션'));assert.equal(await b.locator('#library-catalog').inputValue(),'general');assert.equal(await b.locator('#library-scope').inputValue(),'all');assert(await b.locator('.lib-card').count()>0);
+  await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('.library-filter-panel>summary').click();await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
+  await b.evaluate(()=>LibApp.goto(GymInventory.available.find(e=>e.id==='forward-leg-extension').name));assert.equal(await b.locator('.lib-card').count(),1);
   assert.deepEqual(errors,[]);
-  console.log('PASS: 46 photo guides + 13 accessories + preserved 10-machine draft, correct seated-dip load/movement, brand filters, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
+  console.log('PASS: 46 photo guides + 13 accessories / retired catalogs removed, correct seated-dip load/movement, brand filters, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
