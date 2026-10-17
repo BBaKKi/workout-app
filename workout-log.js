@@ -2282,6 +2282,8 @@ const ExLog={
     return p;
   },
   async _syncRun(url){
+    // Inspection/conflict resolution owns the connection until it finishes.
+    if(DataSync.busy){this._syncSoon();return false;}
     url=url||await this.getScriptUrl();if(!url)return false;
     clearTimeout(this._syncTimer);this.syncMessage='';
     try{await this.save();await DataSync.run(url);return true;}

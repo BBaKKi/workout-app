@@ -74,15 +74,16 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const regression=await defects.evaluate(async()=>{
    InBody._log=[{date:'2026-09-01',wt:70},{date:'2026-11-01',wt:90}];
    DataSync.apply({date:'2026-10-19',rows:[{name:'올데이 직접 · 어시스트 딥스 머신',setNo:1,setId:'regression-set',weight:20,reps:10,day:'Push A'}]},'workout');
-   const st=ExLog.data['2026-10-19'].exercises[0].sets[0];
+   const st=ExLog.data['2026-10-19'].exercises[0].sets[0],calculated=ExLog._loadMeta('올데이 직접 · 어시스트 딥스 머신',20,'2026-10-19');
    const url='https://script.google.com/macros/s/regression_v7/exec';localStorage.setItem('gs_script_url',url);AppFeatures.savePrefState(url,{revision:1,base:AppFeatures.snapshot()});ExLog._dirty.clear();ExLog._delQ=[];localStorage.setItem('session_dirty_v1',JSON.stringify({[ExLog.date]:true}));await AppFeatures.renderSyncStatus();
    const status=document.getElementById('sync-status').textContent;
    const dates=RecordModel.weekDates(_todayKey()),[monday,tuesday]=dates,row={...WorkoutTools.template('Push A',tuesday)[0],sets:2};
    ExLog.data={[monday]:{day:'Push A',exercises:[{name:row.name,sets:[{weight:20,reps:10},{weight:20,reps:10}]}]},[tuesday]:{day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',capturedAt:new Date().toISOString(),source:'recorded',rows:[row]}}}};
    const weekly=AppFeatures.weekly(tuesday);
-   return {st,status,weekly,planned:RecordModel.plannedDays('2026-10-19'),beforeFirstWeight:ExLog.bwOn('2020-01-01')};
+   return {st,calculated,status,weekly,planned:RecordModel.plannedDays('2026-10-19'),beforeFirstWeight:ExLog.bwOn('2020-01-01')};
   });
-  assert.equal(regression.st.bw,70);assert.equal(regression.st.ew,50);assert.equal(regression.beforeFirstWeight,0);assert(regression.status.includes('전송 대기 1건'));assert.equal(regression.weekly.matched,0);assert.equal(regression.weekly.unplannedSets,2);assert.equal(regression.planned,4);
+  // Downloads preserve what the server actually recorded; calculations for new/edited sets still use that date's weight.
+  assert.equal(regression.st.bw,undefined);assert.equal(regression.st.ew,undefined);assert.equal(regression.calculated.bw,70);assert.equal(regression.calculated.ew,50);assert.equal(regression.beforeFirstWeight,0);assert(regression.status.includes('전송 대기 1건'));assert.equal(regression.weekly.matched,0);assert.equal(regression.weekly.unplannedSets,2);assert.equal(regression.planned,4);
   const yesterday=await defects.evaluate(()=>RecordModel.shift(_todayKey(),-1));
   const resume=await page({workout_resume_v1:{date:yesterday,day:'Push A',selected:{}}});assert.equal(await resume.evaluate(()=>ExLog.date===_todayKey()),true);
   const draftName=await resume.evaluate(date=>WorkoutTools.template('Push A',date)[0].name,yesterday);
