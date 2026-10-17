@@ -19,8 +19,8 @@ const ExLog={
   renderRoutineUI(){
     const el=document.getElementById('routine-brief');if(!el)return;
     const ph=TRAINING_PLAN.phase(this.date),planned=TRAINING_PLAN.schedule(this.date),legacy=TRAINING_PLAN.mode==='legacy';
-    el.innerHTML='<b>'+(legacy?'기존 편집 루틴':ph.label)+'</b><span>'+(legacy?'새 루틴과 편집 내용을 따로 보관합니다.':('예정: '+planned+' · '+(ph.limited?'종목당 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')))+'</span><small>'
-      +(legacy?'기록·기구 설정은 두 루틴에서 함께 사용합니다.':(ph.limited?'유산소 15–20분 × 주 3회부터. 복귀 1주는 월·화·목·토 웨이트.':'상체 운동 후 유산소 20–30분, 주 4회까지. 피로가 남으면 줄이세요.'))+'</small>';
+    el.innerHTML='<b>'+(legacy?'기존 편집 루틴':(this.date>=TRAINING_PLAN.equipmentDate?'올데이 · ':'')+ph.label)+'</b><span>'+(legacy?'새 루틴과 편집 내용을 따로 보관합니다.':('예정: '+planned+' · '+(ph.limited?'종목당 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')))+'</span><small>'
+      +(legacy?'기록·기구 설정은 두 루틴에서 함께 사용합니다.':(ph.limited?'유산소 15–20분 × 주 3회부터. 복귀 1주는 월·화·목·토 웨이트.':'상체 운동 후 걷기 20–30분, 주 2–3회부터. 새 기구는 가벼운 준비 세트로 중량을 정하세요.'))+'</small>';
     document.querySelectorAll('.day-panel .ex-wrap').forEach(w=>{
       const nm=(w.querySelector('.ex-nm')?.textContent||'').trim(),day=this.panelDayOf(w.closest('.day-panel')),p=this.prescription(nm,day);
       const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent=p.sets+'×'+p.min+'–'+p.max;

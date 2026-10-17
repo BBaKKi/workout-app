@@ -20,11 +20,18 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await sync(a);await a.evaluate(()=>DataSync.resolve(0,'local'));await sync(a);
   const planBefore=await a.evaluate(()=>JSON.stringify(ExLog.plan));
   const routineBefore=await a.evaluate(()=>JSON.stringify({items:TRAINING_PLAN.items,plans:ExLog.plan,templates:TRAINING_PLAN.cycle.map(d=>WorkoutTools.template(d)),snapshot:ExLog.session().routineSnapshots}));
-  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===5);
+  const transition=await a.evaluate(()=>{
+    const saved=JSON.stringify(ExLog.plan),old=WorkoutTools.template('Push A','2026-10-17'),next=WorkoutTools.template('Push A','2026-10-26');
+    const oldRows=JSON.parse(JSON.stringify(old));ExLog.data['2026-10-26']={day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',source:'recorded',capturedAt:'2026-10-17T10:00:00Z',rows:oldRows}}};
+    const frozen=AppFeatures.routine('Push A','2026-10-26');delete ExLog.data['2026-10-26'];
+    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),limited:WorkoutTools.template('Legs A','2026-10-19').every(r=>r.sets<=2),sources:new Set([...GymInventory.confirmed.map(e=>e.source.file),...GymInventory.stations.map(e=>e.photo)]).size};
+  });
+  assert(transition.old.every(n=>!n.startsWith('올데이 감일 · ')));assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,45);
+  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===59);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();
   assert.equal(await a.locator('#library-catalog').inputValue(),'allday-gamil');
-  await a.locator('#library-equipment').selectOption('브랜드 미확인');assert.equal(await a.locator('.lib-card').count(),2);
+  await a.locator('#library-equipment').selectOption('브랜드 미확인');assert.equal(await a.locator('.lib-card').count(),await a.evaluate(()=>GymInventory.available.filter(e=>e.brand==='브랜드 미확인').length));
   await a.locator('#library-equipment').selectOption('Technogym');assert.equal(await a.locator('.lib-card').count(),1);
   await a.evaluate(()=>GymInventory.select('allday-gamil'));
   const photoNames=await a.evaluate(()=>GymInventory.confirmed.map(e=>e.name));
@@ -37,6 +44,12 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   }
   const dip=await a.evaluate(()=>{const e=GymInventory.confirmed.find(e=>e.id==='seated-dip-press');return {type:ExLog.loadTypeOf(e.name),steps:ExerciseCoaching.get(e).steps.join(' '),variant:ExerciseCoaching.get(e).variant};});
   assert.equal(dip.type,'normal');assert(dip.steps.includes('손잡이를 아래로'));assert(!/보조판|몸을 올립니다/.test(dip.steps));assert.deepEqual(dip.variant,[]);
+  for(const id of ['db-calf','cable-rear','cable-overhead','tbar-available']){
+    await a.evaluate(id=>LibApp.goto(GymInventory.accessories.find(e=>e.id===id).name),id);
+    await a.locator('.lib-card .exercise-guide>summary').click();
+    assert((await a.locator('.lib-card .gym-source').innerText()).includes('사용자 보유 확인'));
+    assert.equal(await a.locator('.lib-card .gym-source a').count(),0);assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  }
   assert.equal(await a.evaluate(()=>_movePat(GymInventory.confirmed.find(e=>e.id==='decline-chest-fly').name)),'플라이');
   assert.equal(await a.evaluate(()=>_loadGuess('어시스트 딥스 머신')),'assist');
   assert.equal(await a.evaluate(()=>_loadGuess('딥스')),'bw');
@@ -46,7 +59,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(await a.locator('.gym-notes article').count(),3);assert.equal(await a.locator('.gym-notes .lib-add').count(),0);
   const name=photoNames[0];
   const data=await a.evaluate(()=>({unique:new Set(GymInventory.entries.map(e=>e.name)).size,arrived:GymInventory.entries.filter(e=>e.status==='arrived').length,planned:GymInventory.entries.filter(e=>e.status==='planned').length,types:GymInventory.entries.map(e=>ExLog.loadTypeOf(e.name)),source:GymInventory.drafts.every(e=>e.source.url.startsWith('https://m.blog.naver.com/alldayfitness_tennis/')),known:GymInventory.entries.every(e=>libLookup()[e.name]===ExLog.libByName(e.name))}));
-  assert.equal(data.unique,15);assert.equal(data.arrived,2);assert.equal(data.planned,7);assert(data.source&&data.known);assert(data.types.every(t=>t==='normal'));
+  assert.equal(data.unique,69);assert.equal(data.arrived,2);assert.equal(data.planned,7);assert(data.source&&data.known);assert(data.types.every(t=>t==='normal'));
   await a.locator('#gym-status-filter').selectOption('arrived');assert.equal(await a.locator('.lib-card').count(),2);
   await a.locator('#gym-status-filter').selectOption('all');await a.locator('#library-equipment').selectOption('렉스코');assert.equal(await a.locator('.lib-card').count(),2);
   await a.locator('#library-equipment').selectOption('all');await a.locator('.lib-search').fill('짐레코');await a.waitForFunction(()=>LibApp._items.length===1);assert.equal(await a.locator('.lib-card').count(),1);
@@ -77,6 +90,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
   await b.evaluate(()=>LibApp.goto('레그 익스텐션'));assert.equal(await b.locator('#library-catalog').inputValue(),'general');assert.equal(await b.locator('#library-scope').inputValue(),'all');assert(await b.locator('.lib-card').count()>0);
   assert.deepEqual(errors,[]);
-  console.log('PASS: 5 photo guides + preserved 10-machine draft, correct seated-dip load/movement, brand filters, no routine changes, 320px layout, separate old/new history, Sheets sync, backup and restart');
+  console.log('PASS: 46 photo guides + 13 accessories + preserved 10-machine draft, correct seated-dip load/movement, brand filters, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

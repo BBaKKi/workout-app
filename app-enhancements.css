@@ -40,7 +40,7 @@ button,summary,.nav-lbl,.day-lbl{cursor:pointer}button:disabled{opacity:.45;curs
 .af-focus .tab-w .ex-wrap:not(.af-current){display:none!important}.af-focus .routine-top,.af-focus #routine-brief :is(small,span){display:none}.af-focus .day-panel>.cond-row{display:none!important}
 .af-focus .routine-home{padding:12px 16px}.af-focus #routine-brief{margin:0}.af-focus #routine-brief b{font-size:15px}
 .ex-list{padding:4px 0;gap:12px}.ex-card{background:#fff;border:1px solid var(--ui-border);border-radius:var(--radius);box-shadow:0 3px 12px #213b2b04;overflow:hidden}
-.ex-card>summary{padding:18px 16px;gap:12px;align-items:center}.ex-nm{font-size:18px;line-height:1.45;letter-spacing:-.45px;font-weight:750}.ex-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.tag{font-size:11px;border-radius:6px;padding:2px 6px}
+.ex-card>summary{padding:18px 16px;gap:12px;align-items:center}.ex-nm{word-break:keep-all;overflow-wrap:anywhere;font-size:18px;line-height:1.45;letter-spacing:-.45px;font-weight:750}.ex-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.tag{font-size:11px;border-radius:6px;padding:2px 6px}
 .tag.t-s{color:#275944;background:#eff5f1;border-color:#d6e4db}.tag.t-m{color:var(--ui-muted);background:#f5f7f5;border-color:transparent}
 .ex-order{display:inline-block;font-size:10px;color:var(--ui-muted);border:1px solid #e1e8e3;background:#fafcfb;padding:2px 6px;border-radius:6px;white-space:nowrap}
 .ex-stage{margin:16px 0 0;padding:6px 2px;font-size:12px;letter-spacing:.2px;font-weight:700;color:var(--ui-muted)}

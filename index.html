@@ -15,10 +15,10 @@
 </head>
 <body>
 <input type="radio" name="tab" id="tw" class="tab-r" checked><input type="radio" name="tab" id="td" class="tab-r"><input type="radio" name="tab" id="tl" class="tab-r"><input type="radio" name="tab" id="tp" class="tab-r"><input type="radio" name="tab" id="tb" class="tab-r"><input type="radio" name="day" id="d1" class="day-r" checked><input type="radio" name="day" id="d2" class="day-r"><input type="radio" name="day" id="d3" class="day-r"><input type="radio" name="day" id="d4" class="day-r"><input type="radio" name="day" id="d5" class="day-r"><input type="radio" name="day" id="d6" class="day-r">
-<header class="app-brand"><span class="brand-mark" aria-hidden="true">∥</span><div><b>운동 노트</b><span>오늘의 기록이 다음의 기준</span></div><span class="brand-version">7.2.1</span></header>
+<header class="app-brand"><span class="brand-mark" aria-hidden="true">∥</span><div><b>운동 노트</b><span>오늘의 기록이 다음의 기준</span></div><span class="brand-version">7.3.0</span></header>
 <nav class="top-nav" aria-label="주요 화면"><label class="nav-lbl lbl-w" for="tw" onclick="setTimeout(function(){ExLog.injectRecos();},20)">운동</label><label class="nav-lbl lbl-d" for="td" onclick="setTimeout(function(){MuscleMap.init();},20)">근육</label><label class="nav-lbl lbl-l" for="tl" onclick="setTimeout(function(){LibApp.render();},20)">도감</label><label class="nav-lbl lbl-p" for="tp" onclick="setTimeout(function(){PlanApp.renderAnalysis();},30)">분석</label><label class="nav-lbl lbl-b" for="tb" onclick="setTimeout(function(){InBody.render();PlanApp.renderPhase();PlanApp.loadBlood();},30)">관리</label></nav>
 <div class="tab-body tab-w">
-<section class="routine-home"><div class="routine-top"><span class="routine-eyebrow">84kg 유지 · 근력 회복</span><label>루틴 <select id="routine-profile" onchange="ExLog.selectRoutine(this.value)"><option value="current">새 루틴 · 2026.10</option><option value="legacy">기존 편집 루틴</option></select></label></div><div id="routine-brief"></div><button id="sync-status" type="button" onclick="ExLog.openSync()" aria-live="polite">저장 상태 확인 중</button></section><div class="motiv-bar" id="motiv-bar" style="display:none"></div>
+<section class="routine-home"><div class="routine-top"><span class="routine-eyebrow">84kg 유지 · 근력 회복</span><label>루틴 <select id="routine-profile" onchange="ExLog.selectRoutine(this.value)"><option value="current">올데이 · PPL A/B</option><option value="legacy">기존 편집 루틴</option></select></label></div><div id="routine-brief"></div><button id="sync-status" type="button" onclick="ExLog.openSync()" aria-live="polite">저장 상태 확인 중</button></section><div class="motiv-bar" id="motiv-bar" style="display:none"></div>
 <div class="sess-sum" id="sess-sum" style="display:none"></div>
 <div class="day-sel">
 <label class="day-lbl lbl-d1" for="d1"><span class="dn">Push A</span><span class="dl">가슴·어깨·삼두</span></label>
@@ -336,8 +336,9 @@
 <script src="storage.js"></script>
 <script src="session-schema.js"></script>
 <script src="exercise-library.js"></script>
-<script src="gym-inventory.js"></script>
 <script src="exercise-coaching.js"></script>
+<script src="gym-equipment-data.js"></script>
+<script src="gym-inventory.js"></script>
 <script src="record-model.js"></script>
 <script src="training-plan.js"></script><script src="app-core.js"></script>
 <script src="workout-log.js"></script>

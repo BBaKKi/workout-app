@@ -16,18 +16,18 @@
    const phase=weight<200?'early':weight<300?'middle':weight<400?'late':'unclassified';
    return {weight,phase,label:{early:'초반',middle:'중반',late:'후반',unclassified:'미분류'}[phase],reason:e?.orderReason||'도감에 없는 직접 입력 종목입니다. 자동 분류를 추정하지 않고 목록 끝에 둡니다.'};
   },
-  defaults(day,original){
-   const fixed=TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.defaults?.[day]?.[original];
+  defaults(day,original,date=ExLog.date){
+   const fixed=TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.defaultsFor(day,date)?.[original];
    if(fixed)return {...fixed};
    const e=ExLog.libByName(original), m=String(e?.sets||'').match(/(\d+)\s*[×x]\s*(\d+)(?:\s*[–~\-]\s*(\d+))?/);
    return {sets:m?+m[1]:3,min:m?+m[2]:8,max:m?+(m[3]||m[2]):12};
   },
   routine(day,date=ExLog.date){const snap=ExLog.data[date]?.routineSnapshots?.[day];return snap?clone(snap.rows).filter(r=>!r.skipped):this.templateRoutine(day,date);},
   templateRoutine(day,date=ExLog.date){
-   const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercises[day]||[], names=base.concat((p.add||[]).filter(n=>!base.includes(n))), seen=new Set();
+   const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercisesFor(day,date)||[], names=base.concat((p.add||[]).filter(n=>!base.includes(n))), seen=new Set();
    return names.map((original,index)=>{
     const name=(p.swap||{})[original]||original;if((p.rm||[]).includes(original)||seen.has(name))return null;seen.add(name);
-    const cfg=p.config?.[original]||p.config?.[name]||{},d=this.defaults(day,original);
+    const cfg=p.config?.[original]||p.config?.[name]||{},d=this.defaults(day,original,date);
     // Old per-day config.weight values were manual slot numbers; ignore them without deleting data.
     ['sets','min','max'].forEach(k=>{if(Number.isFinite(cfg[k]))d[k]=cfg[k];});
     return {original,name,index,...d,...this.priority(name),baseSets:d.sets,sets:TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.phase(date).limited?Math.min(2,d.sets):d.sets};
@@ -55,7 +55,7 @@
   },
   decorateLibraryDetail(d){
    const e=LibApp._items?.[+d?.dataset.i],body=d?.querySelector('.lib-body');if(!e||!body||body.querySelector('.lib-order-detail'))return;
-   const p=this.priority(e.name),box=document.createElement('div');box.className='lib-r lib-order-detail';box.innerHTML='<span class="lib-l">순서</span><span><b>'+p.label+' · weight '+p.weight+'</b><br>'+esc(p.reason)+'</span>';body.prepend(box);
+   const p=this.priority(e.name),box=document.createElement('div');box.className='lib-r lib-order-detail';box.innerHTML='<span class="lib-l">순서</span><span><b>'+p.label+'</b><br>'+esc(p.reason)+'</span>';body.prepend(box);
   },
   activeDay(){const i=ExLog.PANEL_DAY.findIndex((_,i)=>$('#d'+(i+1))?.checked);return ExLog.PANEL_DAY[Math.max(0,i)];},
   openEditor(day=this.activeDay()){
@@ -83,7 +83,7 @@
    if(this.focusDate!==key){this.focusDate=key;this.selected[day]=null;}
    if(!rows.some(r=>r.name===this.selected[day]))this.selected[day]=rows.find(r=>{const e=(ExLog.data[ExLog.date]?.exercises||[]).find(e=>e.name===r.name);return (e?.sets||[]).filter(_isWorkSet).length<r.sets;})?.name||rows[0]?.name;
    const at=rows.findIndex(r=>r.name===this.selected[day]), select=$('#focus-exercise');
-   select.innerHTML=rows.map((r,i)=>'<option value="'+i+'">'+(i+1)+' / '+rows.length+' · '+esc(r.name)+'</option>').join('');select.value=String(at);select.disabled=!rows.length;
+   select.innerHTML=rows.map((r,i)=>'<option value="'+i+'">'+(i+1)+' / '+rows.length+' · '+esc(ExLog.libByName(r.name)?.displayName||r.name)+'</option>').join('');select.value=String(at);select.disabled=!rows.length;
    $('#focus-prev').disabled=at<=0;$('#focus-next').disabled=at<0||at>=rows.length-1;
    document.querySelectorAll('.day-panel').forEach(panel=>{
     const pDay=ExLog.panelDayOf(panel);panel.querySelectorAll('.ex-wrap').forEach(w=>{const on=pDay===day&&nameOf(w)===this.selected[day];w.classList.toggle('af-current',on);if(on&&this.focus){const det=w.querySelector('details');if(det)det.open=true;}

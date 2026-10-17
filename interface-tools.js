@@ -61,14 +61,14 @@
         }
         if (permanent) {
           plan.rm = (plan.rm || []).filter(n => n !== c.name);
-          if (!(TRAINING_PLAN.exercises[c.day] || []).includes(c.name) && !(plan.add || []).includes(c.name)) (plan.add ||= []).push(c.name);
+          if (!TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.name) && !(plan.add || []).includes(c.name)) (plan.add ||= []).push(c.name);
         }
         AppFeatures.selected[c.day] = c.name;
       } else {
         const row = snapshot.rows.find(r => r.original === c.original);
         if (row) row.skipped = true;
         if (permanent) {
-          if ((TRAINING_PLAN.exercises[c.day] || []).includes(c.original)) { if (!(plan.rm || []).includes(c.original)) (plan.rm ||= []).push(c.original); }
+          if (TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.original)) { if (!(plan.rm || []).includes(c.original)) (plan.rm ||= []).push(c.original); }
           else plan.add = (plan.add || []).filter(n => n !== c.original);
         }
       }

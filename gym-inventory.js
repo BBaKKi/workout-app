@@ -11,7 +11,7 @@
     powerplate: {date:'2024-07-02', title:'올데이 파워플레이트 입고', post:'223499012261'}
   };
   Object.values(sources).forEach(s => s.url='https://m.blog.naver.com/alldayfitness_tennis/'+s.post);
-  const labels={confirmed:'사진 확인',arrived:'입고 완료 글',introduced:'도입 안내 글',planned:'입고 예정 글'};
+  const labels={confirmed:'사진 확인',reported:'보유 확인 · 사용자',arrived:'입고 완료 글',introduced:'도입 안내 글',planned:'입고 예정 글'};
   // Templates supply only general movement descriptions; their aliases, models and history are not linked.
   const rows=[
     ['hammer-high-row','Hammer 하이 로우','해머스트렝스 하이로우','Hammer ISO-하이 로우','arrived','hammer','Hammer'],
@@ -139,28 +139,58 @@
       }
     }
   ];
-  const confirmed=photoRows.map(({title,template,photo,...details})=>{
+  const confirmed=[...photoRows,...window.ALLDAY_PHOTO_ROWS].map(({title,template,photo,...details})=>{
     const base=(window.EXERCISE_LIBRARY||[]).find(e=>e.name===template);
     if(!base)throw new Error('Missing photo movement template: '+template);
     const e={...JSON.parse(JSON.stringify(base)),...details,name:'올데이 감일 · '+title,displayName:title,gym:'allday-gamil',status:'confirmed',loadType:'normal',aka:[],alt:[],archived:false,
-      source:{type:'photo',date:'2026-10-17',title:'사용자 제공 현장 사진',file:photo},
+      source:{type:'photo',date:photo>='IMG_5821.JPEG'?'2026-10-18':'2026-10-17',title:'사용자 제공 현장 사진',file:photo},
       recordingNote:'새 짐 전용 기록입니다. 이전 기구의 중량을 환산하거나 자동으로 가져오지 않습니다. 핀 표시값 또는 원판 합계 등 입력 기준을 기구 메모에 남기세요.'};
     delete e.reviewNote;
     return e;
   });
-  const entries=[...confirmed,...drafts];
+  const accessorySetup={
+    'db-lateral':'양손에 덤벨을 들고 발을 안정적으로 둡니다. 팔꿈치를 살짝 굽힌 채 팔을 몸 옆보다 조금 앞쪽에서 벌립니다. 손목을 꺾거나 엄지를 일부러 아래로 붓듯 돌리지 않습니다.',
+    'db-curl':'양손에 덤벨을 들고 상체를 세웁니다. 팔꿈치를 몸 옆에 자연스럽게 둔 채 손바닥이 앞을 향하는 방향으로 굽힙니다. 몸을 젖혀 덤벨을 튕기지 않습니다.',
+    'db-hammer':'덤벨을 손바닥이 서로 마주 보게 잡습니다. 손목을 곧게 두고 팔꿈치를 굽히며, 어깨를 앞으로 들어 덤벨을 올리지 않습니다.',
+    'db-calf':'한 손으로 고정 지지대를 잡고 반대 손에 덤벨을 듭니다. 안정된 평평한 바닥에서 시작하고 양발 또는 한발 방식을 세팅 메모에 기록합니다. 발목을 곧게 편다는 느낌으로 뒤꿈치를 올립니다.',
+    'cable-fly':'두 풀리를 가슴 부근 높이에 맞추고 양 손잡이를 잡아 한 발을 앞으로 둡니다. 팔꿈치를 살짝 굽힌 채 위팔을 가슴 앞으로 모읍니다. 벤치나 특수 손잡이가 반드시 필요한 운동은 아닙니다.',
+    'cable-rear':'두 풀리를 어깨 부근 높이에 맞춰 반대쪽 손잡이를 교차해 잡습니다. 가볍게 시작해 팔꿈치 각도를 거의 유지하며 위팔을 옆·뒤로 벌립니다. 케이블이 얼굴이나 목을 스치지 않는 위치를 고릅니다.',
+    'cable-pushdown':'풀리를 높게 두고 바 또는 로프 손잡이를 잡습니다. 팔꿈치를 몸 옆에 두고 팔꿈치를 펴 아래로 누릅니다. 어깨를 앞으로 덮쳐 몸무게로 누르지 않습니다.',
+    'cable-overhead':'사용 가능한 로프·손잡이와 풀리 높이를 먼저 맞추고 케이블에 등을 둔 채 팔을 머리 위에 놓습니다. 한 발을 앞으로 두고 갈비뼈를 내린 상태에서 팔꿈치를 폅니다.',
+    'cable-crunch':'높은 풀리에 연결한 로프 또는 편안한 손잡이를 잡고 무릎을 꿇습니다. 손은 머리 옆에 고정하고 갈비뼈를 골반 쪽으로 가까이하며 복부를 말아 줍니다. 엉덩이만 뒤로 접지 않습니다.',
+    'cable-facepull':'풀리를 눈 부근 높이에 두고 로프를 잡습니다. 가벼운 무게에서 로프를 얼굴 양옆으로 벌려 당기며 목을 앞으로 내밀지 않습니다. 손목·어깨가 불편하면 당기는 높이를 조절합니다.',
+    'tbar-available':'현장 T바 로우의 가슴 패드·발판 유무를 먼저 확인합니다. 패드가 있으면 가슴을 지지하고, 없으면 고관절을 접어 몸통을 고정한 뒤 손잡이를 당깁니다. 레버·레일 구조와 중량 기준을 메모하세요.',
+    'barbell-rdl':'바벨 표기 중량과 원판 합계를 확인하고 발을 골반 너비 부근에 둡니다. 무릎을 약간 굽힌 채 엉덩이를 뒤로 보내고 바를 다리 가까이 내립니다. 바닥에 닿는 것이 목표가 아닙니다.',
+    'barbell-squat':'랙 높이와 안전바를 먼저 맞춥니다. 바벨을 목뼈가 아닌 등 위 근육에 받치고 양발로 지지한 뒤 무릎·고관절을 함께 굽힙니다. 가벼운 부하에서 안전바까지 복귀하는 방법을 확인합니다.'
+  };
+  const accessories=window.ALLDAY_ACCESSORY_ROWS.map(({id,title,template,brand,photo,reported})=>{
+    const base=window.EXERCISE_LIBRARY.find(e=>e.name===template);if(!base)throw new Error('Missing accessory template: '+template);
+    const e=JSON.parse(JSON.stringify(base)),c=window.ExerciseCoaching.get(e),setup=accessorySetup[id];
+    if(id==='cable-fly')e.rom='팔을 몸 옆에서 가슴 앞으로 모았다가 통제하며 돌아옵니다. 손을 강제로 교차하거나 어깨를 뒤로 과하게 벌리지 않습니다.';
+    if(id==='cable-overhead')e.grip='사용 가능한 로프 또는 케이블 손잡이를 안정적으로 잡고 손목을 편안하게 유지합니다.';
+    const position=id==='cable-rear'?'갈비뼈와 골반을 정렬하고 팔꿈치를 약간 굽힙니다. 몸통을 돌리지 않고 위팔을 벌리며 견갑골이 자연스럽게 움직이게 합니다. 팔꿈치를 굽혀 로우로 바꾸지 않습니다.':id==='db-calf'?'몸을 지지대에 매달리지 않고 발바닥으로 지지합니다. 무릎 각도를 일정하게 두고 발목이 안팎으로 무너지지 않게 뒤꿈치를 올립니다.':c.position;
+    return {...e,id,name:'올데이 감일 · '+title,displayName:title,brand,gym:'allday-gamil',status:reported?'reported':'confirmed',loadType:'normal',aka:[],alt:[],archived:false,
+      source:reported?{type:'reported',date:'2026-10-18',title:'사용자 보유 확인 · 덤벨 / T바 로우 / 케이블'}:{type:'photo',date:'2026-10-17',title:'바벨 랙·플랫폼 현장 사진',file:photo},
+      searchTerms:title,equipmentNote:reported?'사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.':'IMG_5807의 랙·바벨을 사용하는 운동입니다. 스미스 머신으로 분류하지 않습니다.',
+      recordingNote:'새 짐 전용 기록입니다. 덤벨 한 손 중량·바벨 총중량·핀 표시값 등 입력 기준을 기구 세팅에 기록하세요. 기구가 바뀌면 이전 kg을 직접 환산하지 않습니다.',
+      setup,tip:setup,grip:brand==='덤벨'?'덤벨 손잡이를 엄지까지 감싸 잡고 손목을 전완과 정렬합니다.':e.grip,
+      coaching:{...c,position,steps:[setup,position+' '+c.feel,'부하를 천천히 되돌립니다. '+e.rom],variant:[]}
+    };
+  });
+  const available=[...confirmed,...accessories],entries=[...available,...drafts];
   const notes=[
     {title:'뉴텍 어드져스 폴리',status:'planned',source:sources.september,note:'블로그 표기 그대로 수록했습니다. 정확한 모델과 손잡이 구성을 확인한 뒤 실제 수행할 케이블 운동을 선택하세요.'},
     {title:'싸이벡스 하체 3종',status:'planned',source:sources.cybex,note:'본문에 개별 기구명이 없어 종목을 추정하지 않았습니다. 현장에서 3종의 이름·모델 확인이 필요합니다.'},
     {title:'파워플레이트',status:'arrived',source:sources.powerplate,note:'기구 도입 안내만 수록했습니다. 일반적인 중량·반복 운동 한 종목으로 추가하지 않습니다.'}
   ];
   const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const G=window.GymInventory={entries,confirmed,drafts,notes,sources,labels,catalog:'allday-gamil',status:'all',
-    library(){return this.catalog==='allday-gamil'?confirmed:this.catalog==='allday-gamil-draft'?drafts:(window.EXERCISE_LIBRARY||[]).filter(e=>!e.archived);},
+  const G=window.GymInventory={entries,confirmed,accessories,available,stations:window.ALLDAY_STATIONS,drafts,notes,sources,labels,catalog:'allday-gamil',status:'all',
+    library(){return this.catalog==='allday-gamil'?available:this.catalog==='allday-gamil-draft'?drafts:(window.EXERCISE_LIBRARY||[]).filter(e=>!e.archived);},
     find(name){return entries.find(e=>e.name===name);},
-    catalogFor(name){const e=this.find(name);return !e?'general':e.status==='confirmed'?'allday-gamil':'allday-gamil-draft';},
+    catalogFor(name){const e=this.find(name);return !e?'general':drafts.includes(e)?'allday-gamil-draft':'allday-gamil';},
     badge(e){return e.gym?'<span class="gym-status '+e.status+'">'+labels[e.status]+'</span>':'';},
     sourceHTML(e){
+      if(e.source.type==='reported')return '<div class="lib-r gym-source"><span class="lib-l">확인 근거</span><span>'+esc(e.source.title)+' · '+esc(e.source.date)+'</span></div>';
       if(e.source.type==='photo')return '<div class="lib-r gym-source"><span class="lib-l">확인 근거</span><span>'+esc(e.source.title)+' · '+esc(e.source.date)+'<br>'+esc(e.source.file)+'</span></div>';
       return '<div class="lib-r gym-source"><span class="lib-l">출처</span><span><a href="'+e.source.url+'" target="_blank" rel="noopener noreferrer">공식 블로그 · '+e.source.date+' ↗</a><br>'+e.source.title+'</span></div>';
     },
@@ -191,11 +221,11 @@
     mount(){
       const filters=document.querySelector('.library-filters');
       const field=document.createElement('label');field.className='library-catalog-field';field.textContent='도감 선택';
-      const select=document.createElement('select');select.id='library-catalog';select.append(new Option('올데이 · 사진 확인 기구','allday-gamil'),new Option('일반 운동 도감','general'),new Option('올데이 · 이전 블로그 초안','allday-gamil-draft'));select.onchange=()=>this.select(select.value);field.append(select);filters.prepend(field);
+      const select=document.createElement('select');select.id='library-catalog';select.append(new Option('올데이 · 현재 기구와 운동','allday-gamil'),new Option('일반 운동 도감','general'),new Option('올데이 · 이전 블로그 초안','allday-gamil-draft'));select.onchange=()=>this.select(select.value);field.append(select);filters.prepend(field);
       const status=document.createElement('label');status.id='gym-status-field';status.textContent='블로그 확인 상태';
-      const statusSelect=document.createElement('select');statusSelect.id='gym-status-filter';statusSelect.append(new Option('전체 상태','all'),...Object.entries(labels).filter(([k])=>k!=='confirmed').map(([k,v])=>new Option(v,k)));statusSelect.onchange=()=>{this.status=statusSelect.value;LibApp.render();};status.append(statusSelect);filters.append(status);
+      const statusSelect=document.createElement('select');statusSelect.id='gym-status-filter';statusSelect.append(new Option('전체 상태','all'),...['arrived','introduced','planned'].map(k=>new Option(labels[k],k)));statusSelect.onchange=()=>{this.status=statusSelect.value;LibApp.render();};status.append(statusSelect);filters.append(status);
       const photoInfo=document.createElement('section');photoInfo.id='gym-photo-info';photoInfo.className='gym-draft-info';photoInfo.setAttribute('aria-label','사진으로 확인한 올데이 기구');
-      photoInfo.innerHTML='<h3>올데이 · 사진 확인 기구 '+confirmed.length+'개</h3><p>2026.10.17 제공 사진으로 확인했어요. 카드를 펼치면 <b>좌석 설정·몸과 팔꿈치 위치·자극 부위·반복 방법</b>을 볼 수 있어요.</p><p>추가 사진을 받으며 도감을 채우는 중이에요. 루틴은 기구 확인이 끝난 뒤 구성해요.</p>';
+      photoInfo.innerHTML='<h3>올데이 · 현재 운동 '+available.length+'개</h3><p>현장 사진 <b>45장</b>과 보유 확인한 덤벨·T바 로우·케이블을 반영했어요. 몸 위치·근육의 작용·수행 순서·실수 교정을 카드에서 확인하세요.</p><details><summary>기구 구분과 기록 기준</summary><p>기구 44종과 랙 1곳을 확인했어요. 이너·아웃타이 2대는 각각 내전/외전 운동을 나눴고, 덤벨·케이블·바벨 보조 운동 '+accessories.length+'개를 포함했어요. 사진 확인과 사용자 보유 확인은 배지로 구분합니다.</p><p>새 기구의 kg은 이전 짐 기록과 비교하지 않아요. 좌석·그립·원판 입력 기준을 기구 세팅에 남기세요. T바 로우는 브랜드·가슴 패드 유무를 현장에서 확인해 주세요.</p></details>';
       filters.closest('.library-filter-panel').after(photoInfo);
       const info=document.createElement('section');info.id='gym-draft-info';info.className='gym-draft-info';info.setAttribute('aria-label','올데이 감일본점 기구 초안 안내');
       info.innerHTML='<h3>올데이 감일본점 · 기구 초안</h3><p>이름이 확인된 기구 10개 · 그중 2개는 입고 완료 글 확인. 2024–2025년 공식 블로그를 바탕으로 정리했으며 <b>현재 설치 여부·정확한 모델은 현장 확인이 필요합니다.</b> 전체 보유 기구 목록은 아닙니다.</p><p>추가하면 <b>올데이 감일 · 기구명</b>으로 기록됩니다. 기존 짐의 중량·세팅과 구분하며, 현재 루틴은 직접 추가할 때만 바뀝니다.</p><details class="gym-notes"><summary>종목으로 추가하지 않은 기구 안내 3건</summary>'+notes.map(n=>'<article><h4>'+n.title+'</h4><span class="gym-status '+n.status+'">'+labels[n.status]+'</span><p>'+n.note+'</p>'+this.sourceHTML(n)+'</article>').join('')+'</details>';
