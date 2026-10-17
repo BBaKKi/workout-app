@@ -12,6 +12,11 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);
   await p.evaluate(()=>{ExLog.date=_todayKey();ExLog.syncPanel('Push A');ExLog.updateBar();ExLog.injectTargets();ExLog.refresh();});
   assert.equal(await p.locator('.brand-version').innerText(),'7.4.0');
+  // Simulate a standalone phone's top safe area; the sticky date row must clear it too.
+  await p.evaluate(()=>document.documentElement.style.setProperty('--safe-top','24px'));
+  assert.equal(await p.locator('.app-brand').evaluate(x=>getComputedStyle(x).paddingTop),'42px');
+  assert.equal(await p.locator('.log-date-bar').evaluate(x=>getComputedStyle(x).top),'24px');
+  await p.evaluate(()=>document.documentElement.style.removeProperty('--safe-top'));
   const name=await p.locator('.af-current .ex-nm').textContent();
   assert(name.startsWith('올데이 감일 · '));assert.equal(await p.evaluate(n=>ExLog.libByName(n).name,name),name);
   // Saving an actual set starts the dock, without turning the title into a new record key.
