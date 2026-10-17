@@ -70,26 +70,8 @@ function _brandOf(n){
 }
 const BRAND_LBL={hammer:'해머',watson:'왓슨',nautilus:'노틸러스'};
 // 같은 동작의 대체 기구 후보. 운동 기록·중량·자동 목표를 연결하거나 환산하지 않는다.
-const VARIANT_GROUP=[
-  ['Hammer ISO-인클라인 프레스','Watson 인클라인 프레스 머신'],
-  ['Hammer ISO-디클라인 프레스','Watson 디클라인 프레스 머신'],
-  ['Hammer ISO-프론트 풀다운','Watson 프론트 풀다운 (오버그립)','Watson 프론트 풀다운 (언더그립)','Nautilus 랫풀다운','랫풀다운'],
-  ['Hammer ISO-숄더 프레스','Watson 숄더 프레스','머신 숄더 프레스'],
-  ['Hammer ISO-레그 익스텐션','Nautilus 레그 익스텐션','레그 익스텐션'],
-  ['Hammer ISO-레그컬','Nautilus 라잉 레그컬','라잉 레그컬','레그컬'],
-  ['Hammer 슈퍼 플라이','Nautilus 펙덱 플라이','펙덱 플라이'],
-  ['Watson 45도 레그프레스','Nautilus 시티드 레그프레스'],
-  ['힙 어브덕션 (머신)','Booty Builder 스탠딩 힙 어브덕션'],
-  ['바벨 데드리프트','Nautilus 데드리프트 머신']
-];
-// 칩에 쓸 짧은 라벨 — 브랜드명만으로 구분이 안 되는 경우(왓슨 오버/언더)와 무브랜드 기본 기구를 위해.
-const VARIANT_LBL={
-  '랫풀다운':'케이블','레그 익스텐션':'기본','라잉 레그컬':'라잉','레그컬':'시티드',
-  '펙덱 플라이':'기본','머신 숄더 프레스':'기본',
-  'Watson 프론트 풀다운 (오버그립)':'왓슨 오버','Watson 프론트 풀다운 (언더그립)':'왓슨 언더',
-  '힙 어브덕션 (머신)':'시티드','Booty Builder 스탠딩 힙 어브덕션':'스탠딩','바벨 데드리프트':'바벨'
-};
-function _variantLbl(n){return VARIANT_LBL[n]||BRAND_LBL[_brandOf(n)]||n;}
+// Alternative-machine groups use this gym's explicit movement metadata only.
+function _variantLbl(n){return window.GymInventory.find(n)?.displayName||n;}
 // ── 동작 패턴 ───────────────────────────────────────────────────────────────
 // 부위 버킷은 너무 거칠다(등 36종·후면사슬 31종). 그대로 대체 후보를 뽑으면
 // 랫풀다운(수직 당김)의 대체로 T바 로우(수평 당김)·밴드 외회전이 올라온다.
@@ -123,14 +105,11 @@ function _movePat(n){
   for(const [re,lbl] of MOVE_PAT)if(re.test(n))return lbl;
   return null;
 }
-function _variantsOf(name){
-  for(const g of VARIANT_GROUP)if(g.includes(name))return g.filter(x=>x!==name);
-  return [];
+function _variantGroupOf(name){
+ const e=window.GymInventory.find(name);if(!e)return [];
+ return window.GymInventory.available.filter(x=>x.movementPattern===e.movementPattern&&x.vol.p===e.vol.p).map(x=>x.name);
 }
-function _variantGroupOf(name){ // 자기 자신을 포함한 전체 그룹 (브랜드 칩 렌더링용)
-  for(const g of VARIANT_GROUP)if(g.includes(name))return g;
-  return [];
-}
+function _variantsOf(name){return _variantGroupOf(name).filter(n=>n!==name);}
 const EFF_BUCKET_RE=[[/페이스풀|리어\s*델트|리버스\s*펙덱|벤트오버\s*래터럴/,'후면삼각']];
 function _effBucket(name,volBucket){
   for(const [re,b] of EFF_BUCKET_RE)if(re.test(name))return b;

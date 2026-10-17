@@ -19,7 +19,7 @@ const Backup={
     const el=document.getElementById('bk-check');if(!el)return;
     const out=[];
     try{
-      const data=(typeof ExLog!=='undefined'&&ExLog.data)||{};
+      const data=(typeof ExLog!=='undefined'&&ExLog.activeData)||{};
       const today=_todayKey();
       const future=Object.keys(data).filter(k=>k>today&&(data[k].exercises||[]).some(e=>(e.sets||[]).length));
       if(future.length)out.push('📅 미래 날짜 기록: '+future.join(', '));

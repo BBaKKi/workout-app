@@ -15,7 +15,7 @@
     },
     filterExercises(items) {
       const favorites = this.favorites(), recent = new Map();
-      for (const [date, session] of Object.entries(ExLog.data)) {
+      for (const [date, session] of Object.entries(ExLog.activeData)) {
         for (const e of session.exercises || []) if (e.sets.length && (!recent.has(e.name) || recent.get(e.name) < date)) recent.set(e.name, date);
       }
       const result = items.filter(e => (this.filter !== 'favorites' || favorites[e.name]) && (this.filter !== 'recent' || recent.has(e.name)) && (this.equipment === 'all' || e.brand === this.equipment || e.name.toLowerCase().includes(this.equipment.toLowerCase())));
@@ -26,6 +26,8 @@
       name = String(name || '').trim();
       const panel = el.closest('.day-panel');
       if (!panel || !name || name.length > 200 || /[<>"']/.test(name)) return;
+      if(!RecordModel.activeDate(ExLog.date))return;
+      if(!RecordModel.activeName(name))name='올데이 직접 · '+name;
       const day = ExLog.panelDayOf(panel);
       if (AppFeatures.routine(day).some(r => r.name === name)) { AppFeatures.announce('이미 목록에 있는 운동이에요.'); return; }
       this.change = {action:'add', date:ExLog.date, day, name};
@@ -50,7 +52,7 @@
     },
     async applyChange(permanent) {
       const c = this.change;
-      if (!c || c.date !== ExLog.date) { $('#routine-change').close(); return; }
+      if (!c || c.date !== ExLog.date || !RecordModel.activeRecord(c.date,c.name)) { $('#routine-change').close(); return; }
       const snapshot = WorkoutTools.capture(c.day), plan = ExLog.planFor(c.day);
       if (c.action === 'add') {
         const existing = snapshot.rows.find(r => r.name === c.name);
@@ -72,7 +74,7 @@
           else plan.add = (plan.add || []).filter(n => n !== c.original);
         }
       }
-      snapshot.rows.sort((a,b) => a.weight-b.weight || a.index-b.index);
+      snapshot.rows.sort((a,b) => a.index-b.index);
       WorkoutTools.touch(c.date);
       if (permanent) await ExLog.savePlan();
       $('#routine-change').close();
@@ -82,14 +84,14 @@
     },
     restoreSkipped(original) {
       const day = AppFeatures.activeDay(), row = ExLog.session().routineSnapshots?.[day]?.rows.find(r => r.original === original);
-      if (!row) return;
+      if (!row||!RecordModel.activeRecord(ExLog.date,row.name)) return;
       row.skipped = false; WorkoutTools.touch(ExLog.date); AppFeatures.selected[day] = row.name;
       ExLog.refresh(); ExLog.injectTargets();
     },
     refresh() {
       if (!this.ready) return;
       const day = AppFeatures.activeDay();
-      const skipped = (ExLog.session().routineSnapshots?.[day]?.rows || []).filter(r => r.skipped);
+      const skipped = (ExLog.session().routineSnapshots?.[day]?.rows || []).filter(r => r.skipped&&RecordModel.activeRecord(ExLog.date,r.name));
       const box = $('#skipped-exercises');
       box.hidden = !skipped.length;
       box.replaceChildren();
@@ -148,7 +150,7 @@
       const context=document.createElement('details');context.id='session-context';context.className='af-card';
       context.innerHTML='<summary>컨디션·수면·메모</summary><div class="af-fields"><label>컨디션<select id="context-rate"><option value="">미입력</option><option value="1">1 · 매우 낮음</option><option value="2">2 · 낮음</option><option value="3">3 · 보통</option><option value="4">4 · 좋음</option><option value="5">5 · 매우 좋음</option></select></label><label>수면 (시간)<input id="context-sleep" type="number" inputmode="decimal" min="0" max="24" step="0.5"></label></div><label>운동 메모<input id="context-note" maxlength="200" type="text" placeholder="오늘 운동에서 기억할 점"></label><p>이 날짜의 기록과 함께 동기화됩니다.</p>';
       $('#weekly-report').before(context);
-      $('#context-rate').onchange=e=>{if(e.target.value)ExLog.setCond(+e.target.value);else{const s=ExLog.session();s.cond||={};delete s.cond.rate;ExLog.data[ExLog.date]=s;WorkoutTools.touch(ExLog.date);}this.refresh();};
+      $('#context-rate').onchange=e=>{if(!RecordModel.activeDate(ExLog.date))return;if(e.target.value)ExLog.setCond(+e.target.value);else{const s=ExLog.session();s.cond||={};delete s.cond.rate;ExLog.data[ExLog.date]=s;WorkoutTools.touch(ExLog.date);}this.refresh();};
       $('#context-sleep').onchange=e=>{ExLog.setSleep(e.target.value);this.refresh();};$('#context-note').onchange=e=>ExLog.setNote(e.target.value);
       if (WorkoutTools.offeredResume) {
         const last=WorkoutTools.offeredResume,offer=document.createElement('div');offer.id='resume-offer';offer.className='af-card';

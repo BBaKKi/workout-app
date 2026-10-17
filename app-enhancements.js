@@ -22,16 +22,17 @@
    const e=ExLog.libByName(original), m=String(e?.sets||'').match(/(\d+)\s*[×x]\s*(\d+)(?:\s*[–~\-]\s*(\d+))?/);
    return {sets:m?+m[1]:3,min:m?+m[2]:8,max:m?+(m[3]||m[2]):12};
   },
-  routine(day,date=ExLog.date){const snap=ExLog.data[date]?.routineSnapshots?.[day];return snap?clone(snap.rows).filter(r=>!r.skipped):this.templateRoutine(day,date);},
+  routine(day,date=ExLog.date){const snap=ExLog.activeData[date]?.routineSnapshots?.[day];return snap?clone(snap.rows).filter(r=>!r.skipped):this.templateRoutine(day,date);},
   templateRoutine(day,date=ExLog.date){
-   const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercisesFor(day,date)||[], names=base.concat((p.add||[]).filter(n=>!base.includes(n))), seen=new Set();
+   if(!RecordModel.activeDate(date))return [];
+   const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercisesFor(day,date)||[], names=base.concat((p.add||[]).filter(n=>RecordModel.activeName(n)&&!base.includes(n))), seen=new Set();
    return names.map((original,index)=>{
-    const name=(p.swap||{})[original]||original;if((p.rm||[]).includes(original)||seen.has(name))return null;seen.add(name);
+    const candidate=(p.swap||{})[original],name=RecordModel.activeName(candidate)?candidate:original;if((p.rm||[]).includes(original)||seen.has(name))return null;seen.add(name);
     const cfg=p.config?.[original]||p.config?.[name]||{},d=this.defaults(day,original,date);
     // Old per-day config.weight values were manual slot numbers; ignore them without deleting data.
     ['sets','min','max'].forEach(k=>{if(Number.isFinite(cfg[k]))d[k]=cfg[k];});
     return {original,name,index,...d,...this.priority(name),baseSets:d.sets,sets:TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.phase(date).limited?Math.min(2,d.sets):d.sets};
-   }).filter(Boolean).sort((a,b)=>a.weight-b.weight||a.index-b.index);
+   }).filter(Boolean);
   },
   prescription(name,day,date=ExLog.date){
    const row=this.routine(day,date).find(x=>x.name===name)||this.routine(day,date).find(x=>this.canonical(x.name)===this.canonical(name));
@@ -81,7 +82,7 @@
    if(!this.ready)return;document.body.classList.toggle('af-focus',this.focus);$('#focus-toggle').textContent=this.focus?'전체 목록':'한 종목씩';$('#focus-toggle').setAttribute('aria-pressed',String(this.focus));
    const day=this.activeDay(),rows=this.routine(day),key=day+'|'+ExLog.date;
    if(this.focusDate!==key){this.focusDate=key;this.selected[day]=null;}
-   if(!rows.some(r=>r.name===this.selected[day]))this.selected[day]=rows.find(r=>{const e=(ExLog.data[ExLog.date]?.exercises||[]).find(e=>e.name===r.name);return (e?.sets||[]).filter(_isWorkSet).length<r.sets;})?.name||rows[0]?.name;
+   if(!rows.some(r=>r.name===this.selected[day]))this.selected[day]=rows.find(r=>{const e=(ExLog.activeData[ExLog.date]?.exercises||[]).find(e=>e.name===r.name);return (e?.sets||[]).filter(_isWorkSet).length<r.sets;})?.name||rows[0]?.name;
    const at=rows.findIndex(r=>r.name===this.selected[day]), select=$('#focus-exercise');
    select.innerHTML=rows.map((r,i)=>'<option value="'+i+'">'+(i+1)+' / '+rows.length+' · '+esc(ExLog.libByName(r.name)?.displayName||r.name)+'</option>').join('');select.value=String(at);select.disabled=!rows.length;
    $('#focus-prev').disabled=at<=0;$('#focus-next').disabled=at<0||at>=rows.length-1;
@@ -116,20 +117,21 @@
    const dates=RecordModel.weekDates(date),start=dates[0],end=dates[6],planned=new Map(),actual=new Map(),validDates=new Set();
    let sessions=0,unknown=0,reconstructed=0,unplannedSets=0,matched=0;
    for(const d of dates){
-    const snaps=Object.values(ExLog.data[d]?.routineSnapshots||{});
-    const day=ExLog.data[d]?.day||TRAINING_PLAN.schedule(d);
+    if(!RecordModel.activeDate(d))continue;
+    const snaps=Object.values(ExLog.activeData[d]?.routineSnapshots||{});
+    const day=ExLog.activeData[d]?.day||TRAINING_PLAN.schedule(d);
     if(!snaps.length&&(d<TRAINING_PLAN.start||d>TRAINING_PLAN.end||!TRAINING_PLAN.cycle.includes(day)))continue;
     if(d<_todayKey()&&!snaps.length){unknown++;continue;}
     validDates.add(d);sessions++;reconstructed+=snaps.filter(x=>x.source==='reconstructed').length;
     const dayRows=snaps.length?snaps.flatMap(x=>x.rows).filter(r=>!r.skipped):this.routine(day,d);
     const dayPlan=new Map();dayRows.forEach(row=>dayPlan.set(row.name,(dayPlan.get(row.name)||0)+row.sets));
     for(const [name,count] of dayPlan){const row=planned.get(name)||{name,planned:0};row.planned+=count;planned.set(name,row);}
-    if(d<=_todayKey())for(const e of ExLog.data[d]?.exercises||[]){
+    if(d<=_todayKey())for(const e of ExLog.activeData[d]?.exercises||[]){
      const n=e.sets.filter(_isWorkSet).length;actual.set(e.name,(actual.get(e.name)||0)+n);
      const target=dayPlan.get(e.name)||0;matched+=Math.min(n,target);dayPlan.set(e.name,Math.max(0,target-n));
     }
    }
-   for(const d of dates)if(d<=_todayKey()&&!validDates.has(d))for(const e of ExLog.data[d]?.exercises||[])unplannedSets+=e.sets.filter(_isWorkSet).length;
+   for(const d of dates)if(d<=_todayKey()&&!validDates.has(d))for(const e of ExLog.activeData[d]?.exercises||[])unplannedSets+=e.sets.filter(_isWorkSet).length;
    const rows=[...planned].map(([name,v])=>({...v,actual:actual.get(name)||0}));
    const extra=[...actual].filter(([name])=>!planned.has(name)).reduce((n,[,v])=>n+v,0);
    return {start,end,sessions,unknown,reconstructed,unplannedSets,rows,extra,total:rows.reduce((n,x)=>n+x.planned,0),done:rows.reduce((n,x)=>n+x.actual,0),matched};
@@ -189,12 +191,12 @@
    const weekly=document.createElement('section');weekly.id='weekly-plan';weekly.className='af-card';$('.tab-p .plan-wrap').prepend(weekly);
    const settings=document.createElement('section');settings.className='af-card';settings.innerHTML='<details><summary>기기 간 설정 동기화</summary><p id="settings-message" role="status"></p><button id="settings-sync-btn" type="button" onclick="AppFeatures.syncSettings()">설정 동기화</button><div id="settings-conflict" hidden><div id="settings-diff"></div><p>선택한 설정 전체를 적용해요. 시트 설정을 불러오기 전 현재 앱의 백업을 보관합니다.</p><div class="af-tool-row"><button id="settings-local" type="button" onclick="AppFeatures.syncSettings(\'local\')">이 기기 설정 사용</button><button id="settings-cloud" type="button" onclick="AppFeatures.syncSettings(\'cloud\')">시트 설정 불러오기</button></div></div></details>';
    weight.insertAdjacentElement('afterend',settings);
-   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">루틴 편집</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>주요 운동 → 보조 운동 → 마무리 순으로 자동 정렬해요. 운동별 세트와 반복 목표를 조절하세요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
+   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">루틴 편집</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>요일별 운동 순서를 유지해요. 운동별 세트와 반복 목표를 조절하세요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
    document.body.appendChild(dialog);
    $('#routine-edit-form').addEventListener('submit',e=>this.saveEditor(e));$('#edit-day').addEventListener('change',e=>this.openEditor(e.target.value));$('#weight-form').addEventListener('submit',e=>this.saveWeight(e));
    $('#weight-history').addEventListener('click',e=>{const edit=e.target.closest('[data-edit-weight]'),del=e.target.closest('[data-delete-weight]');if(edit){const r=this.weights[edit.dataset.editWeight];$('#weight-date').value=r.date;$('#weight-value').value=r.wt;$('#weight-value').focus();}if(del)this.removeWeight(del.dataset.deleteWeight);});
    $('#focus-exercise').addEventListener('change',e=>{const day=this.activeDay();this.selected[day]=this.routine(day)[+e.target.value]?.name;this.renderFocus();});
-   document.querySelectorAll('input[name="day"]').forEach(r=>r.addEventListener('change',()=>this.renderFocus()));
+   document.querySelectorAll('input[name="day"]').forEach(r=>r.addEventListener('change',()=>ExLog.switchDay(this.activeDay())));
    document.querySelectorAll('.day-sel label').forEach(r=>r.addEventListener('click',()=>setTimeout(()=>this.renderFocus(),0)));
    this.ready=true;this.weights={...this.weights,...read('daily_weight_dirty',{})};document.querySelectorAll('.day-panel').forEach(p=>this.sort(p));this.renderFocus();this.renderWeights();this.renderWeekly();this.renderSettings();
   }
@@ -207,7 +209,6 @@
  const renderLibrary=LibApp.render;LibApp.render=function(...args){renderLibrary.apply(this,args);A.decorateLibrary();};
  const buildLibrary=LibApp._build;LibApp._build=function(d){buildLibrary.call(this,d);A.decorateLibraryDetail(d);};
 
- const selectRoutine=ExLog.selectRoutine;ExLog.selectRoutine=async function(mode){await window.storage.set('routine_profile',mode==='legacy'?'legacy':'current');return selectRoutine.call(this,mode);};
  // Local preference edits trigger a retry. Snapshot comparison protects changes made during a request.
  const set=window.storage.set.bind(window.storage);window.storage.set=async(k,v)=>{const out=await set(k,v);if(PREF_KEYS.includes(k)&&A.ready&&!A.applying){A.settingsMessage='설정 변경됨 · 전송 대기';A.renderSettings();ExLog._syncSoon();ExLog.renderSyncStatus();}return out;};
  Backup.KEYS.push('daily_weight_v1','daily_weight_dirty','focus_mode');

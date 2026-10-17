@@ -7,6 +7,27 @@
     try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (_) { return fallback; }
   };
   const R = window.RecordModel = {
+    activeName(name) {
+      return !!window.GymInventory?.find(name) || (typeof name==='string' && name.startsWith('올데이 직접 · ') && name.length>9);
+    },
+    activeDate(date) { return typeof date==='string' && date>=TRAINING_PLAN.equipmentDate; },
+    activeRecord(date,name) { return this.activeDate(date) && this.activeName(name); },
+    activeData(data) {
+      const result={};
+      for(const [date,s] of Object.entries(data||{})){
+        if(!this.activeDate(date))continue;
+        const exercises=(s.exercises||[]).filter(e=>this.activeName(e.name));
+        const routineSnapshots={};
+        for(const [day,snap] of Object.entries(s.routineSnapshots||{})){
+          const rows=(snap.rows||[]).filter(r=>this.activeName(r.name));
+          if(rows.length || !snap.rows?.length)routineSnapshots[day]={...snap,rows};
+        }
+        // An old-gym-only session must not influence recovery or scheduling either.
+        if((s.exercises||[]).length && !exercises.length && !Object.keys(routineSnapshots).length)continue;
+        result[date]={...s,exercises,routineSnapshots};
+      }
+      return result;
+    },
     shift(date, days) {
       const d = new Date(date + 'T12:00:00');
       d.setDate(d.getDate() + days);
@@ -19,7 +40,8 @@
     },
     plannedDays(date) {
       return this.weekDates(date).filter(d => {
-        if (Object.values(ExLog.data[d]?.routineSnapshots || {}).some(s => s.rows.some(r => !r.skipped))) return true;
+        if (!this.activeDate(d)) return false;
+        if (Object.values(ExLog.activeData[d]?.routineSnapshots || {}).some(s => s.rows.some(r => !r.skipped))) return true;
         if (d < TRAINING_PLAN.start || d > TRAINING_PLAN.end) return false;
         return TRAINING_PLAN.cycle.includes(TRAINING_PLAN.schedule(d));
       }).length;

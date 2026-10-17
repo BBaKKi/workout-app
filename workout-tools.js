@@ -11,12 +11,18 @@
   meta(s){return {snapshots:s.routineSnapshots||{},overrides:s.dayOverrides||{},context:{cond:s.cond||{},note:s.note||''}};},
   touch(date){const q=read('session_dirty_v1',{});q[date]=true;DataSync.noteLocal('session',date);write('session_dirty_v1',q);ExLog.markDirty(date);ExLog.save().catch(e=>SafeStore.report(e));ExLog._syncSoon();},
   capture(day=AppFeatures.activeDay()){
+   if(!RecordModel.activeDate(ExLog.date))return null;
    const s=ExLog.session();s.routineSnapshots||={};
    if(!s.routineSnapshots[day]){
     s.routineSnapshots[day]={day,capturedAt:new Date().toISOString(),source:ExLog.date===_todayKey()?'recorded':'reconstructed',rows:copy(AppFeatures.routine(day))};
     ExLog.data[ExLog.date]=s;this.touch(ExLog.date);
    }
-   return s.routineSnapshots[day];
+   const snap=s.routineSnapshots[day];
+   if(snap.rows.length && !snap.rows.some(r=>RecordModel.activeName(r.name))){
+    // Keep the old rows intact for reference; append the new gym plan once.
+    snap.rows.push(...copy(this.template(day)));this.touch(ExLog.date);
+   }
+   return snap;
   },
   syncPanels(){
    if(!this.ready)return;
@@ -44,7 +50,7 @@
    const c=this.swap;if(!c||c.date!==ExLog.date){$('#swap-scope').close();return;}
    if(AppFeatures.routine(c.day).some(r=>r.name===c.name&&r.original!==c.original)){$('#swap-error').textContent='이미 이 날짜의 루틴에 있는 운동입니다.';return;}
    const snap=this.capture(c.day),s=ExLog.session();s.dayOverrides||={};s.dayOverrides[c.day]||={};s.dayOverrides[c.day][c.original]=c.name;
-   snap.rows=snap.rows.map(r=>r.original===c.original?{...r,name:c.name,...AppFeatures.priority(c.name)}:r).sort((a,b)=>a.weight-b.weight||a.index-b.index);
+   snap.rows=snap.rows.map(r=>r.original===c.original?{...r,name:c.name,...AppFeatures.priority(c.name)}:r).sort((a,b)=>a.index-b.index);
    this.touch(c.date);
    if(scope==='permanent'){const p=ExLog.planFor(c.day);(p.swap||={})[c.original]=c.name;await ExLog.savePlan();}
    AppFeatures.selected[c.day]=c.name;$('#swap-scope').close();ExLog.refresh();ExLog.injectTargets();this.remember();
@@ -55,7 +61,7 @@
    const s=ExLog.session(),snap=s.routineSnapshots?.[c.day];if(!snap)return;
    const template=this.template(c.day,c.date).find(r=>r.original===c.original);if(!template)return;
    if(snap.rows.some(r=>r.original!==c.original&&r.name===template.name)){$('#swap-error').textContent='기본 운동이 이미 목록에 있어 복원할 수 없어요.';return;}
-   snap.rows=snap.rows.map(r=>r.original===c.original?copy(template):r).sort((a,b)=>a.weight-b.weight||a.index-b.index);
+   snap.rows=snap.rows.map(r=>r.original===c.original?copy(template):r).sort((a,b)=>a.index-b.index);
    delete s.dayOverrides?.[c.day]?.[c.original];this.touch(c.date);$('#swap-scope').close();ExLog.refresh();ExLog.injectTargets();
   },
   sets(date,name){return ExLog.data[date]?.exercises?.find(e=>e.name===name)?.sets||[];},
@@ -64,17 +70,17 @@
    this.undo.push({date,name,before,after,label});this.undo=this.undo.slice(-20);write('workout_undo_v1',this.undo);this.renderUndo();
   },
   undoLast(){
-   const u=this.undo[this.undo.length-1];if(!u)return;
+   const u=this.undo[this.undo.length-1];if(!u||!RecordModel.activeRecord(u.date,u.name))return;
    if(stable(this.sets(u.date,u.name))!==stable(u.after)){AppFeatures.announce('이 운동 기록이 이후에 변경되어 되돌리지 않았어요. 기록을 확인해 주세요.');return;}
    const s=ExLog.data[u.date]||{day:ExLog.dayType(u.date),exercises:[]};let e=s.exercises.find(x=>x.name===u.name);
    if(!e){e={name:u.name,sets:[]};s.exercises.push(e);}e.sets=copy(u.before);ExLog.data[u.date]=s;
    ExLog.markDirty(u.date);ExLog._dirty.add(u.date);DataSync.noteLocal('workout',u.date);ExLog._saveDirty();ExLog.save().catch(e=>SafeStore.report(e));
    this.undo.pop();write('workout_undo_v1',this.undo);ExLog.stopRest();ExLog.refresh();ExLog._syncSoon();this.renderUndo();AppFeatures.announce(u.name+' · '+u.label+'을 되돌렸어요.');
   },
-  renderUndo(){const b=$('#undo-set');if(!b)return;const u=this.undo[this.undo.length-1];b.disabled=!u;b.textContent=u?'↶ '+u.label+' 되돌리기':'↶ 되돌릴 기록 없음';b.title=u?u.date+' · '+u.name:'';},
+  renderUndo(){const b=$('#undo-set');if(!b)return;const u=this.undo[this.undo.length-1];const usable=u&&RecordModel.activeRecord(u.date,u.name);b.disabled=!usable;b.textContent=usable?'↶ '+u.label+' 되돌리기':'↶ 되돌릴 기록 없음';b.title=u?u.date+' · '+u.name:'';},
   draftKey(log,date=ExLog.date){return json([date,ExLog.panelDayOf(log.closest('.day-panel')),log.dataset.exname]);},
   saveDraft(log,date=ExLog.date){
-   if(!this.ready||this.restoring||!log)return;const inp=log.querySelector('.ex-log-input');if(!inp||inp.style.display==='none')return;
+   if(!this.ready||this.restoring||!log||!RecordModel.activeRecord(date,log.dataset.exname))return;const inp=log.querySelector('.ex-log-input');if(!inp||inp.style.display==='none')return;
    const i=log.dataset.editIdx,st=i!==''&&i!=null?this.sets(date,log.dataset.exname)[+i]:null,previous=this.drafts[this.draftKey(log,date)];
    this.drafts[this.draftKey(log,date)]={kg:inp.querySelector('.wl-kg-input').value,reps:inp.querySelector('.wl-rp-input').value,rpe:inp.querySelector('.wl-rpe-sel')?.value||'',warmup:!!inp.querySelector('.wl-wu-btn.on'),pain:!!inp.querySelector('.wl-pain-btn.on'),editId:previous?.editId||(st?st._id:null),baseline:previous?.baseline||(st?stable(st):null),updatedAt:Date.now()};
    const keys=Object.keys(this.drafts).sort((a,b)=>this.drafts[b].updatedAt-this.drafts[a].updatedAt);keys.slice(40).forEach(k=>delete this.drafts[k]);write('workout_drafts_v1',this.drafts);this.remember();
@@ -83,7 +89,7 @@
   restoreDrafts(){
    this.restoring=true;
    document.querySelectorAll('.day-panel .ex-log').forEach(log=>{
-    const d=this.drafts[this.draftKey(log)];if(!d)return;
+    const d=this.drafts[this.draftKey(log)];if(!d||!RecordModel.activeRecord(ExLog.date,log.dataset.exname))return;
     const inp=log.querySelector('.ex-log-input');if(inp.style.display!=='none')return;
     const sets=this.sets(ExLog.date,log.dataset.exname),i=d.editId?sets.findIndex(s=>s._id===d.editId):-1;
     if(d.editId&&(i<0||stable(sets[i])!==d.baseline)){AppFeatures.announce('임시 수정 중 원본 세트가 변경됐어요. 현재 기록을 확인하고 다시 수정하세요.');return;}
@@ -100,7 +106,7 @@
    const inp=log.querySelector('.ex-log-input'),raw=inp.querySelector('.wl-kg-input').value,rraw=inp.querySelector('.wl-rp-input').value,w=raw===''?0:Number(raw),r=Number(rraw);
    if(!Number.isFinite(w)||w<0||w>100000||!rraw||!Number.isInteger(r)||r<=0||r>100000){AppFeatures.announce('중량은 0 이상, 반복·시간·거리는 1 이상의 정수로 입력하세요.');return false;}
    const name=log.dataset.exname,type=ExLog.loadTypeOf(name),total=w+ExLog.baseOf(name),wu=!!inp.querySelector('.wl-wu-btn.on');
-   const prior=Object.entries(ExLog.data).filter(([d])=>d<=ExLog.date).sort((a,b)=>b[0].localeCompare(a[0])).flatMap(([,s])=>(s.exercises||[]).filter(e=>e.name===name).flatMap(e=>e.sets.filter(_isWorkSet))).slice(0,9);
+   const prior=Object.entries(ExLog.activeData).filter(([d])=>d<=ExLog.date).sort((a,b)=>b[0].localeCompare(a[0])).flatMap(([,s])=>(s.exercises||[]).filter(e=>e.name===name).flatMap(e=>e.sets.filter(_isWorkSet))).slice(0,9);
    const median=key=>{const a=prior.map(s=>s[key]).filter(n=>Number.isFinite(n)&&n>0).sort((a,b)=>a-b);return a.length?a[Math.floor(a.length/2)]:0;};const pw=median('weight'),pr=median('reps'),issues=[];
    if(total>500)issues.push('총 중량 '+total+'kg');
    if(r>(type==='time'||type==='distance'?3600:100))issues.push(r+(type==='time'?'초':type==='distance'?'m':'회'));
@@ -118,9 +124,9 @@
    const guide=document.createElement('details');guide.className='af-card';guide.id='exercise-guide';guide.innerHTML='<summary>운동 설명 읽는 법 · 공통 호흡·기록 기준</summary><p>'+esc(EXERCISE_GUIDE.general)+'</p><p>'+esc(EXERCISE_GUIDE.breath)+'</p><p>'+esc(EXERCISE_GUIDE.record)+'</p><p>핵심 요령 3개를 먼저 확인하고, 각 운동의 상세 가이드에서 몸의 위치와 실수 교정법을 읽어 보세요.</p><details><summary>검토 근거</summary>'+Object.entries(EXERCISE_GUIDE.sources).map(([label,url])=>'<p><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a></p>').join('')+'</details>';document.getElementById('lib-list').before(guide);
    this.ready=true;this.restoring=true;const last=read('workout_resume_v1',null);
    if(last&&/^\d{4}-\d{2}-\d{2}$/.test(last.date)&&last.date===_todayKey()&&TRAINING_PLAN.cycle.includes(last.day)){ExLog.date=last.date;ExLog.updateBar();ExLog.syncPanel(last.day);AppFeatures.selected=last.selected||{};AppFeatures.focusDate=last.day+'|'+last.date;}
-   this.offeredResume=last&&last.date<_todayKey()&&Object.keys(this.drafts).some(k=>{try{return JSON.parse(k)[0]===last.date;}catch(_){return false;}})?last:null;
+   this.offeredResume=last&&RecordModel.activeDate(last.date)&&last.date<_todayKey()&&Object.keys(this.drafts).some(k=>{try{return JSON.parse(k)[0]===last.date;}catch(_){return false;}})?last:null;
    ExLog.refresh();ExLog.injectTargets();this.restoring=false;this.restoreDrafts();
-   if(last?.rest&&typeof last.rest.name==='string'&&Number.isFinite(last.rest.total)&&last.rest.total>0&&last.date===_todayKey()&&last.rest.endAt>Date.now()&&last.rest.endAt<Date.now()+86400000){ExLog.rest={...last.rest,int:setInterval(()=>ExLog.tickRest(),500),hint:'',notified:false};ExLog.tickRest();}
+   if(last?.rest&&RecordModel.activeRecord(last.date,last.rest.name)&&typeof last.rest.name==='string'&&Number.isFinite(last.rest.total)&&last.rest.total>0&&last.date===_todayKey()&&last.rest.endAt>Date.now()&&last.rest.endAt<Date.now()+86400000){ExLog.rest={...last.rest,int:setInterval(()=>ExLog.tickRest(),500),hint:'',notified:false};ExLog.tickRest();}
    this.renderUndo();
    document.addEventListener('input',e=>this.saveDraft(e.target.closest('.ex-log')));document.addEventListener('change',e=>this.saveDraft(e.target.closest('.ex-log')));
    document.addEventListener('click',e=>{if(e.target.closest('.wl-wu-btn,.wl-pain-btn,.wl-rep-chip'))this.saveDraft(e.target.closest('.ex-log'));if(e.target.closest('.day-sel,#focus-exercise,#focus-prev,#focus-next'))this.remember();});
@@ -131,8 +137,8 @@
  T.template=AppFeatures.templateRoutine.bind(AppFeatures);
  ExLog.swapEx=(btn,name)=>T.chooseSwap(btn,name);ExLog.switchBrand=(btn,name)=>T.chooseSwap(btn,name);
  const cancel=ExLog.cancelSet;ExLog.cancelSet=function(el){T.clearDraft(el.closest('.ex-log'));return cancel.call(this,el);};
- for(const [method,label] of [['confirmSet','세트 입력·수정'],['deleteSet','세트 삭제'],['togglePainSet','통증 표시']]){const original=ExLog[method];ExLog[method]=function(el,...args){const log=el.closest('.ex-log'),date=this.date,name=log?.dataset.exname;if(!log||!T.editStillCurrent(log))return;if(method==='confirmSet'&&!T.validInput(log))return;const before=copy(T.sets(date,name));if(method==='confirmSet')T.capture(ExLog.panelDayOf(log.closest('.day-panel')));const result=original.call(this,el,...args);T.recordUndo(date,name,before,label);if(method==='togglePainSet'&&stable(before)!==stable(T.sets(date,name))){T.clearDraft(log);T.saveDraft(log);}return result;};}
- for(const method of ['startSet','editSet']){const original=ExLog[method];ExLog[method]=function(el,...args){if(!T.restoring)T.clearDraft(el.closest('.ex-log'));const r=original.call(this,el,...args);T.saveDraft(el.closest('.ex-log'));if(window.InterfaceTools?.ready)InterfaceTools.refresh();return r;};}
+ for(const [method,label] of [['confirmSet','세트 입력·수정'],['deleteSet','세트 삭제'],['togglePainSet','통증 표시']]){const original=ExLog[method];ExLog[method]=function(el,...args){const log=el.closest('.ex-log'),date=this.date,name=log?.dataset.exname;if(!log||!RecordModel.activeRecord(date,name)||!T.editStillCurrent(log))return;if(method==='confirmSet'&&!T.validInput(log))return;const before=copy(T.sets(date,name));if(method==='confirmSet')T.capture(ExLog.panelDayOf(log.closest('.day-panel')));const result=original.call(this,el,...args);T.recordUndo(date,name,before,label);if(method==='togglePainSet'&&stable(before)!==stable(T.sets(date,name))){T.clearDraft(log);T.saveDraft(log);}return result;};}
+ for(const method of ['startSet','editSet']){const original=ExLog[method];ExLog[method]=function(el,...args){if(!RecordModel.activeRecord(this.date,el.closest('.ex-log')?.dataset.exname))return;if(!T.restoring)T.clearDraft(el.closest('.ex-log'));const r=original.call(this,el,...args);T.saveDraft(el.closest('.ex-log'));if(window.InterfaceTools?.ready)InterfaceTools.refresh();if(!T.restoring)el.closest('.ex-log')?.querySelector(method==='startSet'?'.wl-kg-input':'.wl-rp-input')?.focus();return r;};}
  for(const method of ['startRest','stopRest','addRest']){const original=ExLog[method];ExLog[method]=function(...args){const r=original.apply(this,args);T.remember();return r;};}
  const focus=AppFeatures.renderFocus;AppFeatures.renderFocus=function(){const r=focus.call(this);T.remember();return r;};
  ExLog.addEx=(name,el)=>InterfaceTools.chooseAdd(name,el);

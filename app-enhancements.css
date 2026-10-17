@@ -56,7 +56,7 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 #af-focus-nav {display:none;grid-template-columns:42px minmax(0,1fr) 42px;gap:8px;margin-top:10px}
 #af-focus-nav select {min-width:0;width:100%;height:46px;font-size:13px;font-weight:650;border:1px solid var(--ui-border);border-radius:9px;padding:9px;background:#fff}
 #af-focus-nav button {font-size:22px;padding:0;background:#fff}.af-focus #af-focus-nav {display:grid}
-.af-focus .tab-w :is(.motiv-bar,.sess-sum,.block-banner,#log-brief,.day-reco,.ex-tier,.hinfo,.wu-card,.done-banner,.day-sel,.block-chip,.brief-card,.note-row,.day-header,.ex-stage) {display:none!important}
+.af-focus .tab-w :is(.motiv-bar,.sess-sum,.block-banner,#log-brief,.day-reco,.ex-tier,.hinfo,.wu-card,.done-banner,.block-chip,.brief-card,.note-row,.day-header,.ex-stage) {display:none!important}
 .af-focus .tab-w .ex-wrap:not(.af-current) {display:none!important}.af-focus .routine-top,.af-focus #routine-brief :is(small,span) {display:none}.af-focus .day-panel>.cond-row {display:none!important}
 .af-focus #routine-brief {padding:0;background:transparent;color:var(--ui-muted);border-radius:0}.af-focus #routine-brief b {font-size:12px;font-weight:500}.af-focus .session-heading {margin-bottom:10px}
 .ex-list {padding:0;gap:14px}.ex-card {background:#fff;border:1px solid var(--ui-border);border-radius:var(--radius);box-shadow:0 4px 16px #17243b04;overflow:hidden}
@@ -207,3 +207,17 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
  .af-card,.plan-card {padding:16px}.af-weight-form {grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.af-weight-form button {grid-column:1/-1}.coach-group-body {padding-left:0}.rest-mini {right:12px;max-width:calc(100vw - 24px)}
 }
 @media(prefers-reduced-motion:reduce) {* {scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* All Day 7.5: visible day allocation and a separate read-only reference. */
+.routine-label {font-size:12px;font-weight:700;color:var(--ui-muted)}
+.day-sel {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
+.day-lbl {min-width:0;width:auto}
+#routine-overview {margin:10px 0 14px} #routine-overview>summary,#reference-history>summary {display:flex;gap:10px;align-items:center;font-weight:700;cursor:pointer}
+#routine-overview summary small,#reference-history summary small {font-weight:500;color:var(--ui-muted);font-size:11px}
+#routine-week-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+#routine-week-grid button {text-align:left;padding:12px;background:var(--ui-surface);border:1px solid var(--ui-border);border-radius:10px;min-width:0}
+#routine-week-grid :is(b,span,small) {display:block;overflow-wrap:anywhere} #routine-week-grid b {font-size:13px;color:var(--ui-text)} #routine-week-grid span {font-size:12px;margin:7px 0;color:var(--ui-muted)} #routine-week-grid small {color:var(--ui-accent)}
+#reference-history {scroll-margin-top:20px} .reference-filters {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.reference-filters label:first-child {grid-column:1/-1}.reference-filters label {display:grid;gap:6px;min-width:0;font-size:12px;color:var(--ui-muted)}.reference-filters input {width:100%;box-sizing:border-box;min-width:0;padding:10px;border:1px solid var(--ui-border);border-radius:8px;font:inherit;color:var(--ui-text);background:var(--ui-surface)}
+.reference-day {border-top:1px solid var(--ui-border);padding:12px 0}.reference-day>summary {display:grid;grid-template-columns:1fr auto;gap:4px 8px;cursor:pointer;font-size:12px}.reference-day time {font-size:14px;font-weight:700}.reference-day>summary span {grid-row:2;color:var(--ui-muted)}.reference-day>summary small {grid-column:2;grid-row:1/3;align-self:center;color:var(--ui-muted)}.reference-body {padding-top:8px;overflow-wrap:anywhere}.reference-body section {padding:10px 12px;background:var(--ui-canvas);border-radius:8px;margin:8px 0}.reference-body h4 {font-size:13px;margin:0 0 8px}.reference-body ol,.reference-body ul {font-size:12px;line-height:1.8;padding-left:20px;margin:0}.reference-empty {padding:16px 0;color:var(--ui-muted)}
+.viewing-reference .tab-w :is(.day-panel,.af-tools,.focus-toolbar,#focus-toolbar,#session-context,#weekly-report,#routine-overview,.day-sel,#routine-brief,#log-type-pick,#log-progress,#log-brief,#sess-sum,#motiv-bar,#skipped-exercises,.af-focusbar,#focus-bar) {display:none!important}
+#archived-date[hidden] {display:none!important}
+@media(min-width:760px){.day-sel{grid-template-columns:repeat(6,minmax(0,1fr))}#routine-week-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}

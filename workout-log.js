@@ -12,16 +12,11 @@ const ExLog={
     const select=document.getElementById('routine-profile');if(select)select.value=TRAINING_PLAN.mode;
     this.renderRoutineUI();
   },
-  async selectRoutine(mode){
-    await this.save();await this.savePlan();
-    localStorage.setItem('routine_profile',mode==='legacy'?'legacy':'current');location.reload();
-  },
   renderRoutineUI(){
     const el=document.getElementById('routine-brief');if(!el)return;
     const heading=document.querySelector('.session-heading h1');if(heading)heading.textContent=this.date===_todayKey()?'오늘의 운동':'날짜별 운동';
-    const ph=TRAINING_PLAN.phase(this.date),planned=TRAINING_PLAN.schedule(this.date),legacy=TRAINING_PLAN.mode==='legacy';
-    el.innerHTML='<b>'+(legacy?'기존 편집 루틴':(this.date>=TRAINING_PLAN.equipmentDate?'올데이 · ':'')+ph.label)+'</b><span>'+(legacy?'새 루틴과 편집 내용을 따로 보관합니다.':('예정: '+planned+' · '+(ph.limited?'종목당 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')))+'</span><small>'
-      +(legacy?'기록·기구 설정은 두 루틴에서 함께 사용합니다.':(ph.limited?'유산소 15–20분 × 주 3회부터. 복귀 1주는 월·화·목·토 웨이트.':'상체 운동 후 걷기 20–30분, 주 2–3회부터. 새 기구는 가벼운 준비 세트로 중량을 정하세요.'))+'</small>';
+    const ph=TRAINING_PLAN.phase(this.date),planned=TRAINING_PLAN.schedule(this.date);
+    el.innerHTML='<b>올데이 · '+ph.label+'</b><span>예정: '+planned+' · '+(ph.limited?'종목당 최대 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')+'</span><small>'+(ph.limited?'첫 적응 주는 월·화·목·토. 피로가 남으면 하루 더 쉬어도 괜찮아요.':'상체 운동 후 걷기 20–30분, 주 2–3회부터. 빠진 운동을 다음 날 몰아서 하지 않아요.')+'</small>';
     document.querySelectorAll('.day-panel .ex-wrap').forEach(w=>{
       const nm=(w.querySelector('.ex-nm')?.textContent||'').trim(),day=this.panelDayOf(w.closest('.day-panel')),p=this.prescription(nm,day);
       const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent=p.sets+'×'+p.min+'–'+p.max;
@@ -31,6 +26,8 @@ const ExLog={
   date:_todayKey(),
   dataVer:0, // 데이터 쓰기마다 증가 — 분석 탭이 '변경 없음'이면 재렌더를 건너뛰는 기준
   data:{},
+  get activeData(){return this._activeData||(this._activeData=RecordModel.activeData(this.data));},
+  activeSession(){return this.activeData[this.date]||{day:this.dayType(this.date),exercises:[]};},
   plan:{},
   rest:{name:'',endAt:0,total:0,int:null},
 
@@ -139,7 +136,7 @@ const ExLog={
     this._dateKeys().forEach(k=>{
       const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
       if(ago<0||ago>70)return;                               // 정체 판정에 필요한 최근 3세션 범위까지만
-      const s=this.data[k]||{};
+      const s=this.activeData[k]||{};
       const w=(ago<7)?w0:((ago<14)?w1:null);
       (s.exercises||[]).forEach(ex=>{
         const sets=(ex.sets||[]).filter(st=>_isWorkSet(st)&&st.weight>0);
@@ -206,9 +203,9 @@ const ExLog={
   _painEver(){
     if(this._painEverCache&&this._painEverCache.k===this.dataVer)return this._painEverCache.v;
     let found=false;
-    for(const dk in this.data){
+    for(const dk in this.activeData){
       if(found)break;
-      (this.data[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(st=>{if(st&&st.pain)found=true;});});
+      (this.activeData[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(st=>{if(st&&st.pain)found=true;});});
     }
     this._painEverCache={k:this.dataVer,v:found};
     return found;
@@ -220,10 +217,10 @@ const ExLog={
   weekCardio(){
     const base=new Date(this.date+'T12:00:00');
     let n=0,min=0;
-    for(const k in this.data){
+    for(const k in this.activeData){
       const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
       if(ago<0||ago>=7)continue;
-      ((this.data[k]||{}).cardio||[]).forEach(c=>{const m=+c.min||0;if(m>0){n++;min+=m;}});
+      ((this.activeData[k]||{}).cardio||[]).forEach(c=>{const m=+c.min||0;if(m>0){n++;min+=m;}});
     }
     return{n,min,need:2,needMin:20};   // 계획: 주 2~3회 × 20~30분 (웨이트 대체 금지)
   },
@@ -279,7 +276,7 @@ const ExLog={
   },
   _histNames(){ // 기록에 등장한 모든 종목명 (최근 등장일 내림차순)
     const seen={};
-    for(const dk in this.data)(this.data[dk].exercises||[]).forEach(e=>{if((e.sets||[]).length&&(!seen[e.name]||seen[e.name]<dk))seen[e.name]=dk;});
+    for(const dk in this.activeData)(this.activeData[dk].exercises||[]).forEach(e=>{if((e.sets||[]).length&&(!seen[e.name]||seen[e.name]<dk))seen[e.name]=dk;});
     return Object.keys(seen).sort((a,b)=>seen[b].localeCompare(seen[a]));
   },
   // ── 자정 롤오버: 앱을 켜둔 채 날짜가 바뀌면, '오늘'을 보고 있던 경우에만 새 오늘로 이동 ──
@@ -311,12 +308,12 @@ const ExLog={
   // 순환제 dayType: 기록된 날은 저장된 타입, 미기록 날은 '가장 최근 운동일(리프팅 본세트 기준)의 다음 순서'.
   // 유산소만 한 날·쉰 날은 순환을 밀지 않는다. 기록이 전혀 없으면 Push부터.
   dayType(d){
-    const cur=this.data[d];
+    const cur=this.activeData[d];
     if(cur&&cur.day)return this._baseType(cur.day);
     if(TRAINING_PLAN.mode==='current'&&d>=TRAINING_PLAN.start&&d<=TRAINING_PLAN.end){const scheduled=TRAINING_PLAN.schedule(d);if(EL_CYCLE.includes(scheduled))return scheduled;}
     const keys=this._pastKeysDesc(d); // 캐시된 내림차순 키
     for(const k of keys){
-      const ps=this.data[k];
+      const ps=this.activeData[k];
       if(!ps||!(ps.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))continue;
       const i=EL_CYCLE.indexOf(this._baseType(ps.day));
       if(i<0)continue;
@@ -330,7 +327,7 @@ const ExLog={
   _delQ:[], // 시트 미반영 삭제 키 큐 — fire-and-forget이던 delete를 영속화해 오프라인·실패 시 유실(pull 복원 때 세트 부활) 방지
   // 영속화: 오프라인에서 기록 → 동기화 실패 → 앱 종료 시에도 미전송분이 남아 다음 실행에서 재전송되게
   _saveDirty(){window.storage.set('sync_dirty',JSON.stringify([...this._dirty])).catch(e=>SafeStore.report(e));},
-  setSession(s){DataSync.assignNewIds(s);this.data[this.date]=s;this.markDirty(this.date);this._dirty.add(this.date);DataSync.noteLocal('workout',this.date);this._saveDirty();this.save().catch(e=>SafeStore.report(e));},
+  setSession(s){if(!RecordModel.activeDate(this.date))return;DataSync.assignNewIds(s);this.data[this.date]=s;this.markDirty(this.date);this._dirty.add(this.date);DataSync.noteLocal('workout',this.date);this._saveDirty();this.save().catch(e=>SafeStore.report(e));},
 
   // ── 데이 플랜 편집 (DB에서 구성 · 추가/삭제 · 영속) ──
   PANEL_DAY:TRAINING_PLAN.cycle, // EL_CYCLE과 동일 — 탭 순서와 순환 순서를 한 축으로
@@ -468,7 +465,7 @@ const ExLog={
   _weekMuscleSets(){ // renderVolume와 동일 계산(주동근 1·보조근 0.5세트) — 메모리(ExLog.data) 기준
     const vol={};
     if(typeof PlanApp==='undefined'||!PlanApp._weekKeys||!PlanApp.muscleOf)return vol;
-    const ks=new Set(PlanApp._weekKeys(0));const data=this.data||{};
+    const ks=new Set(PlanApp._weekKeys(0));const data=this.activeData||{};
     for(const dk in data){if(!ks.has(dk))continue;
       (data[dk].exercises||[]).forEach(ex=>{
         const n=(ex.sets||[]).filter(_isWorkSet).length;if(!n)return;
@@ -518,33 +515,9 @@ const ExLog={
   },
   applyPlan(){
     document.querySelectorAll('.day-panel').forEach(panel=>{
-      const day=this.panelDayOf(panel);const p=this.plan[day];if(!p)return;
-      const statics=()=>[...panel.querySelectorAll('.ex-wrap:not(.custom-ex)')];
-      // 1) 자리바꿈 복원: 기본 슬롯을 제자리에서 대체 운동으로 변환
-      const swap=p.swap||{};
-      Object.keys(swap).forEach(orig=>{
-        if((p.rm||[]).includes(orig))return;
-        const newName=swap[orig];
-        let wrap=statics().find(w=>w.dataset.origname===orig)||statics().find(w=>!w.dataset.origname&&(w.querySelector('.ex-nm')?.textContent||'').trim()===orig);
-        if(!wrap||wrap.dataset.swapto===newName)return;
-        this._transformWrap(wrap,newName);
-        wrap.dataset.origname=orig;wrap.dataset.swapto=newName;wrap.style.display='';
-      });
-      // 2) 삭제 숨김 (원본 이름 또는 origname 기준)
-      (p.rm||[]).forEach(name=>{
-        const wrap=statics().find(w=>w.dataset.origname===name)||(statics().map(w=>w).find(w=>(w.querySelector('.ex-nm')?.textContent||'').trim()===name));
-        if(wrap)wrap.style.display='none';
-      });
-      // 3) 추가 운동 — 메인 리스트(.ex-list) 끝에 plan.add 순서대로 통합
       const list=panel.querySelector('.ex-list');if(!list)return;
-      panel.querySelectorAll('.custom-ex-label').forEach(el=>el.remove()); // 구버전 '+추가됨' 구분 라벨 정리
-      (p.add||[]).forEach(name=>{
-        if(statics().some(x=>x.style.display!=='none'&&((x.dataset.swapto||x.querySelector('.ex-nm')?.textContent||'').trim())===name))return; // 기본 카드와 중복 방지
-        let w=[...panel.querySelectorAll('.custom-ex')].find(w=>w.dataset.cname===name);
-        if(!w)w=this.buildCardEl(name);
-        list.appendChild(w); // 기존 노드면 리스트 끝으로 이동(순서 정렬), 없으면 신규 추가
-      });
-      this._sortDay(panel); // 추가 종목만 배치 (기본 슬롯 순서는 보존)
+      list.replaceChildren(...AppFeatures.templateRoutine(this.panelDayOf(panel)).map(r=>this.buildCardEl(r.name)));
+      this._sortDay(panel);
     });
   },
   // ── 패널 ↔ EL_DAY_EX 정합 ──────────────────────────────────────────────
@@ -600,7 +573,7 @@ const ExLog={
   _lastDoneAgo(t){
     const keys=this._pastKeysDesc(); // 캐시된 내림차순 키 — 호출마다 filter+sort 반복 제거
     for(const k of keys){
-      const s=this.data[k];
+      const s=this.activeData[k];
       if(!s||this._baseType(s.day)!==t)continue;
       if((s.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))return Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
     }
@@ -613,7 +586,7 @@ const ExLog={
   },
   recommendType(){
     if(TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.phase(this.date).limited)return null;
-    const cur=this.data[this.date];
+    const cur=this.activeData[this.date];
     if(cur&&(cur.exercises||[]).some(e=>(e.sets||[]).length))return null; // 오늘 이미 시작 — 추천 침묵
     // 성숙도 가드: 세 타입을 모두 돌아본 데이터가 있어야 추천 — 초기/공백기엔 순환 자체가 답이라 추천이 소음이 된다
     if(EL_CYCLE.filter(t=>this._lastDoneAgo(t)<=90).length<3)return null;
@@ -653,7 +626,7 @@ const ExLog={
   renderTypePick(){
     const p=document.getElementById('log-type-pick');if(!p)return;
     const cur=this.dayType(this.date);
-    const started=((this.data[this.date]||{}).exercises||[]).some(e=>(e.sets||[]).length);
+    const started=((this.activeData[this.date]||{}).exercises||[]).some(e=>(e.sets||[]).length);
     let h='';
     EL_CYCLE.forEach(t=>{
       const ago=this._lastDoneAgo(t),def=this._typeDeficit(t);
@@ -671,7 +644,7 @@ const ExLog={
   // 디로드 제안(주 단위)과 달리 '오늘 증량을 갈지'의 당일 판단. 점수제(좋음 +1/나쁨 −1)로 근거를 그대로 노출하고,
   // 신호가 없거나 중립이면 침묵한다(습관성 배너 방지).
   readiness(){
-    const s=this.session();
+    const s=this.activeSession();
     let score=0,n=0;const bad=[],good=[];
     const rec=this.recovery();
     const sB=rec.sleepBase;
@@ -691,7 +664,7 @@ const ExLog={
       const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
       if(ago>7)break;
       let rs=0,rn=0,has=false;
-      (this.data[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;has=true;if(st.rpe){rs+=st.rpe;rn++;}}));
+      (this.activeData[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;has=true;if(st.rpe){rs+=st.rpe;rn++;}}));
       if(!has)continue;
       if(rn>=3){n++;const avg=rs/rn;
         const thr=(rec.rpeBase!=null)?rec.rpeBase+0.4:9.3;  // 기준선 미확보(표본 부족) 시에만 옛 고정값으로 폴백
@@ -702,7 +675,7 @@ const ExLog={
     keys.forEach(k=>{
       const ago=Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
       if(ago>7)return;
-      (this.data[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(st.pain)pain++;}));
+      (this.activeData[k].exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(st.pain)pain++;}));
     });
     if(pain>=2){n++;score--;bad.push('통증 '+pain+'회/7일');}
     if(!n)return null;
@@ -718,7 +691,7 @@ const ExLog={
     const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;
     if(!panel||day==='REST'){el.style.display='none';el.innerHTML='';return;}
     const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>x.textContent.trim()))];
-    const s=this.session();
+    const s=this.activeSession();
     const logged=new Set((s.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
     const chal=[],fill=[];
     names.forEach(n=>{
@@ -762,7 +735,7 @@ const ExLog={
     if(!panel||day==='REST'){el.style.display='none';return;}
     const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>this.canon(x.textContent.trim())))];
     if(!names.length){el.style.display='none';return;}
-    const doneSet=new Set((this.session().exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
+    const doneSet=new Set((this.activeSession().exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
     const done=names.filter(n=>doneSet.has(n)).length;
     el.style.display='flex';
     el.innerHTML='<div class="lp-bar"><div class="lp-fill" style="width:'+Math.round(done/names.length*100)+'%;background:'+(DAY_COLORS_EL[day]||'#085041')+'"></div></div><span class="lp-txt">'+done+'/'+names.length+'종목</span>';
@@ -855,7 +828,7 @@ const ExLog={
     this.data[this.date]=s;WorkoutTools.touch(this.date);
   },
   renderCond(){
-    const ses=this.session();const c=ses.cond||{};
+    const ses=this.activeSession();const c=ses.cond||{};
     document.querySelectorAll('.cond-row').forEach(row=>{
       row.querySelectorAll('.cond-dot').forEach(d=>d.classList.toggle('on',+d.dataset.n<=(c.rate||0)));
       const sl=row.querySelector('.cond-sleep');
@@ -872,7 +845,7 @@ const ExLog={
     const base=new Date(_todayKey()+'T12:00:00');
     for(let i=0;i<28;i++){
       const d=new Date(base);d.setDate(base.getDate()-i);
-      const s=this.data[_localKey(d)];
+      const s=this.activeData[_localKey(d)];
       if(!s||!s.cond||!(+s.cond.sleep))continue;
       let vol=0,rs=0,rn=0;
       (s.exercises||[]).forEach(ex=>(ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;vol+=_ldW(st)*st.reps;if(st.rpe){rs+=st.rpe;rn++;}}));
@@ -893,17 +866,17 @@ const ExLog={
   _weekCondAvg(){ // 이번 주 컨디션·수면 평균 (기록된 날만)
     const ks=(typeof PlanApp!=='undefined'&&PlanApp._weekKeys)?PlanApp._weekKeys(0):[];
     let rs=0,rn=0,ss=0,sn=0;
-    ks.forEach(dk=>{const c=this.data[dk]&&this.data[dk].cond;if(!c)return;if(c.rate){rs+=c.rate;rn++;}if(c.sleep){ss+=c.sleep;sn++;}});
+    ks.forEach(dk=>{const c=this.activeData[dk]&&this.activeData[dk].cond;if(!c)return;if(c.rate){rs+=c.rate;rn++;}if(c.sleep){ss+=c.sleep;sn++;}});
     return{rate:rn?rs/rn:null,sleep:sn?ss/sn:null};
   },
   renderCardio(){
-    const list=this.session().cardio||[];
+    const list=this.activeSession().cardio||[];
     const html=list.map((c,i)=>'<div class="cd-item">'+_esc(c.type)+' <b>'+c.min+'분</b>'+(c.km!=null?' · '+c.km+'km':'')+(c.incline!=null?' · 경사 '+c.incline+'%':'')+'<span class="cd-x" onclick="ExLog.delCardio('+i+')">✕</span></div>').join('');
     document.querySelectorAll('.cardio-list').forEach(el=>{el.innerHTML=html;});
   },
   _weekCardioMin(){
     const ks=(typeof PlanApp!=='undefined'&&PlanApp._weekKeys)?PlanApp._weekKeys(0):[];
-    let m=0;ks.forEach(dk=>{const d=this.data[dk];if(d&&d.cardio)d.cardio.forEach(c=>m+=(+c.min||0));});
+    let m=0;ks.forEach(dk=>{const d=this.activeData[dk];if(d&&d.cardio)d.cardio.forEach(c=>m+=(+c.min||0));});
     return m;
   },
 
@@ -1011,7 +984,7 @@ const ExLog={
       }
     }
     if(wi)this._updateTotalHint(wi);
-    setTimeout(()=>wi?.focus(),50);
+
   },
   // 렙 칩 탭 → 렙 입력 후 즉시 확정 (RPE·워밍업 토글은 칩을 누르기 전에 설정하면 함께 저장됨)
   pickRep(btn,n){
@@ -1045,13 +1018,13 @@ const ExLog={
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
     const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
     inp.style.display='flex';
-    setTimeout(()=>ri?.focus(),50);
+
   },
 
   _prE1(s){return _e1Of(_ldW(s),s.reps);},
   _priorSets(name){
     let arr=[];const cn=this.canon(name);
-    for(const dk in this.data){(this.data[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
+    for(const dk in this.activeData){(this.activeData[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
     return arr.filter(_isWorkSet);
   },
   // 세트에 붙일 부하 메타 — 일반 종목이면 아무것도 붙이지 않아 기존 기록 형식과 동일하다.
@@ -1134,7 +1107,7 @@ const ExLog={
     const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;if(!panel)return;
     const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>this.canon(x.textContent.trim())))];
     if(!names.length)return;
-    const s=this.session();
+    const s=this.activeSession();
     const logged=new Set((s.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
     if(!names.every(n=>logged.has(n)))return;
     this._doneShown=this.date;
@@ -1154,9 +1127,9 @@ const ExLog={
     });
     // 지난 같은 요일 세션 대비 볼륨
     let cmp='';
-    const prevK=this._pastKeysDesc().find(k=>(this.data[k]||{}).day===day); // 캐시된 키에서 첫 매치만
+    const prevK=this._pastKeysDesc().find(k=>(this.activeData[k]||{}).day===day); // 캐시된 키에서 첫 매치만
     if(prevK){
-      let pv=0;(this.data[prevK].exercises||[]).forEach(e=>(e.sets||[]).filter(_isWorkSet).forEach(st=>{pv+=(st.weight||0)*st.reps;}));
+      let pv=0;(this.activeData[prevK].exercises||[]).forEach(e=>(e.sets||[]).filter(_isWorkSet).forEach(st=>{pv+=(st.weight||0)*st.reps;}));
       if(pv>0){const p=Math.round((vol-pv)/pv*100);cmp='<div class="dn-t3">지난 '+day+' 대비 볼륨 '+(p>=0?'+':'')+p+'%</div>';}
     }
     let t=document.getElementById('done-toast');
@@ -1211,9 +1184,9 @@ const ExLog={
   // 과거 통증 이력 (canon 기준 최근 1건) — 같은 종목 재도전 시 상기용
   _lastPain(name){
     const cn=this.canon(name);let hit=null;
-    for(const dk in this.data){
+    for(const dk in this.activeData){
       if(dk===this.date)continue;
-      (this.data[dk].exercises||[]).forEach(e=>{
+      (this.activeData[dk].exercises||[]).forEach(e=>{
         if(this.canon(e.name)!==cn)return;
         (e.sets||[]).forEach(st=>{if(st.pain&&(!hit||dk>hit.date))hit={date:dk,w:st.weight,r:st.reps};});
       });
@@ -1252,7 +1225,7 @@ const ExLog={
   // 지연 구축 + 데이터 변경 시 무효화(markDirty)로, 조회 비용을 '그 종목의 기록 수'에 비례하게 축소 —
   // 기록이 수년치로 쌓여도 날짜 이동·목표 주입이 일정 속도를 유지한다. ex는 참조 공유라 세트 편집이 즉시 반영된다.
   _exIdx:null,
-  _invalidateIdx(){this._exIdx=null;this._dk=null;this._pkdCache=null;},
+  _invalidateIdx(){this._activeData=null;this._exIdx=null;this._dk=null;this._pkdCache=null;},
   // data 감시 프록시: this.data[k]=… / delete / this.data={} 전체 교체 — 어떤 경로로 써도 캐시가 자동 무효화된다.
   // 실제 앱은 markDirty가 쓰기 관문이지만, 시트 복원·백업 가져오기·테스트처럼 data를 직접 다루는 코드도 안전해진다.
   // 같은 참조 재대입(setSession의 통상 경로)은 스킵 — 인덱스가 ex 참조를 공유하므로 무효화 불필요.
@@ -1273,7 +1246,7 @@ const ExLog={
   _buildExIdx(){
     const idx={};
     for(const dk of this._dateKeys()){
-      (this.data[dk].exercises||[]).forEach(ex=>{
+      (this.activeData[dk].exercises||[]).forEach(ex=>{
         if(!(ex.sets||[]).length)return;
         const cn=this.canon(ex.name);
         (idx[cn]=idx[cn]||[]).push({date:dk,ex});
@@ -1284,7 +1257,7 @@ const ExLog={
   _exFor(cn){return (this._exIdx||this._buildExIdx())[cn]||[];},
   // 정렬된 날짜 키 캐시 — Object.keys().filter().sort()를 호출부마다 반복하던 것을 공용화
   _dk:null,
-  _dateKeys(){return this._dk||(this._dk=Object.keys(this.data).sort());},
+  _dateKeys(){return this._dk||(this._dk=Object.keys(this.activeData).sort());},
   _pkdCache:null,
   _pastKeysDesc(d){ // 기준일(기본: 열람일) 이전 날짜 내림차순 — (데이터·기준일)당 1회만 계산
     d=d||this.date;
@@ -1313,7 +1286,7 @@ const ExLog={
   // 간격 = 휴식 + 다음 세트 수행 시간이므로 목표 휴식보다 다소 긴 게 정상. 15분 초과 공백은 이동/중단으로 간주해 제외.
   _fmtSec(sec){const m=Math.floor(sec/60),ss=Math.round(sec%60);return m?(m+'분'+(ss?' '+ss+'초':'')):(ss+'초');},
   sessionPace(dateKey){
-    const s=this.data[dateKey||this.date];if(!s)return null;
+    const s=this.activeData[dateKey||this.date];if(!s)return null;
     const evs=[];
     (s.exercises||[]).forEach(ex=>{const rs=this.restSec(ex.name);(ex.sets||[]).forEach(st=>{if(st.ts&&st.reps>0)evs.push({t:+st.ts,rs});});});
     if(evs.length<4)return null;
@@ -1331,7 +1304,7 @@ const ExLog={
   refresh(){
     if(window.WorkoutTools?.ready)WorkoutTools.syncPanels();
     this.renderRoutineUI();
-    const s=this.session();
+    const s=this.activeSession();
     this.renderProgress();
     this.renderBrief();
     let totSets=0,totVol=0;
@@ -1452,8 +1425,8 @@ const ExLog={
   showHistory(name){
     const cn=this.canon(name);
     const rows=[];                                            // {dk, sets(본세트), e1(그날 최고)}
-    Object.keys(this.data).sort().forEach(dk=>{
-      (this.data[dk].exercises||[]).forEach(e=>{
+    Object.keys(this.activeData).sort().forEach(dk=>{
+      (this.activeData[dk].exercises||[]).forEach(e=>{
         if(this.canon(e.name)!==cn)return;
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let e1=0;sets.forEach(s=>{const v=!this.isTimed(name)&&_ldW(s)>0?_e1Of(_ldW(s),s.reps):0;if(v>e1)e1=v;});
@@ -1502,7 +1475,7 @@ const ExLog={
     if(!day||day==='REST')return null;
     const keys=this._pastKeysDesc(); // 캐시된 내림차순 키 — 호출마다 filter+sort 반복 제거
     for(const k of keys){
-      const ses=this.data[k];if(!ses||this._baseType(ses.day)!==this._baseType(day))continue; // 옛 Push+ 기록도 Push 이력으로 비교
+      const ses=this.activeData[k];if(!ses||this._baseType(ses.day)!==this._baseType(day))continue; // 옛 Push+ 기록도 Push 이력으로 비교
       let v=0,has=false;
       (ses.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(_isWorkSet(st)){has=true;v+=(st.weight||0)*st.reps;}}));
       if(has)return{vol:v,day,date:k};
@@ -1521,7 +1494,7 @@ const ExLog={
 
   // ── 세션 타이밍: ts 있는 세트로 세션 소요시간·세트 간 평균 간격 계산 (구 기록·이상치는 자동 제외) ──
   _sessionTiming(dk){
-    const d=this.data[dk];if(!d)return null;
+    const d=this.activeData[dk];if(!d)return null;
     const ts=[];(d.exercises||[]).forEach(e=>(e.sets||[]).forEach(st=>{if(st.ts&&st.reps>0){const t=new Date(st.ts).getTime();if(!isNaN(t))ts.push(t);}}));
     if(ts.length<2)return null;
     ts.sort((a,b)=>a-b);
@@ -1562,9 +1535,9 @@ const ExLog={
     const wkKeys=PlanApp._weekKeys(0),wkSet=new Set(wkKeys);
     // 이번 주 PR — 주간요약(renderWeekSummary)과 동일한 1패스 러닝베스트 방식
     const prs=[];const best={};let top=null;
-    Object.keys(this.data).sort().forEach(dk=>{
+    Object.keys(this.activeData).sort().forEach(dk=>{
       const inWeek=wkSet.has(dk);
-      (this.data[dk].exercises||[]).forEach(e=>{
+      (this.activeData[dk].exercises||[]).forEach(e=>{
         const sets=(e.sets||[]).filter(_isWorkSet);if(!sets.length)return;
         let dayMax=-1,dayTopSet=null;
         sets.forEach(s=>{
@@ -1580,7 +1553,7 @@ const ExLog={
         if(dayMax>(best[e.name]??-Infinity))best[e.name]=dayMax;
       });
     });
-    const sessions=wkKeys.filter(dk=>{const d=this.data[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
+    const sessions=wkKeys.filter(dk=>{const d=this.activeData[dk];return d&&((d.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet))||(d.cardio&&d.cardio.length));}).length; // 유산소만 한 날도 활동일
     const remind=this._ibReminderHtml()+this._backupReminderHtml();
     if(!sessions)return'<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind+'<div class="wr-empty">이번 주 기록이 아직 없습니다. 세트를 기록하면 일요일에 여기서 한 주를 결산합니다.</div></div>';
     // 부위별 목표 달성/미달
@@ -1590,7 +1563,7 @@ const ExLog={
     misses.sort((a,b)=>(a.v/a.t)-(b.v/b.t));
     // 다음 주 도전 — 이번 주 수행 종목 중 증량 신호(⬆)가 뜬 것
     const ups=[];const seenEx=new Set();
-    wkKeys.forEach(dk=>{(this.data[dk]&&this.data[dk].exercises||[]).forEach(e=>{
+    wkKeys.forEach(dk=>{(this.activeData[dk]&&this.activeData[dk].exercises||[]).forEach(e=>{
       if(seenEx.has(e.name)||!(e.sets||[]).some(_isWorkSet))return;seenEx.add(e.name);
       const sg=this.suggestTarget(e.name);if(sg&&sg.up)ups.push(e.name);
     });});
@@ -1606,7 +1579,7 @@ const ExLog={
     if(ca.sleep!=null)h+='<div class="wr-row"><span>평균 수면</span><span class="v'+(ca.sleep<6?' miss':'')+'">'+ca.sleep.toFixed(1)+'h</span></div>';
     const si=this.sleepInsight();if(si)h+='<div class="wr-insight">'+si.html+'</div>';
     // 이번 주 세션 노트 — 볼륨·정체 해석의 맥락 (통증·환경 등)
-    const notes=[];wkKeys.forEach(dk=>{const n=this.data[dk]&&this.data[dk].note;if(n)notes.push({dk,n});});
+    const notes=[];wkKeys.forEach(dk=>{const n=this.activeData[dk]&&this.activeData[dk].note;if(n)notes.push({dk,n});});
     if(notes.length){
       h+='<div class="wr-sec">📝 세션 메모</div>';
       notes.forEach(x=>{const dd=new Date(x.dk+'T12:00:00').toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'});h+='<div class="wr-note-row"><b>'+dd+'</b> — '+String(x.n).replace(/</g,'&lt;')+'</div>';});
@@ -1843,9 +1816,9 @@ const ExLog={
   },
   _recalcEw(cn,defer){
     let any=false;
-    Object.keys(this.data||{}).forEach(dk=>{
+    Object.keys(this.activeData||{}).forEach(dk=>{
       let dayTouched=false;                       // 날짜별로 판정해야 실제로 바뀐 달만 저장된다
-      (this.data[dk].exercises||[]).forEach(ex=>{
+      (this.activeData[dk].exercises||[]).forEach(ex=>{
         if(this.canon(ex.name)!==cn)return;
         const t=this.loadTypeOf(ex.name);
         (ex.sets||[]).forEach(st=>{
@@ -1866,7 +1839,7 @@ const ExLog={
     try{if(typeof InBody!=='undefined'&&!InBody._log&&InBody.load)await InBody.load();}catch(_){}
     if(!this.bwOn(null))return 0;                 // 체중 기록이 없으면 환산 근거가 없다
     const names={};
-    Object.keys(this.data||{}).forEach(dk=>(this.data[dk].exercises||[]).forEach(ex=>{names[this.canon(ex.name)]=1;}));
+    Object.keys(this.activeData||{}).forEach(dk=>(this.activeData[dk].exercises||[]).forEach(ex=>{names[this.canon(ex.name)]=1;}));
     let n=0;
     Object.keys(names).forEach(cn=>{if(this.loadTypeOf(cn)!=='normal'&&this._recalcEw(cn,true))n++;});
     if(n){this._pbCache={};this._stepCache={};}
@@ -2012,7 +1985,7 @@ const ExLog={
     this.updateGripChips();
   },
   _gripChipHtml(name){
-    const st=this.session();
+    const st=this.activeSession();
     const ex=(st.exercises||[]).find(e=>this.canon(e.name)===this.canon(name));
     const done=ex?(ex.sets||[]).filter(_isWorkSet).length:0;
     const setNo=done+1;
@@ -2155,8 +2128,8 @@ const ExLog={
     const dow=(today.getDay()+6)%7;
     const monday=new Date(today);monday.setDate(today.getDate()-dow);
     let wk=0,total=0;
-    for(const k in this.data){
-      if(!this.data[k].exercises?.some(e=>(e.sets||[]).some(_isWorkSet)))continue;
+    for(const k in this.activeData){
+      if(!this.activeData[k].exercises?.some(e=>(e.sets||[]).some(_isWorkSet)))continue;
       total++;
       const d=new Date(k+'T12:00:00');
       if(d>=monday&&d<=today)wk++;
