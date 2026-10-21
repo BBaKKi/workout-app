@@ -1713,7 +1713,7 @@ const ExLog={
     if(this.loadTypeOf(name)==='distance')return {html:prev?'지난 기록: '+prev.sets.map(st=>RecordModel.formatSet(name,st)).join(' / ')+' · 거리는 m로 기록해요.':'중량과 이동 거리(m)를 기록하세요.',up:false};
     const note=this._targetNote(name);
     const phase=TRAINING_PLAN.phase(this.date);
-    if(TRAINING_PLAN.mode==='current'&&phase.limited)return {html:'<b>복귀·적응: 2세트 · 3–4회 여유</b> — 워밍업으로 중량 결정. 자동 증량 보류.',up:false,cap:this.repCap(name)};
+    if(TRAINING_PLAN.mode==='current'&&phase.limited)return {html:'<b>복귀·적응: 종목당 최대 2세트 · 3–4회 여유</b> — 기구 메모의 시험 범위를 참고하고 준비 세트로 중량을 정하세요. 자동 증량 보류.',up:false,cap:this.repCap(name)};
     if(!prev){
       const e=this.libByName(this.canon(name))||this.libByName(name);
       const p=this.prescription(name);const rec=p?('루틴 '+p.sets+'×'+p.min+'–'+p.max+' · '):(e&&e.sets?('도감 편성 예시 '+e.sets+' · '):'');
@@ -1752,6 +1752,14 @@ const ExLog={
     if(ago>14)return {html:prevLbl+' → <b>공백 후 재적응 · 여유 3회 남기는 중량부터</b>'+note,up:false,cap};
     const allHit=sets.length>=(prescribed?prescribed.sets:2)&&sets.every(s=>s.reps>=cap&&s.weight===lastW);
     if(allHit){
+      // New equipment needs repeatable evidence, not one good set or a missing RPE.
+      if(TRAINING_PLAN.mode==='current'&&lt==='normal'){
+        const recent=this._exFor(this.canon(name)).filter(r=>r.date<this.date).map(r=>({date:r.date,sets:r.ex.sets.filter(_isWorkSet)})).filter(r=>r.sets.length).slice(-2);
+        const confirmed=recent.length===2&&recent.every(r=>
+          (Date.parse(this.date+'T12:00:00Z')-Date.parse(r.date+'T12:00:00Z'))/864e5<=14&&
+          r.sets.length>=(prescribed?prescribed.sets:2)&&r.sets.every(s=>s.weight===lastW&&s.reps>=cap&&!s.pain&&Number.isFinite(s.rpe)&&s.rpe>0&&s.rpe<=7));
+        if(!confirmed)return{html:prevLbl+' → <b>중량 유지 · 같은 세팅으로 2회 연속 확인</b> — 모든 본세트가 반복 상한·RPE 7 이하일 때 최소 단위 증량을 검토합니다.'+note,up:false,fillW:lastW,cap};
+      }
       // 증량분은 스택 단위(stepOf)의 배수로 올림 — 기구에 실제로 걸 수 있는 무게만 제안한다.
       const nx=this.nextWeight(name,lastW);
       // RPE 반영: 렙 상단을 채웠어도 마지막 세션 체감 강도가 9.5+면 같은 무게 한 번 더 굳히기
