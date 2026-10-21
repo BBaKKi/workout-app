@@ -24,10 +24,10 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     const saved=JSON.stringify(ExLog.plan),old=WorkoutTools.template('Push A','2026-10-17'),next=WorkoutTools.template('Push A','2026-10-26');
     const oldRows=JSON.parse(JSON.stringify(old));ExLog.data['2026-10-26']={day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',source:'recorded',capturedAt:'2026-10-17T10:00:00Z',rows:oldRows}}};
     const frozen=AppFeatures.routine('Push A','2026-10-26');delete ExLog.data['2026-10-26'];
-    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),limited:WorkoutTools.template('Legs A','2026-10-19').every(r=>r.sets<=2),sources:new Set([...GymInventory.confirmed.map(e=>e.source.file),...GymInventory.stations.map(e=>e.photo)]).size};
+    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),limited:WorkoutTools.template('Legs A','2026-10-19').every(r=>r.sets<=2),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.map(e=>e.photo)]).size};
   });
-  assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,45);
-  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===59);
+  assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,52);
+  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===63);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();
   assert.equal(await a.locator('#library-catalog').count(),0);
@@ -38,7 +38,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   for(const photoName of photoNames){
     await a.evaluate(n=>LibApp.goto(n),photoName);await a.locator('.lib-card .exercise-guide>summary').click();
     assert(await a.locator('.lib-card .coach-body').isVisible());
-    assert((await a.locator('.lib-card .gym-source').innerText()).includes('.JPEG'));
+    assert(/\.jpe?g/i.test(await a.locator('.lib-card .gym-source').innerText()));
     assert.equal(await a.locator('.lib-card .gym-source a').count(),0);
     assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   }
@@ -47,15 +47,37 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   for(const id of ['db-calf','cable-rear','cable-overhead','tbar-available']){
     await a.evaluate(id=>LibApp.goto(GymInventory.accessories.find(e=>e.id===id).name),id);
     await a.locator('.lib-card .exercise-guide>summary').click();
-    assert((await a.locator('.lib-card .gym-source').innerText()).includes('사용자 보유 확인'));
+    assert((await a.locator('.lib-card .gym-source').innerText()).includes(id.startsWith('cable-')?'IMG_5861.jpeg':'사용자 보유 확인'));
     assert.equal(await a.locator('.lib-card .gym-source a').count(),0);assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   }
   assert.equal(await a.evaluate(()=>_movePat(GymInventory.confirmed.find(e=>e.id==='decline-chest-fly').name)),'플라이');
   assert.equal(await a.evaluate(()=>_loadGuess('어시스트 딥스 머신')),'assist');
   assert.equal(await a.evaluate(()=>_loadGuess('딥스')),'bw');
+  const added=await a.evaluate(()=>{
+    const byId=id=>GymInventory.available.find(e=>e.id===id);
+    return {
+      assist:['newtech-assisted-pullup','newtech-assisted-dip'].map(id=>{const e=byId(id);return {type:ExLog.loadTypeOf(e.name),heavy:ExLog.effW(e.name,30,ExLog.date,85),light:ExLog.effW(e.name,20,ExLog.date,85),station:e.stationId,source:e.source.file};}),
+      shoulders:['legend-shoulder-press','telju-shoulder-press'].map(id=>{const e=byId(id);return [e.vol.p,_movePat(e.name),ExLog.loadTypeOf(e.name)];}),
+      cable:GymInventory.accessories.filter(e=>e.stationId==='drax-cable-station').map(e=>[e.brand,e.status,e.source.file]),
+      row:{name:byId('newtech-cable-row').name,files:GymInventory.evidenceFiles(byId('newtech-cable-row'))},
+      bench:{name:byId('hammer-horizontal').name,files:GymInventory.evidenceFiles(byId('hammer-horizontal'))},
+      counts:[GymInventory.confirmed.length,GymInventory.accessories.length,new Set(GymInventory.available.map(e=>e.id)).size]
+    };
+  });
+  assert.deepEqual(added.assist,Array(2).fill({type:'assist',heavy:55,light:65,station:'newtech-assisted-chin-dip',source:'IMG_5862.jpeg'}));
+  assert.deepEqual(added.shoulders,Array(2).fill(['전면삼각','수직 프레스','normal']));
+  assert.deepEqual(added.cable,Array(6).fill(['DRAX','confirmed','IMG_5861.jpeg']));
+  assert.deepEqual(added.counts,[50,13,63]);
+  assert.deepEqual(await a.evaluate(()=>{const e=GymInventory.find('올데이 감일 · 케이블 랫 풀다운');return [e.brand,e.source.file,e.stationId||null];}),['브랜드 미확인','IMG_5842.JPEG',null]);
+  assert.deepEqual(added.row,{name:'올데이 감일 · Newtech 케이블 시티드 로우',files:['IMG_5855.JPEG','IMG_5855(1).jpeg','IMG_5860.jpeg']});
+  assert.deepEqual(added.bench,{name:'올데이 감일 · Hammer ISO 호라이즌털 벤치프레스',files:['IMG_5805.JPEG','IMG_5865.jpeg']});
+  await a.evaluate(()=>GymInventory.select());
+  await a.locator('#library-equipment').selectOption('DRAX');assert.equal(await a.locator('.lib-card').count(),6);
+  await a.locator('#library-equipment').selectOption('Legend');assert.equal(await a.locator('.lib-card').count(),1);
+  await a.locator('#library-equipment').selectOption('Telju');assert.equal(await a.locator('.lib-card').count(),1);
   assert.equal(await a.evaluate(()=>JSON.stringify({items:TRAINING_PLAN.items,plans:ExLog.plan,templates:TRAINING_PLAN.cycle.map(d=>WorkoutTools.template(d)),snapshot:ExLog.session().routineSnapshots})),routineBefore);
   const name=photoNames[0];
-  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),59);
+  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),63);
   assert.equal(await a.locator('#gym-status-filter').count(),0);
   assert.equal(await a.evaluate(()=>JSON.stringify(ExLog.plan)),planBefore);
   await a.evaluate(n=>LibApp.goto(n),name);
@@ -78,6 +100,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('.library-filter-panel>summary').click();await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
   await b.evaluate(()=>LibApp.goto(GymInventory.available.find(e=>e.id==='forward-leg-extension').name));assert.equal(await b.locator('.lib-card').count(),1);
   assert.deepEqual(errors,[]);
-  console.log('PASS: 46 photo guides + 13 accessories / retired catalogs removed, correct seated-dip load/movement, brand filters, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
+  console.log('PASS: 50 photo guides + 13 accessories / retired catalogs removed, correct seated-dip load/movement, brand filters, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
