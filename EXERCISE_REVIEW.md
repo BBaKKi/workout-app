@@ -1,6 +1,14 @@
-# 올데이 운동 설명 전체 검토 · 2026-10-18
+# 올데이 운동 설명 검토 · 2026-10-21 추가 검토
 
-현재 59개 운동의 세팅·그립·몸과 팔꿈치 위치·근육 작용·수행 순서·가동범위·호흡·실수·중단 신호를 검토했습니다. 기존 일반 도감에서 설명을 상속하는 구조를 제거하고 각 운동에 독립된 안내를 저장합니다. 운동명의 기록 키는 그대로입니다.
+10월 18일 검토한 59개 운동에 신규 4개를 더해 현재 63개입니다. 추가 사진의 기구 구조를 대조하고 신규 4개와 로우·케이블 안내를 검토했습니다. 세팅·그립·몸과 팔꿈치 위치·근육 작용·수행 순서·가동범위·호흡·실수·중단 신호는 각 운동에 독립적으로 저장합니다. 기존 운동명의 기록 키는 그대로입니다.
+
+## 10월 21일 보완
+
+- 보조 풀업·딥스: 고정 발판과 이동 보조판을 구분하고 탑승·하차를 안내합니다. 팔꿈치·견갑골의 자연스러운 경로, 무릎 반동 방지, 어깨가 편한 범위를 명시합니다. 보조가 클수록 쉬우며 체중−보조 값은 추세용 근사치입니다.
+- Legend·Telju 숄더 프레스: 원판 장착·좌석·손목/팔꿈치 정렬·견갑골 상방 회전·허리 과신전 방지를 안내합니다. 핀식 Nautilus와 다른 세팅 안내를 사용합니다.
+- Newtech 로우: ADJUSTABLE LOW-PULLEY 명판 확인에 따라 풀리 높이와 핀 잠금 안내를 추가했습니다.
+- DRAX: 좌우 독립 스택을 쓰는 플라이와 단일 스택의 로프 운동을 구분해 표기값 입력 기준을 명시합니다. 풀리 배율은 추정하지 않습니다.
+- 제조사 자료: [Legend](https://www.legendfitness.com/product/unilateral-converging-shoulder-press/), [Telju](https://teljufitness.com/producto/press-hombro-isolateral-carga-de-discos/). 현장 설치 세대·모델 번호·빈 저항은 별도 확인 사항입니다.
 
 ## 바로잡은 내용
 
@@ -19,7 +27,7 @@
 
 [NSCA RDL](https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/), [ACE 레그프레스](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/), [ACE 시티드 로우](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/), [Rogers Power Squat Pro](https://rogersathletic.com/products/power-squat-pro/), [Hammer DY 로우](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row), [Hammer 프론트 랫](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown), [gym80 풀오버](https://gym80.de/en/product/4350n/)를 참고했습니다. 제조사별 저항값이나 읽히지 않은 모델·레버 기능은 추정하지 않습니다. 개별 체형과 실제 설치 옵션은 현장에서 확인해야 합니다. 특정 자세의 자극감·근육 고립·통증 치료 효과를 보장하지 않습니다.
 
-## 59개 항목 점검표
+## 63개 항목 점검표
 
 모든 행은 세팅·몸 위치·동작·자극·주의의 전체 항목을 포함합니다. 사진과 보유 확인의 구분은 [기구 목록](GYM_INVENTORY.md)을 따릅니다.
 
@@ -84,3 +92,7 @@
 | T바 로우 · 현장형 | 수평 당김 | 몸통 지지 방식 확인 · 팔꿈치 경로 일정 · 허리 반동 없이 당기기 |
 | 바벨 루마니안 데드리프트 | 힌지 | 엉덩이는 뒤로 · 무릎은 조금 굽힘 · 허리 대신 고관절 접기 |
 | 바벨 백스쿼트 | 스쿼트 | 발 전체로 지지 · 무릎은 발 방향 · 골반·몸통 함께 이동 |
+| Newtech 어시스트 풀업 | 수직 당김 | 팔꿈치를 옆구리 쪽으로 · 몸통과 보조판 흔들림 줄이기 · 보조 중량이 클수록 쉬움 |
+| Newtech 어시스트 딥스 | 딥스 | 팔꿈치는 뒤쪽으로 통제 · 어깨 앞이 편한 깊이까지만 · 손잡이를 아래로 눌러 몸 올리기 |
+| Legend 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |
+| Telju 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |

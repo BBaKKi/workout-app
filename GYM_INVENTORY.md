@@ -1,10 +1,27 @@
 # 올데이 휘트니스 감일본점 — 현장 기구 도감
 
-## v7.5.0 · 2026-10-18
+## v7.5.2 · 2026-10-21
 
-제공 사진 **45장 = 기구 44종 + 바벨 랙·플랫폼 1곳**을 확인했습니다. 내전·외전 복합 기구 2대는 두 운동으로 구분해 **사진 기구 운동 46개**, 덤벨·케이블·T바·바벨 운동 **13개**, 총 **59개**를 현재 도감에 표시합니다. 보조 운동 중 바벨 2개는 랙 사진, 나머지 11개는 사용자 보유 확인을 근거로 합니다. 원본 사진은 공개 저장소에 넣지 않았습니다.
+기존 사진 45장에 추가 사진 파일 7개를 대조했습니다. 새로운 물리적 기구는 DRAX 케이블 스테이션·Newtech 보조 풀업/딥스 복합 기구·Legend 및 Telju 숄더 프레스의 **4종**입니다. 로우 사진 2개와 벤치 사진 1개는 기존 기구의 추가 근거이며 중복 운동으로 만들지 않았습니다.
+
+현재 도감은 **사진 기구 운동 50개 + 덤벨·케이블·T바·바벨 보조 운동 13개 = 총 63개**입니다. 보조 운동 중 케이블 6개는 DRAX 사진, 바벨 2개는 랙 사진, 덤벨 4개와 T바 로우 1개는 사용자 보유 확인을 근거로 합니다. 운동 수는 물리적 기구 수와 다릅니다. 원본 사진은 공개 저장소에 넣지 않았습니다.
 
 기록 이름과 ID는 고정입니다. 제조사 판독을 보완할 때에도 기존 기록을 일괄 개명하거나 다른 기구와 중량·PR을 합치지 않습니다. 이전 일반 도감과 블로그 초안은 선택 목록과 실행 코드에서 제거했습니다. 과거 운동 기록은 관리 화면의 읽기 전용 조회에서 확인합니다.
+
+### 추가 사진 대조
+
+| 사진 | 판독 | 반영 |
+| --- | --- | --- |
+| IMG_5855(1).jpeg / IMG_5860.jpeg | Newtech ADJUSTABLE LOW-PULLEY | 기존 `newtech-cable-row` 유지. 표시명에 어저스터블 로우 풀리 추가, 풀리 높이·발판·가슴 패드 없음 안내 보완. |
+| IMG_5861.jpeg | DRAX 듀얼 조절식 케이블 스테이션 | 기존 케이블 운동 6개를 사진 확인으로 변경. 별도 중복 운동 없이 브랜드 검색과 스택 입력 기준 보완. 모델·풀리 배율 미확인. |
+| IMG_5862.jpeg | Newtech 보조 풀업·딥스 복합 기구 | `newtech-assisted-pullup`, `newtech-assisted-dip` 두 운동으로 분리. 큰 핀 중량 = 큰 보조 = 낮은 난도. 기존 시티드 딥 프레스와 분리. |
+| IMG_5863.jpeg | Legend 원판식 숄더 프레스 | 빨간 프레임·검은 패드. 로고와 공식 LeverEDGE 형상을 대조. 현장 모델 번호·빈 암 저항은 미확정. |
+| IMG_5864.jpeg | Telju 원판식 숄더 프레스 | 흰 프레임·빨간 패드의 Telju 로고 확인. 최신 제조사 제품과 현장 세대가 같다고 단정하지 않음. 보조 페달은 현장 사용법 확인 후 사용. |
+| IMG_5865.jpeg | Hammer ISO 호라이즌털 벤치프레스 | IMG_5805와 같은 기구. `hammer-horizontal` 이름·ID·기록 유지. |
+
+기본 루틴과 사용자 계획은 이번 추가로 바꾸지 않습니다. 새 프레스 2종은 현재 어깨 프레스의 선택지이며 모두 추가해 세트 수를 늘리라는 의미가 아닙니다.
+
+### 기존 사진 목록
 
 | 사진 | 기구·운동 | 확인 범위와 구분 |
 | --- | --- | --- |
@@ -79,6 +96,8 @@
 - [Panatta 서큘러 랫 풀다운](https://www.panattasport.com/en/free-weight-special/super-lat-pulldown-circular/)
 - [Arsenal 멀티 로우](https://www.myarsenalstrength.com/strength-equipment/reloaded/upper-body-reloaded/reloaded-multi-row)
 - [gym80 풀오버](https://gym80.de/en/product/4350n/)
+- [Legend LeverEDGE 숄더 프레스](https://www.legendfitness.com/product/unilateral-converging-shoulder-press/)
+- [Telju 원판식 숄더 프레스](https://teljufitness.com/producto/press-hombro-isolateral-carga-de-discos/)
 
 ## 앱에서 사용하는 방법
 
@@ -90,7 +109,7 @@
 
 ## 유지보수
 
-- `exercise-library.js`: 현재 59개 운동과 독립된 코칭·근거·고정 ID/이름.
+- `exercise-library.js`: 현재 63개 운동과 독립된 코칭·근거·고정 ID/이름. 보조 운동 분류는 `equipmentRole`로 명시하여 사진 확인 상태와 분리합니다.
 - `gym-inventory.js`: 현재 기구 조회·출처·브랜드 필터.
 - `reference-history.js` / `RecordModel.activeData`: 과거 읽기 전용 조회와 현재 운동 분석 분리.
 - 출처나 표시명이 갱신되어도 `id`와 `name`은 유지합니다.

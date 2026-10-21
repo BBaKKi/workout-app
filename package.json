@@ -1,7 +1,7 @@
 {
   "name": "fitness-tracker",
   "private": true,
-  "version": "7.5.1",
+  "version": "7.5.2",
   "scripts": {
     "test": "node tests/backend.test.cjs && node tests/sync-diagnostics.test.cjs && node tests/sync-comparison.test.cjs && node tests/browser.test.cjs && node tests/session-tools.test.cjs && node tests/improvements.test.cjs && node tests/gym-inventory.test.cjs && node tests/redesign.test.cjs && node tests/interface-v74.test.cjs && node tests/allday-only.test.cjs && node tests/pwa.test.cjs",
     "release": "python3 tools/build-release.py"
