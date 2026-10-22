@@ -148,18 +148,22 @@ function augmentCards(){
 }
 const LibApp={
   cat:'all',q:'',
+  matchesCategory(e,cat){return cat==='all'||e.cat===cat||(e.libraryGroups||[]).includes(cat);},
+  syncChips(){document.querySelectorAll('.lib-chip').forEach(b=>{const on=b.dataset.c===this.cat;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});},
   render(){
     const box=document.getElementById('lib-list');if(!box)return;
     const lib=GymInventory.library();const cats=window.EXERCISE_CATS||{};
     const chipWrap=document.getElementById('lib-chips');
     if(chipWrap&&!chipWrap.dataset.done){
-      let h='<button class="lib-chip on" data-c="all" onclick="LibApp.setCat(\'all\')">전체</button>';
-      Object.keys(cats).forEach(c=>{h+='<button class="lib-chip" data-c="'+c+'" onclick="LibApp.setCat(\''+c+'\')">'+cats[c].split(' ')[0]+'</button>';});
+      let h='<button class="lib-chip on" data-c="all" onclick="LibApp.setCat(\'all\')">전체<span class="lib-chip-count">'+lib.length+'</span></button>';
+      Object.keys(cats).forEach(c=>{h+='<button class="lib-chip" data-c="'+c+'" onclick="LibApp.setCat(\''+c+'\')">'+cats[c].split(' ')[0]+'<span class="lib-chip-count">'+lib.filter(e=>this.matchesCategory(e,c)).length+'</span></button>';});
       chipWrap.innerHTML=h;chipWrap.dataset.done='1';
     }
+    this.syncChips();
+    const note=document.getElementById('lib-category-note');if(note)note.hidden=this.cat!=='small';
     const q=this.q.trim().toLowerCase();
     const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
-    const items=InterfaceTools.filterExercises(lib.filter(e=>(this.cat==='all'||e.cat===this.cat)&&(!q||(e.searchTerms||'').toLowerCase().includes(q)||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0))));
+    const items=InterfaceTools.filterExercises(lib.filter(e=>this.matchesCategory(e,this.cat)&&(!q||(e.searchTerms||'').toLowerCase().includes(q)||(e.displayName||'').toLowerCase().includes(q)||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0))));
     this._items=items;
     if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
     // Detailed guidance is built only when an exercise is opened.
@@ -193,14 +197,13 @@ const LibApp={
       +'<button class="library-favorite" onclick="InterfaceTools.favorite(\''+_escJs(e.name)+'\')" aria-pressed="'+!!InterfaceTools.favorites()[e.name]+'">'+(InterfaceTools.favorites()[e.name]?'★ 즐겨찾기 해제':'☆ 즐겨찾기')+'</button>'
       +'<button class="lib-add" onclick="LibApp.add(this,\''+e.name.replace(/'/g,"\\'")+'\')">＋ 운동에 추가</button>';
   },
-  setCat(c){this.cat=c;document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c===c));this.render();},
+  setCat(c){this.cat=c;this.render();},
   search(v){this.q=v;clearTimeout(this._t);this._t=setTimeout(()=>this.render(),120);},
   // 대체 종목 칩 → 그 종목으로 검색을 좁히고 카드를 펼친다(전체 카테고리로 되돌려야 검색이 걸린다).
   goto(name){
     GymInventory.select();
     this.cat='all';this.q=name;
     const inp=document.querySelector('.lib-search');if(inp)inp.value=name;
-    document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c==='all'));
     this.render();
     const box=document.getElementById('lib-list');
     const first=box&&box.querySelector('details.lib-card');

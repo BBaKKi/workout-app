@@ -1,4 +1,4 @@
-/* Render explicit, equipment-specific coaching from the All Day catalog. */
+/* Action-first coaching. Short cues stay visible; detailed explanation is optional. */
 (function(){
  'use strict';
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -9,7 +9,10 @@
    const row=(label,value)=>value?'<section class="coach-section"><h4>'+esc(label)+'</h4><p>'+esc(value)+'</p></section>':'';
    const group=(number,title,subtitle,body,open=false)=>'<details class="coach-group"'+(open?' open':'')+'><summary><span class="coach-index">'+number+'</span><span><b>'+title+'</b><small>'+subtitle+'</small></span></summary><div class="coach-group-body">'+body+'</div></details>';
    const breath=e.breath||'일반적인 반복에서는 힘을 쓰며 내쉬고 되돌아오며 들이쉽니다. 반동을 줄일 수 있는 속도로 움직이고, 무거운 복합운동은 반복 전 몸통을 다시 안정시키세요. 호흡을 오래 참거나 어지러운 상태로 계속하지 않습니다.';
-   return '<div class="coach-quick"><span class="coach-eyebrow">지금 기억할 3가지</span><ul>'+g.cues.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ul></div><details class="exercise-guide"><summary><span class="guide-title">자세·자극 가이드</span><span class="guide-subtitle">세팅부터 주의점까지</span></summary><div class="coach-body">'+
+   const fields=[['grip','그립'],['brace','고정할 부위'],['drive','힘의 방향'],['feel','자극점'],['watch','자세 체크']];
+   const notice=e.executionNotice?'<aside class="coach-notice" aria-label="기구 확인 주의"><b>'+esc(e.executionNotice.title)+'</b><p>'+esc(e.executionNotice.text)+'</p></aside>':'';
+   const action=e.execution?'<section class="coach-action" aria-label="수행 핵심"><h4>이렇게 수행하세요</h4><dl>'+fields.map(([key,label])=>'<div class="coach-action-row coach-action-'+key+'" data-cue="'+key+'"><dt>'+label+'</dt><dd>'+esc(e.execution[key])+'</dd></div>').join('')+'</dl><p class="coach-stop">날카로운 통증·저림·관절 끼임이 생기면 중단하세요.</p></section>':'';
+   return notice+action+'<details class="exercise-guide"><summary><span class="guide-title">자세·자극 가이드</span><span class="guide-subtitle">세팅·반복 순서 더 보기</span></summary><div class="coach-body">'+
     group('01','시작 자세','기구 세팅 · 팔꿈치 · 손잡이',row('시작 전 기구 세팅',e.setup)+row('몸·팔꿈치·관절 위치',g.position)+row('손잡이·그립',e.grip),true)+
     group('02','한 번의 반복','움직임 순서 · 범위 · 호흡','<section class="coach-section coach-steps"><h4>수행 순서</h4><ol>'+g.steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></section>'+row('가동범위',e.rom)+row('호흡·속도',breath),true)+
     group('03','자극과 근육의 역할','힘이 들어갈 곳 · 운동 요령',row('어디에, 어떻게 힘을 쓰나요?',g.feel)+row('운동 요령',e.tip)+g.variant.map(v=>row('이 변형에서 확인할 점',v)).join(''))+

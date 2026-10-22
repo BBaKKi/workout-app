@@ -13,7 +13,7 @@
   find(name){return available.find(e=>e.name===name);},
   badge(e){return '<span class="gym-status '+e.status+'">'+labels[e.status]+'</span>';},
   sourceHTML(e){return '<div class="lib-r gym-source"><span class="lib-l">확인 근거</span><span>'+esc(e.source.title)+' · '+esc(e.source.date)+evidenceFiles(e).map(f=>'<br>'+esc(f)).join('')+'</span></div>';},
-  select(){InterfaceTools.filter='all';InterfaceTools.equipment='all';LibApp.q='';LibApp.cat='all';document.querySelector('.lib-search').value='';document.querySelectorAll('.lib-chip').forEach(b=>b.classList.toggle('on',b.dataset.c==='all'));this.refresh();LibApp.render();},
+  select(){InterfaceTools.filter='all';InterfaceTools.equipment='all';LibApp.q='';LibApp.cat='all';document.querySelector('.lib-search').value='';this.refresh();LibApp.render();},
   open(){document.querySelector('.lbl-l').click();this.select();document.querySelector('.lib-search').focus();},
   refresh(){const scope=document.querySelector('#library-scope');if(!scope)return;scope.value=InterfaceTools.filter;const select=document.querySelector('#library-equipment');select.replaceChildren(new Option('전체','all'),...[...new Set(available.map(e=>e.brand))].map(n=>new Option(n,n)));select.value=InterfaceTools.equipment;},
   mount(){

@@ -1,6 +1,14 @@
-# 올데이 운동 설명 검토 · 2026-10-21 추가 검토
+# 올데이 운동 설명 검토 · 2026-10-22 수행 중심 가이드
 
-10월 18일 검토한 59개 운동에 신규 4개를 더해 현재 63개입니다. 추가 사진의 기구 구조를 대조하고 신규 4개와 로우·케이블 안내를 검토했습니다. 세팅·그립·몸과 팔꿈치 위치·근육 작용·수행 순서·가동범위·호흡·실수·중단 신호는 각 운동에 독립적으로 저장합니다. 기존 운동명의 기록 키는 그대로입니다.
+현재 64개 운동에 대해 수행 핵심 5항목(그립·고정·힘의 방향·자극·자세 체크)을 작성했습니다. 긴 설명은 접어서 유지하며, 기구별 지지대·손잡이·궤적의 차이를 짧은 안내에서도 구분합니다. 기존 운동명의 기록 키는 그대로입니다.
+
+## 10월 22일 보완
+
+- 모든 64개에 독립적인 `execution` 데이터를 저장합니다. 로우의 가슴 패드 유무, 언더그립/오버그립, 레그컬의 앉기/눕기, 보조 딥스/시티드 프레스, 원판식/핀식 세팅을 구분합니다.
+- ‘고정’은 몸통 반동이나 불필요한 관절 움직임을 줄이는 뜻입니다. 숄더 프레스의 견갑골 상방 회전, 로우에서 팔을 보내며 일어나는 견갑 움직임까지 막으라는 지시로 쓰지 않습니다.
+- 특정 근육의 완전 고립이나 자극감·통증 치료를 보장하지 않습니다. 핀식 기구에도 공통으로 붙어 있던 안전 걸쇠 조작 문구를 제거하고 실제 안전장치는 현장 안내로 확인하도록 수정했습니다.
+- Cybex 암컬은 [제조사 원문 14쪽](https://kb.cybexintl.com/Owners_Manuals/Strength/12070-999-4.pdf)과 현장 명판을 대조했습니다. 사진의 모순된 밀기 문구를 수행 지시로 사용하지 않고, **실제 저항 방향 확인 전에는 이 가이드로 수행하지 않도록** 눈에 띄는 주의문을 추가했습니다. 현장 모델 번호는 미확정입니다.
+- 소근육은 12개 운동의 보조 탐색 분류입니다. 기존 푸시·풀·하체 분류와 중량·세트 집계는 바꾸지 않습니다.
 
 ## 10월 21일 보완
 
@@ -27,7 +35,7 @@
 
 [NSCA RDL](https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/), [ACE 레그프레스](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/), [ACE 시티드 로우](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/), [Rogers Power Squat Pro](https://rogersathletic.com/products/power-squat-pro/), [Hammer DY 로우](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row), [Hammer 프론트 랫](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown), [gym80 풀오버](https://gym80.de/en/product/4350n/)를 참고했습니다. 제조사별 저항값이나 읽히지 않은 모델·레버 기능은 추정하지 않습니다. 개별 체형과 실제 설치 옵션은 현장에서 확인해야 합니다. 특정 자세의 자극감·근육 고립·통증 치료 효과를 보장하지 않습니다.
 
-## 63개 항목 점검표
+## 64개 항목 점검표
 
 모든 행은 세팅·몸 위치·동작·자극·주의의 전체 항목을 포함합니다. 사진과 보유 확인의 구분은 [기구 목록](GYM_INVENTORY.md)을 따릅니다.
 
@@ -96,3 +104,4 @@
 | Newtech 어시스트 딥스 | 딥스 | 팔꿈치는 뒤쪽으로 통제 · 어깨 앞이 편한 깊이까지만 · 손잡이를 아래로 눌러 몸 올리기 |
 | Legend 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |
 | Telju 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |
+| Cybex 바이셉스 암컬 | 팔꿈치 굴곡 | 실제 동작 확인 우선 · 위팔 패드 지지 · 팔꿈치 회전축 정렬 · 어깨 쪽으로 당기기 |
