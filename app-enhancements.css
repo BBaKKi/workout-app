@@ -86,12 +86,16 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .wl-cancel-btn,.wl-del-btn,.wl-pain-btn,.wl-wu-btn {min-height:44px;min-width:44px;font-size:12px;border-radius:8px}.wl-rep-chip {min-height:40px;min-width:40px}.wl-rep-chip-lbl {font-size:12px}
 .wl-set-chip {display:inline-flex;align-items:center;min-height:42px;padding:6px 11px;font-size:14px;border-radius:8px;background:#fff;border-color:#d2d9e6;color:#394c6c}.wl-set-chip.hit {background:#eaf5ef;color:#246247;border-color:#b9dac9}
 .ex-add-btn {min-height:46px;margin:12px 0;font-size:13px;border-radius:10px}
-/* Guides: three cues at a glance, four readable sections on demand. */
-.exercise-coaching {order:2;margin:0 0 12px}.coach-quick {background:transparent;border:0;padding:0 0 16px;margin:0}
-.coach-eyebrow {display:block;color:var(--ui-muted);font-size:11px;font-weight:750;letter-spacing:.4px;margin-bottom:10px}
-.coach-quick ul {list-style:none;counter-reset:cue;display:grid;gap:8px;margin:0;padding:0}
-.coach-quick li {counter-increment:cue;display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--ui-text);line-height:1.6;word-break:keep-all}
-.coach-quick li::before {content:counter(cue,decimal-leading-zero);font-size:10px;font-weight:750;letter-spacing:.5px;color:var(--ui-accent);flex:none}
+/* Five task-specific cues remain visible without opening nested details. */
+.exercise-coaching {order:2;margin:0 0 12px}
+.coach-action {margin:0 0 14px;min-width:0}.coach-action h4 {font-size:13px;font-weight:750;color:var(--ui-text);margin:0 0 10px}
+.coach-action dl {margin:0;border:1px solid var(--ui-border);border-radius:10px;overflow:hidden;background:#fff}
+.coach-action-row {display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;padding:12px;border-bottom:1px solid var(--ui-border)}.coach-action-row:last-child {border-bottom:0}
+.coach-action dt {font-size:12px;font-weight:750;color:#43536d;line-height:1.7}.coach-action dd {margin:0;font-size:14px;line-height:1.7;color:var(--ui-text);word-break:keep-all;overflow-wrap:anywhere}
+.coach-action-drive {background:#eef3ff}.coach-action-drive dt {color:#2949aa}.coach-action-drive dd {font-weight:700}
+.coach-stop {font-size:12px;line-height:1.6;color:#845229;margin:9px 0 0;word-break:keep-all}
+.coach-notice {margin:0 0 14px;padding:12px 14px;border:1px solid #dfb276;border-left:4px solid #b87320;border-radius:8px;background:#fff8ee;color:#704719;font-size:13px;line-height:1.7;overflow-wrap:anywhere}.coach-notice b {display:block;font-size:14px}.coach-notice p {margin:5px 0 0}
+.lib-card[open] .coach-action,.lib-card[open] .coach-notice {grid-column:1/-1}
 .exercise-guide {border:1px solid var(--ui-border);border-radius:10px;background:#fff;overflow:hidden}
 .exercise-guide>summary {list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-height:52px;padding:14px;font-size:14px;font-weight:700;background:#fff}
 .exercise-guide>summary::after {content:'＋';margin-left:auto;color:var(--ui-muted)}.exercise-guide[open]>summary::after {content:'−'}
@@ -118,6 +122,8 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .lib-search {margin:0 0 14px;width:100%;font-size:16px;min-height:52px;border:1px solid #cbd3df;border-radius:10px;background:#fff;padding:14px 16px;box-sizing:border-box}
 .lib-chips {margin:0;padding:0 0 8px;gap:7px;display:flex;flex-wrap:wrap}.lib-chip {font-size:12px;min-height:40px;padding:8px 13px;border-radius:7px;background:transparent;border:1px solid var(--ui-border);color:var(--ui-muted)}
 .lib-chip.on {background:var(--ui-text);border-color:var(--ui-text);color:#fff}
+.lib-chip-count {margin-left:5px;font-size:10px;font-variant-numeric:tabular-nums;opacity:.8}.lib-category-note {margin:0 0 14px;font-size:12px;line-height:1.7;color:var(--ui-muted);word-break:keep-all}
+@media(max-width:420px){.coach-action-row {grid-template-columns:1fr;gap:3px;padding:10px 12px}.coach-action dt {font-size:11px}.coach-action dd {font-size:14px}}
 .library-filter-panel {margin:0 0 18px;border-bottom:1px solid var(--ui-border);padding-bottom:6px}.library-filter-panel>summary {font-size:12px;min-height:44px;padding:10px 0;color:var(--ui-muted)}
 .library-filters {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}.library-filters label {font-size:12px;min-width:0}.library-filters select {width:100%;min-width:0;min-height:44px;margin-top:5px;font-size:14px;border:1px solid var(--ui-border);border-radius:8px;background:#fff;padding:8px}.library-catalog-field {grid-column:1/-1}
 #lib-list {padding:0;display:grid;gap:10px}.lib-card {border:1px solid var(--ui-border);border-radius:11px;background:#fff;margin:0;overflow:hidden;box-shadow:none}
