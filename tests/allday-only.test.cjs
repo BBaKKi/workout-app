@@ -30,7 +30,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    oldLookup:ExLog.libByName(old),prior:ExLog.prevSession(name),index:ExLog._priorSets(name),
    raw:Object.keys(ExLog.data),active:Object.keys(ExLog.activeData),analysis:await PlanApp._logData(),archive:ReferenceHistory.rows(),body:InBody._log
   }),{name,old});
-  assert.equal(state.catalog,64);assert.equal(state.mode,'current');assert.equal(state.oldLookup,undefined);
+  assert.equal(state.catalog,66);assert.equal(state.mode,'current');assert.equal(state.oldLookup,undefined);
   assert(state.plan.every(n=>n.startsWith('올데이 감일 · ')));assert.equal(state.plan[0],name);
   assert.equal(state.prior.date,'2026-11-04');assert.equal(state.prior.sets[0].weight,20);assert.equal(state.index.length,1);
   assert.deepEqual(state.active,['2026-11-04']);assert.equal(state.analysis['2026-11-04'].exercises.length,1);
@@ -56,7 +56,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const backup=await p.evaluate(async()=>{const b=await Backup._collect();return {stored:JSON.parse(b['wl_v2:2026-10']),rows:ExLog._syncRows()};});
   assert.equal(backup.stored['2026-10-17'].exercises[0].sets[0].weight,999);assert(backup.rows.some(r=>r.date==='2026-10-17'));
   for(const width of [320,390,768,1200]){await p.setViewportSize({width,height:844});assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}
-  await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),64);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
+  await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),66);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
   await p.locator('.lbl-w').click();await p.locator('.lbl-d2').click();assert.equal(await p.evaluate(()=>ExLog.session().day),'Pull A');await p.evaluate(()=>ExLog.updateBar());assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');
   const routine=await p.evaluate(()=>Object.fromEntries(TRAINING_PLAN.cycle.map(day=>[day,AppFeatures.templateRoutine(day,'2026-11-05').map(r=>({id:ExLog.libByName(r.name).id,sets:r.sets}))])));
   assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','db-lateral','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),12);
