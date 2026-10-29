@@ -1,6 +1,12 @@
-# 올데이 운동 설명 검토 · 2026-10-28 펙덱·리어 델트 보완
+# 올데이 운동 설명 검토 · 2026-10-29 스탠딩 래터럴 보완
 
-현재 66개 운동에 대해 수행 핵심 5항목(그립·고정·힘의 방향·자극·자세 체크)을 작성했습니다. 긴 설명은 접어서 유지하며, 기구별 지지대·손잡이·궤적의 차이를 짧은 안내에서도 구분합니다. 기존 운동명의 기록 키는 그대로입니다.
+현재 67개 운동에 대해 수행 핵심 5항목(그립·고정·힘의 방향·자극·자세 체크)을 작성했습니다. 긴 설명은 접어서 유지하며, 기구별 지지대·손잡이·궤적의 차이를 짧은 안내에서도 구분합니다. 기존 운동명의 기록 키는 그대로입니다.
+
+## 10월 29일 보완
+
+- 사용자 보유 확인의 스탠딩 래터럴 레이즈 머신에 수행 5항목과 독립된 상세 설명을 추가했습니다. 발·골반·몸통은 안정시키되 견갑골의 상방 회전은 허용합니다.
+- 팔 패드형·손잡이형과 몸통 지지대 유무를 조건부로 안내합니다. 제조사·설치 모델·원판/핀 방식·조절 단계는 단정하지 않습니다.
+- [ACE 래터럴 레이즈](https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/)의 몸통 안정·손목 정렬·통제된 올림/내림을 참고했습니다. 덤벨 자료는 기본 동작 참고이며 머신의 모델별 세팅 근거로 쓰지 않습니다.
 
 ## 10월 28일 보완
 
@@ -41,7 +47,7 @@
 
 [NSCA RDL](https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/), [ACE 레그프레스](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/), [ACE 시티드 로우](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/), [Rogers Power Squat Pro](https://rogersathletic.com/products/power-squat-pro/), [Hammer DY 로우](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row), [Hammer 프론트 랫](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown), [gym80 풀오버](https://gym80.de/en/product/4350n/)를 참고했습니다. 제조사별 저항값이나 읽히지 않은 모델·레버 기능은 추정하지 않습니다. 개별 체형과 실제 설치 옵션은 현장에서 확인해야 합니다. 특정 자세의 자극감·근육 고립·통증 치료 효과를 보장하지 않습니다.
 
-## 66개 항목 점검표
+## 67개 항목 점검표
 
 모든 행은 세팅·몸 위치·동작·자극·주의의 전체 항목을 포함합니다. 사진과 보유 확인의 구분은 [기구 목록](GYM_INVENTORY.md)을 따릅니다.
 
@@ -113,3 +119,4 @@
 | Cybex 바이셉스 암컬 | 팔꿈치 굴곡 | 실제 동작 확인 우선 · 위팔 패드 지지 · 팔꿈치 회전축 정렬 · 어깨 쪽으로 당기기 |
 | 펙덱 플라이 머신 | 플라이 | 등·골반 지지 · 위팔을 가슴 앞으로 모으기 · 손잡이형/전완 패드형 구분 |
 | 리어 델트 플라이 머신 | 어깨 수평 외전 | 가슴 지지 · 팔꿈치를 양옆으로 · 굽힘 일정 · 견갑 움직임 허용 |
+| 스탠딩 래터럴 레이즈 머신 | 어깨 외전 | 발·골반·몸통 안정 · 위팔을 양옆으로 · 견갑 회전 허용 · 다리 반동 줄이기 |

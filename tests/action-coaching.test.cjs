@@ -12,14 +12,14 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);
   const unchanged=await p.evaluate(()=>JSON.stringify({plan:TRAINING_PLAN,custom:ExLog.plan,records:ExLog.data}));
   const guides=await p.evaluate(()=>EXERCISE_LIBRARY.map(e=>({id:e.id,execution:e.execution,html:ExerciseCoaching.html(e),cat:e.cat,groups:e.libraryGroups})));
-  assert.equal(guides.length,66);assert.equal(new Set(guides.map(e=>e.id)).size,66);
+  assert.equal(guides.length,67);assert.equal(new Set(guides.map(e=>e.id)).size,67);
   for(const e of guides){
    assert.deepEqual(Object.keys(e.execution),['grip','brace','drive','feel','watch']);
    for(const [key,text]of Object.entries(e.execution)){assert(text.length>=15&&text.length<=130,e.id+' '+key+' must stay concise');assert(e.html.includes('data-cue="'+key+'"'));}
    assert.equal((e.html.match(/class="coach-action-row /g)||[]).length,5);
    assert(e.html.indexOf('coach-action')<e.html.indexOf('<details class="exercise-guide"'));
   }
-  await p.locator('.lbl-l').click();await p.waitForFunction(()=>document.querySelectorAll('.lib-card').length===66);
+  await p.locator('.lbl-l').click();await p.waitForFunction(()=>document.querySelectorAll('.lib-card').length===67);
   for(const cat of ['push','pull','legs','core','small']){
    await p.locator('.lib-chip[data-c='+cat+']').click();
    const expected=guides.filter(e=>e.cat===cat||e.groups.includes(cat));
@@ -28,9 +28,9 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    assert.equal(await p.locator('.lib-chip[data-c='+cat+']').getAttribute('aria-pressed'),'true');
    assert.equal(await p.locator('.lib-chip[aria-pressed=true]').count(),1);
   }
-  assert.equal(await p.locator('.lib-card').count(),13);assert(await p.locator('#lib-category-note').isVisible());
+  assert.equal(await p.locator('.lib-card').count(),14);assert(await p.locator('#lib-category-note').isVisible());
   assert((await p.locator('#lib-category-note').innerText()).includes('중복 집계하지'));
-  assert.deepEqual(await p.evaluate(()=>LibApp._items.map(e=>e.id).sort()),['seated-dip-press','paramount-triceps','db-lateral','db-curl','db-hammer','db-calf','cable-rear','cable-pushdown','cable-overhead','cable-facepull','newtech-assisted-dip','cybex-arm-curl','rear-delt-fly-machine'].sort());
+  assert.deepEqual(await p.evaluate(()=>LibApp._items.map(e=>e.id).sort()),['seated-dip-press','paramount-triceps','db-lateral','db-curl','db-hammer','db-calf','cable-rear','cable-pushdown','cable-overhead','cable-facepull','newtech-assisted-dip','cybex-arm-curl','rear-delt-fly-machine','standing-lateral-raise-machine'].sort());
   await p.locator('.lib-search').fill('암컬');await p.clock.runFor(150);
   assert.equal(await p.locator('.lib-card').count(),1);
   await p.locator('.lib-card>summary').click();
@@ -52,7 +52,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   // Both workout cards and library cards use the same five-cue renderer.
   await p.locator('.lbl-w').click();assert.equal(await p.locator('.af-current .coach-action-row').count(),5);
   await p.locator('.lbl-l').click();await p.clock.runFor(100);
-  for(const id of ['cybex-arm-curl','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine']){
+  for(const id of ['cybex-arm-curl','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine','standing-lateral-raise-machine']){
    await p.evaluate(id=>LibApp.goto(EXERCISE_LIBRARY.find(e=>e.id===id).name),id);
    assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),5);
    await p.locator('.lib-card .exercise-guide>summary').click();
@@ -65,6 +65,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const escaped=await p.evaluate(()=>{const e=structuredClone(EXERCISE_LIBRARY.find(e=>e.id==='cybex-arm-curl'));e.execution.grip='<img src=x onerror=alert(1)>';e.executionNotice.text='<script>bad()</script>';return ExerciseCoaching.html(e);});
   assert(!escaped.includes('<img'));assert(!escaped.includes('<script>'));assert(escaped.includes('&lt;img'));
   assert.deepEqual(errors,[]);
-  console.log('PASS: 66 concise five-cue guides, 13 overlapping small-muscle entries, Cybex label warning, brand/search filters, no duplicate records, 320–1200px and escaped content');
+  console.log('PASS: 67 concise five-cue guides, 14 overlapping small-muscle entries, Cybex label warning, brand/search filters, no duplicate records, 320–1200px and escaped content');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
