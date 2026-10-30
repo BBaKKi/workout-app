@@ -80,16 +80,16 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    const dates=RecordModel.weekDates(_todayKey()),[monday,tuesday]=dates,row={...WorkoutTools.template('Push A',tuesday)[0],sets:2};
    ExLog.data={[monday]:{day:'Push A',exercises:[{name:row.name,sets:[{weight:20,reps:10},{weight:20,reps:10}]}]},[tuesday]:{day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',capturedAt:new Date().toISOString(),source:'recorded',rows:[row]}}}};
    const weekly=AppFeatures.weekly(tuesday);
-   return {st,calculated,status,weekly,planned:RecordModel.plannedDays('2026-10-19'),beforeFirstWeight:ExLog.bwOn('2020-01-01')};
+   return {st,calculated,status,weekly,beforeFirstWeight:ExLog.bwOn('2020-01-01')};
   });
   // Downloads preserve what the server actually recorded; calculations for new/edited sets still use that date's weight.
-  assert.equal(regression.st.bw,undefined);assert.equal(regression.st.ew,undefined);assert.equal(regression.calculated.bw,70);assert.equal(regression.calculated.ew,50);assert.equal(regression.beforeFirstWeight,0);assert(regression.status.includes('전송 대기 1건'));assert.equal(regression.weekly.matched,0);assert.equal(regression.weekly.unplannedSets,2);assert.equal(regression.planned,4);
+  assert.equal(regression.st.bw,undefined);assert.equal(regression.st.ew,undefined);assert.equal(regression.calculated.bw,70);assert.equal(regression.calculated.ew,50);assert.equal(regression.beforeFirstWeight,0);assert(regression.status.includes('전송 대기 1건'));assert.equal(regression.weekly.matched,0);assert.equal(regression.weekly.unplannedSets,2);assert.equal(regression.weekly.sessions,1);assert.equal(regression.weekly.unknown,1);
   const yesterday=await defects.evaluate(()=>RecordModel.shift(_todayKey(),-1));
   const resume=await page({workout_resume_v1:{date:yesterday,day:'Push A',selected:{}}});assert.equal(await resume.evaluate(()=>ExLog.date===_todayKey()),true);
   const draftName=await resume.evaluate(date=>WorkoutTools.template('Push A',date)[0].name,yesterday);
   const draft=await page({workout_resume_v1:{date:yesterday,day:'Push A',selected:{'Push A':draftName}},workout_drafts_v1:{[JSON.stringify([yesterday,'Push A',draftName])]:{kg:'25',reps:'8',rpe:'',updatedAt:Date.now()}}});
   assert.equal(await draft.evaluate(()=>ExLog.date===_todayKey()),true);await draft.locator('#resume-offer button').first().click();assert.equal(await draft.evaluate(()=>ExLog.date),yesterday);assert.equal(await draft.locator('.dp1 .af-current .wl-kg-input').inputValue(),'25');
-  console.log('PASS: past-date bodyweight, zero unknown weight, metadata-only pending state, dated weekly matching, phase target and opt-in historical draft resume');
+  console.log('PASS: past-date bodyweight, zero unknown weight, metadata-only pending state, dated weekly matching, snapshot-only target and opt-in historical draft resume');
   assert.deepEqual(errors,[]);
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

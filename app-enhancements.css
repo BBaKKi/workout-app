@@ -56,7 +56,7 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 #af-focus-nav {display:none;grid-template-columns:42px minmax(0,1fr) 42px;gap:8px;margin-top:10px}
 #af-focus-nav select {min-width:0;width:100%;height:46px;font-size:13px;font-weight:650;border:1px solid var(--ui-border);border-radius:9px;padding:9px;background:#fff}
 #af-focus-nav button {font-size:22px;padding:0;background:#fff}.af-focus #af-focus-nav {display:grid}
-.af-focus .tab-w :is(.motiv-bar,.sess-sum,.block-banner,#log-brief,.day-reco,.ex-tier,.hinfo,.wu-card,.done-banner,.block-chip,.brief-card,.note-row,.day-header,.ex-stage) {display:none!important}
+.af-focus .tab-w :is(.motiv-bar,.sess-sum,.block-banner,#log-brief,.day-reco,.ex-tier,.hinfo,.wu-card,.done-banner,.brief-card,.note-row,.day-header,.ex-stage) {display:none!important}
 .af-focus .tab-w .ex-wrap:not(.af-current) {display:none!important}.af-focus .routine-top,.af-focus #routine-brief :is(small,span) {display:none}.af-focus .day-panel>.cond-row {display:none!important}
 .af-focus #routine-brief {padding:0;background:transparent;color:var(--ui-muted);border-radius:0}.af-focus #routine-brief b {font-size:12px;font-weight:500}.af-focus .session-heading {margin-bottom:10px}
 .ex-list {padding:0;gap:14px}.ex-card {background:#fff;border:1px solid var(--ui-border);border-radius:var(--radius);box-shadow:0 4px 16px #17243b04;overflow:hidden}
@@ -144,13 +144,13 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .plan-nav {position:static;display:flex;gap:8px;padding:0 0 18px;margin:0;background:transparent;flex-wrap:wrap}
 .plan-nav-chip {min-height:40px;font-size:12px;padding:8px 15px;border-radius:7px;border:1px solid var(--ui-border);background:#fff;color:var(--ui-muted)}
 .plan-hd {margin:28px 0 12px;padding:0;border:0;border-radius:0;background:transparent;font-size:17px;font-weight:750;letter-spacing:-.4px;line-height:1.5;scroll-margin-top:18px}
-.plan-card,.plan-block-card,.plan-body-card,.bk-card,.cardio-section,.info-card,.ib-card {border:1px solid var(--ui-border);border-radius:var(--radius);box-shadow:none;background:#fff}
-.plan-card,.bk-card,.plan-block-card {padding:20px}.plan-card+.plan-card {margin-top:12px}.plan-fold {border-bottom:1px solid var(--ui-border);padding-bottom:16px}.plan-fold>summary {min-height:44px}.plan-fold .plan-card {margin-top:10px}
-.plan-stat-grid {gap:10px}.plan-stat-card {padding:17px 14px;border:1px solid var(--ui-border);border-radius:12px}.plan-stat-lbl {font-size:12px}.plan-stat-cur {font-size:28px;letter-spacing:-1px;font-weight:750}.plan-stat-sub {font-size:11px;line-height:1.6}
+.plan-card,.plan-body-card,.bk-card,.cardio-section,.info-card,.ib-card {border:1px solid var(--ui-border);border-radius:var(--radius);box-shadow:none;background:#fff}
+.plan-card,.bk-card {padding:20px}.plan-card+.plan-card {margin-top:12px}.plan-fold {border-bottom:1px solid var(--ui-border);padding-bottom:16px}.plan-fold>summary {min-height:44px}.plan-fold .plan-card {margin-top:10px}
+.plan-stat-grid {gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}.plan-stat-card {min-width:0;padding:17px 14px;border:1px solid var(--ui-border);border-radius:12px}.plan-stat-vals {flex-wrap:wrap}.plan-stat-lbl {font-size:12px}.plan-stat-cur {font-size:28px;letter-spacing:-1px;font-weight:750}.plan-stat-sub {font-size:11px;line-height:1.6}
 .ws-grid {gap:1px;border-radius:10px;background:var(--ui-border)}.ws-cell {padding:20px 10px;text-align:left}.ws-v {font-size:28px;letter-spacing:-1px;font-variant-numeric:tabular-nums}.ws-l {font-size:12px;margin-top:8px}.ws-note {font-size:12px;line-height:1.7;margin-top:14px}
 .plan-vol-empty,.wr-row {font-size:13px;line-height:1.8}.wr-row>span {min-width:0}.wr-row>span:first-child {flex:0 1 40%}.wr-row .v {white-space:normal;text-align:right;font-family:inherit;overflow-wrap:anywhere;flex:0 1 60%}.pv-row {margin:12px 0}.pv-nm,.pv-val {font-size:12px}.pv-track {height:7px}.pv-nm {width:68px}.plan-vol-note {font-size:12px;line-height:1.7}
 .plan-week-grid {gap:3px}.plan-day-cell {border-radius:7px;min-width:0;padding:10px 0}.plan-day-cell.today {border-color:var(--ui-accent)}.plan-day-cell.done {background:var(--ui-soft);border-color:#c5d1f8}.pw-nav {min-width:40px;min-height:40px;font-size:22px;border-radius:8px}
-.plan-block-fill {background:var(--ui-accent)}.plan-block-title,.plan-block-item {font-size:13px}.plan-week-note,.plan-blood-note,.plan-inbody-note {font-size:12px;line-height:1.7}
+.plan-week-note,.plan-blood-note,.plan-inbody-note {font-size:12px;line-height:1.7}
 .plan-blood-item {padding:14px;border:1px solid var(--ui-border)}.plan-blood-name {font-size:14px}.plan-blood-why {font-size:12px;line-height:1.7}
 .copy-report-btn {min-height:44px;border:1px solid var(--ui-border);background:#fff;border-radius:9px;font-size:12px;color:var(--ui-accent);margin:10px 0 16px}
 .af-number {font-size:40px;font-weight:750;line-height:1.2;letter-spacing:-1.5px;margin:16px 0 8px;font-variant-numeric:tabular-nums}.af-number small {font-size:14px;letter-spacing:0}

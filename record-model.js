@@ -38,14 +38,7 @@
       const start = this.shift(date, -offset);
       return Array.from({length: 7}, (_, i) => this.shift(start, i));
     },
-    plannedDays(date) {
-      return this.weekDates(date).filter(d => {
-        if (!this.activeDate(d)) return false;
-        if (Object.values(ExLog.activeData[d]?.routineSnapshots || {}).some(s => s.rows.some(r => !r.skipped))) return true;
-        if (d < TRAINING_PLAN.start || d > TRAINING_PLAN.end) return false;
-        return TRAINING_PLAN.cycle.includes(TRAINING_PLAN.schedule(d));
-      }).length;
-    },
+
     exerciseId(name) {
       // Injective encoding: no hash collision or fuzzy name matching during migration.
       return 'exercise:' + encodeURIComponent(name);

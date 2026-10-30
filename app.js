@@ -1,11 +1,9 @@
-const IB_GOALS={wt:(TRAINING_PLAN.config.weightMin+TRAINING_PLAN.config.weightMax)/2,wtMin:TRAINING_PLAN.config.weightMin,wtMax:TRAINING_PLAN.config.weightMax,sm:37,bf:24};
+const IB_GOALS={...TRAINING_PLAN.goals};
 const GOAL_MODEL={
   fatOf:(wt,bf)=>wt*bf/100,lbmOf:(wt,bf)=>wt*(1-bf/100),
-  weightState(wt){return wt<IB_GOALS.wtMin?'low':wt>IB_GOALS.wtMax?'high':'maintain';},
-  judge(wt,bf,sm){const state=this.weightState(wt);return {cond:[
-    {k:'체중 '+IB_GOALS.wtMin+'–'+IB_GOALS.wtMax+'kg',ok:state==='maintain',v:wt.toFixed(1)+'kg',m:state==='low'?'유지 범위 아래 · 추가 감량보다 회복 확인':state==='high'?'목표 범위까지 천천히 조절':'유지 범위 · 추가 감량 목표 없음'},
-    {k:'체지방률 23–24%',ok:bf<=24,v:bf.toFixed(1)+'%',m:'기본 참고 목표 · 같은 조건에서 추세 확인'},
-    {k:'골격근량 약 37kg',ok:sm!=null&&sm>=37,v:sm==null?'—':sm.toFixed(1)+'kg',m:'회복 참고 목표 · 수분 변동과 운동 수행 함께 확인'}]};}
+  judge(wt,bf,sm){return {cond:[
+    {k:'체지방률 '+IB_GOALS.bf+'% 이하',ok:Number.isFinite(bf)&&bf<=IB_GOALS.bf,v:Number.isFinite(bf)?bf.toFixed(1)+'%':'—',m:'같은 조건에서 측정한 추세와 함께 확인'},
+    {k:'골격근량 '+IB_GOALS.sm+'kg 이상',ok:Number.isFinite(sm)&&sm>=IB_GOALS.sm,v:Number.isFinite(sm)?sm.toFixed(1)+'kg':'—',m:'수분 변동과 운동 수행을 함께 확인'}]};}
 };
 const Backup={
   KEYS:['retired_links_v7','exercise_favorites_v1','plan_v3','routine_profile','brand_coef','ex_load','deload_v1','inbody_dirty','sync_dirty','sync_del','sync_last_ok','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
@@ -101,7 +99,7 @@ const InBody={
 
     const FIELDS=[
       {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,col:'#085041',dir:-1,wide:true,
-       sub:v=>GOAL_MODEL.weightState(v)==='maintain'?'유지 범위 '+IB_GOALS.wtMin+'–'+IB_GOALS.wtMax+'kg':GOAL_MODEL.weightState(v)==='low'?'유지 범위 아래 · 추가 감량 보류':'유지 범위까지 '+(v-IB_GOALS.wtMax).toFixed(1)+'kg'},
+       sub:()=>IB_GOALS.wt+'kg은 참고값 · 체지방률과 골격근량으로 목표 확인'},
       {key:'sm',lbl:'골격근량',unit:'kg',goal:IB_GOALS.sm,col:'#3B6D11',dir:1,
        sub:v=>{const s=log[0]?.sm??v;const d=(v-s).toFixed(1);const r=(IB_GOALS.sm-v).toFixed(1);return(d>=0?'+':'')+d+'kg 변화 · 잔여 +'+Math.max(0,r)+'kg';}},
       {key:'bf',lbl:'체지방률',unit:'%',goal:IB_GOALS.bf,col:'#185FA5',dir:-1,
@@ -109,7 +107,8 @@ const InBody={
     ];
 
     const pct=(f,v)=>{
-      if(f.key==='wt')return GOAL_MODEL.weightState(v)==='maintain'?100:Math.max(0,100-Math.abs(v-84)*10);
+      if(f.key==='wt')return null;
+      if(f.dir===1?v>=f.goal:v<=f.goal)return 100;
       const start=log[0]?.[f.key]??v,goal=f.goal;
       const total=Math.abs(goal-start);if(!total)return 0;
       const done=f.dir===1?(v-start):(start-v);
@@ -141,14 +140,14 @@ const InBody={
       const vStr=f.key==='ab'?(+v).toFixed(2):v;
       html+='<div class="plan-stat-card"'+(f.wide?' style="grid-column:1/-1"':'')+'>'+
         '<div class="plan-stat-lbl">'+f.lbl+'</div>'+
-        '<div class="plan-stat-vals"><span class="plan-stat-cur">'+vStr+'</span><span class="plan-stat-unit">'+f.unit+'</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">'+(f.key==='wt'?IB_GOALS.wtMin+'–'+IB_GOALS.wtMax:f.goal)+(f.unit==='%'?'%':'')+(f.unit==='kg'?'kg':'')+'</span></div>'+
-        '<div class="plan-stat-bar"><div class="plan-stat-fill" style="width:'+p+'%;background:'+f.col+'"></div></div>'+
+        '<div class="plan-stat-vals"><span class="plan-stat-cur">'+vStr+'</span><span class="plan-stat-unit">'+f.unit+'</span><span class="plan-stat-sep">→</span><span class="plan-stat-tgt">'+(f.key==='wt'?'참고 '+f.goal:f.goal)+(f.unit==='%'?'%':'')+(f.unit==='kg'?'kg':'')+'</span></div>'+
+        (f.key==='wt'?'':'<div class="plan-stat-bar"><div class="plan-stat-fill" style="width:'+p+'%;background:'+f.col+'"></div></div>')+
         '<div class="plan-stat-sub">'+f.sub(v)+'</div>'+
         spark(f.key,f.col)+
         '</div>';
     });
-    const J=GOAL_MODEL.judge(+last.wt,+last.bf,last.sm==null?null:+last.sm);
-    html='<div class="goal-chk">'+J.cond.map(c=>'<div class="gchk '+(c.ok?'ok':'no')+'"><span class="gk">'+c.k+'</span><span class="gv">'+c.v+'</span><span class="gm">'+c.m+'</span></div>').join('')+'</div><div class="ib-signal">최근 인바디의 단일 측정값입니다. 체중 유지 여부는 아침 체중 7일 평균, 허리둘레, 운동 기록을 함께 확인하세요.</div>'+html;
+    const J=GOAL_MODEL.judge(last.wt,last.bf,last.sm);
+    html='<div class="goal-chk">'+J.cond.map(c=>'<div class="gchk '+(c.ok?'ok':'no')+'"><span class="gk">'+c.k+'</span><span class="gv">'+c.v+'</span><span class="gm">'+c.m+'</span></div>').join('')+'</div><div class="ib-signal">최근 인바디의 단일 측정값입니다. 같은 조건의 체성분 추세, 아침 체중 7일 평균, 허리둘레와 운동 기록을 함께 확인하세요.</div>'+html;
     // 선택 지표(허리둘레·내장지방): 기록된 항목만 카드 표시. 스파크라인은 해당 값이 있는 측정만 사용
     const optSpark=(key,col)=>{
       const vals=this._log.filter(e=>e[key]!=null).slice(-8).map(e=>e[key]);
@@ -161,7 +160,7 @@ const InBody={
     };
     const OPT_FIELDS=[
       {key:'waist',lbl:'허리둘레',unit:'cm',col:'#8B5E3C',sub:()=> '같은 위치·조건의 추세 참고'},
-      {key:'ab',lbl:'복부지방률',unit:'',col:'#BA7517',sub:()=> '인바디 출력값 · 참고 지표'},
+      {key:'ab',lbl:'복부지방률',unit:'',col:'#BA7517',sub:()=> '참고 목표 ≤ '+IB_GOALS.ab.toFixed(2)+' · 같은 조건에서 추세 확인'},
       {key:'vf',lbl:'내장지방레벨',unit:'',col:'#A03C3C',sub:()=> '같은 기기의 추세 참고'},
       {key:'pa',lbl:'위상각',unit:'°',col:'#6B4FA0',sub:()=> '측정 조건과 함께 기록'},
       {key:'bmr',lbl:'기초대사량',unit:'kcal',col:'#5B8A2A',sub:()=> '기기의 추정값 · 섭취 열량과 다름'}
@@ -234,7 +233,7 @@ const InBody={
   },
   renderProjection(){
     const box=document.getElementById('inbody-projection');if(!box)return;
-    box.innerHTML='<div class="prj-card"><div class="prj-hd">'+TRAINING_PLAN.end+' 참고 목표</div><div class="prj-row"><b>기본</b><span>'+IB_GOALS.wtMin+'–'+IB_GOALS.wtMax+'kg 유지 · 골격근량 약 37kg · 체지방률 23–24%</span></div><div class="prj-row"><b>도전</b><span>골격근량 약 37.5kg · 체지방률 22–23%</span></div><div class="prj-note">개인 회복 속도에 따라 달라지는 계획값입니다. 인바디 추세를 직선으로 연장한 도달일 예측은 사용하지 않습니다.</div></div>';
+    box.innerHTML='<div class="prj-card"><div class="prj-hd">'+TRAINING_PLAN.end+' 목표</div><div class="prj-row"><b>체성분</b><span>골격근량 '+IB_GOALS.sm+'kg 이상 · 체지방률 '+IB_GOALS.bf+'% 이하</span></div><div class="prj-row"><b>체중 참고</b><span>'+IB_GOALS.wt+'kg · 달성 판정에서 제외</span></div><div class="prj-note">설정한 목표이며 도달을 보장하는 예측은 아닙니다. 체지방률이 더 낮거나 골격근량이 더 높아져도 목표 달성으로 표시합니다.</div></div>';
   },
   openModal(){
     const today=_todayKey();
