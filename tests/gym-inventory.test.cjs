@@ -38,6 +38,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   for(const photoName of photoNames){
     await a.evaluate(n=>LibApp.goto(n),photoName);await a.locator('.lib-card .exercise-guide>summary').click();
     assert(await a.locator('.lib-card .coach-body').isVisible());
+    await a.locator('.lib-card .coach-reference>summary').click();
     assert(/\.jpe?g/i.test(await a.locator('.lib-card .gym-source').innerText()));
     assert.equal(await a.locator('.lib-card .gym-source a').count(),0);
     assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
@@ -47,6 +48,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   for(const id of ['db-calf','cable-rear','cable-overhead','tbar-available']){
     await a.evaluate(id=>LibApp.goto(GymInventory.accessories.find(e=>e.id===id).name),id);
     await a.locator('.lib-card .exercise-guide>summary').click();
+    await a.locator('.lib-card .coach-reference>summary').click();
     assert((await a.locator('.lib-card .gym-source').innerText()).includes(id.startsWith('cable-')?'IMG_5861.jpeg':'사용자 보유 확인'));
     assert.equal(await a.locator('.lib-card .gym-source a').count(),0);assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   }

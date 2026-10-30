@@ -14,9 +14,10 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const guides=await p.evaluate(()=>EXERCISE_LIBRARY.map(e=>({id:e.id,execution:e.execution,html:ExerciseCoaching.html(e),cat:e.cat,groups:e.libraryGroups})));
   assert.equal(guides.length,67);assert.equal(new Set(guides.map(e=>e.id)).size,67);
   for(const e of guides){
-   assert.deepEqual(Object.keys(e.execution),['grip','brace','drive','feel','watch']);
+   assert.deepEqual(Object.keys(e.execution),['setup','grip','brace','drive','feel','watch']);
    for(const [key,text]of Object.entries(e.execution)){assert(text.length>=15&&text.length<=130,e.id+' '+key+' must stay concise');assert(e.html.includes('data-cue="'+key+'"'));}
-   assert.equal((e.html.match(/class="coach-action-row /g)||[]).length,5);
+   assert.equal((e.html.match(/class="coach-action-row /g)||[]).length,6);
+   assert(!/coach-stop|coach-safety|날카로운 통증·저림/.test(e.html),e.id+' repeats generic advice');
    assert(e.html.indexOf('coach-action')<e.html.indexOf('<details class="exercise-guide"'));
   }
   await p.locator('.lbl-l').click();await p.waitForFunction(()=>document.querySelectorAll('.lib-card').length===67);
@@ -38,7 +39,8 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert(await p.locator('.lib-card .coach-notice').isVisible());
   assert((await p.locator('.lib-card .coach-notice').innerText()).includes('모순'));
   assert((await p.locator('.lib-card [data-cue=drive]').innerText()).includes('어깨 쪽으로'));
-  assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),5);
+  assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),6);
+  assert(!(await p.locator('.lib-card .coach-reference').evaluate(e=>e.open)));
   assert(!(await p.locator('.lib-card .coach-body').isVisible()));
   const curl=await p.evaluate(()=>{const e=EXERCISE_LIBRARY.find(e=>e.id==='cybex-arm-curl');return {name:e.name,cat:e.cat,type:ExLog.loadTypeOf(e.name),source:e.source.file};});
   assert.deepEqual(curl,{name:'올데이 감일 · Cybex 바이셉스 암컬',cat:'pull',type:'normal',source:'IMG_5866.jpeg'});
@@ -49,22 +51,26 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(await p.locator('.lib-chip[data-c=all]').getAttribute('aria-pressed'),'true');
   await p.locator('.library-filter-panel>summary').click();await p.locator('#library-equipment').selectOption('Cybex');
   await p.locator('.lib-chip[data-c=small]').click();assert.equal(await p.locator('.lib-card').count(),1);
-  // Both workout cards and library cards use the same five-cue renderer.
-  await p.locator('.lbl-w').click();assert.equal(await p.locator('.af-current .coach-action-row').count(),5);
+  // Both workout cards and library cards use the same six-cue renderer.
+  await p.locator('.lbl-w').click();assert.equal(await p.locator('.af-current .coach-action-row').count(),6);
   await p.locator('.lbl-l').click();await p.clock.runFor(100);
-  for(const id of ['cybex-arm-curl','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine','standing-lateral-raise-machine']){
+  for(const id of ['lexco-masterpro-curl','cybex-arm-curl','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine','standing-lateral-raise-machine']){
    await p.evaluate(id=>LibApp.goto(EXERCISE_LIBRARY.find(e=>e.id===id).name),id);
-   assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),5);
+   assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),6);
    await p.locator('.lib-card .exercise-guide>summary').click();
+   await p.locator('.lib-card .coach-group').nth(1).locator('summary').click();
+   assert.equal(await p.locator('.lib-card .coach-corrections dt:visible').count(),2);
    for(const width of [320,390,768,1200]){
     await p.setViewportSize({width,height:850});
     assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,id+' at '+width);
    }
   }
   assert.equal(await p.evaluate(()=>JSON.stringify({plan:TRAINING_PLAN,custom:ExLog.plan,records:ExLog.data})),unchanged);
-  const escaped=await p.evaluate(()=>{const e=structuredClone(EXERCISE_LIBRARY.find(e=>e.id==='cybex-arm-curl'));e.execution.grip='<img src=x onerror=alert(1)>';e.executionNotice.text='<script>bad()</script>';return ExerciseCoaching.html(e);});
+  const seated=guides.find(e=>e.id==='lexco-masterpro-curl');
+  for(const cue of ['회전축','허벅지','엉덩이가 앞으로 밀리면 중량'])assert(JSON.stringify(seated.execution).includes(cue));
+  const escaped=await p.evaluate(()=>{const e=structuredClone(EXERCISE_LIBRARY.find(e=>e.id==='cybex-arm-curl'));e.execution.grip='<img src=x onerror=alert(1)>';e.executionNotice.text='<script>bad()</script>';e.coaching.corrections=[{sign:'<img src=x>',fix:'<script>bad()</script>'}];return ExerciseCoaching.html(e);});
   assert(!escaped.includes('<img'));assert(!escaped.includes('<script>'));assert(escaped.includes('&lt;img'));
   assert.deepEqual(errors,[]);
-  console.log('PASS: 67 concise five-cue guides, 14 overlapping small-muscle entries, Cybex label warning, brand/search filters, no duplicate records, 320–1200px and escaped content');
+  console.log('PASS: 67 practical six-cue guides, specific corrections, collapsed references, 14 overlapping small-muscle entries, Cybex label warning, unchanged records/plans, 320–1200px and escaped content');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

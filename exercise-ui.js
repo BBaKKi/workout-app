@@ -186,10 +186,11 @@ const LibApp={
     const e=(this._items||[])[+d.dataset.i];if(!e)return;
     d.dataset.built='1';
     const body=d.querySelector('.lib-body');if(!body)return;
-    body.innerHTML=ExerciseCoaching.html(e)
-      +(e.gym?GymInventory.sourceHTML(e):'')
+    const reference=(e.gym?GymInventory.sourceHTML(e):'')
       +(e.recordingNote?'<p class="coach-footnote">'+_esc(e.recordingNote)+'</p>':'')
-      +(e.equipmentNote?'<p class="coach-footnote">'+_esc(e.equipmentNote)+'</p>':'')
+      +(e.equipmentNote?'<p class="coach-footnote">'+_esc(e.equipmentNote)+'</p>':'');
+    body.innerHTML=ExerciseCoaching.html(e)
+      +(reference?'<details class="coach-reference"><summary>기구·기록 참고</summary>'+reference+'</details>':'')
       // 대체 종목: 기구가 찼을 때의 분기점. 눌러서 바로 그 종목 카드로 이동한다.
       +((e.alt&&e.alt.length)?'<div class="lib-r"><span class="lib-l alt">대체</span><span class="lib-alts">'
           +e.alt.map(a=>'<button class="lib-altb" onclick="LibApp.goto(\''+a.replace(/'/g,"\\'")+'\')">'+a+'</button>').join('')
