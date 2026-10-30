@@ -8,7 +8,7 @@
  const shift=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return _localKey(x);};
  const nameOf=w=>(w.querySelector('.ex-nm')?.textContent||'').trim();
  const PREF_KEYS=['plan_v3','plan_v2','routine_profile','ex_base','ex_rest','ex_memo','ex_load','block_v1','deload_v1','training_config_v1','ex_equipment_v1','exercise_favorites_v1'];
- const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',block_v1:'훈련 블록',deload_v1:'디로드 설정',training_config_v1:'계획 기간·목표',ex_equipment_v1:'기구별 구조화 세팅',exercise_favorites_v1:'운동 즐겨찾기'};
+ const PREF_LABELS={plan_v3:'새 루틴 · 종목/세트/반복',plan_v2:'기존 루틴 · 종목/세트/반복',routine_profile:'선택한 루틴',ex_base:'기구 기본 중량',ex_rest:'휴식 시간',ex_memo:'기구 메모',ex_load:'부하 유형',block_v1:'이전 블록 설정 (보관)',deload_v1:'이전 디로드 설정 (보관)',training_config_v1:'계획 기간·목표',ex_equipment_v1:'기구별 구조화 세팅',exercise_favorites_v1:'운동 즐겨찾기'};
  const A=window.AppFeatures={ready:false,focus:read('focus_mode',true),selected:{},weights:read('daily_weight_v1',{}),conflict:null,settingsMessage:'',syncing:false,
   canonical(n){return n;},
   priority(name){
@@ -27,16 +27,18 @@
    if(!RecordModel.activeDate(date))return [];
    const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercisesFor(day,date)||[], names=base.concat((p.add||[]).filter(n=>RecordModel.activeName(n)&&!base.includes(n))), seen=new Set();
    return names.map((original,index)=>{
-    const candidate=(p.swap||{})[original],name=RecordModel.activeName(candidate)?candidate:original;if((p.rm||[]).includes(original)||seen.has(name))return null;seen.add(name);
-    const cfg=p.config?.[original]||p.config?.[name]||{},d=this.defaults(day,original,date);
+    const previous=TRAINING_PLAN.previousSlot(day,original),swaps=p.swap||{};
+    const candidate=Object.hasOwn(swaps,original)?swaps[original]:swaps[previous],name=RecordModel.activeName(candidate)?candidate:original;
+    if((p.rm||[]).includes(original)||(previous&&(p.rm||[]).includes(previous))||seen.has(name))return null;seen.add(name);
+    const cfg=p.config?.[original]||p.config?.[previous]||p.config?.[name]||{},d=this.defaults(day,original,date);
     // Old per-day config.weight values were manual slot numbers; ignore them without deleting data.
     ['sets','min','max'].forEach(k=>{if(Number.isFinite(cfg[k]))d[k]=cfg[k];});
-    return {original,name,index,...d,...this.priority(name),baseSets:d.sets,sets:TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.phase(date).limited?Math.min(2,d.sets):d.sets};
+    return {original,name,index,...d,...this.priority(name),baseSets:d.sets,sets:d.sets};
    }).filter(Boolean);
   },
   prescription(name,day,date=ExLog.date){
    const row=this.routine(day,date).find(x=>x.name===name)||this.routine(day,date).find(x=>this.canonical(x.name)===this.canonical(name));
-   return row?{sets:row.sets,baseSets:row.baseSets,min:row.min,max:row.max,rir:TRAINING_PLAN.phase(date).repsLeft}:TRAINING_PLAN.prescription(name,day,date);
+   return row?{sets:row.sets,baseSets:row.baseSets,min:row.min,max:row.max,rir:2}:TRAINING_PLAN.prescription(name,day,date);
   },
   sort(panel){
    const day=ExLog.panelDayOf(panel),list=panel.querySelector('.ex-list');if(!list)return;
@@ -61,7 +63,7 @@
   activeDay(){const i=ExLog.PANEL_DAY.findIndex((_,i)=>$('#d'+(i+1))?.checked);return ExLog.PANEL_DAY[Math.max(0,i)];},
   openEditor(day=this.activeDay()){
    this.editorDay=day;this.editorRows=window.WorkoutTools?WorkoutTools.template(day):this.routine(day);const dialog=$('#routine-editor');
-   $('#edit-day').value=day;$('#edit-hint').textContent=TRAINING_PLAN.phase(ExLog.date).limited&&TRAINING_PLAN.mode==='current'?'기본 세트 수를 편집합니다. 복귀·적응 기간에는 최대 2세트로 표시합니다.':'앞으로 쓸 세트·반복을 편집해요. 이미 시작한 날짜의 계획은 유지됩니다.';
+   $('#edit-day').value=day;$('#edit-hint').textContent='앞으로 쓸 세트·반복을 편집해요. 이미 시작한 날짜의 계획은 유지됩니다.';
    $('#edit-rows').innerHTML=this.editorRows.map((r,i)=>'<div class="af-edit-row" data-row="'+i+'"><b>'+esc(r.name)+'</b><span class="ex-order '+r.phase+'">'+r.label+'</span><p class="af-order-reason">'+esc(r.reason)+'</p><div class="af-fields">'+[['sets','세트',r.baseSets,'1','1','20'],['min','최소 반복',r.min,'1','1','1000'],['max','최대 반복',r.max,'1','1','1000']].map(([k,label,v,step,min,max])=>'<label>'+label+'<input aria-label="'+esc(r.name+' '+label)+'" name="'+k+'" type="number" inputmode="numeric" step="'+step+'" min="'+min+'" max="'+max+'" value="'+v+'" required></label>').join('')+'</div></div>').join('');
    $('#edit-error').textContent='';if(!dialog.open)dialog.showModal();
   },
@@ -108,8 +110,8 @@
   },
   async removeWeight(date){await this.putWeight({date,deleted:true,updatedAt:new Date().toISOString()});$('#weight-message').textContent=date+' 기록 삭제됨';},
   renderWeights(){
-   if(!this.ready)return;const s=this.weightStats(), mean=s.mean===null?'—':s.mean.toFixed(1), state=s.mean===null?'측정값을 입력해 주세요':s.mean<TRAINING_PLAN.config.weightMin?'목표 범위 아래':s.mean>TRAINING_PLAN.config.weightMax?'목표 범위 위':'목표 범위 안';
-   $('#weight-summary').innerHTML='<div class="af-number">'+mean+'<small> kg</small></div><b>최근 7일 평균 · '+s.count+'/7일 기록</b><p>'+s.start.slice(5)+'–'+s.end.slice(5)+' · '+state+'<br>유지 범위 '+TRAINING_PLAN.config.weightMin+'–'+TRAINING_PLAN.config.weightMax+'kg'+(s.delta!==null?'<br>직전 7일 평균 대비 '+(s.delta>0?'+':'')+s.delta.toFixed(1)+'kg ('+s.previousCount+'/7일 기록)':'')+'</p>';
+   if(!this.ready)return;const s=this.weightStats(), mean=s.mean===null?'—':s.mean.toFixed(1), state=s.mean===null?'측정값을 입력해 주세요':'체성분·운동 수행과 함께 추세 확인';
+   $('#weight-summary').innerHTML='<div class="af-number">'+mean+'<small> kg</small></div><b>최근 7일 평균 · '+s.count+'/7일 기록</b><p>'+s.start.slice(5)+'–'+s.end.slice(5)+' · '+state+'<br>체중 참고값 '+TRAINING_PLAN.goals.wt+'kg · 달성 판정에서 제외'+(s.delta!==null?'<br>직전 7일 평균 대비 '+(s.delta>0?'+':'')+s.delta.toFixed(1)+'kg ('+s.previousCount+'/7일 기록)':'')+'</p>';
    const rows=Object.values(this.weights).filter(x=>!x.deleted).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
    $('#weight-history').innerHTML=rows.length?rows.map(r=>'<div class="af-history-row"><span>'+esc(r.date)+'</span><b>'+r.wt+'kg</b><button type="button" data-edit-weight="'+r.date+'">수정</button><button type="button" data-delete-weight="'+r.date+'" aria-label="'+r.date+' 체중 삭제">삭제</button></div>').join(''):'아직 일일 체중 기록이 없어요.';
   },
@@ -119,11 +121,9 @@
    for(const d of dates){
     if(!RecordModel.activeDate(d))continue;
     const snaps=Object.values(ExLog.activeData[d]?.routineSnapshots||{});
-    const day=ExLog.activeData[d]?.day||TRAINING_PLAN.schedule(d);
-    if(!snaps.length&&(d<TRAINING_PLAN.start||d>TRAINING_PLAN.end||!TRAINING_PLAN.cycle.includes(day)))continue;
-    if(d<_todayKey()&&!snaps.length){unknown++;continue;}
+    if(!snaps.length){if(d<=_todayKey()&&(ExLog.activeData[d]?.exercises||[]).some(e=>e.sets.some(_isWorkSet)))unknown++;continue;}
     validDates.add(d);sessions++;reconstructed+=snaps.filter(x=>x.source==='reconstructed').length;
-    const dayRows=snaps.length?snaps.flatMap(x=>x.rows).filter(r=>!r.skipped):this.routine(day,d);
+    const dayRows=snaps.flatMap(x=>x.rows).filter(r=>!r.skipped);
     const dayPlan=new Map();dayRows.forEach(row=>dayPlan.set(row.name,(dayPlan.get(row.name)||0)+row.sets));
     for(const [name,count] of dayPlan){const row=planned.get(name)||{name,planned:0};row.planned+=count;planned.set(name,row);}
     if(d<=_todayKey())for(const e of ExLog.activeData[d]?.exercises||[]){
@@ -137,7 +137,7 @@
    return {start,end,sessions,unknown,reconstructed,unplannedSets,rows,extra,total:rows.reduce((n,x)=>n+x.planned,0),done:rows.reduce((n,x)=>n+x.actual,0),matched};
   },
   renderWeekly(){
-   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 확인된 계획 · 시작한 날은 저장된 목표 기준'+(w.unknown?' · 과거 목표 미보관 '+w.unknown+'일 제외':'')+(w.reconstructed?' · 사후 입력 계획 '+w.reconstructed+'개':'')+'</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>워밍업 제외 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.extra)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+' · 빠진 날의 운동을 몰아서 할 필요는 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
+   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 확인된 계획 · 시작한 날은 저장된 목표 기준'+(w.unknown?' · 과거 목표 미보관 '+w.unknown+'일 제외':'')+(w.reconstructed?' · 사후 입력 계획 '+w.reconstructed+'개':'')+'</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>워밍업 제외 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.unplannedSets)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+(w.unplannedSets?' · 목표 미보관 '+w.unplannedSets+'개':'')+' · 기록이 없는 날은 수행 여부를 알 수 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
   },
   snapshot(){return Object.fromEntries(PREF_KEYS.map(k=>[k,localStorage.getItem(k)]));},
   prefState(url){const all=read('settings_sync_v1',{});return all[url]||{revision:0,base:null};},

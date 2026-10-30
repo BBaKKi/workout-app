@@ -3,11 +3,12 @@ const ExLog={
   initRoutineUI(){
     document.querySelectorAll('.day-panel').forEach((panel)=>{
       const day=this.panelDayOf(panel),i=this.PANEL_DAY.indexOf(day),label=document.querySelector('.lbl-d'+(i+1));
-      if(label){label.querySelector('.dn').textContent=day;label.querySelector('.dl').textContent=TRAINING_PLAN.mode==='current'?(['월','화','수','목','금','토'][i]+' · '+({'Push A':'가슴 중심','Pull A':'수직 당김','Legs A':'허벅지 앞','Push B':'어깨 중심','Pull B':'로우 중심','Legs B':'뒤쪽·엉덩이'}[day])):'기존 루틴';}
+      if(label){label.querySelector('.dn').textContent=day;label.querySelector('.dl').textContent=TRAINING_PLAN.mode==='current'?((i+1)+'/6 · '+({'Push A':'가슴 중심','Pull A':'수직 당김','Legs A':'허벅지 앞','Push B':'어깨 중심','Pull B':'로우 중심','Legs B':'뒤쪽·엉덩이'}[day])):'기존 루틴';}
       panel.querySelector('.hbadge').textContent=day;
       panel.querySelector('.hbadge').style.background=DAY_COLORS_EL[day];
       panel.querySelector('.hinfo').textContent=TRAINING_PLAN.mode==='current'?TRAINING_PLAN.focus[day]+' · 복합 2–3분 / 고립 1–2분 휴식':'기존 편집 루틴 · 컨디션에 맞춰 진행';
       const dn=panel.querySelector('.done-banner .dt');if(dn)dn.textContent=day+' 완료';
+      const prep=panel.querySelector('.wu-card');if(prep){prep.querySelector('summary').textContent=/^Legs/.test(day)?'하체 준비 · 종아리·그립 체크':'어깨 움직임 준비 · 주 2–3회';prep.querySelector('.info-body').innerHTML=TRAINING_PLAN.preparation(day).map(([title,body])=>'<p><b>'+_esc(title)+'</b><br>'+_esc(body)+'</p>').join('');}
     });
     const select=document.getElementById('routine-profile');if(select)select.value=TRAINING_PLAN.mode;
     this.renderRoutineUI();
@@ -15,11 +16,10 @@ const ExLog={
   renderRoutineUI(){
     const el=document.getElementById('routine-brief');if(!el)return;
     const heading=document.querySelector('.session-heading h1');if(heading)heading.textContent=this.date===_todayKey()?'오늘의 운동':'날짜별 운동';
-    const ph=TRAINING_PLAN.phase(this.date),planned=TRAINING_PLAN.schedule(this.date);
-    el.innerHTML='<b>올데이 · '+ph.label+'</b><span>예정: '+planned+' · '+(ph.limited?'종목당 최대 2세트 · 3–4회 여유':'1–3회 여유 · 일요일 휴식')+'</span><small>'+(ph.limited?'첫 적응 주는 월·화·목·토. 피로가 남으면 하루 더 쉬어도 괜찮아요.':'상체 운동 후 걷기 20–30분, 주 2–3회부터. 빠진 운동을 다음 날 몰아서 하지 않아요.')+'</small>';
+    el.innerHTML='<b>올데이 · '+_esc(this.dayType(this.date))+'</b><span>PPL A/B 순환 · 본세트와 워밍업은 별도</span><small>휴식일 뒤에는 다음 순서를 이어가세요. 저장된 당일 계획은 그대로 유지됩니다.</small>';
     document.querySelectorAll('.day-panel .ex-wrap').forEach(w=>{
       const nm=(w.querySelector('.ex-nm')?.textContent||'').trim(),day=this.panelDayOf(w.closest('.day-panel')),p=this.prescription(nm,day);
-      const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent=p.sets+'×'+p.min+'–'+p.max;
+      const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent='본세트 '+p.sets+'×'+p.min+'–'+p.max;
     });
     this.renderSyncStatus();
   },
@@ -46,7 +46,6 @@ const ExLog={
 
     this.syncPanel(this.dayType(this.date)); // 오늘 타입 패널 자동 선택 (switchDay와 동일 경로)
     document.addEventListener('input',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('wl-kg-input'))this._updateTotalHint(e.target);});
-    if(typeof PlanApp!=='undefined'&&PlanApp.renderBlock)PlanApp.renderBlock(); // 메타 로드 후 플랜 블록 카드 동기화
     this.initRoutineUI();
     this.injectBar();
     this.injectLogs();
@@ -104,22 +103,12 @@ const ExLog={
     }
   },
 
-  // ── 6주 훈련 블록: 시작일 저장 → 주차 계산 → 6주차에 보조 종목 로테이션 리뷰 트리거 ──
-  block:null,
+  // 백업 시점과 동기화 대기열은 기기를 다시 열어도 보존합니다.
   lastBackup:null,
   async loadMeta(){
-    try{const r=await window.storage.get('block_v1');if(r)this.block=JSON.parse(r.value);}catch(_){}
-    try{const r=await window.storage.get('deload_v1');if(r)this.deload=JSON.parse(r.value);}catch(_){}
     try{const r=await window.storage.get('last_backup');if(r)this.lastBackup=r.value;}catch(_){}
     try{const r=await window.storage.get('sync_dirty');if(r)JSON.parse(r.value).forEach(d=>this._dirty.add(d));}catch(_){} // 지난 세션의 미전송 날짜 복원
     try{const r=await window.storage.get('sync_del');if(r)this._delQ=JSON.parse(r.value)||[];}catch(_){} // 지난 세션의 미전송 삭제 복원
-  },
-  saveBlock(){window.storage.set('block_v1',JSON.stringify(this.block)).catch(e=>SafeStore.report(e));},
-  blockWeek(){ // 1부터 시작하는 주차. 블록 미설정/미래 시작일이면 null
-    if(!this.block||!this.block.start)return null;
-    const ms=new Date(this.date+'T12:00:00')-new Date(this.block.start+'T12:00:00');
-    if(ms<0)return null;
-    return Math.floor(ms/86400000/7)+1;
   },
   // ── 회복 지표(개인 기준선) ────────────────────────────────────────────────
   // RPE·수면을 고정 임계가 아니라 '내 최근 28일 기준선' 대비로 판정한다.
@@ -173,95 +162,12 @@ const ExLog={
     return v;
   },
 
-  // ── 디로드 단일 판정 ──────────────────────────────────────────────────────
-  // 이전에는 계획 탭(PlanApp.deloadSignals)과 추세 탭(renderTrends 인라인)이 서로 다른 기준으로 따로 판정해
-  // 한쪽만 켜지거나, "디로드 하세요"와 "+2.5kg 도전"이 동시에 뜨는 모순이 생겼다.
-  // 이제 두 배너와 자동 목표가 모두 이 함수 하나를 본다.
-  deloadState(){
-    const r=this.recovery(),sig=[],B=r.rpeBase;
-    if(B!=null&&r.w0.n>=6&&r.w0.rpe>=B+0.3)
-      sig.push('7일 RPE '+r.w0.rpe.toFixed(2)+' (기준선 '+B.toFixed(1)+' 대비 +'+(r.w0.rpe-B).toFixed(2)+')');
-    if(r.w0.n>=6&&r.w1.n>=6&&(r.w0.rpe-r.w1.rpe)>=0.3)
-      sig.push('RPE 전주 대비 +'+(r.w0.rpe-r.w1.rpe).toFixed(2));
-    if(r.w0.pain>=2)sig.push('통증 플래그 '+r.w0.pain+'회/7일');
-    if(r.w1.vol>0&&r.w0.vol<r.w1.vol*0.9&&r.w0.n>=3&&r.w0.rpe>=r.w1.rpe)
-      sig.push('볼륨 −'+Math.round((1-r.w0.vol/r.w1.vol)*100)+'%인데 RPE 유지↑');
-    if(r.plateau>=2)sig.push('복합 '+r.plateau+'종 3회 연속 정체');
-    const wk=this.blockWeek()||0;
-    if(wk>=5)sig.push('블록 '+wk+'주차');
-    // ── 사각지대 보고 ────────────────────────────────────────────────────
-    // 6개 신호 중 '통증'과 '블록 주차'는 각각 통증 플래그·블록 시작일이 있어야만 켜진다.
-    // 둘 다 비어 있으면 판정이 사실상 RPE 3종으로만 이뤄지는데, RPE가 내려가는 국면에서는
-    // 그 3종도 켜지지 않아 suggest 임계(2개)에 영영 못 닿는다. 화면에는 '이상 없음'으로만 보이므로
-    // 왜 조용한지를 함께 돌려준다. 컷처럼 회복이 느린 국면에서 디로드를 놓치는 경로가 여기다.
-    const blind=[];
-    if(!wk)blind.push('훈련 블록이 시작되지 않아 「블록 5주차+」 신호가 꺼져 있습니다');
-    if(!this._painEver())blind.push('통증 플래그를 한 번도 쓰지 않아 「통증 2회+/7일」 신호가 꺼져 있습니다');
-    return{signals:sig,suggest:sig.length>=2,day:this.deloadDay(),blind};
-  },
-  // 통증 플래그가 기록에 한 번이라도 쓰였는지 — dataVer로 메모이즈
-  _painEver(){
-    if(this._painEverCache&&this._painEverCache.k===this.dataVer)return this._painEverCache.v;
-    let found=false;
-    for(const dk in this.activeData){
-      if(found)break;
-      (this.activeData[dk].exercises||[]).forEach(e=>{(e.sets||[]).forEach(st=>{if(st&&st.pain)found=true;});});
-    }
-    this._painEverCache={k:this.dataVer,v:found};
-    return found;
-  },
-
-  // ── 유산소 실적: 계획은 '주 2~3회 × 20~30분'인데 10주간 1회뿐이었다 ──────────
-  // 웨이트 볼륨·강도는 매 세션 화면에 뜨지만 유산소는 어디에도 집계되지 않아, 안 하고 있다는 사실
-  // 자체가 보이지 않았다. 내장지방 레벨이 11→10에서 7주째 멈춰 있는 것과 같은 자리의 문제다.
-  weekCardio(){
-    const base=new Date(this.date+'T12:00:00');
-    let n=0,min=0;
-    for(const k in this.activeData){
-      const ago=Math.round((base-new Date(k+'T12:00:00'))/864e5);
-      if(ago<0||ago>=7)continue;
-      ((this.activeData[k]||{}).cardio||[]).forEach(c=>{const m=+c.min||0;if(m>0){n++;min+=m;}});
-    }
-    return{n,min,need:2,needMin:20};   // 계획: 주 2~3회 × 20~30분 (웨이트 대체 금지)
-  },
-
-  // ── 회복 병목(수면): 디로드와 분리한다 ────────────────────────────────────
-  // 수면 부족은 훈련 피로가 아니라 회복 용량 자체의 문제라 볼륨을 줄여도 원인이 남는다.
-  // 같은 배너에 섞으면 "디로드 했는데 왜 그대로지"가 반복되므로 별도 신호로 노출한다.
   sleepBottleneck(){
     const r=this.recovery();
     if(r.w0.sn<3||r.w1.sn<3)return null;
     if(r.w0.sleep<6.5&&r.w1.sleep<6.5)
       return{avg:(r.w0.sleep+r.w1.sleep)/2,w0:r.w0.sleep,w1:r.w1.sleep};
     return null;
-  },
-
-  // ── 디로드 주 실행: 한 번 켜면 자동 목표가 따라오고 7일 후 스스로 해제된다 ──
-  deload:null,
-  saveDeload(){window.storage.set('deload_v1',JSON.stringify(this.deload)).catch(e=>SafeStore.report(e));},
-  deloadDay(){                                               // 진행 일차 1~7, 미실행·종료면 0
-    if(!this.deload||!this.deload.start)return 0;
-    const d=Math.floor((new Date(this.date+'T12:00:00')-new Date(this.deload.start+'T12:00:00'))/864e5);
-    return (d>=0&&d<7)?d+1:0;
-  },
-  _afterDeloadChange(){
-    this._recCache=null;
-    this.injectTargets();                                    // 자동 목표 배지는 refresh()가 갱신하지 않는다
-    this.refresh();
-    if(typeof PlanApp!=='undefined'){if(PlanApp.renderBlock)PlanApp.renderBlock();if(PlanApp.renderTrends)PlanApp.renderTrends();}
-  },
-  startDeload(){
-    if(!confirm('이번 주를 디로드 주로 전환할까요?\n\n· 중량은 그대로, 세트 수만 55%\n· 증량 제안 중지\n· 7일 뒤 자동 종료'))return;
-    this.deload={start:this.date};this.saveDeload();this._afterDeloadChange();
-  },
-  endDeload(){
-    this.deload=null;this.saveDeload();this._afterDeloadChange();
-  },
-
-  startBlock(){
-    if(this.block&&this.block.start&&!confirm('새 6주 블록을 오늘부터 시작할까요?\n(현재 블록: '+this.block.start+' 시작, '+this.blockWeek()+'주차)'))return;
-    this.block={start:this.date};this.saveBlock();this.refresh();
-    if(typeof PlanApp!=='undefined'){if(PlanApp.renderTrends)PlanApp.renderTrends();if(PlanApp.renderBlock)PlanApp.renderBlock();}
   },
 
   canon(name){return name;},
@@ -311,7 +217,6 @@ const ExLog={
   dayType(d){
     const cur=this.activeData[d];
     if(cur&&cur.day)return this._baseType(cur.day);
-    if(TRAINING_PLAN.mode==='current'&&d>=TRAINING_PLAN.start&&d<=TRAINING_PLAN.end){const scheduled=TRAINING_PLAN.schedule(d);if(EL_CYCLE.includes(scheduled))return scheduled;}
     const keys=this._pastKeysDesc(d); // 캐시된 내림차순 키
     for(const k of keys){
       const ps=this.activeData[k];
@@ -478,7 +383,6 @@ const ExLog={
     return vol;
   },
   injectRecos(){
-    if(TRAINING_PLAN.phase(this.date).limited)return;
     if(typeof PlanApp==='undefined'||!PlanApp.muscleOf)return;
     const vol=this._weekMuscleSets();const byMuscle=this._recoLibIndex();
     document.querySelectorAll('.day-panel').forEach(panel=>{
@@ -586,7 +490,6 @@ const ExLog={
     return cat.reduce((a,m)=>a+Math.max(0,(RECO_TARGET[m]||0)-(vol[m]||0)),0);
   },
   recommendType(){
-    if(TRAINING_PLAN.mode==='current'&&TRAINING_PLAN.phase(this.date).limited)return null;
     const cur=this.activeData[this.date];
     if(cur&&(cur.exercises||[]).some(e=>(e.sets||[]).length))return null; // 오늘 이미 시작 — 추천 침묵
     // 성숙도 가드: 세 타입을 모두 돌아본 데이터가 있어야 추천 — 초기/공백기엔 순환 자체가 답이라 추천이 소음이 된다
@@ -642,7 +545,7 @@ const ExLog={
     p.innerHTML=h;
   },
   // ── 오늘의 준비도: 오늘 컨디션·수면 + 최근 운동일 RPE + 최근 7일 통증을 종합한 당일 강도 가이드 ──
-  // 디로드 제안(주 단위)과 달리 '오늘 증량을 갈지'의 당일 판단. 점수제(좋음 +1/나쁨 −1)로 근거를 그대로 노출하고,
+  // '오늘 증량을 갈지'의 당일 판단. 점수제(좋음 +1/나쁨 −1)로 근거를 그대로 노출하고,
   // 신호가 없거나 중립이면 침묵한다(습관성 배너 방지).
   readiness(){
     const s=this.activeSession();
@@ -704,12 +607,11 @@ const ExLog={
     });
     const rd=this.readiness();
     const rec=this.recommendType();
-    const dlD=this.deloadDay();   // 디로드 주는 7일 한정이라 상시 노출이 아니고, 무게를 정하는 화면에서 보여야 의미가 있다
-    if(!chal.length&&!fill.length&&!rd&&!rec&&!dlD){el.style.display='none';el.innerHTML='';return;}
+    if(!chal.length&&!fill.length&&!rd&&!rec){el.style.display='none';el.innerHTML='';return;}
     const short=n=>n.length>11?n.slice(0,10)+'…':n;
     const esc=n=>n.replace(/'/g,"\'");
     const item=(n,txt)=>'<span class="lb-item" onclick="ExLog.jumpToEx(\''+esc(n)+'\')">'+short(n)+' <b>'+txt+'</b></span>';
-    let h=dlD?'<span class="lb-ready low">🪫 디로드 주 '+dlD+'/7일 — 중량 유지 · 세트 55% · 증량 보류</span>':'';
+    let h='';
     if(rd)h+='<span class="lb-ready '+rd.lvl+'">'+rd.msg+'</span>';
     if(rec)h+='<span class="lb-ready mid lb-reco" onclick="ExLog.switchDay(\''+rec.type+'\')">📌 오늘 추천: <b>'+rec.type+'</b> — '+rec.why+' (탭하여 전환)</span>';
     if(chal.length)h+='<span class="lb-lbl up">⬆ 도전</span>'+chal.map(c=>item(c.n,c.w+'kg')).join('');
@@ -776,7 +678,7 @@ const ExLog={
       row.innerHTML=`<button class="ex-add-btn" onclick="ExLog.togglePicker(this)">＋ 운동 추가</button><div class="ex-add-picker" style="display:none"></div><div class="ex-custom-area"></div>`;
       panel.appendChild(row);
     });
-    // 컨디션(1~5)·수면(h) 기록 — 정체·디로드 판단의 회복 맥락 데이터
+    // 컨디션(1~5)·수면(h) 기록 — 당일 준비도와 추세 해석을 위한 맥락 데이터
     document.querySelectorAll('.day-panel').forEach(panel=>{
       if(panel.querySelector('.cond-row'))return;
       const cd=document.createElement('div');
@@ -795,6 +697,7 @@ const ExLog={
       const cr=document.createElement('div');
       cr.className='cardio-row';
       cr.innerHTML=`<div class="cardio-hd">🏃 유산소</div><div class="cardio-list"></div><button class="cardio-add" onclick="ExLog.toggleCardio(this)">＋ 유산소 기록</button><div class="cardio-form" style="display:none"><select class="cd-type"><option>걷기(LISS)</option><option>인클라인 워킹</option><option>자전거</option><option>러닝</option><option>수영</option><option>기타</option></select><label>시간 (분)<input type="number" class="cd-min" placeholder="분" inputmode="decimal" min="0.1" step="0.1"></label><label>거리 (km·선택)<input type="number" class="cd-km" min="0" step="0.01" inputmode="decimal"></label><label>경사 (%·선택)<input type="number" class="cd-incline" min="0" max="100" step="0.5" inputmode="decimal"></label><button class="cd-ok" onclick="ExLog.saveCardio(this)">기록</button></div>`;
+      const hint=document.createElement('p');hint.className='cardio-hint';hint.textContent=TRAINING_PLAN.cardioHint(this.panelDayOf(panel));cr.querySelector('.cardio-hd').after(hint);
       panel.appendChild(cr);
     });
   },
@@ -1170,7 +1073,7 @@ const ExLog={
     // 신규 입력 모드: 버튼 상태만 켜두고 confirmSet이 저장한다.
     // 이전에는 수정 모드에서만 눌 수 있어서, 통증을 남기려면 세트를 확정한 뒤 칩을 눌러 수정으로 들어가야 했다.
     // 통증은 세트 도중에 생기는데 기록에 두 단계가 더 필요했던 셈이고, 857세트 중 0건이 그 결과다.
-    // 디로드 신호 「통증 2회+/7일」과 '같은 종목 재도전 시 통증 이력 상기'가 둘 다 이 플래그에 걸려 있다.
+    // 같은 종목을 다시 수행할 때 확인할 통증 이력 플래그입니다.
     if(editIdx===''||editIdx==null){el.classList.toggle('on');return;}
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
@@ -1367,23 +1270,15 @@ const ExLog={
         // 주간 목표 볼륨 달성률 — 보고 있는 날짜가 이번 주일 때만 표시(주간 계산이 현재 주 기준이므로)
         let goal='';
         if(typeof PlanApp!=='undefined'&&PlanApp._weekKeys&&PlanApp._weekKeys(0).includes(this.date)){
-          const g=this._weekGoalPct();if(g)goal=` · 목표 볼륨 <b>${g.pct}%</b> (${g.done}/${g.target}세트)`;
+          const g=this._weekGoalPct();if(g)goal=` · 6세션 편성 대비 <b>${g.pct}%</b> (${g.done}/${g.target}세트)`;
         }
-        mb.style.display='';mb.innerHTML=`🔥 이번 주 ${wk}/${RecordModel.plannedDays(this.date)}일 완료 · 누적 ${total}회 운동${goal}`;
+        mb.style.display='';mb.innerHTML=`🔥 이번 주 ${wk}일 기록 · 누적 ${total}회 운동${goal}`;
       }
-    }
-    // 6주 블록 칩 (motiv-bar 아래)
-    if(mb&&mb.parentNode){
-      let bc=document.getElementById('block-chip');
-      if(!bc){bc=document.createElement('div');bc.id='block-chip';bc.className='block-chip';mb.parentNode.insertBefore(bc,mb.nextSibling);}
-      const bw=this.blockWeek();
-      bc.innerHTML=bw?('📆 훈련 블록 <b>'+bw+'/6주차</b>'+(bw>=6?' <span class="bc-due">리뷰 시점 — 플랜 탭 확인</span>':'')+'<span class="bc-act" onclick="ExLog.startBlock()">새 블록</span>')
-                    :('📆 6주 블록 미설정<span class="bc-act" onclick="ExLog.startBlock()">오늘부터 시작</span>');
     }
     // 레그데이 영양 리마인더 (확정된 프로토콜 상기용 — Legs/Legs+ 날짜에만)
     if(mb&&mb.parentNode){
       let ln=document.getElementById('legday-note');
-      if(!ln){ln=document.createElement('div');ln.id='legday-note';ln.className='legday-note';ln.style.display='none';const bc2=document.getElementById('block-chip');mb.parentNode.insertBefore(ln,(bc2||mb).nextSibling);}
+      if(!ln){ln=document.createElement('div');ln.id='legday-note';ln.className='legday-note';ln.style.display='none';mb.parentNode.insertBefore(ln,mb.nextSibling);}
       if(/Legs/.test(this.dayType(this.date))){ln.style.display='';ln.innerHTML='🍚 <b>레그데이 영양</b> — 운동 후 평소 식사와 수분을 챙기고, 다음 세션까지 회복 상태를 확인하세요';}
       else ln.style.display='none';
     }
@@ -1422,7 +1317,7 @@ const ExLog={
     mini.innerHTML=parts.join(' · ');
   },
 
-  // ── 종목별 전체 히스토리: canon 기준 전 기간 날짜별 본세트 + e1RM 곡선 (6주 블록 리뷰·정체 판단 근거) ──
+  // ── 종목별 전체 히스토리: canon 기준 전 기간 날짜별 본세트 + e1RM 곡선 (종목별 추세·정체 판단 근거) ──
   showHistory(name){
     const cn=this.canon(name);
     const rows=[];                                            // {dk, sets(본세트), e1(그날 최고)}
@@ -1570,10 +1465,11 @@ const ExLog={
     });});
     const g=this._weekGoalPct();
     let h='<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind;
-    h+='<div class="wr-row"><span>운동 일수</span><span class="v">'+sessions+'/'+RecordModel.plannedDays(wkKeys[0]||_todayKey())+'일</span></div>';
-    // 유산소 주간 누적 (목표 150분 — LISS 중심, 내장지방 감량 축)
+    h+='<div class="wr-row"><span>운동 일수</span><span class="v">'+sessions+'일 기록</span></div>';
+    // Recorded minutes have no intensity field; do not equate them with public-health moderate minutes.
     const cm=this._weekCardioMin();
-    h+='<div class="wr-row"><span>유산소</span><span class="v'+(cm>=150?' pr':(cm?'':' miss'))+'">'+cm+'/150분</span></div>';
+    const cardio=TRAINING_PLAN.cardio;
+    h+='<div class="wr-row"><span>유산소 기록</span><span class="v">'+cm+'분</span></div><p class="cardio-hint">운동 후 시작 참고량 '+cardio.sessions*cardio.min+'–'+cardio.sessions*cardio.max+'분/주 · 하체 수행을 보며 조절. 기록 시간은 강도별로 구분하지 않습니다.</p>';
     // 컨디션·수면 평균 (기록된 날만)
     const ca=this._weekCondAvg();
     if(ca.rate!=null)h+='<div class="wr-row"><span>평균 컨디션</span><span class="v'+(ca.rate<3?' miss':'')+'">'+ca.rate.toFixed(1)+'/5</span></div>';
@@ -1596,13 +1492,13 @@ const ExLog={
         h+='<div class="wr-row"><span>평균 세트 간격</span><span class="v">'+Math.round(avgGap*60)+'초</span></div>';
       }
     }
-    if(g)h+='<div class="wr-row"><span>목표 볼륨 달성</span><span class="v'+(g.pct>=100?' pr':'')+'">'+g.pct+'%</span></div>';
+    if(g)h+='<div class="wr-row"><span>6세션 편성 대비</span><span class="v'+(g.pct>=100?' pr':'')+'">'+g.pct+'%</span></div>';
     if(top)h+='<div class="wr-row"><span>최고 리프트</span><span class="v">'+top.name+' '+top.w+'×'+top.r+'</span></div>';
     h+='<div class="wr-sec">🏆 이번 주 신기록 '+(prs.length?'('+prs.length+')':'')+'</div>';
     h+=prs.length?prs.slice(0,6).map(p=>'<div class="wr-row"><span>'+p.name+'</span><span class="v pr">'+p.txt+'</span></div>').join('')
       :'<div class="wr-empty">이번 주 신기록 없음 — 커팅 중엔 유지도 성공입니다.</div>';
     if(misses.length){
-      h+='<div class="wr-sec">⚠ 목표 미달 부위</div>';
+      h+='<div class="wr-sec">6세션 편성보다 적게 기록된 부위</div>';
       h+=misses.slice(0,4).map(x=>'<div class="wr-row"><span>'+x.m+'</span><span class="v miss">'+(x.v%1?x.v.toFixed(1):x.v)+'/'+x.t+'세트</span></div>').join('');
     }
     if(ups.length){
@@ -1713,8 +1609,6 @@ const ExLog={
     const prev=this.prevSession(name);
     if(this.loadTypeOf(name)==='distance')return {html:prev?'지난 기록: '+prev.sets.map(st=>RecordModel.formatSet(name,st)).join(' / ')+' · 거리는 m로 기록해요.':'중량과 이동 거리(m)를 기록하세요.',up:false};
     const note=this._targetNote(name);
-    const phase=TRAINING_PLAN.phase(this.date);
-    if(TRAINING_PLAN.mode==='current'&&phase.limited)return {html:'<b>복귀·적응: 종목당 최대 2세트 · 3–4회 여유</b> — 기구 메모의 시험 범위를 참고하고 준비 세트로 중량을 정하세요. 자동 증량 보류.',up:false,cap:this.repCap(name)};
     if(!prev){
       const e=this.libByName(this.canon(name))||this.libByName(name);
       const p=this.prescription(name);const rec=p?('루틴 '+p.sets+'×'+p.min+'–'+p.max+' · '):(e&&e.sets?('도감 편성 예시 '+e.sets+' · '):'');
@@ -1741,13 +1635,6 @@ const ExLog={
     }
     const cap=this.repCap(name);
     const lastW=sets[sets.length-1].weight;
-    // 디로드 주에는 증량 제안을 끄고 '중량 유지 · 세트 55%'로 자동 전환한다(7일 뒤 자동 복귀).
-    // 배너와 자동 목표가 반대 방향을 가리키던 모순을 제거하는 부분.
-    const dlD=this.deloadDay();
-    if(dlD){
-      const sc=Math.max(2,Math.round(sets.length*0.55));
-      return{html:prevLbl+' → <b>'+lastW+'kg 유지 · '+sc+'세트</b> <span class="wt-dl">디로드 '+dlD+'/7일</span>'+note,up:false,fillW:lastW,cap};
-    }
     const prescribed=this.prescription(name);
     if(sets.some(s=>s.pain)||this.readiness()?.lvl==='low')return {html:prevLbl+' → <b>증량 보류 · 통증과 회복 상태 확인</b>'+note,up:false,cap};
     if(ago>14)return {html:prevLbl+' → <b>공백 후 재적응 · 여유 3회 남기는 중량부터</b>'+note,up:false,cap};

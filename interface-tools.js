@@ -62,7 +62,8 @@
           snapshot.rows.push({original:c.name, name:c.name, index:snapshot.rows.length, ...defaults, baseSets:defaults.sets, ...AppFeatures.priority(c.name)});
         }
         if (permanent) {
-          plan.rm = (plan.rm || []).filter(n => n !== c.name);
+          const previous=TRAINING_PLAN.previousSlot(c.day,c.name);
+          plan.rm = (plan.rm || []).filter(n => n !== c.name && n !== previous);
           if (!TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.name) && !(plan.add || []).includes(c.name)) (plan.add ||= []).push(c.name);
         }
         AppFeatures.selected[c.day] = c.name;
@@ -70,7 +71,8 @@
         const row = snapshot.rows.find(r => r.original === c.original);
         if (row) row.skipped = true;
         if (permanent) {
-          if (TRAINING_PLAN.exercisesFor(c.day,c.date).includes(c.original)) { if (!(plan.rm || []).includes(c.original)) (plan.rm ||= []).push(c.original); }
+          const original=(plan.add||[]).includes(c.original)?c.original:TRAINING_PLAN.currentSlot(c.day,c.original);
+          if (TRAINING_PLAN.exercisesFor(c.day,c.date).includes(original)) { if (!(plan.rm || []).includes(original)) (plan.rm ||= []).push(original); }
           else plan.add = (plan.add || []).filter(n => n !== c.original);
         }
       }

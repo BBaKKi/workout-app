@@ -183,7 +183,6 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .ex-week-target.up{color:#1b5e20;background:#d7f0d9;font-weight:600}
 .ex-week-target .wt-prev{color:#8e8e93;font-weight:400}
 .ex-week-target .wt-var{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#EEF2F7;color:#4A5A6E;font-size:10.5px;font-weight:600}
-.ex-week-target .wt-dl{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#F7EFE2;color:#7A5A12;font-size:10.5px;font-weight:600}
 .sess-sum{margin:10px 16px 0;padding:9px 13px;background:#eef3f7;border:1px solid #cdd9e3;border-radius:10px;font-size:13px;color:#33415c;text-align:center}
 .sess-sum b{color:#185FA5}
 .sess-pace{display:block;margin-top:4px;font-size:11px;color:#5b6b7c}
@@ -449,8 +448,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .ib-advice.plateau{background:#FFF6E5;border:1px solid #EED9A8;color:#7A5A12}
 .ib-advice.fast{background:#FDEEEE;border:1px solid #EFC1C1;color:#8E2F2F}
 .ib-advice.recomp{background:#EAF3DE;border:1px solid #C9DCB0;color:#3B6D11}
-.plan-block-deload{margin-top:8px;padding:8px 11px;border-radius:10px;background:#FFF6E5;border:1px solid #EED9A8;color:#7A5A12;font-size:11.5px;line-height:1.5}
-.plan-block-deload .dl-sep{border-top:1px solid #EED9A8;margin:8px 0}
 /* Phase */
 .plan-phase-track{margin-bottom:10px}
 .plan-phase-bar{display:flex;height:8px;background:var(--color-border-tertiary);border-radius:5px;overflow:hidden;margin-bottom:5px}
@@ -464,16 +461,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .plan-phase-focus{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
 .plan-phase-card.future{opacity:.55}
 .plan-phase-card.future .plan-phase-rate{color:var(--color-text-tertiary)}
-/* 6주 블록 */
-.plan-block-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
-.plan-block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.plan-block-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.plan-block-date{font-size:11px;color:var(--color-text-secondary)}
-.plan-block-bar{height:10px;background:var(--color-border-tertiary);border-radius:5px;overflow:hidden;margin-bottom:5px}
-.plan-block-fill{height:100%;background:linear-gradient(90deg,#3B6D11,#5B8D31);border-radius:5px;transition:width .5s}
-.plan-block-foot{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:10px}
-.plan-block-items{display:flex;flex-direction:column;gap:4px;border-top:0.5px solid var(--color-border-tertiary);padding-top:10px}
-.plan-block-item{font-size:12px;color:var(--color-text-secondary)}
 /* 주간 체크 */
 /* ── 신규: 카드 접힘 요약 ── */
 .ex-mini{font-size:11.5px;color:var(--color-text-tertiary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -579,14 +566,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .v4-val{font-size:10px;color:#8e8e93}
 .v4-note{font-size:10px;color:#8e8e93;margin-top:6px}
 /* 도감 미연결 힌트 */
-/* 6주 블록 */
-.block-chip{font-size:11px;color:#4a4a45;background:#F4F1EA;border-radius:var(--border-radius-md);padding:6px 10px;margin:6px 16px 0;display:flex;align-items:center;justify-content:center;gap:8px}
-.bc-act{margin-left:6px;color:#185FA5;cursor:pointer;font-weight:600}
-.bc-due{color:#BA7517;font-weight:600}
-.tr-block{font-size:12px;line-height:1.6;color:#153A5E;background:#EAF1F8;border:0.5px solid #CBDDEE;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
-.tr-block-list{margin:6px 0}
-.tr-block-alt{color:#185FA5}
-.tr-block .bc-act{display:inline-block;margin-left:6px}
 /* 유산소 */
 .cardio-row{margin-top:10px;padding-top:8px;border-top:0.5px dashed var(--color-border-tertiary)}
 .cardio-hd{font-size:11px;font-weight:600;color:#6b6b66;margin-bottom:6px}
@@ -753,7 +732,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .pr-e1{font-weight:700;color:#085041}
 .pr-meta{font-size:10px;color:#8e8e93}
 .pr-empty{font-size:12px;color:#8e8e93;padding:6px 0}
-/* 디로드 배너 */
 .wu-cue{margin-top:8px;padding-top:8px;border-top:1px solid #D6E2ED;font-size:11.5px;line-height:1.6;color:#3A4A5A}
 .sl-top{display:flex;gap:6px;margin-bottom:10px}
 .sl-kpi{flex:1;text-align:center;background:#F4F6FA;border:0.5px solid #DDE4EE;border-radius:10px;padding:8px 2px}
@@ -777,13 +755,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .prj-thin{margin-right:4px;padding:0 5px;border-radius:5px;background:#F0EEE9;color:#8A8375;font-size:10px}
 .prj-fast{color:#1F6B4A;font-weight:700}.prj-ontime{color:#7A5A12;font-weight:700}.prj-late{color:#A03C3C;font-weight:700}
 .tr-sleep{font-size:12px;line-height:1.6;color:#334a5e;background:#EEF4FA;border:0.5px solid #CFE0EE;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
-.tr-deload{font-size:12px;line-height:1.6;color:#5a3d10;background:#F7EFE2;border:0.5px solid #E8DBC2;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px}
-.tr-deload-plan{display:none;margin-top:8px}
-.tr-deload-plan.open{display:block}
-.dl-hd{font-size:11px;color:#5a4a1e;margin-bottom:6px;line-height:1.5}
-.dl-row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:0.5px dashed #e0d3ad;font-size:12px}
-.dl-nm{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dl-val{flex-shrink:0;font-variant-numeric:tabular-nums}
 
 /* Routine overview and persistent save status */
 .routine-home{margin:12px 0 16px;padding:16px;border:1px solid #cfe2dc;border-radius:16px;background:linear-gradient(130deg,#e8f4ef,#fff);color:#183e33}

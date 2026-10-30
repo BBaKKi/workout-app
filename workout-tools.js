@@ -52,14 +52,14 @@
    const snap=this.capture(c.day),s=ExLog.session();s.dayOverrides||={};s.dayOverrides[c.day]||={};s.dayOverrides[c.day][c.original]=c.name;
    snap.rows=snap.rows.map(r=>r.original===c.original?{...r,name:c.name,...AppFeatures.priority(c.name)}:r).sort((a,b)=>a.index-b.index);
    this.touch(c.date);
-   if(scope==='permanent'){const p=ExLog.planFor(c.day);(p.swap||={})[c.original]=c.name;await ExLog.savePlan();}
+   if(scope==='permanent'){const p=ExLog.planFor(c.day),original=(p.add||[]).includes(c.original)?c.original:TRAINING_PLAN.currentSlot(c.day,c.original);(p.swap||={})[original]=c.name;await ExLog.savePlan();}
    AppFeatures.selected[c.day]=c.name;$('#swap-scope').close();ExLog.refresh();ExLog.injectTargets();this.remember();
    AppFeatures.announce(scope==='permanent'?'이 날짜와 앞으로의 루틴을 변경했어요.':'이 날짜에만 교체했어요.');
   },
   async resetSwap(){
    const c=this.swap;if(!c||c.date!==ExLog.date)return;
    const s=ExLog.session(),snap=s.routineSnapshots?.[c.day];if(!snap)return;
-   const template=this.template(c.day,c.date).find(r=>r.original===c.original);if(!template)return;
+   const rows=this.template(c.day,c.date),template=rows.find(r=>r.original===c.original)||rows.find(r=>r.original===TRAINING_PLAN.currentSlot(c.day,c.original));if(!template)return;
    if(snap.rows.some(r=>r.original!==c.original&&r.name===template.name)){$('#swap-error').textContent='기본 운동이 이미 목록에 있어 복원할 수 없어요.';return;}
    snap.rows=snap.rows.map(r=>r.original===c.original?copy(template):r).sort((a,b)=>a.index-b.index);
    delete s.dayOverrides?.[c.day]?.[c.original];this.touch(c.date);$('#swap-scope').close();ExLog.refresh();ExLog.injectTargets();

@@ -24,9 +24,9 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     const saved=JSON.stringify(ExLog.plan),old=WorkoutTools.template('Push A','2026-10-17'),next=WorkoutTools.template('Push A','2026-10-26');
     const oldRows=JSON.parse(JSON.stringify(old));ExLog.data['2026-10-26']={day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',source:'recorded',capturedAt:'2026-10-17T10:00:00Z',rows:oldRows}}};
     const frozen=AppFeatures.routine('Push A','2026-10-26');delete ExLog.data['2026-10-26'];
-    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),limited:WorkoutTools.template('Legs A','2026-10-19').every(r=>r.sets<=2),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.map(e=>e.photo)]).size};
+    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),uncapped:WorkoutTools.template('Legs A','2026-10-19').some(r=>r.sets===3),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.map(e=>e.photo)]).size};
   });
-  assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.limited);assert.equal(transition.sources,53);
+  assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.uncapped);assert.equal(transition.sources,53);
   await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===67);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();

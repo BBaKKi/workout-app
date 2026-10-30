@@ -640,20 +640,6 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     ExLog.stopRest();ExLog.data={};
   });
 
-  console.log('\n[C. 디로드 원탭 플랜]');
-  await t('toggleDeloadPlan이 중량 유지·세트 55% 표 생성',async()=>{
-    PlanApp._deloadRows=[{n:'바벨 데드리프트',w:75,sc:4},{n:'V스쿼트 머신',w:150,sc:4}];
-    const host=d.createElement('div');host.innerHTML='<span class="bc-act"></span><div class="tr-deload-plan"></div>';d.body.appendChild(host);
-    PlanApp.toggleDeloadPlan(host.querySelector('.bc-act'));
-    const panel=host.querySelector('.tr-deload-plan');
-    ok(panel.classList.contains('open'));
-    ok(panel.innerHTML.includes('75kg × 2세트'),'디로드 수치 오류: '+panel.textContent);
-    ok(panel.innerHTML.includes('기존 4'));
-    PlanApp.toggleDeloadPlan(host.querySelector('.bc-act'));
-    ok(!panel.classList.contains('open'),'재탭 시 닫혀야 함');
-    host.remove();
-  });
-
   console.log('\n[D. 지난 기록 N일 전 표시]');
   await t('suggestTarget에 경과일 표기',async()=>{
     const dk=new Date();dk.setDate(dk.getDate()-9);
@@ -958,19 +944,6 @@ const src=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
     const rec=InBody.trendAdvice([{date:'2026-06-01',wt:88.5,sm:35.6,bf:28.9,ab:.95},{date:'2026-06-08',wt:88.4,sm:35.8,bf:28.6,ab:.95},{date:'2026-06-15',wt:88.3,sm:36.0,bf:28.4,ab:.95}]);
     ok(rec&&rec.type==='recomp',JSON.stringify(rec));
     eq(InBody.trendAdvice([{date:'2026-06-01',wt:88,sm:36,bf:28,ab:.95},{date:'2026-06-15',wt:88,sm:36,bf:28,ab:.95}]),null);
-  });
-  await t('PlanApp.deloadSignals: 고RPE+통증 누적 시 제안·평시 억제',async()=>{
-    const PlanApp=w.eval('PlanApp');
-    const lk=w.eval('_localKey');
-    const today=_todayKey();
-    const mk=off=>{const dd=new Date(today+'T12:00:00');dd.setDate(dd.getDate()-off);return lk(dd);};
-    ExLog.data={};
-    [1,2,3].forEach(off=>{ExLog.data[mk(off)]={day:'Push',exercises:[{name:'딥스 머신',sets:[
-      {weight:50,reps:8,rpe:9.5},{weight:50,reps:8,rpe:9,pain:off===1},{weight:50,reps:8,rpe:9.5,pain:off===2}]}]};});
-    const r=PlanApp.deloadSignals();
-    ok(r.suggest&&r.signals.length>=2,'제안 없음: '+JSON.stringify(r));
-    ExLog.data={};
-    ok(!PlanApp.deloadSignals().suggest,'평시 오탐');
   });
   await t('ExLog.sessionPace: 소요시간·평균 간격 집계, 15분 초과 공백 제외',async()=>{
     const t0=new Date('2026-07-06T18:00:00').getTime();

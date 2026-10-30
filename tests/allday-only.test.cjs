@@ -59,19 +59,19 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),67);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
   await p.locator('.lbl-w').click();await p.locator('.lbl-d2').click();assert.equal(await p.evaluate(()=>ExLog.session().day),'Pull A');await p.evaluate(()=>ExLog.updateBar());assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');
   const routine=await p.evaluate(()=>Object.fromEntries(TRAINING_PLAN.cycle.map(day=>[day,AppFeatures.templateRoutine(day,'2026-11-05').map(r=>({id:ExLog.libByName(r.name).id,sets:r.sets}))])));
-  assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','db-lateral','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),12);
+  assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','standing-lateral-raise-machine','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),12);
   assert.equal(Object.values(routine).flat().filter(r=>r.id==='db-calf').length,0);
-  assert.equal(Object.values(routine).flat().filter(r=>r.id==='cable-rear').reduce((n,r)=>n+r.sets,0),6);
+  assert.equal(Object.values(routine).flat().filter(r=>r.id==='cable-rear').reduce((n,r)=>n+r.sets,0),3);
   for(const day of ['Legs A','Legs B'])assert(routine[day].some(r=>r.id==='lexco-masterpro-curl'));
-  const adaptation=await p.evaluate(()=>({
+  const earlyPlan=await p.evaluate(()=>({
    routines:Object.fromEntries(['Legs A','Push B'].map(day=>[day,AppFeatures.templateRoutine(day,'2026-10-22').map(r=>({id:ExLog.libByName(r.name).id,sets:r.sets}))])),
    core:TRAINING_PLAN.prescription(GymInventory.available.find(e=>e.id==='cable-crunch').name,'Legs A','2026-10-22'),
    targets:TRAINING_PLAN.targets('2026-11-05')
   }));
-  assert.equal(adaptation.routines['Legs A'].reduce((n,r)=>n+r.sets,0),7);
-  assert.equal(adaptation.routines['Push B'].reduce((n,r)=>n+r.sets,0),10);
-  assert(Object.values(adaptation.routines).flat().every(r=>r.sets<=2));assert.equal(adaptation.core.sets,1);
-  assert.equal(adaptation.targets['대퇴사두'],12);assert.equal(adaptation.targets['종아리']||0,0);
+  assert.equal(earlyPlan.routines['Legs A'].reduce((n,r)=>n+r.sets,0),10);
+  assert.equal(earlyPlan.routines['Push B'].reduce((n,r)=>n+r.sets,0),11);
+  for(const day of ['Legs A','Push B'])assert.deepEqual(earlyPlan.routines[day],routine[day]);assert.equal(earlyPlan.core.sets,1);
+  assert.equal(earlyPlan.targets['대퇴사두'],12);assert.equal(earlyPlan.targets['종아리']||0,0);
   const progression=await p.evaluate(()=>{
    const saved=JSON.parse(JSON.stringify(ExLog.data)),date=ExLog.date;
    const name=GymInventory.available.find(e=>e.id==='db-lateral').name;
