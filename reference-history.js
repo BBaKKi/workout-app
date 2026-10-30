@@ -37,7 +37,7 @@
    const rows=TRAINING_PLAN.cycle.map((day,i)=>{const plan=AppFeatures.templateRoutine(day,RecordModel.activeDate(ExLog.date)?ExLog.date:TRAINING_PLAN.equipmentDate);return '<button type="button" data-routine-day="'+i+'"><b>'+(i+1)+'/6 · '+day+'</b><span>'+esc(TRAINING_PLAN.focus[day])+'</span><small>'+plan.length+'종목 · '+plan.reduce((n,r)=>n+r.sets,0)+'세트</small></button>';});
    $('#routine-week-grid').innerHTML=rows.join('');
    const total=TRAINING_PLAN.cycle.reduce((n,d)=>n+AppFeatures.templateRoutine(d,TRAINING_PLAN.equipmentDate).reduce((m,r)=>m+r.sets,0),0);
-   $('#routine-cycle-total').textContent='현재 기본 편성: 6세션 합계 '+total+'본세트 · 워밍업 별도. 한 주에 모두 마칠 의무량은 아닙니다.';
+   $('#routine-cycle-total').textContent='현재 기본 편성: 6세션 합계 '+total+'본세트 · 준비운동 미기록. 한 주에 모두 마칠 의무량은 아닙니다.';
   },
   mount(){
    const section=document.createElement('details');section.id='reference-history';section.className='af-card';section.innerHTML='<summary>이전 운동 기록 <small>읽기 전용</small></summary><p>이전 짐 운동과 '+TRAINING_PLAN.equipmentDate+' 이전 기록을 원래 이름과 수치로 보관해요. 올데이 중량 추천·신기록·주간 통계에는 포함하지 않아요.</p><div class="reference-filters"><label>운동·메모 검색<input id="reference-search" type="search" placeholder="운동명 또는 날짜"></label><label>시작일<input id="reference-from" type="date"></label><label>종료일<input id="reference-to" type="date"></label></div><p id="reference-count" aria-live="polite"></p><div id="reference-list"></div><button id="reference-more" type="button">12일 더 보기</button>';

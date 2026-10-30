@@ -661,21 +661,18 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .dn-t1{font-size:14px;font-weight:800}
 .dn-t2{font-size:12px;opacity:.9;margin-top:2px}
 .dn-t3{font-size:11px;color:#7ee2c3;margin-top:2px}
-/* 워밍업 램프 원탭 기록 버튼 */
 /* 세션 진행률 — 날짜 바 아래 얇은 바 (기록 기반 자동) */
 .log-progress{display:none;align-items:center;justify-content:center;gap:8px;padding:5px 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}
 .lp-bar{flex:0 1 240px;height:4px;background:#eceef0;border-radius:2px;overflow:hidden}
 .lp-fill{height:100%;border-radius:2px;transition:width .3s ease}
 .lp-txt{font-size:10px;font-weight:600;color:var(--color-text-tertiary);flex-shrink:0;font-variant-numeric:tabular-nums}
-/* 렙 원탭 칩 — 세트 입력행 아래, 손 젖은 상태에서 타이핑 없이 확정 */
+/* 반복수 칩 — 값을 채운 뒤 별도 저장 버튼으로 확정 */
 .wl-rep-chips{display:none;gap:6px;margin-top:7px;align-items:center;flex-wrap:wrap}
 .wl-rep-chip-lbl{font-size:10px;color:var(--color-text-tertiary);font-weight:600;flex-shrink:0}
 .wl-rep-chip{min-width:46px;height:38px;border:1px solid var(--color-border-secondary);border-radius:10px;background:var(--color-background-primary,#fff);font-size:15px;font-weight:700;color:#185FA5;cursor:pointer}
 .wl-rep-chip:active{background:#e3ebf2}
 .wl-rep-chip.cap{border-color:#3B6D11;color:#3B6D11}
 /* 워밍업 세트 토글·칩 */
-.wl-wu-btn{flex-shrink:0;width:38px;height:44px;border:1px solid var(--color-border-secondary);border-radius:10px;background:#fff;color:#b0b0b5;font-size:13px;font-weight:800;cursor:pointer}
-.wl-wu-btn.on{background:#FFF4E0;border-color:#E0A93D;color:#B26A00}
 .wl-set-chip.wu{opacity:.55;background:#f5f2ea;border-color:#e0d8c4;color:#8a7a55;text-decoration:none}
 /* 세션 노트 */
 .note-row{padding:0 16px 8px;background:#fff;border-bottom:1px solid #f0f0f0}

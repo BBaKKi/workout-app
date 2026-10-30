@@ -16,7 +16,7 @@ const ExLog={
   renderRoutineUI(){
     const el=document.getElementById('routine-brief');if(!el)return;
     const heading=document.querySelector('.session-heading h1');if(heading)heading.textContent=this.date===_todayKey()?'오늘의 운동':'날짜별 운동';
-    el.innerHTML='<b>올데이 · '+_esc(this.dayType(this.date))+'</b><span>PPL A/B 순환 · 본세트와 워밍업은 별도</span><small>휴식일 뒤에는 다음 순서를 이어가세요. 저장된 당일 계획은 그대로 유지됩니다.</small>';
+    el.innerHTML='<b>올데이 · '+_esc(this.dayType(this.date))+'</b><span>PPL A/B 순환 · 본세트만 기록</span><small>휴식일 뒤에는 다음 순서를 이어가세요. 저장된 당일 계획은 그대로 유지됩니다.</small>';
     document.querySelectorAll('.day-panel .ex-wrap').forEach(w=>{
       const nm=(w.querySelector('.ex-nm')?.textContent||'').trim(),day=this.panelDayOf(w.closest('.day-panel')),p=this.prescription(nm,day);
       const tag=w.querySelector('.tag.t-s');if(tag&&p)tag.textContent='본세트 '+p.sets+'×'+p.min+'–'+p.max;
@@ -629,19 +629,19 @@ const ExLog={
     const det=wrap.querySelector('details');if(det)det.open=true;
     if(wrap.scrollIntoView)wrap.scrollIntoView({behavior:'smooth',block:'start'});
   },
-  // 세션 진행률: 보고 있는 날짜의 데이 플랜 종목 중 본세트가 기록된 종목 수 — 수동 체크가 아닌 기록 기반(주간 그리드와 동일 원칙)
+  // Plan targets and actual working sets share one completion calculation.
+  sessionProgress(day=this.dayType(this.date)){
+    const rows=AppFeatures.routine(day),counts=new Map();
+    for(const e of this.activeSession().exercises||[])counts.set(e.name,(counts.get(e.name)||0)+(e.sets||[]).filter(_isWorkSet).length);
+    let total=0,matched=0,completed=0;
+    for(const row of rows){const n=counts.get(row.name)||0;total+=row.sets;matched+=Math.min(n,row.sets);if(n>=row.sets)completed++;}
+    return {total,matched,completed,exercises:rows.length,complete:total>0&&matched>=total};
+  },
   renderProgress(){
     const el=document.getElementById('log-progress');if(!el)return;
-    const day=this.dayType(this.date);
-    const idx=this.PANEL_DAY.indexOf(day);
-    const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;
-    if(!panel||day==='REST'){el.style.display='none';return;}
-    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>this.canon(x.textContent.trim())))];
-    if(!names.length){el.style.display='none';return;}
-    const doneSet=new Set((this.activeSession().exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
-    const done=names.filter(n=>doneSet.has(n)).length;
-    el.style.display='flex';
-    el.innerHTML='<div class="lp-bar"><div class="lp-fill" style="width:'+Math.round(done/names.length*100)+'%;background:'+(DAY_COLORS_EL[day]||'#085041')+'"></div></div><span class="lp-txt">'+done+'/'+names.length+'종목</span>';
+    const day=this.dayType(this.date),p=this.sessionProgress(day);
+    el.style.display=p.total?'flex':'none';if(!p.total)return;
+    el.innerHTML='<div class="lp-bar"><div class="lp-fill" style="width:'+Math.round(p.matched/p.total*100)+'%;background:'+(DAY_COLORS_EL[day]||'#085041')+'"></div></div><span class="lp-txt">'+p.matched+'/'+p.total+'본세트 · '+p.completed+'/'+p.exercises+'종목</span>';
   },
 
   updateBar(){
@@ -655,7 +655,7 @@ const ExLog={
   },
 
   makeLogHtml(){
-    return`<div class="ex-log-top"><span class="ex-log-lbl">세트 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="RPE (선택 — 마지막 세트 체감 강도)"><option value="">RPE</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option><option>9.5</option><option>10</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">세트 저장</button><button aria-label="통증 표시" class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" title="이 세트에서 통증 발생 — 확정 전에 눌러두면 함께 저장됩니다">⚠️</button><button aria-label="세트 삭제" class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">취소</button></div><div class="wl-rep-chips" style="display:none"></div>`;
+    return`<div class="ex-log-top"><span class="ex-log-lbl">세트 기록</span><button class="ex-log-add-btn" onclick="ExLog.startSet(this)">＋ 세트</button></div><div class="ex-log-chips"><span class="ex-log-empty">기록 없음</span></div><div class="ex-log-input" style="display:none"><span class="ex-log-sn"></span><input type="number" class="wl-kg-input" placeholder="kg" step="2.5" inputmode="decimal"><span class="wl-set-x">×</span><input type="number" class="wl-rp-input" placeholder="회" inputmode="numeric" onkeydown="if(event.key==='Enter')ExLog.confirmSet(this)"><select class="wl-rpe-sel" title="마지막 본세트 체감 강도 (선택)"><option value="">마지막 세트 RPE · 선택</option><option value="7">7 · 약 3회 여유</option><option value="7.5">7.5 · 2–3회 여유</option><option value="8">8 · 약 2회 여유</option><option value="8.5">8.5 · 1–2회 여유</option><option value="9">9 · 약 1회 여유</option><option value="9.5">9.5 · 거의 한계</option><option value="10">10 · 추가 반복 불가</option></select><button class="wl-confirm-btn" onclick="ExLog.confirmSet(this)">세트 저장</button><button aria-label="통증 표시" class="wl-pain-btn" onclick="ExLog.togglePainSet(this)" title="이 세트에서 통증 발생 — 확정 전에 눌러두면 함께 저장됩니다">⚠️</button><button aria-label="세트 삭제" class="wl-del-btn" onclick="ExLog.deleteSet(this)" style="display:none" title="이 세트 삭제">🗑</button><button class="wl-cancel-btn" onclick="ExLog.cancelSet(this)">취소</button></div><div class="wl-rep-chips" style="display:none"></div>`;
   },
 
   injectLogs(){
@@ -854,12 +854,12 @@ const ExLog={
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='none';
     const pb=inp.querySelector('.wl-pain-btn');if(pb)pb.classList.remove('on');
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
-    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.remove('on');
     const s=this.session();
     const ex=s.exercises.find(e=>e.name===log.dataset.exname);
     if(sn)sn.textContent=(ex?.sets.length||0)+1;
-    let lastW=ex?.sets.length?ex.sets[ex.sets.length-1].weight:'';
-    if(!ex?.sets.length){const prev=this.prevSession(log.dataset.exname);if(prev&&prev.sets.length)lastW=prev.sets[prev.sets.length-1].weight;}
+    const working=(ex?.sets||[]).filter(_isWorkSet);
+    let lastW=working.length?working.at(-1).weight:'';
+    if(!working.length){const prev=this.prevSession(log.dataset.exname);if(prev&&prev.sets.length)lastW=prev.sets[prev.sets.length-1].weight;}
     const wi=inp.querySelector('.wl-kg-input');
     const base=this.baseOf(log.dataset.exname);
     if(wi)wi.value=lastW?(base?Math.max(0,Math.round((lastW-base)*100)/100):lastW):'';  // 기본무게 등록 시 입력칸은 추가 원판
@@ -879,7 +879,7 @@ const ExLog={
       if(this.isTimed(nm)){chips.style.display='none';}
       else{
         const cap=this.repCap(nm);
-        let lastR=ex?.sets.length?ex.sets[ex.sets.length-1].reps:0;
+        let lastR=working.length?working.at(-1).reps:0;
         if(!lastR){const pv=this.prevSession(nm);if(pv&&pv.sets.length)lastR=pv.sets[pv.sets.length-1].reps;}
         if(!lastR)lastR=cap;
         const cand=[...new Set([lastR-1,lastR,lastR+1,cap].filter(x=>x>0))].sort((a,b)=>a-b);
@@ -890,7 +890,7 @@ const ExLog={
     if(wi)this._updateTotalHint(wi);
 
   },
-  // 렙 칩 탭 → 렙 입력 후 즉시 확정 (RPE·워밍업 토글은 칩을 누르기 전에 설정하면 함께 저장됨)
+  // 렙 칩은 반복수만 채웁니다. 별도 저장 버튼으로 확정합니다.
   pickRep(btn,n){
     const log=btn.closest('.ex-log');if(!log)return;
     const inp=log.querySelector('.ex-log-input');if(!inp)return;
@@ -909,7 +909,7 @@ const ExLog={
     if(!ex||!ex.sets[i])return;
     log.dataset.editIdx=String(i);                           // 수정 모드
     const rc=log.querySelector('.wl-rep-chips');if(rc)rc.style.display='none'; // 수정은 값 프리필 — 원탭 칩 미표시
-    if(sn)sn.textContent=(i+1)+' 수정';
+    if(sn)sn.textContent=(i+1)+' 수정'+(ex.sets[i].warmup?' · 이전 준비 세트 기록':'');
     const wi=inp.querySelector('.wl-kg-input');
     const ri=inp.querySelector('.wl-rp-input');
     const base=this.baseOf(log.dataset.exname);
@@ -917,7 +917,6 @@ const ExLog={
     if(ri)ri.value=ex.sets[i].reps;
     if(wi)this._updateTotalHint(wi);
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value=ex.sets[i].rpe?String(ex.sets[i].rpe):'';
-    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.toggle('on',!!ex.sets[i].warmup);
     const pb=inp.querySelector('.wl-pain-btn');if(pb)pb.classList.toggle('on',!!ex.sets[i].pain);
     const del=inp.querySelector('.wl-del-btn');if(del)del.style.display='';
     const ab=log.querySelector('.ex-log-add-btn');if(ab)ab.style.display='none';
@@ -973,10 +972,8 @@ const ExLog={
     if(_base&&(w>0||r>0))w=Math.round((w+_base)*100)/100;   // 입력=추가 원판 → 총 무게로 저장
     const rpeSel=inp.querySelector('.wl-rpe-sel');
     const rpe=rpeSel?parseFloat(rpeSel.value)||0:0;          // RPE는 선택 입력 — 있을 때만 세트에 저장
-    const wuBtn=inp.querySelector('.wl-wu-btn');
-    const wuOn=!!(wuBtn&&wuBtn.classList.contains('on'));    // 워밍업 세트 — 기록은 남기되 집계 제외
     const painBtn=inp.querySelector('.wl-pain-btn');
-    const painOn=!!(painBtn&&painBtn.classList.contains('on')); // 통증 — RPE·워밍업과 같은 방식으로 확정 시 함께 저장
+    const painOn=!!(painBtn&&painBtn.classList.contains('on')); // 통증 — 세트 확정 시 함께 저장
     const editIdx=log.dataset.editIdx;
     const s=this.session();
     let ex=s.exercises.find(e=>e.name===log.dataset.exname);
@@ -984,21 +981,21 @@ const ExLog={
     if(editIdx!==''&&editIdx!=null&&ex.sets[+editIdx]){
       // 기존 세트 제자리 수정 (휴식 타이머·PR 토스트 없음). ts는 최초 기록 시각, pain 플래그 보존.
       const old=ex.sets[+editIdx];
-      ex.sets[+editIdx]=Object.assign({_id:old._id,weight:w,reps:r,unit:RecordModel.unit(log.dataset.exname,old),ts:old.ts||new Date().toISOString()},this._loadMeta(log.dataset.exname,w,this.date,old.bw),painOn?{pain:true}:{},rpe?{rpe}:{},wuOn?{warmup:true}:{});
+      ex.sets[+editIdx]=Object.assign({_id:old._id,weight:w,reps:r,unit:RecordModel.unit(log.dataset.exname,old),ts:old.ts||new Date().toISOString()},this._loadMeta(log.dataset.exname,w,this.date,old.bw),painOn?{pain:true}:{},rpe?{rpe}:{},old.warmup?{warmup:true}:{});
       this.setSession(s);
       this.cancelSet(el);
       this.refresh();
       this._syncSoon();
       return;
     }
-    // 신규 세트 (워밍업은 PR 판정 대상 아님)
-    const isPR=wuOn?false:this.checkPR(log.dataset.exname,w,r);
-    ex.sets.push(Object.assign({weight:w,reps:r,unit:RecordModel.unit(log.dataset.exname),ts:new Date().toISOString()},this._loadMeta(log.dataset.exname,w),rpe?{rpe}:{},wuOn?{warmup:true}:{},painOn?{pain:true}:{}));
+    // 신규 입력은 본세트만. 기존 워밍업 기록은 수정·동기화 시 구분을 보존합니다.
+    const isPR=this.checkPR(log.dataset.exname,w,r);
+    ex.sets.push(Object.assign({weight:w,reps:r,unit:RecordModel.unit(log.dataset.exname),ts:new Date().toISOString()},this._loadMeta(log.dataset.exname,w),rpe?{rpe}:{},painOn?{pain:true}:{}));
     this.setSession(s);
     this.cancelSet(el);
     this.refresh();
     if(isPR)this.showPR(log.dataset.exname);
-    if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname,wuOn?60:0);} // 워밍업 후 휴식은 짧게(60초)
+    if(this.date===_todayKey()){this._askNotify();this.startRest(log.dataset.exname);}
     this._maybeSessionDone();
     this._syncSoon();
   },
@@ -1007,13 +1004,8 @@ const ExLog={
   _maybeSessionDone(){
     if(this.date!==_todayKey()||this._doneShown===this.date)return;
     const day=this.dayType(this.date);if(day==='REST')return;
-    const idx=this.PANEL_DAY.indexOf(day);
-    const panel=idx>=0?document.querySelector('.day-panel.dp'+(idx+1)):null;if(!panel)return;
-    const names=[...new Set([...panel.querySelectorAll('.ex-wrap .ex-nm')].map(x=>this.canon(x.textContent.trim())))];
-    if(!names.length)return;
+    if(!this.sessionProgress(day).complete)return;
     const s=this.activeSession();
-    const logged=new Set((s.exercises||[]).filter(e=>(e.sets||[]).some(_isWorkSet)).map(e=>this.canon(e.name)));
-    if(!names.every(n=>logged.has(n)))return;
     this._doneShown=this.date;
     // 통계: 본세트·볼륨·소요시간(ts)·오늘 PR 종목 수
     let sets=0,vol=0;const tss=[];
@@ -1038,7 +1030,7 @@ const ExLog={
     }
     let t=document.getElementById('done-toast');
     if(!t){t=document.createElement('div');t.id='done-toast';t.className='done-toast';document.body.appendChild(t);}
-    t.innerHTML='<span class="dn-emoji">✅</span><div class="dn-txt"><div class="dn-t1">'+day+' 세션 완료!</div><div class="dn-t2">'+sets+'세트 · '+Math.round(vol).toLocaleString()+'kg'+dur+(prs?' · PR '+prs+'개 🎉':'')+'</div>'+cmp+'</div>';
+    t.innerHTML='<span class="dn-emoji">✅</span><div class="dn-txt"><div class="dn-t1">'+day+' 목표 본세트 완료!</div><div class="dn-t2">'+sets+'세트 · '+Math.round(vol).toLocaleString()+'kg'+dur+(prs?' · PR '+prs+'개 🎉':'')+'</div>'+cmp+'</div>';
     t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
     try{navigator.vibrate&&navigator.vibrate(120);}catch(_){}
     clearTimeout(this._dnTimer);this._dnTimer=setTimeout(function(){t.classList.remove('show');},6000);
@@ -1055,7 +1047,6 @@ const ExLog={
     const log=inp.closest('.ex-log');
     inp.querySelector('.wl-rp-input').value='';
     const rs=inp.querySelector('.wl-rpe-sel');if(rs)rs.value='';
-    const wu=inp.querySelector('.wl-wu-btn');if(wu)wu.classList.remove('on');
     inp.style.display='none';
     const rc=log.querySelector('.wl-rep-chips');if(rc)rc.style.display='none';
     log.dataset.editIdx='';
@@ -1640,13 +1631,15 @@ const ExLog={
     if(ago>14)return {html:prevLbl+' → <b>공백 후 재적응 · 여유 3회 남기는 중량부터</b>'+note,up:false,cap};
     const allHit=sets.length>=(prescribed?prescribed.sets:2)&&sets.every(s=>s.reps>=cap&&s.weight===lastW);
     if(allHit){
-      // New equipment needs repeatable evidence, not one good set or a missing RPE.
+      // Compare complete sessions; last-set RPE is optional but required for an automatic increase.
       if(TRAINING_PLAN.mode==='current'&&lt==='normal'){
         const recent=this._exFor(this.canon(name)).filter(r=>r.date<this.date).map(r=>({date:r.date,sets:r.ex.sets.filter(_isWorkSet)})).filter(r=>r.sets.length).slice(-2);
-        const confirmed=recent.length===2&&recent.every(r=>
+        const comparable=recent.length===2&&recent.every(r=>
           (Date.parse(this.date+'T12:00:00Z')-Date.parse(r.date+'T12:00:00Z'))/864e5<=14&&
-          r.sets.length>=(prescribed?prescribed.sets:2)&&r.sets.every(s=>s.weight===lastW&&s.reps>=cap&&!s.pain&&Number.isFinite(s.rpe)&&s.rpe>0&&s.rpe<=7));
-        if(!confirmed)return{html:prevLbl+' → <b>중량 유지 · 같은 세팅으로 2회 연속 확인</b> — 모든 본세트가 반복 상한·RPE 7 이하일 때 최소 단위 증량을 검토합니다.'+note,up:false,fillW:lastW,cap};
+          r.sets.length>=(prescribed?prescribed.sets:2)&&r.sets.every(s=>s.weight===lastW&&s.reps>=cap&&!s.pain));
+        if(!comparable)return{html:prevLbl+' → <b>같은 중량·반복 상한을 2회 연속 확인</b> — 같은 기구 세팅과 가동범위를 유지하세요.'+note,up:false,fillW:lastW,cap};
+        if(recent.some(r=>!Number.isFinite(r.sets.at(-1).rpe)||r.sets.at(-1).rpe<=0))return{html:prevLbl+' → <b>자동 증량 판단 보류 · 마지막 본세트 RPE 미입력</b> — 기록은 정상 저장됐어요. 자동 제안을 원하면 종목의 마지막 본세트에만 체감 강도를 남기세요.'+note,up:false,fillW:lastW,cap};
+        if(recent.some(r=>r.sets.some(s=>s.rpe>8)))return{html:prevLbl+' → <b>중량 유지 · 반복 여유 확보</b> — 두 세션 모두 마지막 본세트 RPE 8 이하(약 2회 여유)를 확인한 뒤 최소 단위 증량을 검토합니다.'+note,up:false,fillW:lastW,cap};
       }
       // 증량분은 스택 단위(stepOf)의 배수로 올림 — 기구에 실제로 걸 수 있는 무게만 제안한다.
       const nx=this.nextWeight(name,lastW);

@@ -45,12 +45,11 @@
    const order=new Map(this.routine(day).map((x,i)=>[x.name,{...x,rank:i}]));
    const wraps=[...list.children].filter(w=>w.classList.contains('ex-wrap'));
    wraps.sort((a,b)=>(order.get(nameOf(a))?.rank??1e6)-(order.get(nameOf(b))?.rank??1e6));
-   wraps.forEach(w=>{list.appendChild(w);const row=order.get(nameOf(w));if(row){w.dataset.orderWeight=String(row.weight);w.dataset.orderPhase=row.phase;w.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+row.phase;tag.textContent=row.label;tag.title=row.reason;w.querySelector('.ex-meta')?.prepend(tag);}});
+   wraps.forEach(w=>{list.appendChild(w);const row=order.get(nameOf(w));if(row){w.dataset.orderWeight=String(row.weight);w.dataset.orderPhase=row.phase;w.querySelector('.ex-order')?.remove();const tag=document.createElement('span');tag.className='ex-order '+row.phase;tag.textContent=(row.rank+1)+' / '+order.size;tag.title='이 루틴의 수행 순서';w.querySelector('.ex-meta')?.prepend(tag);}});
    const info=panel.querySelector('.hinfo');if(info&&TRAINING_PLAN.mode==='current')info.textContent=this.routine(day).slice(0,2).map(x=>x.name).join(' → ')+' · 복합 2–3분 / 고립 1–2분 휴식';this.markPhases(panel);const rec=list.querySelector('.day-reco');if(rec)list.appendChild(rec);
   },
   markPhases(panel){
    const list=panel.querySelector('.ex-list');if(!list)return;list.querySelectorAll('.ex-tier,.ex-stage').forEach(el=>el.remove());
-   let prev=null;[...list.querySelectorAll('.ex-wrap')].filter(w=>w.style.display!=='none').forEach(w=>{const p=this.priority(nameOf(w));if(p.phase===prev)return;prev=p.phase;const h=document.createElement('div');h.className='ex-stage '+p.phase;h.textContent=p.label+' · '+({early:'주요 근력운동',middle:'보조·고립운동',late:'마무리',unclassified:'직접 입력 종목'}[p.phase]);list.insertBefore(h,w);});
   },
   decorateLibrary(){
    const list=$('#lib-list');if(!list)return;
@@ -90,7 +89,7 @@
    $('#focus-prev').disabled=at<=0;$('#focus-next').disabled=at<0||at>=rows.length-1;
    document.querySelectorAll('.day-panel').forEach(panel=>{
     const pDay=ExLog.panelDayOf(panel);panel.querySelectorAll('.ex-wrap').forEach(w=>{const on=pDay===day&&nameOf(w)===this.selected[day];w.classList.toggle('af-current',on);if(on&&this.focus){const det=w.querySelector('details');if(det)det.open=true;}
-     if(on){const prev=ExLog.prevSession(nameOf(w));let info=w.querySelector('.af-prev');if(!info){info=document.createElement('div');info.className='af-prev';w.querySelector('.ex-detail')?.prepend(info);}const sets=(prev?.sets||[]).filter(_isWorkSet);info.hidden=!sets.length;info.textContent=sets.length?'지난 기록 · '+prev.date+' · '+sets.map(s=>RecordModel.formatSet(nameOf(w),s)).join(' / '):'첫 기록 · 준비 세트부터 시작하세요.';}
+     w.querySelector('.af-prev')?.remove();
     });
    });
   },
@@ -137,7 +136,7 @@
    return {start,end,sessions,unknown,reconstructed,unplannedSets,rows,extra,total:rows.reduce((n,x)=>n+x.planned,0),done:rows.reduce((n,x)=>n+x.actual,0),matched};
   },
   renderWeekly(){
-   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 확인된 계획 · 시작한 날은 저장된 목표 기준'+(w.unknown?' · 과거 목표 미보관 '+w.unknown+'일 제외':'')+(w.reconstructed?' · 사후 입력 계획 '+w.reconstructed+'개':'')+'</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>워밍업 제외 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.unplannedSets)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+(w.unplannedSets?' · 목표 미보관 '+w.unplannedSets+'개':'')+' · 기록이 없는 날은 수행 여부를 알 수 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
+   if(!this.ready)return;const w=this.weekly();$('#weekly-plan').innerHTML='<div class="af-card-title">이번 주 계획과 수행</div><p>'+w.start.slice(5)+'–'+w.end.slice(5)+' · '+w.sessions+'회 확인된 계획 · 시작한 날은 저장된 목표 기준'+(w.unknown?' · 과거 목표 미보관 '+w.unknown+'일 제외':'')+(w.reconstructed?' · 사후 입력 계획 '+w.reconstructed+'개':'')+'</p><div class="af-number">'+w.matched+' <small>/ '+w.total+'세트</small></div><progress value="'+w.matched+'" max="'+(w.total||1)+'" aria-label="주간 계획 세트 달성"></progress><p>본세트 기준 · 종목별 목표까지만 달성으로 계산<br>기록된 본세트 '+(w.done+w.unplannedSets)+'개'+(w.extra?' · 계획 외 종목 '+w.extra+'개':'')+(w.unplannedSets?' · 목표 미보관 '+w.unplannedSets+'개':'')+' · 기록이 없는 날은 수행 여부를 알 수 없어요.</p><details><summary>종목별 확인</summary><div class="af-week-rows">'+w.rows.map(r=>'<div><span>'+esc(r.name)+'</span><b>'+r.actual+' / '+r.planned+'</b></div>').join('')+'</div></details>';
   },
   snapshot(){return Object.fromEntries(PREF_KEYS.map(k=>[k,localStorage.getItem(k)]));},
   prefState(url){const all=read('settings_sync_v1',{});return all[url]||{revision:0,base:null};},
@@ -191,7 +190,7 @@
    const weekly=document.createElement('section');weekly.id='weekly-plan';weekly.className='af-card';$('.tab-p .plan-wrap').prepend(weekly);
    const settings=document.createElement('section');settings.className='af-card';settings.innerHTML='<details><summary>기기 간 설정 동기화</summary><p id="settings-message" role="status"></p><button id="settings-sync-btn" type="button" onclick="AppFeatures.syncSettings()">설정 동기화</button><div id="settings-conflict" hidden><div id="settings-diff"></div><p>선택한 설정 전체를 적용해요. 시트 설정을 불러오기 전 현재 앱의 백업을 보관합니다.</p><div class="af-tool-row"><button id="settings-local" type="button" onclick="AppFeatures.syncSettings(\'local\')">이 기기 설정 사용</button><button id="settings-cloud" type="button" onclick="AppFeatures.syncSettings(\'cloud\')">시트 설정 불러오기</button></div></div></details>';
    weight.insertAdjacentElement('afterend',settings);
-   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">루틴 편집</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>요일별 운동 순서를 유지해요. 운동별 세트와 반복 목표를 조절하세요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
+   const dialog=document.createElement('dialog');dialog.id='routine-editor';dialog.className='af-dialog';dialog.setAttribute('aria-labelledby','edit-title');dialog.innerHTML='<form id="routine-edit-form"><div class="af-dialog-head"><b id="edit-title">루틴 편집</b><button type="button" aria-label="닫기" onclick="document.getElementById(\'routine-editor\').close()">✕</button></div><label>운동일 <select id="edit-day">'+TRAINING_PLAN.cycle.map(d=>'<option>'+d+'</option>').join('')+'</select></label><p>PPL A/B 운동 순서를 유지해요. 운동별 세트와 반복 목표를 조절하세요.</p><p id="edit-hint"></p><div id="edit-rows"></div><p id="edit-error" role="alert"></p><div class="af-dialog-actions"><button type="button" onclick="document.getElementById(\'routine-editor\').close()">취소</button><button type="submit" class="af-primary">저장하고 적용</button></div></form>';
    document.body.appendChild(dialog);
    $('#routine-edit-form').addEventListener('submit',e=>this.saveEditor(e));$('#edit-day').addEventListener('change',e=>this.openEditor(e.target.value));$('#weight-form').addEventListener('submit',e=>this.saveWeight(e));
    $('#weight-history').addEventListener('click',e=>{const edit=e.target.closest('[data-edit-weight]'),del=e.target.closest('[data-delete-weight]');if(edit){const r=this.weights[edit.dataset.editWeight];$('#weight-date').value=r.date;$('#weight-value').value=r.wt;$('#weight-value').focus();}if(del)this.removeWeight(del.dataset.deleteWeight);});

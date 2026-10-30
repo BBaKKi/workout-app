@@ -69,7 +69,6 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .exck:checked+.ex-card .ck-btn {background:var(--ui-accent);border-color:var(--ui-accent)}
 .ex-detail {padding:0 18px 14px;display:flex;flex-direction:column;border-top:1px solid var(--ui-border)}
 .ex-log {order:1;margin:0 -18px 18px;padding:18px;background:#f8f9fd;border-bottom:1px solid var(--ui-border);border-radius:0}
-.af-prev {order:0;font-size:12px;padding:12px 0;color:var(--ui-muted);display:none;line-height:1.7}.af-focus .af-prev {display:block}
 .ex-week-target {order:0;margin:12px 0;padding:10px 12px;border-left:3px solid #8ba2ec;border-radius:0 8px 8px 0;background:var(--ui-soft);font-size:12px;line-height:1.75;color:#344a7e}
 .target-note {margin-top:6px}.ex-card .target-note>summary {padding:4px 0;background:transparent;font-size:11px;color:var(--ui-muted);min-height:32px}.target-note p {font-size:12px;line-height:1.75;margin:6px 0 0}.ex-week-target.up {background:#e8f4ee;color:#246247}.ex-week-target .wt-prev {color:var(--ui-muted)}
 .ex-log-top {padding:0 0 12px;align-items:center}.ex-log-lbl {font-size:12px;font-weight:700;letter-spacing:.3px;color:var(--ui-muted)}
@@ -83,7 +82,7 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .wl-rpe-sel {height:56px;max-width:100%;font-size:12px;background:#fff;border:1px solid var(--ui-border);border-radius:9px}
 .ex-log-input .wl-confirm-btn {grid-column:1/3;width:100%;min-height:48px;font-size:15px;white-space:nowrap}
 .wl-custom-row .wl-confirm-btn {width:auto;font-size:13px;flex:none}
-.wl-cancel-btn,.wl-del-btn,.wl-pain-btn,.wl-wu-btn {min-height:44px;min-width:44px;font-size:12px;border-radius:8px}.wl-rep-chip {min-height:40px;min-width:40px}.wl-rep-chip-lbl {font-size:12px}
+.wl-cancel-btn,.wl-del-btn,.wl-pain-btn {min-height:44px;min-width:44px;font-size:12px;border-radius:8px}.wl-rep-chip {min-height:40px;min-width:40px}.wl-rep-chip-lbl {font-size:12px}
 .wl-set-chip {display:inline-flex;align-items:center;min-height:42px;padding:6px 11px;font-size:14px;border-radius:8px;background:#fff;border-color:#d2d9e6;color:#394c6c}.wl-set-chip.hit {background:#eaf5ef;color:#246247;border-color:#b9dac9}
 .ex-add-btn {min-height:46px;margin:12px 0;font-size:13px;border-radius:10px}
 /* Six practical cues remain visible; repetition and corrections expand below. */
@@ -193,7 +192,7 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
  #tw:checked~.top-nav .lbl-w,#td:checked~.top-nav .lbl-d,#tl:checked~.top-nav .lbl-l,#tp:checked~.top-nav .lbl-p,#tb:checked~.top-nav .lbl-b {color:#fff;background:#344b70}
  .tab-body {padding:0 32px}.routine-home {margin-top:34px}.plan-wrap,.lib-wrap,.mm-wrap {padding-top:34px}.page-heading h1,.session-heading h1,.mm-title {font-size:32px}
  .af-focus .ex-detail {display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 24px;align-items:start;grid-template-rows:repeat(5,min-content) minmax(0,1fr);padding:0 22px 18px}
- .af-focus .ex-detail>.af-prev {grid-column:1;grid-row:1}.af-focus .ex-detail>.ex-log {grid-column:1;grid-row:3;margin:0 0 14px;padding:16px;border:1px solid var(--ui-border);border-radius:10px}
+.af-focus .ex-detail>.ex-log {grid-column:1;grid-row:3;margin:0 0 14px;padding:16px;border:1px solid var(--ui-border);border-radius:10px}
  .af-focus .exercise-coaching {grid-column:2;grid-row:1/7;margin-top:18px}.af-focus .ex-week-target {grid-column:1;grid-row:2}.af-focus .exercise-settings {grid-column:1;grid-row:4}.af-focus .exercise-actions {grid-column:1;grid-row:5}.af-focus .ex-detail>:not(.exercise-coaching) {max-width:100%}
  #lib-list {grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.lib-card[open] {grid-column:1/-1}.lib-card[open] .lib-body {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px}.lib-card[open] .exercise-guide {grid-column:1/-1}.lib-card .coach-body {display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.lib-card .coach-footnote {grid-column:1/-1}
  .af-pref-values {grid-template-columns:1fr 1fr}.af-weight-form {max-width:600px}.library-filters {grid-template-columns:repeat(3,minmax(0,1fr))}.library-catalog-field {grid-column:auto}.lib-search {max-width:680px}
@@ -231,3 +230,26 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 
 /* Brief preparation stays reachable while focusing on one exercise. */
 .wu-card .info-body p {margin:10px 0;line-height:1.65}.cardio-hint {font-size:12px;line-height:1.65;color:var(--ui-muted);overflow-wrap:anywhere}
+
+/* Mobile inputs: native focus must not magnify the page. Keep deliberate pinch zoom. */
+html {touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media(max-width:1024px),(pointer:coarse){
+ input,select,textarea {font-size:16px!important}
+ .ex-log-input {grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .ex-log-input .wl-rpe-sel {grid-column:1/-1;width:100%;height:44px}
+ .ex-log-input .wl-confirm-btn {grid-column:1/-1}
+ .af-focus .routine-home {margin:12px 0 4px}
+ .af-focus .session-heading {display:none}
+ .af-focus #routine-overview {margin:4px 0;padding:0 12px}
+ .af-focus #routine-overview>summary {min-height:40px;padding:8px 0}
+ .af-focus .day-sel {display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:4px 0;scrollbar-width:thin}
+ .af-focus .day-lbl {flex:0 0 84px;min-width:84px;height:44px}
+ .af-focus .day-lbl .dl {display:none}
+ .af-focus .ex-card>summary {padding:14px}
+ .af-focus .ex-week-target {margin:8px 0;padding:8px 10px}
+ .af-focus .ex-location {display:none}
+ .lp-txt {white-space:normal;font-size:12px;text-align:right}
+}
+
+.coach-step-label {display:block;font-size:12px;color:var(--ui-accent);margin-bottom:4px}
+.equipment-summary {order:0;font-size:13px;line-height:1.65;color:var(--ui-text);margin:4px 0 10px;overflow-wrap:anywhere}
