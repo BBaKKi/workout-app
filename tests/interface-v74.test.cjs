@@ -64,13 +64,12 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert(await p.locator('.rest-mini').isVisible());
   await p.locator('.af-current .wl-cancel-btn').click();
   await p.locator('.af-current .exercise-guide>summary').click();
-  assert.equal(await p.locator('.af-current .coach-group').count(),4);
-  await p.locator('.af-current .coach-group').nth(2).locator('summary').click();
-  await p.locator('.af-current .coach-group').nth(3).locator('summary').click();
-  const guide=await p.locator('.af-current .coach-body').innerText();for(const word of ['팔꿈치','수행 순서','근육','멈추고 확인할 신호'])assert(guide.includes(word),word);
+  assert.equal(await p.locator('.af-current .coach-group').count(),2);
+  await p.locator('.af-current .coach-group').nth(1).locator('summary').click();
+  const guide=await p.locator('.af-current .coach-body').innerText();for(const word of ['팔꿈치','수행 순서','가동범위','자세가 흐트러지면'])assert(guide.includes(word),word);
   await p.locator('.rm-toggle').click();await p.locator('.rm-end').click();
   assert(!(await p.locator('.rest-mini').isVisible()));assert.equal(await p.evaluate(()=>document.activeElement.htmlFor),'tw');
   assert.equal(await p.evaluate(()=>JSON.stringify(ExLog.data)),before);assert.deepEqual(errors,[]);
-  console.log('PASS: mobile dock and desktop navigation, no top-row timer, expansion/Escape/+30/stop, saved deadline resume, stale timeout isolation, keyboard viewport clearance, exact-name records and four-section coaching');
+  console.log('PASS: mobile dock and desktop navigation, no top-row timer, expansion/Escape/+30/stop, saved deadline resume, stale timeout isolation, keyboard viewport clearance, exact-name records and two-section coaching');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

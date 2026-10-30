@@ -86,14 +86,13 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .wl-cancel-btn,.wl-del-btn,.wl-pain-btn,.wl-wu-btn {min-height:44px;min-width:44px;font-size:12px;border-radius:8px}.wl-rep-chip {min-height:40px;min-width:40px}.wl-rep-chip-lbl {font-size:12px}
 .wl-set-chip {display:inline-flex;align-items:center;min-height:42px;padding:6px 11px;font-size:14px;border-radius:8px;background:#fff;border-color:#d2d9e6;color:#394c6c}.wl-set-chip.hit {background:#eaf5ef;color:#246247;border-color:#b9dac9}
 .ex-add-btn {min-height:46px;margin:12px 0;font-size:13px;border-radius:10px}
-/* Five task-specific cues remain visible without opening nested details. */
+/* Six practical cues remain visible; repetition and corrections expand below. */
 .exercise-coaching {order:2;margin:0 0 12px}
 .coach-action {margin:0 0 14px;min-width:0}.coach-action h4 {font-size:13px;font-weight:750;color:var(--ui-text);margin:0 0 10px}
 .coach-action dl {margin:0;border:1px solid var(--ui-border);border-radius:10px;overflow:hidden;background:#fff}
-.coach-action-row {display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;padding:12px;border-bottom:1px solid var(--ui-border)}.coach-action-row:last-child {border-bottom:0}
+.coach-action-row {display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:12px;border-bottom:1px solid var(--ui-border)}.coach-action-row:last-child {border-bottom:0}
 .coach-action dt {font-size:12px;font-weight:750;color:#43536d;line-height:1.7}.coach-action dd {margin:0;font-size:14px;line-height:1.7;color:var(--ui-text);word-break:keep-all;overflow-wrap:anywhere}
 .coach-action-drive {background:#eef3ff}.coach-action-drive dt {color:#2949aa}.coach-action-drive dd {font-weight:700}
-.coach-stop {font-size:12px;line-height:1.6;color:#845229;margin:9px 0 0;word-break:keep-all}
 .coach-notice {margin:0 0 14px;padding:12px 14px;border:1px solid #dfb276;border-left:4px solid #b87320;border-radius:8px;background:#fff8ee;color:#704719;font-size:13px;line-height:1.7;overflow-wrap:anywhere}.coach-notice b {display:block;font-size:14px}.coach-notice p {margin:5px 0 0}
 .lib-card[open] .coach-action,.lib-card[open] .coach-notice {grid-column:1/-1}
 .exercise-guide {border:1px solid var(--ui-border);border-radius:10px;background:#fff;overflow:hidden}
@@ -108,7 +107,9 @@ details.af-card {padding:0 18px}details.af-card>summary {min-height:56px;padding
 .coach-group-body {padding:0 0 14px 25px}.coach-section {margin:0 0 18px;padding:0}.coach-section:last-child {margin-bottom:0}
 .coach-section h4 {font-size:11px;font-weight:700;color:var(--ui-muted);margin:0 0 6px}.coach-section p,.coach-section li {font-size:14px;line-height:1.85;color:#2c3b53;word-break:keep-all;overflow-wrap:anywhere}
 .coach-section ol {padding-left:19px;margin:0}.coach-section li {padding-left:4px;margin-bottom:12px}.coach-section li::marker {color:var(--ui-accent);font-weight:700}
-.coach-footnote {font-size:12px!important;line-height:1.75;color:var(--ui-muted);margin:14px 0 4px}.coach-safety {background:#fff5ef;border-left:2px solid #dc9b66;padding:10px 12px;color:#785136}
+.coach-footnote {font-size:12px!important;line-height:1.75;color:var(--ui-muted);margin:14px 0 4px}
+.coach-corrections {margin:0}.coach-corrections>div {border-left:2px solid #c8d3ee;padding:0 0 0 12px;margin:0 0 18px}.coach-corrections dt {font-size:13px;font-weight:750;line-height:1.7;color:#334666}.coach-corrections dd {margin:5px 0 0;font-size:14px;line-height:1.8;word-break:keep-all;overflow-wrap:anywhere}
+.coach-reference {grid-column:1/-1;border-top:1px solid var(--ui-border);margin-top:12px;min-width:0}.coach-reference>summary {min-height:44px;padding:12px 0;font-size:12px;color:var(--ui-muted);cursor:pointer}
 .coach-unknown {padding:14px;font-size:14px;background:var(--ui-canvas);border-radius:10px}
 .exercise-settings,.exercise-actions {order:4;border-top:1px solid var(--ui-border);margin-top:4px}.exercise-actions {order:5}
 .exercise-settings>summary,.exercise-actions>summary {min-height:44px;padding:12px 0;font-size:12px;font-weight:500;color:var(--ui-muted)}

@@ -1,6 +1,28 @@
-# 올데이 운동 설명 검토 · 2026-10-22 수행 중심 가이드
+# 올데이 운동 설명 검토 · 2026-10-30 수행 가이드 정리
 
-현재 64개 운동에 대해 수행 핵심 5항목(그립·고정·힘의 방향·자극·자세 체크)을 작성했습니다. 긴 설명은 접어서 유지하며, 기구별 지지대·손잡이·궤적의 차이를 짧은 안내에서도 구분합니다. 기존 운동명의 기록 키는 그대로입니다.
+현재 67개 운동에 대해 수행 핵심 6항목(높이·몸 위치 / 그립 / 유지할 자세 / 이동 경로 / 힘·자극 방향 / 자세 교정)을 작성했습니다. 기구별 지지대·손잡이·궤적의 차이를 구분하며 기존 이름·ID·분류·기록 키는 그대로입니다.
+
+## 10월 30일 보완
+
+- 세팅은 좌석 번호 대신 손잡이와 몸의 높이, 관절과 회전축, 패드 접촉으로 안내합니다. 눈으로 확인할 수 있는 자세 변화에 세팅·범위·부하 조정을 연결했습니다.
+- 시티드 레그컬: 무릎 옆과 회전축 정렬, 허벅지 위 패드, 뒤꿈치 위 롤러를 먼저 확인합니다. 허벅지가 뜨면 패드·축 정렬을 맞추고, 맞춘 뒤에도 골반이 앞으로 밀리면 부하를 줄입니다. [LEXCO MASTERPRO 제조사 목록](https://lexco.co.jp/product_cat/master_pro-series/)과 [NASM 시티드 레그컬](https://www.nasm.org/workout-exercise-guidance/how-to-seated-leg-curl)을 대조했습니다. 설치 모델의 조절 단계 수는 추정하지 않습니다.
+- RDL은 무릎 굽힘을 크게 바꾸지 않고 엉덩이를 뒤로 보내며 바를 다리 가까이 유지하도록 정리했습니다. [NSCA RDL 수행 안내](https://dxpprod.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/)를 참고했습니다.
+- 가슴 패드가 없는 로우, 요크형 스쿼트, 바벨, 위팔 패드형 익스텐션의 접촉부·복귀 설명을 구분했습니다. 어깨뼈는 지지해야 할 몸통과 구분하여 동작에 맞게 움직이도록 안내합니다.
+- 일반적인 통증·중단 문구를 운동마다 반복하지 않습니다. Cybex 암컬 명판의 모순은 특정 기구 동작을 잘못 안내할 수 있는 문제이므로 기존 확인 안내를 유지합니다. 브랜드 미확인 기구는 패드형·손잡이형 차이만 조건부로 안내합니다.
+- 상세 가이드는 ‘한 번의 반복’과 ‘자세가 흐트러지면’으로 줄였으며, 기구 출처와 기록 기준은 별도 접힘 구역에 보관합니다.
+- 실제 현장 기구의 새 사진을 다시 확인한 변경은 아닙니다. 기존에 확인된 기구 목록·형태를 바탕으로 설명과 화면을 검토했습니다.
+
+## 10월 29일 보완
+
+- 사용자 보유 확인의 스탠딩 래터럴 레이즈 머신에 수행 5항목과 독립된 상세 설명을 추가했습니다. 발·골반·몸통은 안정시키되 견갑골의 상방 회전은 허용합니다.
+- 팔 패드형·손잡이형과 몸통 지지대 유무를 조건부로 안내합니다. 제조사·설치 모델·원판/핀 방식·조절 단계는 단정하지 않습니다.
+- [ACE 래터럴 레이즈](https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/)의 몸통 안정·손목 정렬·통제된 올림/내림을 참고했습니다. 덤벨 자료는 기본 동작 참고이며 머신의 모델별 세팅 근거로 쓰지 않습니다.
+
+## 10월 28일 보완
+
+- 사용자 확인의 펙덱·리어 델트 머신에 각각 독립된 수행 5항목·세팅·그립·위치·3단계 반복·자극·오류·호흡·가동범위·주의를 작성했습니다.
+- [Intenza EL14 제조사 매뉴얼 30쪽](https://www.intenzafitness.com/wp-content/uploads/2025/11/Intenza-EL14-Pec-Fly-Rear-Deltoid-Owners-Manual.pdf)의 가슴 플라이 등 지지 / 리어 델트 가슴 지지, 팔꿈치 가벼운 굽힘 유지와 통제된 복귀를 참고했습니다. 설치 모델을 Intenza로 단정하지 않습니다.
+- 리어 델트에서는 몸통을 지지하면서 견갑의 자연스러운 움직임을 허용하고, 팔꿈치를 굽혀 로우로 바꾸지 않도록 안내합니다.
 
 ## 10월 22일 보완
 
@@ -35,7 +57,7 @@
 
 [NSCA RDL](https://www.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/), [ACE 레그프레스](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/), [ACE 시티드 로우](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/), [Rogers Power Squat Pro](https://rogersathletic.com/products/power-squat-pro/), [Hammer DY 로우](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-d-y-row), [Hammer 프론트 랫](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-iso-lateral-front-lat-pulldown), [gym80 풀오버](https://gym80.de/en/product/4350n/)를 참고했습니다. 제조사별 저항값이나 읽히지 않은 모델·레버 기능은 추정하지 않습니다. 개별 체형과 실제 설치 옵션은 현장에서 확인해야 합니다. 특정 자세의 자극감·근육 고립·통증 치료 효과를 보장하지 않습니다.
 
-## 64개 항목 점검표
+## 67개 항목 점검표
 
 모든 행은 세팅·몸 위치·동작·자극·주의의 전체 항목을 포함합니다. 사진과 보유 확인의 구분은 [기구 목록](GYM_INVENTORY.md)을 따릅니다.
 
@@ -105,3 +127,6 @@
 | Legend 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |
 | Telju 숄더 프레스 · 원판식 | 수직 프레스 | 팔꿈치로 손잡이 받치기 · 갈비뼈·골반 정렬 · 어깨뼈는 자연스럽게 움직이기 |
 | Cybex 바이셉스 암컬 | 팔꿈치 굴곡 | 실제 동작 확인 우선 · 위팔 패드 지지 · 팔꿈치 회전축 정렬 · 어깨 쪽으로 당기기 |
+| 펙덱 플라이 머신 | 플라이 | 등·골반 지지 · 위팔을 가슴 앞으로 모으기 · 손잡이형/전완 패드형 구분 |
+| 리어 델트 플라이 머신 | 어깨 수평 외전 | 가슴 지지 · 팔꿈치를 양옆으로 · 굽힘 일정 · 견갑 움직임 허용 |
+| 스탠딩 래터럴 레이즈 머신 | 어깨 외전 | 발·골반·몸통 안정 · 위팔을 양옆으로 · 견갑 회전 허용 · 다리 반동 줄이기 |

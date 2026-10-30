@@ -77,7 +77,7 @@
   log(action,kind,dates,note=''){
    if(!dates.length&&!note)return;this.activity.unshift({at:new Date().toISOString(),action,kind,dates:[...new Set(dates)],note});this.activity=this.activity.slice(0,100);window.storage.set('sync_activity_v1',JSON.stringify(this.activity)).catch(e=>SafeStore.report(e));this.renderActivity();
   },
-  renderActivity(){const box=document.getElementById('sync-activity');if(!box)return;const labels={sent:'시트에 저장',received:'시트에서 수신',conflict:'선택 대기',local:'이 기기 기록 적용',cloud:'시트 기록 적용',error:'동기화 실패',settings:'설정 동기화'};box.innerHTML=this.activity.length?this.activity.map(e=>'<div class="sync-activity"><time>'+esc(new Date(e.at).toLocaleString())+'</time><b>'+esc(labels[e.action]||e.action)+' · '+esc({workout:'운동',weight:'체중',inbody:'인바디',session:'당일 계획',settings:'루틴·기구 설정'}[e.kind]||'')+'</b><div>'+esc((e.dates||[]).join(', '))+'</div>'+esc(e.note)+'</div>').join(''):'아직 동기화 내역이 없어요.';},
+  renderActivity(){const box=document.getElementById('sync-activity');if(!box)return;const labels={sent:'시트에 저장',recovered:'누락된 저장 응답 확인',received:'시트에서 수신',conflict:'선택 대기',local:'이 기기 기록 적용',cloud:'시트 기록 적용',error:'동기화 실패',settings:'설정 동기화'};box.innerHTML=this.activity.length?this.activity.map(e=>'<div class="sync-activity"><time>'+esc(new Date(e.at).toLocaleString())+'</time><b>'+esc(labels[e.action]||e.action)+' · '+esc({workout:'운동',weight:'체중',inbody:'인바디',session:'당일 계획',settings:'루틴·기구 설정'}[e.kind]||'')+'</b><div>'+esc((e.dates||[]).join(', '))+'</div>'+esc(e.note)+'</div>').join(''):'아직 동기화 내역이 없어요.';},
   validUrl(url){try{const u=new URL(url);return u.origin==='https://script.google.com'&&/^\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u.pathname)&&!u.search&&!u.hash;}catch(_){return false;}},
   token(url){return read('gs_tokens_v5',{})[url]||'';},
   async request(url,body){
@@ -100,7 +100,7 @@
     b.hash=this.fingerprint(record,kind);
    }catch(_){/* Unknown baselines stay intact so an edit cannot become clean by accident. */}}
    s.format7=true;s.comparisonVersion=2;
-  }return s;},
+  }s.pending||={};for(const kind of kinds)s.pending[kind]||={};return s;},
   statesWith(url,state){return {...read('record_sync_v5',{}),[url]:state};},
   noteLocal(kind,date){
    const url=localStorage.getItem('gs_script_url');if(!url)return;const state=this.state(url);
@@ -136,6 +136,19 @@
     return stable([snapshots,Object.fromEntries(Object.entries(overrides).filter(([,v])=>Object.keys(v).length)),context]);
    }
    const keys=kind==='weight'?['date','wt']:['date','wt','sm','bf','ab','waist','vf','pa','bmr'];return stable(keys.map(k=>k==='date'?e[k]:numeric(e[k])));
+  },
+  writeFingerprint(record,kind){
+   // A lost receipt may only be recovered from the exact set identities we sent,
+   // never from a subset or a coincidentally equal exercise/weight/reps list.
+   if(kind==='weight')return stable([this.fingerprint(record,kind),record.entry?.updatedAt||'']);
+   if(kind!=='workout')return this.fingerprint(record,kind);
+   return stable((record.rows||[]).map(r=>[r.setId,r.ts||'',Number(r.vol)||0,this.fingerprint({rows:[r]},kind)]).sort((a,b)=>stable(a).localeCompare(stable(b))));
+  },
+  rememberWrite(url,state,kind,items){
+   for(const item of items)state.pending[kind][item.date]={baseRevision:state.base[kind][item.date]?.revision??null,hash:this.writeFingerprint(item,kind)};
+   // This durable checkpoint must succeed BEFORE sending. It is URL/source-bound
+   // with the baseline and excluded from portable backups, just like the baseline.
+   this.persist(url,state);
   },
   isDirty(kind,date,local,base){
    const queued=kind==='workout'?ExLog._dirty.has(date):Object.hasOwn(read(kind==='weight'?'daily_weight_dirty':kind==='session'?'session_dirty_v1':'inbody_dirty',{}),date);
@@ -187,35 +200,42 @@
     }
     this.conflicts=conflicts;this.lastComparedAt=new Date().toISOString();
     for(const kind of kinds){
-     const remote=Object.fromEntries(snapshot[kind].map(r=>[r.date,r])),locals=this.local(kind),base=state.base[kind],writes=[],received=[];
+     const remote=Object.fromEntries(snapshot[kind].map(r=>[r.date,r])),locals=this.local(kind),base=state.base[kind],writes=[],received=[],recovered=[];
      const dates=new Set([...Object.keys(remote),...Object.keys(locals),...Object.keys(base)]);
      for(const date of dates){
-      const r=remote[date]||this.empty(date,kind),l=locals[date]||this.empty(date,kind),b=base[date];
-      const lh=this.fingerprint(l,kind),rh=this.fingerprint(r,kind),dirty=this.isDirty(kind,date,l,b);
+      const r=remote[date]||this.empty(date,kind),l=locals[date]||this.empty(date,kind);let b=base[date];
+      const lh=this.fingerprint(l,kind),rh=this.fingerprint(r,kind),pending=state.pending[kind][date];
+      if(remote[date]&&pending&&pending.baseRevision===(b?.revision??null)&&pending.hash===this.writeFingerprint(r,kind)){
+       // The server committed our previous request, but its response was lost.
+       // Advance only the baseline: keep any sets/edits entered since that request.
+       b=base[date]={revision:r.revision,hash:rh};delete state.pending[kind][date];recovered.push(date);
+      }
+      const dirty=this.isDirty(kind,date,l,b);
       if(lh===rh){
        // Adopt stable IDs on the first connection without modifying the recorded kg/reps.
        if(kind==='workout'&&r.rows.length)this.apply(r,kind);
-       base[date]={revision:r.revision,hash:lh};this.acknowledge(kind,date,lh);
+       base[date]={revision:r.revision,hash:lh};delete state.pending[kind][date];this.acknowledge(kind,date,lh);
       }else if(!remote[date]&&locals[date]&&b&&b.revision!=='0'){
        // A missing tab/date is not a deletion tombstone. Never erase local history.
        conflicts.push(this.conflict(kind,l,r));
       }else if(b&&b.revision===r.revision&&dirty){
        writes.push({date,expectedRevision:r.revision,...(kind==='workout'?{rows:l.rows}:{entry:l.entry})});
       }else if((b&&!dirty)||(!b&&!locals[date]&&!dirty)){
-       this.apply(r,kind);base[date]={revision:r.revision,hash:rh};received.push(date);
+       this.apply(r,kind);base[date]={revision:r.revision,hash:rh};delete state.pending[kind][date];received.push(date);
       }else conflicts.push(this.conflict(kind,l,r));
      }
      // Read/merge decisions are persisted before network writes, including acknowledged IDs.
-     this.persist(url,state);this.log('received',kind,received);
+     this.persist(url,state);this.log('received',kind,received);this.log('recovered',kind,recovered);
      for(let i=0;i<writes.length;i+=50){
       const sent=writes.slice(i,i+50),hashes=new Map(sent.map(x=>[x.date,this.fingerprint(x,kind)]));
+      this.rememberWrite(url,state,kind,sent);
       const response=await ExLog.api(url,{mode:'sync_write',kind,items:sent});
       if(response.type!=='write'||response.kind!==kind||response.results?.length!==sent.length)throw new Error('저장 확인 건수가 일치하지 않습니다.');
       const returned=new Set();
       for(const item of response.results){const r=item.record;if(!r||!hashes.has(r.date)||returned.has(r.date))throw new Error('저장 확인 날짜가 일치하지 않습니다.');returned.add(r.date);
        if(item.status==='conflict'){conflicts.push(this.conflict(kind,this.local(kind)[r.date]||this.empty(r.date,kind),r));continue;}
        if(item.status!=='ok'||typeof r.revision!=='string'||this.fingerprint(r,kind)!==hashes.get(r.date))throw new Error('서버 기록 확인이 일치하지 않습니다.');
-       base[r.date]={revision:r.revision,hash:hashes.get(r.date)};this.acknowledge(kind,r.date,hashes.get(r.date));
+       base[r.date]={revision:r.revision,hash:hashes.get(r.date)};delete state.pending[kind][r.date];this.acknowledge(kind,r.date,hashes.get(r.date));
       }
       this.persist(url,state);this.log('sent',kind,response.results.filter(x=>x.status==='ok').map(x=>x.record.date));
      }
@@ -241,18 +261,18 @@
     if(r.revision!==c.remote.revision){this.conflicts[index]=this.conflict(c.kind,local,r);throw new Error('비교 중 시트 기록이 바뀌었어요. 최신 내용을 다시 선택하세요.');}
     // Always make a durable recovery copy before resolving a disagreement.
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:2,data:old,exported:new Date().toISOString()}));
-    let chosen=r;
+    let chosen=r;const state=this.state(url);this.queueWrites={};
     if(choice==='local'){
      const item={date:c.date,expectedRevision:r.revision,...(c.kind==='workout'?{rows:local.rows}:{entry:local.entry})};
+     this.rememberWrite(url,state,c.kind,[item]);
      const j=await ExLog.api(url,{mode:'sync_write',kind:c.kind,items:[item]});const result=j.results?.[0];
      if(!result||result.status!=='ok'){if(result?.record)this.conflicts[index]=this.conflict(c.kind,local,result.record);throw new Error('시트가 다시 변경됐어요. 다시 비교하세요.');}
-     chosen=result.record;
+     chosen=result.record;if(!chosen||chosen.date!==c.date||typeof chosen.revision!=='string'||this.writeFingerprint(chosen,c.kind)!==this.writeFingerprint(item,c.kind))throw new Error('서버 기록 확인이 일치하지 않습니다.');
     }
     // If the user typed during the request, keep their newer input queued.
     const now=this.local(c.kind)[c.date]||this.empty(c.date,c.kind);
-    const state=this.state(url);this.queueWrites={};
     if(this.fingerprint(now,c.kind)===c.localHash){this.apply(chosen,c.kind);this.acknowledge(c.kind,c.date,this.fingerprint(chosen,c.kind));}
-    state.base[c.kind][c.date]={revision:chosen.revision,hash:this.fingerprint(chosen,c.kind)};this.persist(url,state);
+    state.base[c.kind][c.date]={revision:chosen.revision,hash:this.fingerprint(chosen,c.kind)};delete state.pending[c.kind][c.date];this.persist(url,state);
     this.conflicts.splice(index,1);this.log(choice,c.kind,[c.date]);ExLog.syncMessage='';ExLog._syncSoon();
    }catch(e){ExLog.syncMessage=e.message;}
    finally{this.busy=false;this.refreshUI();}
