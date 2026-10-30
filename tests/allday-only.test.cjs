@@ -81,7 +81,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     const single=ExLog.suggestTarget(name).up;
     ExLog.data['2026-11-01']=session(undefined);const missing=ExLog.suggestTarget(name).up;
     ExLog.data['2026-11-01']=session(7);const repeated=ExLog.suggestTarget(name).up;
-    ExLog.data['2026-11-03']=session(8);const hard=ExLog.suggestTarget(name).up;
+    ExLog.data['2026-11-03']=session(9);const hard=ExLog.suggestTarget(name).up;
     return {single,missing,repeated,hard};
    }finally{ExLog.data=saved;ExLog.date=date;}
   });

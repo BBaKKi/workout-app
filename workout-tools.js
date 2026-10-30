@@ -82,7 +82,7 @@
   saveDraft(log,date=ExLog.date){
    if(!this.ready||this.restoring||!log||!RecordModel.activeRecord(date,log.dataset.exname))return;const inp=log.querySelector('.ex-log-input');if(!inp||inp.style.display==='none')return;
    const i=log.dataset.editIdx,st=i!==''&&i!=null?this.sets(date,log.dataset.exname)[+i]:null,previous=this.drafts[this.draftKey(log,date)];
-   this.drafts[this.draftKey(log,date)]={kg:inp.querySelector('.wl-kg-input').value,reps:inp.querySelector('.wl-rp-input').value,rpe:inp.querySelector('.wl-rpe-sel')?.value||'',warmup:!!inp.querySelector('.wl-wu-btn.on'),pain:!!inp.querySelector('.wl-pain-btn.on'),editId:previous?.editId||(st?st._id:null),baseline:previous?.baseline||(st?stable(st):null),updatedAt:Date.now()};
+   this.drafts[this.draftKey(log,date)]={kg:inp.querySelector('.wl-kg-input').value,reps:inp.querySelector('.wl-rp-input').value,rpe:inp.querySelector('.wl-rpe-sel')?.value||'',pain:!!inp.querySelector('.wl-pain-btn.on'),editId:previous?.editId||(st?st._id:null),baseline:previous?.baseline||(st?stable(st):null),updatedAt:Date.now()};
    const keys=Object.keys(this.drafts).sort((a,b)=>this.drafts[b].updatedAt-this.drafts[a].updatedAt);keys.slice(40).forEach(k=>delete this.drafts[k]);write('workout_drafts_v1',this.drafts);this.remember();
   },
   clearDraft(log){if(!log)return;delete this.drafts[this.draftKey(log)];write('workout_drafts_v1',this.drafts);},
@@ -90,6 +90,7 @@
    this.restoring=true;
    document.querySelectorAll('.day-panel .ex-log').forEach(log=>{
     const d=this.drafts[this.draftKey(log)];if(!d||!RecordModel.activeRecord(ExLog.date,log.dataset.exname))return;
+    if(d.warmup&&!d.editId){this.clearDraft(log);return;} // Unsubmitted legacy warmup drafts are not working sets.
     const inp=log.querySelector('.ex-log-input');if(inp.style.display!=='none')return;
     const sets=this.sets(ExLog.date,log.dataset.exname),i=d.editId?sets.findIndex(s=>s._id===d.editId):-1;
     if(d.editId&&(i<0||stable(sets[i])!==d.baseline)){AppFeatures.announce('임시 수정 중 원본 세트가 변경됐어요. 현재 기록을 확인하고 다시 수정하세요.');return;}
@@ -97,7 +98,7 @@
     else ExLog.startSet(log.querySelector('.ex-log-add-btn'));
     log.dataset.editIdx=i>=0?String(i):'';inp.querySelector('.wl-del-btn').style.display=i>=0?'':'none';
     inp.querySelector('.wl-kg-input').value=d.kg;inp.querySelector('.wl-rp-input').value=d.reps;inp.querySelector('.wl-rpe-sel').value=d.rpe;
-    inp.querySelector('.wl-wu-btn')?.classList.toggle('on',d.warmup);inp.querySelector('.wl-pain-btn')?.classList.toggle('on',d.pain);ExLog._updateTotalHint(inp.querySelector('.wl-kg-input'));
+    inp.querySelector('.wl-pain-btn')?.classList.toggle('on',d.pain);ExLog._updateTotalHint(inp.querySelector('.wl-kg-input'));
    });this.restoring=false;
   },
   remember(){if(!this.ready||this.restoring)return;write('workout_resume_v1',{date:ExLog.date,day:AppFeatures.activeDay(),selected:AppFeatures.selected,rest:ExLog.rest.name?{name:ExLog.rest.name,endAt:ExLog.rest.endAt,total:ExLog.rest.total}:null});},
@@ -105,7 +106,7 @@
   validInput(log){
    const inp=log.querySelector('.ex-log-input'),raw=inp.querySelector('.wl-kg-input').value,rraw=inp.querySelector('.wl-rp-input').value,w=raw===''?0:Number(raw),r=Number(rraw);
    if(!Number.isFinite(w)||w<0||w>100000||!rraw||!Number.isInteger(r)||r<=0||r>100000){AppFeatures.announce('중량은 0 이상, 반복·시간·거리는 1 이상의 정수로 입력하세요.');return false;}
-   const name=log.dataset.exname,type=ExLog.loadTypeOf(name),total=w+ExLog.baseOf(name),wu=!!inp.querySelector('.wl-wu-btn.on');
+   const name=log.dataset.exname,type=ExLog.loadTypeOf(name),total=w+ExLog.baseOf(name),wu=!!this.sets(ExLog.date,name)[+log.dataset.editIdx]?.warmup&&log.dataset.editIdx!=='';
    const prior=Object.entries(ExLog.activeData).filter(([d])=>d<=ExLog.date).sort((a,b)=>b[0].localeCompare(a[0])).flatMap(([,s])=>(s.exercises||[]).filter(e=>e.name===name).flatMap(e=>e.sets.filter(_isWorkSet))).slice(0,9);
    const median=key=>{const a=prior.map(s=>s[key]).filter(n=>Number.isFinite(n)&&n>0).sort((a,b)=>a-b);return a.length?a[Math.floor(a.length/2)]:0;};const pw=median('weight'),pr=median('reps'),issues=[];
    if(total>500)issues.push('총 중량 '+total+'kg');
@@ -114,7 +115,7 @@
    if(!wu&&pr&&r>=pr*3&&r-pr>=10)issues.push('최근 반복 중앙값 '+pr+' → '+r);
    return !issues.length||confirm('입력값을 한 번 확인해 주세요.\n'+issues.join('\n')+'\n의도한 값이면 확인을 눌러 그대로 저장하세요.');
   },
-  decorateEquipment(){document.querySelectorAll('.day-panel .ex-log').forEach(log=>{let b=log.parentNode.querySelector('.equipment-button');if(!b){b=document.createElement('button');b.type='button';b.className='equipment-button';b.addEventListener('click',()=>this.openEquipment(log.dataset.exname));log.before(b);}const v=this.equipment[log.dataset.exname]||{};b.textContent='⚙ 기구 세팅'+(Object.values(v).some(Boolean)?' · '+Object.entries(v).filter(([,s])=>s).map(([k,s])=>fields[k]+' '+s).join(' / '):' 저장');});},
+  decorateEquipment(){document.querySelectorAll('.day-panel .ex-log').forEach(log=>{let b=log.parentNode.querySelector('.equipment-button');if(!b){b=document.createElement('button');b.type='button';b.className='equipment-button';b.addEventListener('click',()=>this.openEquipment(log.dataset.exname));log.before(b);}const v=this.equipment[log.dataset.exname]||{};b.textContent='⚙ 기구 세팅 편집';let summary=log.parentNode.querySelector('.equipment-summary');if(!summary){summary=document.createElement('p');summary.className='equipment-summary';log.before(summary);}const saved=Object.entries(v).filter(([k,s])=>fields[k]&&s).map(([k,s])=>fields[k]+' '+s);summary.hidden=!saved.length;summary.textContent=saved.length?'내 세팅 · '+saved.join(' / '):'';});},
   openEquipment(name){this.equipmentName=name;$('#equipment-title').textContent=name+' · 기구 세팅';const form=$('#equipment-form'),value=this.equipment[name]||{};Object.keys(fields).forEach(k=>form.elements[k].value=value[k]||'');$('#equipment-old').textContent=ExLog.memo[name]?'기존 메모: '+ExLog.memo[name]:'';$('#equipment-dialog').showModal();},
   async saveEquipment(e){e.preventDefault();const form=e.target,v={};Object.keys(fields).forEach(k=>v[k]=form.elements[k].value.trim());this.equipment[this.equipmentName]=v;await window.storage.set('ex_equipment_v1',json(this.equipment));this.decorateEquipment();$('#equipment-dialog').close();AppFeatures.announce('기구별 세팅을 저장했어요.');},
   mount(){
@@ -129,7 +130,7 @@
    if(last?.rest&&RecordModel.activeRecord(last.date,last.rest.name)&&typeof last.rest.name==='string'&&Number.isFinite(last.rest.total)&&last.rest.total>0&&last.date===_todayKey()&&last.rest.endAt>Date.now()&&last.rest.endAt<Date.now()+86400000){ExLog.rest={...last.rest,int:setInterval(()=>ExLog.tickRest(),500),hint:'',notified:false};ExLog.tickRest();}
    this.renderUndo();
    document.addEventListener('input',e=>this.saveDraft(e.target.closest('.ex-log')));document.addEventListener('change',e=>this.saveDraft(e.target.closest('.ex-log')));
-   document.addEventListener('click',e=>{if(e.target.closest('.wl-wu-btn,.wl-pain-btn,.wl-rep-chip'))this.saveDraft(e.target.closest('.ex-log'));if(e.target.closest('.day-sel,#focus-exercise,#focus-prev,#focus-next'))this.remember();});
+   document.addEventListener('click',e=>{if(e.target.closest('.wl-pain-btn,.wl-rep-chip'))this.saveDraft(e.target.closest('.ex-log'));if(e.target.closest('.day-sel,#focus-exercise,#focus-prev,#focus-next'))this.remember();});
    document.addEventListener('visibilitychange',()=>{if(document.hidden){document.querySelectorAll('.ex-log').forEach(log=>this.saveDraft(log));this.remember();}});this.remember();
   }
  };
