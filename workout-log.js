@@ -286,6 +286,7 @@ const ExLog={
     this._todaySeen=_todayKey();
     document.addEventListener('visibilitychange',()=>{
       if(document.visibilityState!=='visible')return;
+      this._syncSoon(); // Resume after a phone lock/app switch even without a new set or online event.
       const t=_todayKey();
       if(t===this._todaySeen)return;
       const wasOnToday=(this.date===this._todaySeen);
