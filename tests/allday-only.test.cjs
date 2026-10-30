@@ -59,7 +59,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),67);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
   await p.locator('.lbl-w').click();await p.locator('.lbl-d2').click();assert.equal(await p.evaluate(()=>ExLog.session().day),'Pull A');await p.evaluate(()=>ExLog.updateBar());assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');
   const routine=await p.evaluate(()=>Object.fromEntries(TRAINING_PLAN.cycle.map(day=>[day,AppFeatures.templateRoutine(day,'2026-11-05').map(r=>({id:ExLog.libByName(r.name).id,sets:r.sets}))])));
-  assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','standing-lateral-raise-machine','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),11);
+  assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','standing-lateral-raise-machine','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),12);
   assert.equal(Object.values(routine).flat().filter(r=>r.id==='db-calf').length,0);
   assert.equal(Object.values(routine).flat().filter(r=>r.id==='cable-rear').reduce((n,r)=>n+r.sets,0),3);
   for(const day of ['Legs A','Legs B'])assert(routine[day].some(r=>r.id==='lexco-masterpro-curl'));

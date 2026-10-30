@@ -19,14 +19,37 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.deepEqual(base.early,base.today);assert.deepEqual(base.late,base.today);assert(base.removed);
   assert.deepEqual(base.goals,{wt:84,sm:38,bf:20,ab:0.9});assert.equal(base.end,'2026-12-31');
   assert(base.pass.cond.every(x=>x.ok));assert(base.fail.cond.every(x=>!x.ok));assert(base.missing.cond.every(x=>!x.ok));assert.equal(base.pass.cond.length,2);
-  assert.deepEqual(Object.values(base.today).map(rows=>rows.reduce((n,r)=>n+r.sets,0)),[10,11,10,11,10,11]);
+  assert.deepEqual(Object.values(base.today).map(rows=>rows.reduce((n,r)=>n+r.sets,0)),[10,11,10,11,10,12]);
   assert(base.today['Push A'].some(r=>r.id==='standing-lateral-raise-machine'));
   assert(base.today['Pull A'].some(r=>r.id==='rear-delt-fly-machine'));
   assert(base.today['Push B'].some(r=>r.id==='pec-deck-fly'));
-  assert.equal(base.today['Legs B'].find(r=>r.id==='barbell-rdl').sets,2);
+  assert.equal(base.today['Legs B'].find(r=>r.id==='booty-hip-thrust').sets,2);assert.equal(base.today['Legs B'].find(r=>r.id==='lexco-masterpro-curl').sets,3);assert(!base.today['Legs B'].some(r=>r.id==='barbell-rdl'));
   assert.equal(await p.locator('#block-chip,#block-deload-note,.tr-deload').count(),0);
   assert.equal(await p.locator('#inbody-cards .plan-stat-card').first().locator('.plan-stat-bar').count(),0);
   assert((await p.locator('#inbody-projection').textContent()).includes('84kg · 달성 판정에서 제외'));
+  const beforePrep=await p.evaluate(()=>JSON.stringify(ExLog.data));
+  assert(await p.locator('.dp1 .wu-card').isVisible());await p.locator('.dp1 .wu-card>summary').click();
+  assert((await p.locator('.dp1 .wu-card').innerText()).includes('전완 월슬라이드'));
+  assert((await p.locator('.dp1 .wu-card').innerText()).includes('Y 레이즈'));
+  assert.equal(await p.evaluate(()=>JSON.stringify(ExLog.data)),beforePrep,'reading preparation must not create work sets');
+  const support=await p.evaluate(()=>({
+   cardio:TRAINING_PLAN.cardio,upper:TRAINING_PLAN.cardioHint('Push A'),lower:TRAINING_PLAN.cardioHint('Legs B'),
+   curl:EXERCISE_LIBRARY.find(e=>e.id==='lexco-masterpro-curl').execution,
+   rdl:EXERCISE_LIBRARY.find(e=>e.id==='barbell-rdl').coaching.corrections
+  }));
+  assert.deepEqual(support.cardio,{sessions:3,min:20,max:25});assert(support.upper.includes('0–3%'));assert(support.lower.includes('필수가 아니며'));
+  assert(support.curl.watch.includes('종아리가 먼저'));assert(support.rdl.some(c=>c.fix.includes('그립 제한')));
+  const rdlCompatibility=await p.evaluate(()=>{
+   const name=id=>GymInventory.available.find(e=>e.id===id).name,old=name('barbell-rdl'),next=name('booty-hip-thrust');
+   const plan=ExLog.plan,data=ExLog.data;
+   try{
+    ExLog.plan={'Legs B':{swap:{[old]:old},config:{[old]:{sets:2,min:8,max:12}}}};
+    const row=AppFeatures.templateRoutine('Legs B').find(r=>r.original===next);
+    const frozen={...row,original:old};ExLog.data={'2026-10-29':{day:'Legs B',exercises:[{name:old,sets:[{_id:'rdl-original',weight:60,reps:8}]}],routineSnapshots:{'Legs B':{day:'Legs B',source:'recorded',capturedAt:'2026-10-29T10:00:00Z',rows:[frozen]}}}};
+    return {name:row.name,sets:row.sets,min:row.min,kept:AppFeatures.routine('Legs B','2026-10-29')[0].name===old,id:ExLog.data['2026-10-29'].exercises[0].sets[0]._id};
+   }finally{ExLog.plan=plan;ExLog.data=data;}
+  });
+  assert(rdlCompatibility.name.includes('루마니안'));assert.equal(rdlCompatibility.sets,2);assert.equal(rdlCompatibility.min,8);assert(rdlCompatibility.kept);assert.equal(rdlCompatibility.id,'rdl-original');
 
   // Existing user choices and recorded two-set day plans remain intact across the new defaults.
   const preservation=await p.evaluate(async()=>{
@@ -76,11 +99,12 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    const row={...AppFeatures.templateRoutine('Push A')[0],sets:3};
    ExLog.data={'2026-10-26':session('Push A',[{weight:20,reps:10}]),'2026-10-29':{...session('Push A',[{weight:10,reps:10,warmup:true},{weight:20,reps:10},{weight:20,reps:10}]),routineSnapshots:{'Push A':{day:'Push A',capturedAt:'2026-10-29T10:00:00Z',source:'recorded',rows:[row]}}}};
    ExLog.date='2026-10-30';ExLog.refresh();
-   return {next,gap,manual,afterPull,weekly:AppFeatures.weekly(),suggestion:ExLog.suggestTarget(name).html};
+   return {next,gap,manual,afterPull,weekly:AppFeatures.weekly(),suggestion:ExLog.suggestTarget(name).html,report:document.getElementById('weekly-report').textContent};
   });
   assert.deepEqual([sequence.next,sequence.gap,sequence.manual,sequence.afterPull],['Pull A','Pull A','Legs B','Legs A']);
   assert.equal(sequence.weekly.sessions,1);assert.equal(sequence.weekly.total,3);assert.equal(sequence.weekly.matched,2);assert.equal(sequence.weekly.unplannedSets,1);assert.equal(sequence.weekly.unknown,1);
   assert(!/디로드|55%|최대 2세트/.test(sequence.suggestion));
+  assert(sequence.report.includes('60–75분/주'));assert(!sequence.report.includes('/150분'));
 
   // A non-Monday date is valid for a sequential plan; legacy bounds survive only as backup data.
   await p.locator('.lbl-b').click();await p.locator('#training-config-form [name=start]').fill('2026-10-20');

@@ -8,6 +8,7 @@ const ExLog={
       panel.querySelector('.hbadge').style.background=DAY_COLORS_EL[day];
       panel.querySelector('.hinfo').textContent=TRAINING_PLAN.mode==='current'?TRAINING_PLAN.focus[day]+' · 복합 2–3분 / 고립 1–2분 휴식':'기존 편집 루틴 · 컨디션에 맞춰 진행';
       const dn=panel.querySelector('.done-banner .dt');if(dn)dn.textContent=day+' 완료';
+      const prep=panel.querySelector('.wu-card');if(prep){prep.querySelector('summary').textContent=/^Legs/.test(day)?'하체 준비 · 종아리·그립 체크':'어깨 움직임 준비 · 주 2–3회';prep.querySelector('.info-body').innerHTML=TRAINING_PLAN.preparation(day).map(([title,body])=>'<p><b>'+_esc(title)+'</b><br>'+_esc(body)+'</p>').join('');}
     });
     const select=document.getElementById('routine-profile');if(select)select.value=TRAINING_PLAN.mode;
     this.renderRoutineUI();
@@ -696,6 +697,7 @@ const ExLog={
       const cr=document.createElement('div');
       cr.className='cardio-row';
       cr.innerHTML=`<div class="cardio-hd">🏃 유산소</div><div class="cardio-list"></div><button class="cardio-add" onclick="ExLog.toggleCardio(this)">＋ 유산소 기록</button><div class="cardio-form" style="display:none"><select class="cd-type"><option>걷기(LISS)</option><option>인클라인 워킹</option><option>자전거</option><option>러닝</option><option>수영</option><option>기타</option></select><label>시간 (분)<input type="number" class="cd-min" placeholder="분" inputmode="decimal" min="0.1" step="0.1"></label><label>거리 (km·선택)<input type="number" class="cd-km" min="0" step="0.01" inputmode="decimal"></label><label>경사 (%·선택)<input type="number" class="cd-incline" min="0" max="100" step="0.5" inputmode="decimal"></label><button class="cd-ok" onclick="ExLog.saveCardio(this)">기록</button></div>`;
+      const hint=document.createElement('p');hint.className='cardio-hint';hint.textContent=TRAINING_PLAN.cardioHint(this.panelDayOf(panel));cr.querySelector('.cardio-hd').after(hint);
       panel.appendChild(cr);
     });
   },
@@ -1464,9 +1466,10 @@ const ExLog={
     const g=this._weekGoalPct();
     let h='<div class="wr-card"><div class="wr-hd">📋 이번 주 리포트</div>'+remind;
     h+='<div class="wr-row"><span>운동 일수</span><span class="v">'+sessions+'일 기록</span></div>';
-    // 유산소 주간 누적 (목표 150분 — LISS 중심, 내장지방 감량 축)
+    // Recorded minutes have no intensity field; do not equate them with public-health moderate minutes.
     const cm=this._weekCardioMin();
-    h+='<div class="wr-row"><span>유산소</span><span class="v'+(cm>=150?' pr':(cm?'':' miss'))+'">'+cm+'/150분</span></div>';
+    const cardio=TRAINING_PLAN.cardio;
+    h+='<div class="wr-row"><span>유산소 기록</span><span class="v">'+cm+'분</span></div><p class="cardio-hint">운동 후 시작 참고량 '+cardio.sessions*cardio.min+'–'+cardio.sessions*cardio.max+'분/주 · 하체 수행을 보며 조절. 기록 시간은 강도별로 구분하지 않습니다.</p>';
     // 컨디션·수면 평균 (기록된 날만)
     const ca=this._weekCondAvg();
     if(ca.rate!=null)h+='<div class="wr-row"><span>평균 컨디션</span><span class="v'+(ca.rate<3?' miss':'')+'">'+ca.rate.toFixed(1)+'/5</span></div>';
