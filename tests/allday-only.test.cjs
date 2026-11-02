@@ -30,7 +30,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    oldLookup:ExLog.libByName(old),prior:ExLog.prevSession(name),index:ExLog._priorSets(name),
    raw:Object.keys(ExLog.data),active:Object.keys(ExLog.activeData),analysis:await PlanApp._logData(),archive:ReferenceHistory.rows(),body:InBody._log
   }),{name,old});
-  assert.equal(state.catalog,67);assert.equal(state.mode,'current');assert.equal(state.oldLookup,undefined);
+  assert.equal(state.catalog,68);assert.equal(state.mode,'current');assert.equal(state.oldLookup,undefined);
   assert(state.plan.every(n=>n.startsWith('올데이 감일 · ')));assert.equal(state.plan[0],name);
   assert.equal(state.prior.date,'2026-11-04');assert.equal(state.prior.sets[0].weight,20);assert.equal(state.index.length,1);
   assert.deepEqual(state.active,['2026-11-04']);assert.equal(state.analysis['2026-11-04'].exercises.length,1);
@@ -56,7 +56,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const backup=await p.evaluate(async()=>{const b=await Backup._collect();return {stored:JSON.parse(b['wl_v2:2026-10']),rows:ExLog._syncRows()};});
   assert.equal(backup.stored['2026-10-17'].exercises[0].sets[0].weight,999);assert(backup.rows.some(r=>r.date==='2026-10-17'));
   for(const width of [320,390,768,1200]){await p.setViewportSize({width,height:844});assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}
-  await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),67);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
+  await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),68);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
   // Started-day tabs browse without relabelling existing records. Use the date
   // badge and confirm to explicitly reclassify the whole session.
   const recorded=await p.evaluate(()=>ExLog._syncRows());
@@ -74,7 +74,14 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   }));
   assert.equal(earlyPlan.routines['Legs A'].reduce((n,r)=>n+r.sets,0),10);
   assert.equal(earlyPlan.routines['Push B'].reduce((n,r)=>n+r.sets,0),11);
-  for(const day of ['Legs A','Push B'])assert.deepEqual(earlyPlan.routines[day],routine[day]);assert.equal(earlyPlan.core.sets,1);
+  for(const [day,oldSlot,newSlot] of [
+   ['Legs A',{id:'cable-crunch',sets:1},{id:'combo-a-abduction',sets:2}],
+   ['Push B',{id:'cable-overhead',sets:2},{id:'paramount-triceps',sets:2}]
+  ]){
+   assert.deepEqual(earlyPlan.routines[day].slice(0,-1),routine[day].slice(0,-1));
+   assert.deepEqual(earlyPlan.routines[day].at(-1),oldSlot);assert.deepEqual(routine[day].at(-1),newSlot);
+  }
+  assert.equal(earlyPlan.core.sets,1);
   assert.equal(earlyPlan.targets['대퇴사두'],12);assert.equal(earlyPlan.targets['종아리']||0,0);
   const progression=await p.evaluate(()=>{
    const saved=JSON.parse(JSON.stringify(ExLog.data)),date=ExLog.date;

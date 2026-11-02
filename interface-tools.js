@@ -72,7 +72,7 @@
         if (row) row.skipped = true;
         if (permanent) {
           const original=(plan.add||[]).includes(c.original)?c.original:TRAINING_PLAN.currentSlot(c.day,c.original);
-          if (TRAINING_PLAN.exercisesFor(c.day,c.date).includes(original)) { if (!(plan.rm || []).includes(original)) (plan.rm ||= []).push(original); }
+          if (TRAINING_PLAN.exercises[c.day]?.includes(original)) { if (!(plan.rm || []).includes(original)) (plan.rm ||= []).push(original); }
           else plan.add = (plan.add || []).filter(n => n !== c.original);
         }
       }
