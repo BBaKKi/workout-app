@@ -11,13 +11,26 @@
   'Pull B':[['hammer-iso-high-row',3,8,12],['gym80-pullover',2,10,15],['cable-rear',3,12,20],['db-hammer',2,10,15]],
   'Legs B':[['cybex-45-legpress',3,10,15],['lexco-masterpro-curl',3,10,15],['booty-hip-thrust',2,10,15],['forward-leg-extension',3,10,15],['cable-crunch',1,10,15]]
  };
- const items=Object.fromEntries(cycle.map(d=>[d,stations[d].map(([id,...v])=>[station(id),...v])]));
+ const revisionDate='2026-11-02';
+ // Replacements apply only to new templates from this date. Rows are [id, sets, min, max].
+ const changes={
+  'Legs A':{'cable-crunch':['combo-a-abduction',2,15,20]},
+  'Push B':{'cable-overhead':['paramount-triceps',2,10,15]},
+  'Pull B':{'db-hammer':['cybex-arm-curl',2,10,15]}
+ };
+ const buildItems=revised=>Object.fromEntries(cycle.map(day=>[day,stations[day].map(row=>{
+  const [id,...dose]=(revised&&changes[day]?.[row[0]])||row;
+  return [station(id),...dose];
+ })]));
+ const priorItems=buildItems(false),items=buildItems(true);
+ const isPrior=date=>date&&date<revisionDate;
+ const itemsAt=date=>isPrior(date)?priorItems:items;
  const focus={'Push A':'어깨 움직임 · 가슴·측면 어깨','Pull A':'가슴 지지 로우 · 후면 어깨','Legs A':'허벅지 앞·뒤 · 시티드 컬','Push B':'어깨 움직임 · 프레스','Pull B':'등 · 후면 어깨','Legs B':'허벅지·둔근 · 그립 부담 분산'};
  const lib=window.EXERCISE_LIBRARY||[];
  const canonical=n=>{const e=lib.find(e=>e.name===n)||lib.find(e=>(e.aka||[]).includes(n));return e?e.name:n;};
  // The declared day sequence is the training order; library priority is only explanatory.
  const makeDefaults=rows=>Object.fromEntries(cycle.map(day=>[day,Object.fromEntries(rows[day].map(x=>[x[0],{sets:x[1],min:x[2],max:x[3]}]))]));
- const defaults=makeDefaults(items);
+ const defaults=makeDefaults(items),priorDefaults=makeDefaults(priorItems);
  const config={start:'2026-10-12',end:'2026-12-31',weightMin:83.5,weightMax:84.5};
  try{const c=JSON.parse(localStorage.getItem('training_config_v1')||'null');if(c&&/^\d{4}-\d{2}-\d{2}$/.test(c.start)&&/^\d{4}-\d{2}-\d{2}$/.test(c.end)&&c.end>c.start&&Number.isFinite(c.weightMin)&&Number.isFinite(c.weightMax)&&c.weightMin>=20&&c.weightMax<=300&&c.weightMax>c.weightMin)Object.assign(config,c);}catch(_){}
  // Old weight bounds remain transport-compatible but no longer drive goals or pass/fail.
@@ -27,11 +40,12 @@
   'Push B':{[station('pec-deck-fly')]:station('decline-chest-fly')},
   'Legs B':{[station('booty-hip-thrust')]:station('barbell-rdl')}
  };
- const P=window.TRAINING_PLAN={version:'2026-10-30.original-goals',config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
+ const revisionSlots=Object.fromEntries(Object.entries(changes).map(([day,rows])=>[day,Object.fromEntries(Object.entries(rows).map(([old,[next]])=>[station(next),station(old)]))]));
+ const P=window.TRAINING_PLAN={version:'2026-11-02.allday',revisionDate,config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
   storageKey:'plan_v3',start:config.start,end:config.end,
   exercises:Object.fromEntries(cycle.map(d=>[d,items[d].map(x=>x[0])])),
-  exercisesFor(day,date){return date<equipmentDate?[]:(items[day]||[]).map(x=>x[0]);},
-  defaultsFor(day){return defaults[day];},
+  exercisesFor(day,date){return date<equipmentDate?[]:(itemsAt(date)[day]||[]).map(x=>x[0]);},
+  defaultsFor(day,date){return (isPrior(date)?priorDefaults:defaults)[day];},
   cardio:{sessions:3,min:20,max:25},
   preparation(day){return /^Legs/.test(day)?[
    ['준비 세트','첫 하체 종목은 가벼운 중량부터 필요한 만큼 올립니다. 준비운동은 기록하지 않고, 실제 본세트부터 입력하세요.'],
@@ -45,15 +59,16 @@
   ];},
   cardioHint(day){return (/^Legs/.test(day)?'하체 날은 웨이트 우선. 추가 유산소는 필수가 아니며 가벼운 걷기 정도로 마칩니다. ':'상체 운동 후 주 '+this.cardio.sessions+'회, 회당 '+this.cardio.min+'–'+this.cardio.max+'분부터 시작하세요. ')+
    '문장으로 대화 가능한 강도. 걷기는 경사 0–3%부터 조절하고, 종아리가 먼저 지치면 경사를 낮추거나 낮은 저항의 자전거로 바꾸세요.';},
-  previousSlot(day,name){return previousSlots[day]?.[name];},
-  currentSlot(day,name){return Object.entries(previousSlots[day]||{}).find(([,old])=>old===name)?.[0]||name;},
+  previousSlot(day,name,date){return (!isPrior(date)&&revisionSlots[day]?.[name])||previousSlots[day]?.[name];},
+  replacedDose(day,name,date){return !isPrior(date)&&revisionSlots[day]?.[name]?priorDefaults[day][revisionSlots[day][name]]:null;},
+  currentSlot(day,name){return Object.entries({...previousSlots[day],...revisionSlots[day]}).find(([,old])=>old===name)?.[0]||name;},
   prescription(name,day,date){if(date<equipmentDate)return null;const cn=canonical(name);
-   const rows=items;
+   const rows=itemsAt(date);
    const all=Object.values(rows).flat(), row=(rows[day]||[]).find(x=>canonical(x[0])===cn)||all.find(x=>canonical(x[0])===cn);
    if(!row)return null;return {sets:row[1],min:row[2],max:row[3],baseSets:row[1],rir:2};},
   targets(date){
    const v={};
-   for(const [day,rows] of Object.entries(items))for(const [name] of rows){const count=this.prescription(name,day,date)?.sets||0,key=window.GymInventory.find(name).vol.p;v[key]=(v[key]||0)+count;}
+   for(const [day,rows] of Object.entries(itemsAt(date)))for(const [name] of rows){const count=this.prescription(name,day,date)?.sets||0,key=window.GymInventory.find(name).vol.p;v[key]=(v[key]||0)+count;}
    return v;
   }
  };

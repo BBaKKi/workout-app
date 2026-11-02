@@ -14,12 +14,36 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const base=await p.evaluate(async()=>{
    await InBody.render();PlanApp.renderPhase();
    const rows=date=>Object.fromEntries(TRAINING_PLAN.cycle.map(d=>[d,AppFeatures.templateRoutine(d,date).map(r=>({id:GymInventory.find(r.name).id,sets:r.sets}))]));
-   return {early:rows('2026-10-19'),today:rows('2026-10-30'),late:rows('2026-12-30'),goals:IB_GOALS,end:TRAINING_PLAN.end,pass:GOAL_MODEL.judge(82,19.9,38.1),fail:GOAL_MODEL.judge(84,20.1,37.9),missing:GOAL_MODEL.judge(84,null,null),removed:[TRAINING_PLAN.phase,TRAINING_PLAN.schedule,ExLog.startDeload,ExLog.deloadDay,ExLog.startBlock,PlanApp.renderBlock].every(x=>x===undefined)};
+   return {early:rows('2026-10-19'),today:rows('2026-10-30'),before:rows('2026-11-01'),revised:rows('2026-11-02'),late:rows('2026-12-30'),goals:IB_GOALS,end:TRAINING_PLAN.end,pass:GOAL_MODEL.judge(82,19.9,38.1),fail:GOAL_MODEL.judge(84,20.1,37.9),missing:GOAL_MODEL.judge(84,null,null),removed:[TRAINING_PLAN.phase,TRAINING_PLAN.schedule,ExLog.startDeload,ExLog.deloadDay,ExLog.startBlock,PlanApp.renderBlock].every(x=>x===undefined)};
   });
-  assert.deepEqual(base.early,base.today);assert.deepEqual(base.late,base.today);assert(base.removed);
+  assert.deepEqual(base.early,base.today);assert.deepEqual(base.before,base.today);assert.deepEqual(base.late,base.revised);assert(base.removed);
   assert.deepEqual(base.goals,{wt:84,sm:38,bf:20,ab:0.9});assert.equal(base.end,'2026-12-31');
   assert(base.pass.cond.every(x=>x.ok));assert(base.fail.cond.every(x=>!x.ok));assert(base.missing.cond.every(x=>!x.ok));assert.equal(base.pass.cond.length,2);
   assert.deepEqual(Object.values(base.today).map(rows=>rows.reduce((n,r)=>n+r.sets,0)),[10,11,10,11,10,12]);
+  assert.deepEqual(Object.values(base.revised).map(rows=>rows.reduce((n,r)=>n+r.sets,0)),[10,11,11,11,10,12]);
+  for(const [day,id] of [['Legs A','combo-a-abduction'],['Push B','paramount-triceps'],['Pull B','cybex-arm-curl']]){
+   assert.equal(base.revised[day].at(-1).id,id);assert.equal(base.revised[day].at(-1).sets,2);
+  }
+  for(const day of ['Push A','Pull A','Legs B'])assert.deepEqual(base.revised[day],base.before[day]);
+  const carry=await p.evaluate(()=>{
+   const name=id=>GymInventory.available.find(e=>e.id===id).name,old=name('cable-crunch'),next=name('combo-a-abduction');
+   const saved=ExLog.plan,data=ExLog.data,date=ExLog.date;
+   try{
+    ExLog.date='2026-11-02';ExLog.plan={'Legs A':{config:{[old]:{sets:1,min:10,max:15}}},'Push B':{swap:{[name('cable-overhead')]:name('cybex-triceps-arm-extension')}}};
+    const leg=()=>AppFeatures.templateRoutine('Legs A').at(-1),summary=r=>[r.name,r.sets,r.min,r.max];
+    const revised=summary(leg()),arm=AppFeatures.templateRoutine('Push B').at(-1).name;
+    ReferenceHistory.refresh();const total=document.querySelector('#routine-cycle-total').textContent;
+    const snap={day:'Legs A',source:'recorded',capturedAt:'2026-11-02T00:00:00Z',rows:AppFeatures.templateRoutine('Legs A','2026-11-01')};
+    ExLog.data={[ExLog.date]:{day:'Legs A',exercises:[],routineSnapshots:{'Legs A':snap}}};
+    const frozen=AppFeatures.routine('Legs A').at(-1).name;
+    ExLog.plan['Legs A'].config[old]={sets:3,min:8,max:12};const tuned=summary(leg());
+    ExLog.plan['Legs A'].config[next]={sets:2,min:12,max:18};const own=summary(leg());
+    ExLog.plan['Legs A'].rm=[old];const removed=!AppFeatures.templateRoutine('Legs A').some(r=>r.original===next);
+    return {revised,tuned,own,arm,frozen,total,removed,old,next,triceps:name('cybex-triceps-arm-extension')};
+   }finally{ExLog.plan=saved;ExLog.data=data;ExLog.date=date;ExLog.refresh();}
+  });
+  assert.deepEqual(carry.revised,[carry.next,2,15,20]);assert.deepEqual(carry.tuned,[carry.old,3,8,12]);assert.deepEqual(carry.own,[carry.next,2,12,18]);
+  assert.equal(carry.arm,carry.triceps);assert.equal(carry.frozen,carry.old);assert(carry.total.includes('65본세트'));assert(carry.removed);
   assert(base.today['Push A'].some(r=>r.id==='standing-lateral-raise-machine'));
   assert(base.today['Pull A'].some(r=>r.id==='rear-delt-fly-machine'));
   assert(base.today['Push B'].some(r=>r.id==='pec-deck-fly'));

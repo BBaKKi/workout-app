@@ -74,7 +74,14 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   }));
   assert.equal(earlyPlan.routines['Legs A'].reduce((n,r)=>n+r.sets,0),10);
   assert.equal(earlyPlan.routines['Push B'].reduce((n,r)=>n+r.sets,0),11);
-  for(const day of ['Legs A','Push B'])assert.deepEqual(earlyPlan.routines[day],routine[day]);assert.equal(earlyPlan.core.sets,1);
+  for(const [day,oldSlot,newSlot] of [
+   ['Legs A',{id:'cable-crunch',sets:1},{id:'combo-a-abduction',sets:2}],
+   ['Push B',{id:'cable-overhead',sets:2},{id:'paramount-triceps',sets:2}]
+  ]){
+   assert.deepEqual(earlyPlan.routines[day].slice(0,-1),routine[day].slice(0,-1));
+   assert.deepEqual(earlyPlan.routines[day].at(-1),oldSlot);assert.deepEqual(routine[day].at(-1),newSlot);
+  }
+  assert.equal(earlyPlan.core.sets,1);
   assert.equal(earlyPlan.targets['대퇴사두'],12);assert.equal(earlyPlan.targets['종아리']||0,0);
   const progression=await p.evaluate(()=>{
    const saved=JSON.parse(JSON.stringify(ExLog.data)),date=ExLog.date;

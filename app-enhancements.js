@@ -27,12 +27,21 @@
    if(!RecordModel.activeDate(date))return [];
    const p=ExLog.plan[day]||{}, base=TRAINING_PLAN.exercisesFor(day,date)||[], names=base.concat((p.add||[]).filter(n=>RecordModel.activeName(n)&&!base.includes(n))), seen=new Set();
    return names.map((original,index)=>{
-    const previous=TRAINING_PLAN.previousSlot(day,original),swaps=p.swap||{};
-    const candidate=Object.hasOwn(swaps,original)?swaps[original]:swaps[previous],name=RecordModel.activeName(candidate)?candidate:original;
+    const previous=TRAINING_PLAN.previousSlot(day,original,date),swaps=p.swap||{};
+    const candidate=Object.hasOwn(swaps,original)?swaps[original]:swaps[previous];
+    const oldDose=TRAINING_PLAN.replacedDose(day,original,date),priorCfg=p.config?.[previous],directCfg=p.config?.[original];
+    const d=this.defaults(day,original,date),keys=['sets','min','max'];
+    // Saving the editor persists even untouched defaults. Do not turn a saved
+    // one-set crunch into a one-set abduction; keep a genuinely customised old prescription on its own exercise.
+    const differentDose=oldDose&&keys.some(k=>oldDose[k]!==d[k]);
+    const tunedOld=differentDose&&priorCfg&&keys.some(k=>Number.isFinite(priorCfg[k])&&priorCfg[k]!==oldDose[k]);
+    const keepOld=!directCfg&&!RecordModel.activeName(candidate)&&tunedOld;
+    const name=RecordModel.activeName(candidate)?candidate:keepOld?previous:original;
     if((p.rm||[]).includes(original)||(previous&&(p.rm||[]).includes(previous))||seen.has(name))return null;seen.add(name);
-    const cfg=p.config?.[original]||p.config?.[previous]||p.config?.[name]||{},d=this.defaults(day,original,date);
+    if(differentDose&&name!==original)Object.assign(d,oldDose);
+    const cfg=directCfg||((!differentDose||name!==original||(candidate===original&&tunedOld))&&priorCfg)||p.config?.[name]||{};
     // Old per-day config.weight values were manual slot numbers; ignore them without deleting data.
-    ['sets','min','max'].forEach(k=>{if(Number.isFinite(cfg[k]))d[k]=cfg[k];});
+    keys.forEach(k=>{if(Number.isFinite(cfg[k]))d[k]=cfg[k];});
     return {original,name,index,...d,...this.priority(name),baseSets:d.sets,sets:d.sets};
    }).filter(Boolean);
   },
