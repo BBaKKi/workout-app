@@ -57,7 +57,11 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(backup.stored['2026-10-17'].exercises[0].sets[0].weight,999);assert(backup.rows.some(r=>r.date==='2026-10-17'));
   for(const width of [320,390,768,1200]){await p.setViewportSize({width,height:844});assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}
   await p.reload();await p.waitForFunction(()=>ReferenceHistory.ready);assert.equal(await p.evaluate(()=>EXERCISE_LIBRARY.length),67);assert.equal(await p.evaluate(()=>TRAINING_PLAN.mode),'current');
-  await p.locator('.lbl-w').click();await p.locator('.lbl-d2').click();assert.equal(await p.evaluate(()=>ExLog.session().day),'Pull A');await p.evaluate(()=>ExLog.updateBar());assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');
+  // Started-day tabs browse without relabelling existing records. Use the date
+  // badge and confirm to explicitly reclassify the whole session.
+  const recorded=await p.evaluate(()=>ExLog._syncRows());
+  await p.locator('.lbl-w').click();await p.locator('.lbl-d2').click();assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');assert.equal(await p.evaluate(()=>ExLog.session().day),'Push A');assert.deepEqual(await p.evaluate(()=>ExLog._syncRows()),recorded);
+  await p.locator('#log-day-badge').click();p.once('dialog',d=>d.accept());await p.locator('#log-type-pick button').filter({hasText:'Pull A'}).click();assert.equal(await p.evaluate(()=>ExLog.session().day),'Pull A');await p.evaluate(()=>ExLog.updateBar());assert.equal(await p.evaluate(()=>AppFeatures.activeDay()),'Pull A');
   const routine=await p.evaluate(()=>Object.fromEntries(TRAINING_PLAN.cycle.map(day=>[day,AppFeatures.templateRoutine(day,'2026-11-05').map(r=>({id:ExLog.libByName(r.name).id,sets:r.sets}))])));
   assert.deepEqual(routine['Push A'].map(r=>r.id),['hammer-incline','standing-lateral-raise-machine','technogym-pure-chest-press','cable-pushdown']);assert.equal(routine['Legs B'].reduce((n,r)=>n+r.sets,0),12);
   assert.equal(Object.values(routine).flat().filter(r=>r.id==='db-calf').length,0);

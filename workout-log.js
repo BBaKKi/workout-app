@@ -507,12 +507,38 @@ const ExLog={
     if(best===next||sc(best)-sc(next)<3||this._lastDoneAgo(best)-this._lastDoneAgo(next)<2)return null;
     return{type:best,why:'마지막 '+this._lastDoneAgo(best)+'일 전 · 이번 주 부족 '+this._typeDeficit(best)+'세트'};
   },
+  hasSessionRecords(date=this.date){
+    const s=this.data[date];
+    return !!s&&((s.exercises||[]).some(e=>(e.sets||[]).length)||(s.cardio||[]).length>0);
+  },
+  // Tabs browse routines after recording starts. Only the date badge explicitly
+  // reclassifies the whole day; otherwise a stray tab click rewrites every row.
+  browseDay(t){
+    if(!EL_CYCLE.includes(t))return;
+    if(!this.hasSessionRecords())return this.switchDay(t);
+    this.syncPanel(t);this.refresh();
+  },
+  prepareRecordingDay(t){
+    if(!EL_CYCLE.includes(t))return false;
+    const s=this.session();
+    if(this._baseType(s.day)===t)return true;
+    if(this.hasSessionRecords()){
+      AppFeatures.announce('이 날짜의 기록은 '+this._baseType(s.day)+'입니다. '+t+'로 기록하려면 날짜 옆 루틴 버튼에서 분류를 변경하세요. 입력값은 보관했습니다.');
+      return false;
+    }
+    // A resume preference or remote pull may leave the visible panel different
+    // from an empty session's default. Bind it before either snapshot or set.
+    s.day=t;this.setSession(s);this.updateBar();return true;
+  },
   switchDay(t){
     if(EL_CYCLE.indexOf(t)<0)return;
+    const previous=this.dayType(this.date);
+    if(t!==previous&&this.hasSessionRecords()&&!confirm(this.date+'의 기존 세트 전체 분류를 '+previous+' → '+t+'로 변경할까요? 중량·횟수·RPE·기록 시각은 그대로 유지됩니다.'))return;
     const s=this.session();s.day=t;this.setSession(s);
     this.syncPanel(t);                       // 화면 패널도 함께 이동 — 전환 후 손으로 탭을 찾지 않게
     const p=document.getElementById('log-type-pick');if(p)p.classList.remove('open');
     this.updateBar();this.injectTargets();this.refresh();
+    this._syncSoon();
   },
   // ── 날짜 ↔ 루틴 분리: 순환은 '기본 제안'일 뿐이고, 어떤 날에든 6타입 중 무엇이든 고를 수 있다 ──
   // 공백 후 복귀나 컨디션·기구 사정으로 순서를 건너뛰는 경우가 실제로 잦다. 순환만 강제하면

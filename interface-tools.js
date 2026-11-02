@@ -139,8 +139,9 @@
       }
     },
     resume(last) {
-      ExLog.date=last.date;ExLog.updateBar();ExLog.syncPanel(last.day);
-      AppFeatures.selected=copy(last.selected||{});AppFeatures.focusDate=last.day+'|'+last.date;
+      const day=ExLog.hasSessionRecords(last.date)?ExLog.dayType(last.date):last.day;
+      ExLog.date=last.date;ExLog.updateBar();ExLog.syncPanel(day);
+      AppFeatures.selected=copy(last.selected||{});AppFeatures.focusDate=day+'|'+last.date;
       ExLog.refresh();ExLog.injectTargets();$('#resume-offer')?.remove();
     },
     mount() {
