@@ -195,7 +195,7 @@
    $('#routine-edit-form').addEventListener('submit',e=>this.saveEditor(e));$('#edit-day').addEventListener('change',e=>this.openEditor(e.target.value));$('#weight-form').addEventListener('submit',e=>this.saveWeight(e));
    $('#weight-history').addEventListener('click',e=>{const edit=e.target.closest('[data-edit-weight]'),del=e.target.closest('[data-delete-weight]');if(edit){const r=this.weights[edit.dataset.editWeight];$('#weight-date').value=r.date;$('#weight-value').value=r.wt;$('#weight-value').focus();}if(del)this.removeWeight(del.dataset.deleteWeight);});
    $('#focus-exercise').addEventListener('change',e=>{const day=this.activeDay();this.selected[day]=this.routine(day)[+e.target.value]?.name;this.renderFocus();});
-   document.querySelectorAll('input[name="day"]').forEach(r=>r.addEventListener('change',()=>ExLog.switchDay(this.activeDay())));
+   document.querySelectorAll('input[name="day"]').forEach(r=>r.addEventListener('change',()=>ExLog.browseDay(this.activeDay())));
    document.querySelectorAll('.day-sel label').forEach(r=>r.addEventListener('click',()=>setTimeout(()=>this.renderFocus(),0)));
    this.ready=true;this.weights={...this.weights,...read('daily_weight_dirty',{})};document.querySelectorAll('.day-panel').forEach(p=>this.sort(p));this.renderFocus();this.renderWeights();this.renderWeekly();this.renderSettings();
   }
