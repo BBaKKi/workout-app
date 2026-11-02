@@ -27,7 +27,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),uncapped:WorkoutTools.template('Legs A','2026-10-19').some(r=>r.sets===3),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.map(e=>e.photo)]).size};
   });
   assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.uncapped);assert.equal(transition.sources,53);
-  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===67);
+  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===68);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();
   assert.equal(await a.locator('#library-catalog').count(),0);
@@ -69,15 +69,23 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.deepEqual(added.assist,Array(2).fill({type:'assist',heavy:55,light:65,station:'newtech-assisted-chin-dip',source:'IMG_5862.jpeg'}));
   assert.deepEqual(added.shoulders,Array(2).fill(['전면삼각','수직 프레스','normal']));
   assert.deepEqual(added.cable,Array(6).fill(['DRAX','confirmed','IMG_5861.jpeg']));
-  assert.deepEqual(added.counts,[51,13,67]);
+  assert.deepEqual(added.counts,[51,13,68]);
   const reported=await a.evaluate(()=>GymInventory.reported.map(e=>({id:e.id,status:e.status,files:GymInventory.evidenceFiles(e),source:GymInventory.sourceHTML(e),badge:GymInventory.badge(e),pattern:_movePat(e.name),muscle:e.vol.p,small:LibApp.matchesCategory(e,'small')})));
-  assert.deepEqual(reported.map(e=>[e.id,e.pattern,e.muscle,e.small]),[['pec-deck-fly','플라이','가슴',false],['rear-delt-fly-machine','어깨 수평 외전','후면삼각',true],['standing-lateral-raise-machine','어깨 외전','측면삼각',true]]);
+  assert.deepEqual(reported.map(e=>[e.id,e.pattern,e.muscle,e.small]),[['pec-deck-fly','플라이','가슴',false],['rear-delt-fly-machine','어깨 수평 외전','후면삼각',true],['standing-lateral-raise-machine','어깨 외전','측면삼각',true],['cybex-triceps-arm-extension','삼두 신전','삼두',true]]);
   reported.forEach(e=>{assert.equal(e.status,'reported');assert.deepEqual(e.files,[]);assert(e.source.includes('사용자 보유 확인'));assert(!e.badge.includes('사진 확인'));});
-  for(const [query,id]of [['펙덱 플라이 머신','pec-deck-fly'],['리어 플로이드','rear-delt-fly-machine'],['스탠딩 레터럴 레이즈','standing-lateral-raise-machine'],['사레레 머신','standing-lateral-raise-machine']]){
+  for(const [query,id]of [['펙덱 플라이 머신','pec-deck-fly'],['리어 플로이드','rear-delt-fly-machine'],['스탠딩 레터럴 레이즈','standing-lateral-raise-machine'],['사레레 머신','standing-lateral-raise-machine'],['Cybex arm extension','cybex-triceps-arm-extension']]){
     await a.evaluate(query=>{GymInventory.select();LibApp.q=query;LibApp.render();},query);
     assert.deepEqual(await a.evaluate(()=>LibApp._items.map(e=>e.id)),[id]);
   }
   assert.deepEqual(await a.evaluate(()=>{const e=GymInventory.find('올데이 감일 · 케이블 랫 풀다운');return [e.brand,e.source.file,e.stationId||null];}),['브랜드 미확인','IMG_5842.JPEG',null]);
+  await a.evaluate(()=>{GymInventory.select();LibApp.q='암 익스텐션 머신';LibApp.render();});
+  assert.deepEqual(await a.evaluate(()=>LibApp._items.map(e=>e.id).sort()),['cybex-triceps-arm-extension','paramount-triceps']);
+  // A shared search phrase must not make either extension inherit the other machine's last weight.
+  const armNames=await a.evaluate(()=>['cybex-triceps-arm-extension','paramount-triceps','cybex-arm-curl'].map(id=>GymInventory.available.find(e=>e.id===id).name));
+  const armPage=await page({'wl_v2:2026-11':{'2026-11-03':{day:'Push A',exercises:armNames.map((name,i)=>({name,sets:[{weight:[12,24,36][i],reps:10}]}))}}});
+  const armHistory=await armPage.evaluate(names=>names.map(n=>ExLog.prevSession(n)?.sets.map(s=>s.weight)),armNames);
+  assert.deepEqual(armHistory,[[12],[24],[36]]);
+  await armPage.context().close();
   assert.deepEqual(added.row,{name:'올데이 감일 · Newtech 케이블 시티드 로우',files:['IMG_5855.JPEG','IMG_5855(1).jpeg','IMG_5860.jpeg']});
   assert.deepEqual(added.bench,{name:'올데이 감일 · Hammer ISO 호라이즌털 벤치프레스',files:['IMG_5805.JPEG','IMG_5865.jpeg']});
   await a.evaluate(()=>GymInventory.select());
@@ -86,7 +94,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await a.locator('#library-equipment').selectOption('Telju');assert.equal(await a.locator('.lib-card').count(),1);
   assert.equal(await a.evaluate(()=>JSON.stringify({items:TRAINING_PLAN.items,plans:ExLog.plan,templates:TRAINING_PLAN.cycle.map(d=>WorkoutTools.template(d)),snapshot:ExLog.session().routineSnapshots})),routineBefore);
   const name=photoNames[0];
-  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),67);
+  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),68);
   assert.equal(await a.locator('#gym-status-filter').count(),0);
   assert.equal(await a.evaluate(()=>JSON.stringify(ExLog.plan)),planBefore);
   await a.evaluate(n=>LibApp.goto(n),name);
@@ -109,6 +117,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('.library-filter-panel>summary').click();await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
   await b.evaluate(()=>LibApp.goto(GymInventory.available.find(e=>e.id==='forward-leg-extension').name));assert.equal(await b.locator('.lib-card').count(),1);
   assert.deepEqual(errors,[]);
-  console.log('PASS: 51 photo guides + 3 user-confirmed machines + 13 accessories, correct classifications/search/provenance, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
+  console.log('PASS: 51 photo guides + 4 user-confirmed machines + 13 accessories, correct classifications/search/provenance, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
