@@ -24,10 +24,10 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     const saved=JSON.stringify(ExLog.plan),old=WorkoutTools.template('Push A','2026-10-17'),next=WorkoutTools.template('Push A','2026-10-26');
     const oldRows=JSON.parse(JSON.stringify(old));ExLog.data['2026-10-26']={day:'Push A',exercises:[],routineSnapshots:{'Push A':{day:'Push A',source:'recorded',capturedAt:'2026-10-17T10:00:00Z',rows:oldRows}}};
     const frozen=AppFeatures.routine('Push A','2026-10-26');delete ExLog.data['2026-10-26'];
-    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),uncapped:WorkoutTools.template('Legs A','2026-10-19').some(r=>r.sets===3),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.map(e=>e.photo)]).size};
+    return {old:old.map(r=>r.name),next:next.map(r=>r.name),frozen:frozen.map(r=>r.name),saved:saved===JSON.stringify(ExLog.plan),valid:Object.values(TRAINING_PLAN.items).flat().every(([n])=>GymInventory.available.some(e=>e.name===n)),uncapped:WorkoutTools.template('Legs A','2026-10-19').some(r=>r.sets===3),sources:new Set([...GymInventory.available.flatMap(e=>GymInventory.evidenceFiles(e)),...GymInventory.stations.flatMap(e=>e.photo?[e.photo]:[])]).size};
   });
   assert.deepEqual(transition.old,[]);assert(transition.next.every(n=>n.startsWith('올데이 감일 · ')));assert.deepEqual(transition.frozen,transition.old);assert(transition.saved&&transition.valid&&transition.uncapped);assert.equal(transition.sources,53);
-  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===68);
+  await a.locator('.lbl-l').click();await a.waitForFunction(()=>document.querySelectorAll('.lib-card').length===87);
   assert(await a.locator('#gym-photo-info').isVisible());
   await a.locator('.library-filter-panel>summary').click();
   assert.equal(await a.locator('#library-catalog').count(),0);
@@ -68,8 +68,8 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   });
   assert.deepEqual(added.assist,Array(2).fill({type:'assist',heavy:55,light:65,station:'newtech-assisted-chin-dip',source:'IMG_5862.jpeg'}));
   assert.deepEqual(added.shoulders,Array(2).fill(['전면삼각','수직 프레스','normal']));
-  assert.deepEqual(added.cable,Array(6).fill(['DRAX','confirmed','IMG_5861.jpeg']));
-  assert.deepEqual(added.counts,[51,13,68]);
+  assert.deepEqual(added.cable,Array(11).fill(['DRAX','confirmed','IMG_5861.jpeg']));
+  assert.deepEqual(added.counts,[51,32,87]);
   const reported=await a.evaluate(()=>GymInventory.reported.map(e=>({id:e.id,status:e.status,files:GymInventory.evidenceFiles(e),source:GymInventory.sourceHTML(e),badge:GymInventory.badge(e),pattern:_movePat(e.name),muscle:e.vol.p,small:LibApp.matchesCategory(e,'small')})));
   assert.deepEqual(reported.map(e=>[e.id,e.pattern,e.muscle,e.small]),[['pec-deck-fly','플라이','가슴',false],['rear-delt-fly-machine','어깨 수평 외전','후면삼각',true],['standing-lateral-raise-machine','어깨 외전','측면삼각',true],['cybex-triceps-arm-extension','삼두 신전','삼두',true]]);
   reported.forEach(e=>{assert.equal(e.status,'reported');assert.deepEqual(e.files,[]);assert(e.source.includes('사용자 보유 확인'));assert(!e.badge.includes('사진 확인'));});
@@ -89,12 +89,12 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.deepEqual(added.row,{name:'올데이 감일 · Newtech 케이블 시티드 로우',files:['IMG_5855.JPEG','IMG_5855(1).jpeg','IMG_5860.jpeg']});
   assert.deepEqual(added.bench,{name:'올데이 감일 · Hammer ISO 호라이즌털 벤치프레스',files:['IMG_5805.JPEG','IMG_5865.jpeg']});
   await a.evaluate(()=>GymInventory.select());
-  await a.locator('#library-equipment').selectOption('DRAX');assert.equal(await a.locator('.lib-card').count(),6);
+  await a.locator('#library-equipment').selectOption('DRAX');assert.equal(await a.locator('.lib-card').count(),11);
   await a.locator('#library-equipment').selectOption('Legend');assert.equal(await a.locator('.lib-card').count(),1);
   await a.locator('#library-equipment').selectOption('Telju');assert.equal(await a.locator('.lib-card').count(),1);
   assert.equal(await a.evaluate(()=>JSON.stringify({items:TRAINING_PLAN.items,plans:ExLog.plan,templates:TRAINING_PLAN.cycle.map(d=>WorkoutTools.template(d)),snapshot:ExLog.session().routineSnapshots})),routineBefore);
   const name=photoNames[0];
-  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),68);
+  assert.equal(await a.evaluate(()=>new Set(GymInventory.entries.map(e=>e.name)).size),87);
   assert.equal(await a.locator('#gym-status-filter').count(),0);
   assert.equal(await a.evaluate(()=>JSON.stringify(ExLog.plan)),planBefore);
   await a.evaluate(n=>LibApp.goto(n),name);
@@ -109,7 +109,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await current.locator('.wl-kg-input').fill('25');await current.locator('.wl-rp-input').fill('9');await current.locator('.wl-confirm-btn').click();
   await a.evaluate(n=>WorkoutTools.openEquipment(n),name);await a.locator('#equipment-form [name=seat]').fill('2');await a.locator('#equipment-form [type=submit]').click();
   await a.evaluate(n=>InterfaceTools.favorite(n),name);await sync(a);
-  const b=await page();await sync(b);await b.evaluate(()=>AppFeatures.syncSettings('cloud'));await b.waitForFunction(()=>InterfaceTools.ready);
+  const b=await page();await sync(b);await b.evaluate(()=>AppFeatures.syncSettings('cloud'));await b.waitForFunction(()=>window.InterfaceTools?.ready);
   const saved=await b.evaluate(({n,oldName})=>({record:ExLog.session().exercises.find(e=>e.name===n),equipment:WorkoutTools.equipment[n],old:WorkoutTools.equipment[oldName],favorite:InterfaceTools.favorites()[n],prior:ExLog._priorSets(n).length,oldPrior:ExLog._priorSets(oldName).length,metadata:ExLog.libByName(n).gym}),{n:name,oldName});
   assert.equal(saved.record.sets[0].weight,25);assert.equal(saved.record.sets[0].reps,9);assert.equal(saved.equipment.seat,'2');assert.equal(saved.old.seat,'5');assert(saved.favorite);assert.equal(saved.oldPrior,0);assert.equal(saved.prior,1);assert.equal(saved.metadata,'allday-gamil');
   const backup=await b.evaluate(async()=>SafeBackup.validate(JSON.stringify({app:'fit-tracker',version:2,data:await Backup._collect()})));assert.equal(JSON.parse(backup.ex_equipment_v1)[name].seat,'2');assert.equal(JSON.parse(backup.exercise_favorites_v1)[name],true);
@@ -117,6 +117,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await b.reload();await b.waitForFunction(()=>InterfaceTools.ready);await b.evaluate(()=>GymInventory.open());await b.locator('.library-filter-panel>summary').click();await b.locator('#library-scope').selectOption('favorites');assert.equal(await b.locator('.lib-card').count(),1);
   await b.evaluate(()=>LibApp.goto(GymInventory.available.find(e=>e.id==='forward-leg-extension').name));assert.equal(await b.locator('.lib-card').count(),1);
   assert.deepEqual(errors,[]);
-  console.log('PASS: 51 photo guides + 4 user-confirmed machines + 13 accessories, correct classifications/search/provenance, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
+  console.log('PASS: 51 photo guides + 4 user-confirmed machines + 32 accessories, correct classifications/search/provenance, catalog navigation leaves routines unchanged, 320px layout, separate old/new history, Sheets sync, backup and restart');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

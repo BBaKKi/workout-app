@@ -58,7 +58,7 @@ await a.evaluate(()=>{ExLog.date=_todayKey();WorkoutTools.capture('Push A').rows
 await b.evaluate(()=>{WorkoutTools.capture('Push A').rows[0].sets=4;WorkoutTools.touch(ExLog.date);});await sync(b);assert(await b.evaluate(()=>DataSync.conflicts.some(c=>c.kind==='session')));
 assert.equal(await a.evaluate(()=>DataSync.activity.some(e=>e.action==='sent'&&e.kind==='session')),true);
 // Only the current gym is selectable; old names remain in raw reference records.
-assert.equal(await a.evaluate(()=>EXERCISE_LIBRARY.length),68);assert.equal(await a.evaluate(()=>ExLog.libByName('케이블 풀오버')),undefined);
+assert.equal(await a.evaluate(()=>EXERCISE_LIBRARY.length),87);assert.equal(await a.evaluate(()=>ExLog.libByName('케이블 풀오버')),undefined);
 const card=await a.evaluate(()=>{const name=document.querySelector('.dp1 .ex-nm').textContent.trim();return {actual:[...document.querySelectorAll('.dp1 .af-current .coach-corrections>div')].map(x=>({sign:x.querySelector('dt').textContent,fix:x.querySelector('dd').textContent})),expected:ExLog.libByName(name).coaching.corrections};});assert.deepEqual(card.actual,card.expected);
 assert.deepEqual(errors,[]);console.log('PASS: draft/focus/timer resume, stable-ID undo after sync, edit/delete undo, anomaly override, date-only swaps, frozen plans, metadata CAS conflicts, equipment sync/backup and library cleanup');
 }finally{await browser.close();server.close();}
