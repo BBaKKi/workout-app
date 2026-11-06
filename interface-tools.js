@@ -4,7 +4,7 @@
   const $ = s => document.querySelector(s);
   const copy = x => JSON.parse(JSON.stringify(x));
   const I = window.InterfaceTools = {
-    ready: false, filter: 'all', equipment: 'all',
+    ready: false, filter: 'all', equipment: 'all', equipmentType: 'all',
     favorites() { try { return JSON.parse(localStorage.getItem('exercise_favorites_v1')) || {}; } catch (_) { return {}; } },
     async favorite(name) {
       const values = this.favorites();
@@ -18,7 +18,7 @@
       for (const [date, session] of Object.entries(ExLog.activeData)) {
         for (const e of session.exercises || []) if (e.sets.length && (!recent.has(e.name) || recent.get(e.name) < date)) recent.set(e.name, date);
       }
-      const result = items.filter(e => (this.filter !== 'favorites' || favorites[e.name]) && (this.filter !== 'recent' || recent.has(e.name)) && (this.equipment === 'all' || e.brand === this.equipment || e.name.toLowerCase().includes(this.equipment.toLowerCase())));
+      const result = items.filter(e => (this.filter !== 'favorites' || favorites[e.name]) && (this.filter !== 'recent' || recent.has(e.name)) && (this.equipmentType === 'all' || e.equipmentType === this.equipmentType) && (this.equipment === 'all' || e.brand === this.equipment || e.name.toLowerCase().includes(this.equipment.toLowerCase())));
       if (this.filter === 'recent') result.sort((a,b) => recent.get(b.name).localeCompare(recent.get(a.name)));
       return result;
     },

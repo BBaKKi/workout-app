@@ -1,4 +1,4 @@
-/* All Day only. Stable record keys; practical coaching reviewed 2026-10-30. */
+/* All Day only. Stable record keys; practical coaching extended 2026-11-06. */
 window.EXERCISE_CATS={
   "push": "푸시 (가슴·어깨앞·삼두)",
   "pull": "풀 (등·이두)",
@@ -32,7 +32,12 @@ window.EXERCISE_GUIDE={
     "Telju 원판식 숄더 프레스": "https://teljufitness.com/producto/press-hombro-isolateral-carga-de-discos/",
     "Cybex 암컬 · 제조사 매뉴얼 14쪽": "https://kb.cybexintl.com/Owners_Manuals/Strength/12070-999-4.pdf",
     "펙덱·리어 델트 기본 동작 · Intenza 매뉴얼 30쪽": "https://www.intenzafitness.com/wp-content/uploads/2025/11/Intenza-EL14-Pec-Fly-Rear-Deltoid-Owners-Manual.pdf",
-    "시티드 레그컬 · LEXCO": "https://lexco.co.jp/product_cat/master_pro-series/"
+    "시티드 레그컬 · LEXCO": "https://lexco.co.jp/product_cat/master_pro-series/",
+    "바벨 로우 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+    "팔로프 프레스 · ACE": "https://www.acefitness.org/resources/everyone/exercise-library/332/standing-anti-rotation-press/",
+    "케이블 래터럴 · Catalyst Athletics": "https://www.catalystathletics.com/exercise/811/Cable-Lateral-Raise/",
+    "컨벤셔널 데드리프트 · NASM": "https://www.nasm.org/resource-center/exercise-library/barbell-deadlift",
+    "스미스 기구 구조 참고 · Life Fitness (현장 모델 미확인)": "https://www.lifefitness.com/en-us/catalog/strength-training/benches/life-fitness-smith-machine"
   }
 };
 window.ALLDAY_STATIONS=[
@@ -46,7 +51,12 @@ window.ALLDAY_STATIONS=[
     "id": "drax-cable-station",
     "photo": "IMG_5861.jpeg",
     "title": "DRAX 듀얼 조절식 케이블 스테이션",
-    "note": "DRAX 로고, 좌우 독립 중량 스택과 높이 조절 풀리를 확인했습니다. 기존 케이블 운동 6개에 연결합니다. 정확한 모델 번호와 풀리 배율은 미확인이므로 핀 표기값을 실제 손에 걸리는 kg으로 단정하지 않습니다."
+    "note": "DRAX 로고, 좌우 독립 중량 스택과 높이 조절 풀리를 확인했습니다. 케이블 보조 운동에 연결합니다. 풀리 높이·손잡이·사용 타워를 기록하며 실제 손에 걸리는 중량과 핀 표기값을 같다고 단정하지 않습니다."
+  },
+  {
+    "id": "smith-station",
+    "title": "스미스 머신 · 사용자 보유 확인",
+    "note": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다."
   }
 ];
 window.EXERCISE_LIBRARY=[
@@ -77,7 +87,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "nautilus-nitro-overhead-press",
     "brand": "Nautilus",
-    "searchTerms": "노틸러스 나틸러스 니트로 숄더 프레스 어깨 shoulder overhead press 5800",
+    "searchTerms": "노틸러스 나틸러스 니트로 숄더 프레스 어깨 shoulder overhead press 5800 머신",
     "equipmentNote": "사진에서 NAUTILUS NITRO OVERHEAD PRESS 표기와 핀 중량 방식을 확인했습니다. 좌석 번호와 사용한 손잡이를 함께 기록하세요.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -129,7 +139,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "밀 때 갈비뼈가 들리고 허리가 젖혀지면 좌석·발 지지를 다시 맞추고, 같은 현상이 남으면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 딥 프레스 · 시티드 딥스",
@@ -158,7 +169,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "seated-dip-press",
     "brand": "브랜드 미확인",
-    "searchTerms": "딥스 딥 프레스 시티드 seated dip press 삼두 가슴 5801",
+    "searchTerms": "딥스 딥 프레스 시티드 seated dip press 삼두 가슴 5801 머신",
     "equipmentNote": "DIP PRESS 안내판과 원판 부하 구조를 확인했습니다. 제조사는 사진에서 확정하지 않았습니다. 몸을 들어 올리는 어시스트 딥스와 다른, 앉아서 손잡이를 누르는 기구입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -212,7 +223,8 @@ window.EXERCISE_LIBRARY=[
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [
       "small"
-    ]
+    ],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 디클라인 플라이",
@@ -240,7 +252,7 @@ window.EXERCISE_LIBRARY=[
     "id": "decline-chest-fly",
     "brand": "브랜드 미확인",
     "movementPattern": "플라이",
-    "searchTerms": "디클라인 하부 가슴 플라이 lower chest flight fly 5802",
+    "searchTerms": "디클라인 하부 가슴 플라이 lower chest flight fly 5802 머신",
     "equipmentNote": "디클라인 플라이 / LOWER CHEST FLIGHT 표기와 원판·풀리 구조를 확인했습니다. 제조사와 세부 모델은 미확인입니다. 조절 레버의 기능은 현장 안내를 확인하세요.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -292,7 +304,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손을 모으려고 팔꿈치를 계속 펴면 프레스로 바뀐 상태입니다. 부하를 낮추고 처음 정한 팔꿈치 굽힘을 유지합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Technogym Pure Strength 체스트 프레스",
@@ -320,7 +333,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "technogym-pure-chest-press",
     "brand": "Technogym",
-    "searchTerms": "테크노짐 퓨어 퓨어스트렝스 체스트 프레스 pure strength chest press 5803",
+    "searchTerms": "테크노짐 퓨어 퓨어스트렝스 체스트 프레스 pure strength chest press 5803 머신",
     "equipmentNote": "PURESTRENGTH 등받이와 CHEST PRESS 표기를 확인했습니다. 좌석·손잡이 위치와 원판 합산 기준을 기록하세요. 모델별 빈 기구 저항은 확인 전 임의로 더하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -372,7 +385,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "한쪽 손잡이가 먼저 나가면 좌우 원판과 잡는 위치를 확인합니다. 대칭인데도 몸통이 돌아가면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 디클라인 프레스",
@@ -400,7 +414,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-iso-decline-press",
     "brand": "Hammer",
-    "searchTerms": "해머 해머스트렝스 아이소 레터럴 디클라인 프레스 decline chest press 5804",
+    "searchTerms": "해머 해머스트렝스 아이소 레터럴 디클라인 프레스 decline chest press 5804 머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
       "cues": [
@@ -452,7 +466,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손잡이를 수직 아래로 누르려 하지 말고 운동암 궤적을 따릅니다. 골반이 들리거나 몸이 한쪽으로 돌아가면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 호라이즌털 벤치프레스",
@@ -481,7 +496,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-horizontal",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO 호라이즌털 벤치프레스 5805 해머 해머스트렝스  5865",
+    "searchTerms": "Hammer ISO 호라이즌털 벤치프레스 5805 해머 해머스트렝스  5865 머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 프레스",
     "coaching": {
@@ -536,7 +551,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "마지막 반복에서 엉덩이가 벤치에서 뜨면 중량을 낮춥니다. 손잡이를 가슴까지 내리려고 어깨를 벤치 뒤로 꺾지 않습니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 인클라인 프레스",
@@ -565,7 +581,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-incline",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO 인클라인 프레스 5806 해머 해머스트렝스 ",
+    "searchTerms": "Hammer ISO 인클라인 프레스 5806 해머 해머스트렝스  머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "인클라인 프레스",
     "coaching": {
@@ -616,7 +632,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "앞으로 밀 때 어깨가 귀 쪽으로 올라가면 좌석 높이와 그립부터 조정합니다. 등까지 패드에서 떨어지면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Nautilus Nitro 버티컬 체스트 프레스",
@@ -644,7 +661,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "nautilus-vertical-chest",
     "brand": "Nautilus",
-    "searchTerms": "Nautilus Nitro 버티컬 체스트 프레스 5808 노틸러스 나틸러스 ",
+    "searchTerms": "Nautilus Nitro 버티컬 체스트 프레스 5808 노틸러스 나틸러스  머신",
     "equipmentNote": "NITRO VERTICAL CHEST PRESS 표기와 핀 중량 확인. 원판식 Hammer·Technogym과 별도 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 프레스",
@@ -696,7 +713,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "팔꿈치가 어깨 높이 위로 벌어지면 좌석을 올려 손잡이와 가슴 높이를 맞춥니다. 몸으로 밀어야 하면 핀 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 바이킹 프레스",
@@ -725,7 +743,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "viking-press",
     "brand": "브랜드 미확인",
-    "searchTerms": "바이킹 프레스 5809  ",
+    "searchTerms": "바이킹 프레스 5809   머신",
     "equipmentNote": "바이킹 프레스 현장 표기 확인. 브랜드와 빈 기구 저항은 미확인입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 프레스",
@@ -777,7 +795,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "무릎을 튕기거나 상체를 뒤로 젖혀 올리면 중량을 낮춥니다. 손잡이에서 너무 멀리 서서 허리로 버티고 있지 않은지 확인합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 리니어 넥 프레스",
@@ -806,7 +825,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "linear-neck-press",
     "brand": "브랜드 미확인",
-    "searchTerms": "리니어 넥 프레스 5810  ",
+    "searchTerms": "리니어 넥 프레스 5810   머신",
     "equipmentNote": "현장명은 넥 프레스이며 목 운동이 아닌 어깨 프레스입니다. 제조사 판독이 불확실해 브랜드를 확정하지 않았습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 프레스",
@@ -858,7 +877,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "머리를 앞으로 빼거나 허리를 젖혀 레일을 밀면 시작 높이와 부하를 다시 맞춥니다. 턱을 당겨 목과 몸통 정렬을 유지합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Paramount 트라이셉스 익스텐션",
@@ -884,7 +904,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "paramount-triceps",
     "brand": "Paramount",
-    "searchTerms": "Paramount 트라이셉스 익스텐션 5811 파라마운트 암 익스텐션 머신 암익스텐션 삼두 머신 Paramount arm extension",
+    "searchTerms": "Paramount 트라이셉스 익스텐션 5811 파라마운트 암 익스텐션 머신 암익스텐션 삼두 머신 Paramount arm extension 머신",
     "equipmentNote": "PARAMOUNT TRICEP EXTENSION 표기 확인. 세부 모델 번호는 미확인입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "삼두 신전",
@@ -940,7 +960,8 @@ window.EXERCISE_LIBRARY=[
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [
       "small"
-    ]
+    ],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Cybex 핵 스쿼트",
@@ -968,7 +989,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cybex-hack",
     "brand": "Cybex",
-    "searchTerms": "Cybex 핵 스쿼트 5812 싸이벡스 사이벡스 ",
+    "searchTerms": "Cybex 핵 스쿼트 5812 싸이벡스 사이벡스  머신",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "스쿼트",
     "coaching": {
@@ -1020,7 +1041,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "바닥 구간에서 골반이 말려 패드에서 뜨면 그 직전까지 내려갑니다. 뒤꿈치가 뜨면 발 위치와 깊이를 다시 맞춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Newtech M-TORTURE 핵 프레스",
@@ -1048,7 +1070,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "newtech-hack-press",
     "brand": "Newtech",
-    "searchTerms": "Newtech M-TORTURE 핵 프레스 5813 뉴텍 ",
+    "searchTerms": "Newtech M-TORTURE 핵 프레스 5813 뉴텍  머신",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "스쿼트",
     "coaching": {
@@ -1100,7 +1122,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "무릎이 안으로 모이거나 발 바깥쪽으로만 밀면 부하를 낮춥니다. 올라갈 때 등·골반이 패드에서 떨어지는지도 확인합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Cybex 스쿼트 프레스",
@@ -1128,7 +1151,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cybex-squat-press",
     "brand": "Cybex",
-    "searchTerms": "Cybex 스쿼트 프레스 5814 싸이벡스 사이벡스 ",
+    "searchTerms": "Cybex 스쿼트 프레스 5814 싸이벡스 사이벡스  머신",
     "equipmentNote": "이름은 스쿼트 프레스이지만 앉아서 발판을 미는 레그프레스 계열입니다. 45도 레일형과 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "스쿼트",
@@ -1180,7 +1203,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "발판이 가까워질수록 골반이 좌석 앞쪽으로 밀리면 시작 거리와 깊이를 조절합니다. 손으로 무릎을 밀어 올려야 하면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · BodyMasters 수평 레그프레스",
@@ -1208,7 +1232,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "bodymasters-legpress",
     "brand": "BodyMasters",
-    "searchTerms": "BodyMasters 수평 레그프레스 5815 바디마스터 ",
+    "searchTerms": "BodyMasters 수평 레그프레스 5815 바디마스터  머신",
     "equipmentNote": "BodyMasters 브랜드·핀 부하·누운 지지 구조 확인. 정확한 모델 번호와 중량 비율은 추정하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "스쿼트",
@@ -1260,7 +1284,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "미는 순간 몸이 패드 위로 밀리면 손잡이·몸통 지지와 시작 거리를 확인합니다. 지지를 맞춰도 밀리면 핀 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · MOVEMENT 펜듈럼 스쿼트",
@@ -1288,7 +1313,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "movement-pendulum",
     "brand": "MOVEMENT",
-    "searchTerms": "MOVEMENT 펜듈럼 스쿼트 5816 무브먼트 ",
+    "searchTerms": "MOVEMENT 펜듈럼 스쿼트 5816 무브먼트  머신",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "스쿼트",
     "coaching": {
@@ -1340,7 +1365,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "아래쪽에서 몸이 패드에서 미끄러지거나 뒤꿈치가 뜨면 발 위치와 깊이를 줄여 다시 맞춥니다. 반동 없이 출발할 부하를 고릅니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Booty Builder 스탠딩 힙 어브덕션",
@@ -1367,7 +1393,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "booty-standing-abductor",
     "brand": "Booty Builder",
-    "searchTerms": "Booty Builder 스탠딩 힙 어브덕션 5817 부티빌더 부티 빌더 ",
+    "searchTerms": "Booty Builder 스탠딩 힙 어브덕션 5817 부티빌더 부티 빌더  머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 외전",
     "coaching": {
@@ -1418,7 +1444,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "패드를 벌리려 몸통을 좌우로 흔들면 범위와 중량을 줄입니다. 발끝만 돌리지 말고 허벅지가 패드를 밀고 있는지 확인합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Rogers Pendulum Power Squat Pro",
@@ -1446,7 +1473,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "rogers-power-squat",
     "brand": "Rogers",
-    "searchTerms": "Rogers Pendulum Power Squat Pro 5818 로저스 펜듈럼 ",
+    "searchTerms": "Rogers Pendulum Power Squat Pro 5818 로저스 펜듈럼  머신",
     "equipmentNote": "제조사는 Rogers Athletic, Pendulum은 제품군명입니다. Power Squat Pro 현장 표기 확인.",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "스쿼트",
@@ -1498,7 +1525,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "요크를 손으로 끌어내리거나 발끝으로만 밀어 올라오면 부하·발 위치를 다시 맞춥니다. 내려갈 때 무릎과 발끝 방향을 맞춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Cybex 45도 레그프레스",
@@ -1525,7 +1553,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cybex-45-legpress",
     "brand": "Cybex",
-    "searchTerms": "Cybex 45도 레그프레스 5819 싸이벡스 사이벡스 ",
+    "searchTerms": "Cybex 45도 레그프레스 5819 싸이벡스 사이벡스  머신",
     "equipmentNote": "경사 레일을 이동하는 CYBEX 45도 레그프레스. 원판 합계/한쪽 기준을 메모하고 빈 썰매 무게는 미확인 시 더하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "스쿼트",
@@ -1578,7 +1606,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "무릎을 가슴까지 끌어오며 엉덩이가 뜨면 그 직전에서 방향을 바꿉니다. 무릎을 손으로 밀어야 하면 원판을 줄입니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Booty Builder 힙 쓰러스트",
@@ -1604,7 +1633,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "booty-hip-thrust",
     "brand": "Booty Builder",
-    "searchTerms": "Booty Builder 힙 쓰러스트 5820 부티빌더 부티 빌더 ",
+    "searchTerms": "Booty Builder 힙 쓰러스트 5820 부티빌더 부티 빌더  머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 신전",
     "position": "목은 몸통과 자연스럽게 정렬하고 턱을 억지로 당기지 않습니다. 위에서 정강이가 대략 수직이 되는 발 위치부터 개인에 맞춰 조절합니다.",
@@ -1663,7 +1692,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "위에서 갈비뼈만 들리고 허리가 꺾이면 올라가는 높이를 줄입니다. 발이 밀리거나 골반 패드가 배 쪽으로 올라오면 세팅을 다시 잡습니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Panatta 슈퍼 스쿼트",
@@ -1691,7 +1721,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "panatta-super-squat",
     "brand": "Panatta",
-    "searchTerms": "Panatta 슈퍼 스쿼트 5821 파나타 ",
+    "searchTerms": "Panatta 슈퍼 스쿼트 5821 파나타  머신",
     "equipmentNote": "PANATTA SUPER SQUAT MACHINE 확인. 도감의 기본 설명은 등 지지 자세입니다.",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "스쿼트",
@@ -1743,7 +1773,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "등을 패드에서 떼거나 골반을 말아 깊이를 만들면 범위를 줄입니다. 무릎이 안으로 접히면 발 방향과 중량을 다시 맞춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · LEXCO 링크 아웃타이",
@@ -1769,7 +1800,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "lexco-link-abductor",
     "brand": "LEXCO",
-    "searchTerms": "LEXCO 링크 아웃타이 5822 렉스코 ",
+    "searchTerms": "LEXCO 링크 아웃타이 5822 렉스코  머신",
     "equipmentNote": "LEXCO 링크 아웃타이 원판식. 시티드 외전이며 스탠딩 Booty Builder와 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 외전",
@@ -1821,7 +1852,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "벌릴 때 골반 한쪽이 들리거나 상체를 뒤로 젖히면 중량을 낮춥니다. 끝에서 반동을 쓰지 않을 만큼만 벌립니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Cybex EAGLE 라잉 레그컬",
@@ -1846,7 +1878,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cybex-prone-curl",
     "brand": "Cybex",
-    "searchTerms": "Cybex EAGLE 라잉 레그컬 5823 싸이벡스 사이벡스 ",
+    "searchTerms": "Cybex EAGLE 라잉 레그컬 5823 싸이벡스 사이벡스  머신",
     "equipmentNote": "CYBEX EAGLE PRONE LEG CURL 표기 확인. 앉는 레그컬과 별도 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "무릎 굴곡",
@@ -1899,7 +1931,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "뒤꿈치를 올릴 때 골반이 패드에서 들리면 범위를 줄입니다. 배를 밀고 허리를 젖혀야 더 굽혀지면 중량을 낮춥니다. 종아리가 먼저 지치면 중량·발목 각도를 조정하고 반복되면 시티드 컬을 선택합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · FORWARD 라잉 레그컬",
@@ -1924,7 +1957,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "forward-lying-curl",
     "brand": "FORWARD",
-    "searchTerms": "FORWARD 라잉 레그컬 5824 포워드 ",
+    "searchTerms": "FORWARD 라잉 레그컬 5824 포워드  머신",
     "equipmentNote": "FORWARD 명판·누워서 양다리를 굽히는 안내 그림 확인. 무릎을 꿇는 싱글 레그컬이 아닙니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "무릎 굴곡",
@@ -1977,7 +2010,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "한쪽 골반이 들리거나 몸이 패드 위로 끌려가면 좌우 다리 위치와 손잡이 지지를 맞춥니다. 반복되면 중량을 낮춥니다. 종아리가 먼저 지치면 중량·발목 각도를 조정하고 반복되면 시티드 컬을 선택합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 이너·아웃타이 A · 외전",
@@ -2003,7 +2037,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "combo-a-abduction",
     "brand": "브랜드 미확인",
-    "searchTerms": "이너·아웃타이 A · 외전 5825  ",
+    "searchTerms": "이너·아웃타이 A · 외전 5825   머신",
     "equipmentNote": "동일한 복합 기구의 외전 운동입니다. 내전과 부하·반복을 구분해 기록합니다. 인접 기구 로고만으로 Newtech 브랜드를 확정하지 않았습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 외전",
@@ -2055,7 +2089,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "다리를 벌릴수록 엉덩이가 앞쪽으로 미끄러지면 시작 폭과 등 지지를 확인합니다. 패드를 튕겨야 벌어지면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 이너·아웃타이 A · 내전",
@@ -2081,7 +2116,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "combo-a-adduction",
     "brand": "브랜드 미확인",
-    "searchTerms": "이너·아웃타이 A · 내전 5825  ",
+    "searchTerms": "이너·아웃타이 A · 내전 5825   머신",
     "equipmentNote": "외전 항목과 같은 기구입니다. 패드 방향·모드에 따라 운동이 달라 별도 운동명으로 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 내전",
@@ -2133,7 +2168,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "다리를 모을 때 골반이 한쪽으로 돌아가면 시작 폭을 줄입니다. 좌우 패드를 같은 속도로 움직이지 못하면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · FORWARD 이너·아웃타이 · 외전",
@@ -2159,7 +2195,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "forward-combo-abduction",
     "brand": "FORWARD",
-    "searchTerms": "FORWARD 이너·아웃타이 · 외전 5827 포워드 ",
+    "searchTerms": "FORWARD 이너·아웃타이 · 외전 5827 포워드  머신",
     "equipmentNote": "동일한 복합 기구의 외전 운동입니다. 내전과 부하·반복을 구분해 기록합니다. 앞쪽 FORWARD 명판 기준으로 분류했습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 외전",
@@ -2211,7 +2247,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "팔로 손잡이를 당기며 상체를 흔들어야 벌어지면 부하를 낮춥니다. 돌아올 때 패드가 다리를 밀어 닫지 않도록 속도를 줄입니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · FORWARD 이너·아웃타이 · 내전",
@@ -2237,7 +2274,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "forward-combo-adduction",
     "brand": "FORWARD",
-    "searchTerms": "FORWARD 이너·아웃타이 · 내전 5827 포워드 ",
+    "searchTerms": "FORWARD 이너·아웃타이 · 내전 5827 포워드  머신",
     "equipmentNote": "외전 항목과 같은 기구입니다. 패드 방향·모드에 따라 운동이 달라 별도 운동명으로 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "고관절 내전",
@@ -2289,7 +2326,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "끝에서 패드를 부딪치거나 다리를 갑자기 벌려 보내면 중량을 줄입니다. 골반이 따라 돌지 않는 폭을 유지합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 시티드 레그프레스 · 핀 중량식",
@@ -2317,7 +2355,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "seated-legpress-stack",
     "brand": "브랜드 미확인",
-    "searchTerms": "시티드 레그프레스 · 핀 중량식 5826  ",
+    "searchTerms": "시티드 레그프레스 · 핀 중량식 5826   머신",
     "equipmentNote": "핀 중량식 시티드 레그프레스 확인. Newtech로 보이는 표기가 있으나 해당 기구의 제조사 명판은 확정하지 않았습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "스쿼트",
@@ -2369,7 +2407,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "밀 때 엉덩이가 앞쪽으로 미끄러지면 등받이·시작 거리를 먼저 맞춥니다. 발뒤꿈치를 붙이고도 밀리면 핀 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · FORWARD 레그 익스텐션",
@@ -2395,7 +2434,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "forward-leg-extension",
     "brand": "FORWARD",
-    "searchTerms": "FORWARD 레그 익스텐션 5828 포워드 ",
+    "searchTerms": "FORWARD 레그 익스텐션 5828 포워드  머신",
     "equipmentNote": "FORWARD LEG EXTENSION 명판 확인.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "무릎 신전",
@@ -2454,7 +2493,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "펴는 순간 엉덩이가 들리면 손잡이와 등 지지를 다시 잡습니다. 몸을 뒤로 젖혀야 끝까지 펴지면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · LEXCO MASTERPRO 시티드 레그컬",
@@ -2480,7 +2520,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "lexco-masterpro-curl",
     "brand": "LEXCO",
-    "searchTerms": "LEXCO MASTERPRO 시티드 레그컬 5829 렉스코 ",
+    "searchTerms": "LEXCO MASTERPRO 시티드 레그컬 5829 렉스코  머신",
     "equipmentNote": "LEXCO MASTERPRO SEATED LEG CURL 확인. 라잉 레그컬과 자세·중량을 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "무릎 굴곡",
@@ -2532,7 +2572,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "허벅지가 뜨면 위 고정 패드와 무릎 축 정렬을 다시 맞춥니다. 맞춘 뒤에도 엉덩이가 앞으로 밀리면 중량을 낮춥니다. 종아리가 먼저 지치면 발목을 과하게 당기거나 뻗지 말고 중량·롤러 위치를 조정합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Booty Builder 로디드 백 익스텐션",
@@ -2559,7 +2600,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "booty-loaded-back-extension",
     "brand": "Booty Builder",
-    "searchTerms": "Booty Builder 로디드 백 익스텐션 5830 부티빌더 부티 빌더 ",
+    "searchTerms": "Booty Builder 로디드 백 익스텐션 5830 부티빌더 부티 빌더  머신",
     "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
     "movementPattern": "힌지",
     "loadType": "normal",
@@ -2618,7 +2659,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "상체를 올리며 허리만 꺾이면 몸통과 다리가 일직선인 곳에서 끝냅니다. 패드가 배를 막으면 높이를 낮춰 고관절이 접히게 합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · 케이블 랫 풀다운",
@@ -2646,7 +2688,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cable-lat-station",
     "brand": "브랜드 미확인",
-    "searchTerms": "케이블 랫 풀다운 5842  ",
+    "searchTerms": "케이블 랫 풀다운 5842   케이블머신 cable",
     "equipmentNote": "상부 케이블·긴 바·허벅지 고정대 확인. 옆 기구의 Hammer ROW 명판을 이 기구 브랜드로 사용하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 당김",
@@ -2698,7 +2740,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "당길 때 엉덩이가 좌석에서 뜨면 허벅지 패드를 맞춥니다. 매번 상체를 더 눕혀야 바가 내려오면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · Hammer 시티드 로우 · 핀 중량식",
@@ -2725,7 +2768,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-selector-row",
     "brand": "Hammer",
-    "searchTerms": "Hammer 시티드 로우 · 핀 중량식 5843 해머 해머스트렝스 ",
+    "searchTerms": "Hammer 시티드 로우 · 핀 중량식 5843 해머 해머스트렝스  머신",
     "equipmentNote": "HAMMER STRENGTH ROW, 단일 중량 스택 확인. IMG_5846 원판식 미들 로우와 별도 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -2778,7 +2821,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "당길 때 가슴이 패드에서 떨어지면 패드 거리와 중량을 확인합니다. 몸통을 뒤로 젖혀 마지막 거리를 만들지 않습니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Cybex EAGLE NX 로우",
@@ -2805,7 +2849,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "cybex-eagle-nx-row",
     "brand": "Cybex",
-    "searchTerms": "Cybex EAGLE NX 로우 5844 싸이벡스 사이벡스 ",
+    "searchTerms": "Cybex EAGLE NX 로우 5844 싸이벡스 사이벡스  머신",
     "equipmentNote": "CYBEX EAGLE NX ROW 명판 확인. 핀 중량과 좌석·가슴 패드 위치를 기록하세요.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -2858,7 +2902,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손잡이를 돌려보낼 때 골반까지 앞으로 밀리면 패드 거리를 줄입니다. 당길 때 가슴이 뜨면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · gym80 PURE KRAFT 풀오버",
@@ -2884,7 +2929,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "gym80-pullover",
     "brand": "gym80",
-    "searchTerms": "gym80 PURE KRAFT 풀오버 5845 짐80 짐에이티 ",
+    "searchTerms": "gym80 PURE KRAFT 풀오버 5845 짐80 짐에이티  머신",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "어깨 신전",
     "position": "등·골반을 패드에 붙이고 갈비뼈가 들리지 않게 합니다. 위팔을 내리는 동안 손목을 꺾거나 팔꿈치를 펴는 삼두 운동으로 바꾸지 않습니다.",
@@ -2944,7 +2989,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "팔을 올려 보낼 때 갈비뼈가 들리면 복귀 범위를 줄입니다. 팔꿈치를 펴야 패드가 내려오면 중량을 낮추고 위팔로 누릅니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 미들 로우",
@@ -2971,7 +3017,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-middle-row",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO 미들 로우 5846 해머 해머스트렝스 ",
+    "searchTerms": "Hammer ISO 미들 로우 5846 해머 해머스트렝스  머신",
     "equipmentNote": "현장명 미들 로우, Hammer ISO 원판식 좌우 독립 암 확인. 핀 중량식 로우와 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3024,7 +3070,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "한쪽 팔을 당길 때 가슴이 패드에서 돌아가면 좌우 부하를 확인하고 중량을 낮춥니다. 팔꿈치만 몸 뒤로 과하게 넘기지 않습니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Arsenal RELOADED ISO 멀티 로우",
@@ -3051,7 +3098,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "arsenal-multi-row",
     "brand": "Arsenal",
-    "searchTerms": "Arsenal RELOADED ISO 멀티 로우 5847 아스널 아스날 ",
+    "searchTerms": "Arsenal RELOADED ISO 멀티 로우 5847 아스널 아스날  머신",
     "equipmentNote": "노란색 Arsenal RELOADED ISO MULTI ROW. 다중 그립·좌우 독립 암·패드 조절 확인.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3104,7 +3151,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "반복 중 그립을 바꾸거나 팔꿈치 높이가 흔들리면 한 위치로 고정합니다. 가슴을 튕겨 당기게 되면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Panatta 슈퍼 랫 풀다운 서큘러",
@@ -3132,7 +3180,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "panatta-circular-lat",
     "brand": "Panatta",
-    "searchTerms": "Panatta 슈퍼 랫 풀다운 서큘러 5848 파나타 ",
+    "searchTerms": "Panatta 슈퍼 랫 풀다운 서큘러 5848 파나타  머신",
     "equipmentNote": "PANATTA SUPER LAT PULLDOWN CIRCULAR 명판 확인. 좌우 독립 원호형 풀다운입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 당김",
@@ -3184,7 +3232,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "독립 암을 직선으로 끌어내리려 손목이 꺾이면 기구 원호를 따릅니다. 한쪽 어깨만 내려가면 좌우 속도와 부하를 맞춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 프론트 랫 풀다운",
@@ -3212,7 +3261,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-front-lat",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO 프론트 랫 풀다운 5849 해머 해머스트렝스 ",
+    "searchTerms": "Hammer ISO 프론트 랫 풀다운 5849 해머 해머스트렝스  머신",
     "equipmentNote": "현장 프론트 풀다운 표기와 제조사 언더그립 모델 대조. 하이 로우와 별도 기구입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 당김",
@@ -3264,7 +3313,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손목을 말아 손잡이를 당기거나 상체를 뒤로 젖히면 중량을 낮춥니다. 팔꿈치가 몸 가까이 내려오는 경로를 유지합니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO 하이 로우",
@@ -3291,7 +3341,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-iso-high-row",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO 하이 로우 5850 해머 해머스트렝스 ",
+    "searchTerms": "Hammer ISO 하이 로우 5850 해머 해머스트렝스  머신",
     "equipmentNote": "HAMMER 하이로우 표기 확인. 프론트 풀다운·DY 로우와 각도 및 그립을 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "대각선 당김",
@@ -3344,7 +3394,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손잡이를 수평으로만 당겨 어깨가 들리면 위·앞에서 아래·뒤로 오는 궤적을 따릅니다. 가슴이 뜨면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Citadel 랫 풀다운",
@@ -3372,7 +3423,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "citadel-lat-pulldown",
     "brand": "Citadel",
-    "searchTerms": "Citadel 랫 풀다운 5851 시타델 ",
+    "searchTerms": "Citadel 랫 풀다운 5851 시타델  머신",
     "equipmentNote": "CITADEL 로고·현장 풀다운 표기 확인. 제조사에 따르면 원판 위치가 저항 분포를 바꾸므로 원판 kg뿐 아니라 장착 봉도 기록합니다. 패드 변경 로우 변형은 별도 설정입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수직 당김",
@@ -3424,7 +3475,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손잡이 회전을 억지로 막아 손목이 꺾이지 않게 합니다. 골반이 들리면 허벅지 지지를 맞추고 부하를 줄입니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Hammer ISO DY 로우",
@@ -3451,7 +3503,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "hammer-iso-dy-row",
     "brand": "Hammer",
-    "searchTerms": "Hammer ISO DY 로우 5852 해머 해머스트렝스 ",
+    "searchTerms": "Hammer ISO DY 로우 5852 해머 해머스트렝스  머신",
     "equipmentNote": "현장 디와이로우·Hammer 표기. D.Y.는 Dorian Yates 협업 모델명이며 프론트 풀다운과 별도 기구입니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3504,7 +3556,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "팔꿈치를 벌리거나 몸을 뒤로 젖혀 당기면 중량을 낮춥니다. 손목을 말아 끌지 말고 팔꿈치를 아래·뒤로 보냅니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · LABCON 리니어 로우",
@@ -3531,7 +3584,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "labcon-photo-linear-row",
     "brand": "LABCON",
-    "searchTerms": "LABCON 리니어 로우 5853 랩콘 ",
+    "searchTerms": "LABCON 리니어 로우 5853 랩콘  머신",
     "equipmentNote": "현장 리니어로우 표기와 프레임 LABCON 로고 확인. 레일식 로우이며 일반 T바 로우와 별도 기록합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3584,7 +3637,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "레일 끝까지 당기려 가슴을 패드에서 떼면 그 직전에서 끝냅니다. 복귀 때 몸이 앞으로 쓸려가면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Watson 로우 로우",
@@ -3611,7 +3665,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "watson-low-row",
     "brand": "Watson",
-    "searchTerms": "Watson 로우 로우 5854 왓슨 ",
+    "searchTerms": "Watson 로우 로우 5854 왓슨  머신",
     "equipmentNote": "영국 국기·Watson W 로고·로우로우 표기 확인. 같은 이름의 Hammer 로우 로우와 구분합니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3664,7 +3718,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "낮은 손잡이를 위로 들어 올리려 어깨가 으쓱하면 팔꿈치를 몸 뒤로 보냅니다. 가슴이 뜨거나 몸통이 돌면 부하를 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Newtech 케이블 시티드 로우",
@@ -3691,7 +3746,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "newtech-cable-row",
     "brand": "Newtech",
-    "searchTerms": "Newtech 케이블 시티드 로우 5855 뉴텍  어저스터블 로우 풀리 adjustable low pulley 5860 5855",
+    "searchTerms": "Newtech 케이블 시티드 로우 5855 뉴텍  어저스터블 로우 풀리 adjustable low pulley 5860 5855 케이블머신 cable",
     "equipmentNote": "추가 사진에서 NEWTECH / ADJUSTABLE LOW-PULLEY 명판과 높이 조절 레일을 확인했습니다. 긴 벤치·발판을 쓰는 로우이며 가슴 패드는 없습니다. 기존 케이블 시티드 로우와 같은 기구라 기록 이름을 유지합니다. 풀리 높이·손잡이·핀 표기값을 메모하세요.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "movementPattern": "수평 당김",
@@ -3750,7 +3805,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "당길 때 몸통이 뒤로 넘어가면 중량을 낮춥니다. 복귀 때 허리가 둥글어지면 팔과 어깨뼈만 앞으로 보내는 범위로 줄입니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 덤벨 래터럴 레이즈",
@@ -3786,7 +3842,7 @@ window.EXERCISE_LIBRARY=[
       "date": "2026-10-18",
       "title": "사용자 보유 확인 · 덤벨 / T바 로우 / 케이블"
     },
-    "searchTerms": "덤벨 래터럴 레이즈",
+    "searchTerms": "덤벨 래터럴 레이즈 덤벨 dumbbell",
     "equipmentNote": "사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -3830,7 +3886,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "dumbbell"
   },
   {
     "name": "올데이 감일 · 덤벨 바이셉스 컬",
@@ -3866,7 +3923,7 @@ window.EXERCISE_LIBRARY=[
       "date": "2026-10-18",
       "title": "사용자 보유 확인 · 덤벨 / T바 로우 / 케이블"
     },
-    "searchTerms": "덤벨 바이셉스 컬",
+    "searchTerms": "덤벨 바이셉스 컬 덤벨 dumbbell",
     "equipmentNote": "사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -3910,7 +3967,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "dumbbell"
   },
   {
     "name": "올데이 감일 · 덤벨 해머 컬",
@@ -3946,7 +4004,7 @@ window.EXERCISE_LIBRARY=[
       "date": "2026-10-18",
       "title": "사용자 보유 확인 · 덤벨 / T바 로우 / 케이블"
     },
-    "searchTerms": "덤벨 해머 컬",
+    "searchTerms": "덤벨 해머 컬 덤벨 dumbbell",
     "equipmentNote": "사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -3990,7 +4048,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "dumbbell"
   },
   {
     "name": "올데이 감일 · 덤벨 스탠딩 카프 레이즈",
@@ -4026,7 +4085,7 @@ window.EXERCISE_LIBRARY=[
       "date": "2026-10-18",
       "title": "사용자 보유 확인 · 덤벨 / T바 로우 / 케이블"
     },
-    "searchTerms": "덤벨 스탠딩 카프 레이즈",
+    "searchTerms": "덤벨 스탠딩 카프 레이즈 덤벨 dumbbell",
     "equipmentNote": "사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -4070,7 +4129,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "dumbbell"
   },
   {
     "name": "올데이 감일 · 케이블 플라이",
@@ -4109,7 +4169,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 플라이 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 플라이 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4152,7 +4212,8 @@ window.EXERCISE_LIBRARY=[
     },
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 케이블 리어 델트 플라이",
@@ -4191,7 +4252,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 리어 델트 플라이 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 리어 델트 플라이 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4236,7 +4297,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 케이블 트라이셉스 푸시다운",
@@ -4273,7 +4335,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 트라이셉스 푸시다운 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 트라이셉스 푸시다운 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4318,7 +4380,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 케이블 오버헤드 트라이셉스 익스텐션",
@@ -4355,7 +4418,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 오버헤드 트라이셉스 익스텐션 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 오버헤드 트라이셉스 익스텐션 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4400,7 +4463,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 케이블 크런치",
@@ -4437,7 +4501,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 크런치 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 크런치 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4480,7 +4544,8 @@ window.EXERCISE_LIBRARY=[
     },
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · 케이블 페이스풀",
@@ -4519,7 +4584,7 @@ window.EXERCISE_LIBRARY=[
       "title": "사용자 제공 현장 사진",
       "file": "IMG_5861.jpeg"
     },
-    "searchTerms": "케이블 페이스풀 DRAX 드랙스 듀얼 조절식 케이블 5861",
+    "searchTerms": "케이블 페이스풀 DRAX 드랙스 듀얼 조절식 케이블 5861 케이블머신 cable",
     "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
     "recordingNote": "DRAX 핀 표기값 기준 · 풀리 높이·손잡이·한쪽/단일 스택 기준 고정 · 다른 케이블과 kg 환산 금지",
     "coaching": {
@@ -4564,7 +4629,8 @@ window.EXERCISE_LIBRARY=[
     "libraryGroups": [
       "small"
     ],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "cable"
   },
   {
     "name": "올데이 감일 · T바 로우 · 현장형",
@@ -4602,7 +4668,7 @@ window.EXERCISE_LIBRARY=[
       "date": "2026-10-18",
       "title": "사용자 보유 확인 · 덤벨 / T바 로우 / 케이블"
     },
-    "searchTerms": "T바 로우 · 현장형",
+    "searchTerms": "T바 로우 · 현장형 T바 로우",
     "equipmentNote": "사용자가 보유를 확인한 장비로 수행하는 운동입니다. 제조사·손잡이 종류·풀리 배율은 미확인입니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -4646,7 +4712,8 @@ window.EXERCISE_LIBRARY=[
     },
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [],
-    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다."
+    "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
+    "equipmentType": "tbar"
   },
   {
     "name": "올데이 감일 · 바벨 루마니안 데드리프트",
@@ -4683,7 +4750,7 @@ window.EXERCISE_LIBRARY=[
       "title": "바벨 랙·플랫폼 현장 사진",
       "file": "IMG_5807.JPEG"
     },
-    "searchTerms": "바벨 루마니안 데드리프트",
+    "searchTerms": "바벨 루마니안 데드리프트 바벨 barbell",
     "equipmentNote": "IMG_5807의 랙·바벨을 사용하는 운동입니다. 스미스 머신으로 분류하지 않습니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -4725,7 +4792,9 @@ window.EXERCISE_LIBRARY=[
     },
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [],
-    "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다."
+    "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
+    "equipmentType": "barbell",
+    "stationId": "barbell-rack"
   },
   {
     "name": "올데이 감일 · 바벨 백스쿼트",
@@ -4764,7 +4833,7 @@ window.EXERCISE_LIBRARY=[
       "title": "바벨 랙·플랫폼 현장 사진",
       "file": "IMG_5807.JPEG"
     },
-    "searchTerms": "바벨 백스쿼트",
+    "searchTerms": "바벨 백스쿼트 바벨 barbell",
     "equipmentNote": "IMG_5807의 랙·바벨을 사용하는 운동입니다. 스미스 머신으로 분류하지 않습니다.",
     "recordingNote": "올데이 전용 기록입니다. 좌석·그립과 중량 입력 기준을 저장하고 같은 조건으로 비교하세요. 이전 짐 기록은 관리 화면에서 참고할 수 있습니다.",
     "coaching": {
@@ -4806,7 +4875,9 @@ window.EXERCISE_LIBRARY=[
     },
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [],
-    "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다."
+    "breath": "내려가기 전 배·옆구리에 힘을 채우고 몸통을 유지합니다. 올라온 뒤 다음 반복 전에 호흡과 복부 긴장을 다시 정리합니다.",
+    "equipmentType": "barbell",
+    "stationId": "barbell-rack"
   },
   {
     "weight": 145,
@@ -4841,7 +4912,7 @@ window.EXERCISE_LIBRARY=[
       "file": "IMG_5862.jpeg"
     },
     "stationId": "newtech-assisted-chin-dip",
-    "searchTerms": "뉴텍 보조 풀업 친업 턱걸이 assisted chin dip pullup 5862",
+    "searchTerms": "뉴텍 보조 풀업 친업 턱걸이 assisted chin dip pullup 5862 머신",
     "equipmentNote": "Newtech 보조 풀업·딥스 복합 기구입니다. 상단 다중 그립, 무릎 보조 패드, 고정 발판과 중량 스택을 확인했습니다. 아래쪽 딥스 손잡이와 구분하세요. 세부 모델·보조 배율은 미확인입니다. 기존 시티드 딥 프레스와는 다른 기구입니다.",
     "target": "손잡이를 아래로 당기듯 팔꿈치를 옆구리로 내리고 가슴을 위로 가져옵니다. 겨드랑이 아래·옆등으로 몸을 끌어올립니다.",
     "grip": "상단 오버그립·뉴트럴 중 편한 손잡이를 엄지까지 감싸기.",
@@ -4886,7 +4957,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "다리를 흔들거나 턱만 내밀어 올라가면 보조량을 늘립니다. 내려갈 때 보조판을 찍어 다음 반복을 튕기지 않습니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "weight": 145,
@@ -4922,7 +4994,7 @@ window.EXERCISE_LIBRARY=[
       "file": "IMG_5862.jpeg"
     },
     "stationId": "newtech-assisted-chin-dip",
-    "searchTerms": "뉴텍 보조 딥스 어시스티드 assisted dip 5862",
+    "searchTerms": "뉴텍 보조 딥스 어시스티드 assisted dip 5862 머신",
     "equipmentNote": "보조 풀업과 같은 Newtech 복합 기구의 아래쪽 평행 손잡이를 사용합니다. 몸 전체가 이동하는 보조 딥스이며, 좌석에 앉아 손잡이를 내리는 딥 프레스와 다릅니다. 두 운동은 기록·중량 이력을 따로 유지합니다.",
     "target": "손바닥으로 평행 손잡이를 아래로 밀어 몸을 올립니다. 위팔 뒤와 가슴으로 몸을 받치고 정한 상체 기울기를 유지합니다.",
     "grip": "아래쪽 평행 손잡이를 감싸고 손목 아래에서 전완으로 받치기.",
@@ -4969,7 +5041,8 @@ window.EXERCISE_LIBRARY=[
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [
       "small"
-    ]
+    ],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Legend 숄더 프레스 · 원판식",
@@ -4998,7 +5071,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "legend-shoulder-press",
     "brand": "Legend",
-    "searchTerms": "레전드 레전드피트니스 LeverEDGE 레버엣지 어깨 5863",
+    "searchTerms": "레전드 레전드피트니스 LeverEDGE 레버엣지 어깨 5863 머신",
     "equipmentNote": "빨간 프레임·검은 패드의 원판식 숄더 프레스입니다. 프레임 로고와 LeverEDGE 제조사 자료의 구조를 대조했습니다. 제조사 6001 계열 자료는 참고용이며 현장 모델 번호·개조 여부·빈 기구 저항은 명판 확인 전 확정하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -5050,7 +5123,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "한쪽 암만 먼저 올라가면 좌우 원판·그립 위치를 맞춥니다. 끝에서 등이 패드에서 떨어지면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "name": "올데이 감일 · Telju 숄더 프레스 · 원판식",
@@ -5079,7 +5153,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
     "id": "telju-shoulder-press",
     "brand": "Telju",
-    "searchTerms": "텔쥬 텔주 텔루 텔유 이소래터럴 아이소래터럴 어깨 5864",
+    "searchTerms": "텔쥬 텔주 텔루 텔유 이소래터럴 아이소래터럴 어깨 5864 머신",
     "equipmentNote": "흰 프레임·빨간 패드의 Telju 원판식 숄더 프레스입니다. 등받이 로고와 현장 숄더프레스 표기를 확인했습니다. 공식 원판식 숄더 프레스 자료를 참고하되 현장 세대·모델 번호와 빈 기구 저항은 확정하지 않습니다.",
     "breath": "힘을 보내며 내쉬고 되돌아오며 들이쉽니다. 복귀는 약 2–3초로 시작해 자세와 속도가 유지되는지 확인합니다.",
     "coaching": {
@@ -5131,7 +5205,8 @@ window.EXERCISE_LIBRARY=[
       "watch": "손잡이 끝을 잡아 손목이 꺾이면 손바닥 깊숙이 받칠 위치로 바꿉니다. 몸을 젖혀 밀어야 하면 중량을 낮춥니다."
     },
     "executionReviewedAt": "2026-10-30",
-    "libraryGroups": []
+    "libraryGroups": [],
+    "equipmentType": "machine"
   },
   {
     "id": "cybex-arm-curl",
@@ -5158,7 +5233,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "추가 시 참고 예시입니다. 기존 컬 종목과 교체해 총세트 수를 관리하세요.",
     "alt": [],
     "aka": [],
-    "searchTerms": "싸이벡스 사이벡스 싸이벡 Cybex arm curl 암컬 암 컬 바이셉스 이두 프리처 머신 컬 5866",
+    "searchTerms": "싸이벡스 사이벡스 싸이벡 Cybex arm curl 암컬 암 컬 바이셉스 이두 프리처 머신 컬 5866 머신",
     "source": {
       "type": "photo",
       "date": "2026-10-22",
@@ -5217,7 +5292,8 @@ window.EXERCISE_LIBRARY=[
     "executionReviewedAt": "2026-10-30",
     "libraryGroups": [
       "small"
-    ]
+    ],
+    "equipmentType": "machine"
   },
   {
     "id": "pec-deck-fly",
@@ -5246,7 +5322,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "추가 시 참고 예시입니다. 다른 가슴 플라이와 교체해 총세트 수를 관리하세요.",
     "alt": [],
     "aka": [],
-    "searchTerms": "펙덱 펙 덱 팩덱 펙댁 펙텍 체스트 플라이 버터플라이 pec deck pectoral chest fly 가슴",
+    "searchTerms": "펙덱 펙 덱 팩덱 펙댁 펙텍 체스트 플라이 버터플라이 pec deck pectoral chest fly 가슴 머신",
     "source": {
       "type": "user",
       "date": "2026-10-28",
@@ -5299,7 +5375,8 @@ window.EXERCISE_LIBRARY=[
       "drive": "벌린 위팔 → 가슴 앞 중앙으로 모으기. 큰 나무를 안듯 움직이기.",
       "feel": "손끼리 닿게 하기보다 양 위팔을 가슴 앞에서 가까워지게 합니다. 벌릴 때 가슴이 늘어나는 부하를 받고 모을 때 가슴 앞쪽으로 힘을 모읍니다.",
       "watch": "모을 때 등이 패드에서 떨어지면 부하를 낮춥니다. 벌릴 때 어깨가 앞으로 말리면 시작 각도를 좁혀 접촉을 유지합니다."
-    }
+    },
+    "equipmentType": "machine"
   },
   {
     "id": "rear-delt-fly-machine",
@@ -5330,7 +5407,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "추가 시 참고 예시입니다. 케이블 리어 델트와 교체해 총세트 수를 관리하세요.",
     "alt": [],
     "aka": [],
-    "searchTerms": "리어 델트 리어델트 리어 플로이드 리어플로이드 리어 플라이 리버스 펙덱 팩덱 reverse pec deck rear deltoid fly 후면 어깨",
+    "searchTerms": "리어 델트 리어델트 리어 플로이드 리어플로이드 리어 플라이 리버스 펙덱 팩덱 reverse pec deck rear deltoid fly 후면 어깨 머신",
     "source": {
       "type": "user",
       "date": "2026-10-28",
@@ -5381,7 +5458,8 @@ window.EXERCISE_LIBRARY=[
       "drive": "몸 앞 위팔 → 양옆·뒤쪽으로 벌리기. 팔꿈치를 양옆으로 멀리 보내기.",
       "feel": "손을 뒤로 빼기보다 팔꿈치·위팔을 양옆으로 벌립니다. 어깨 뒤쪽으로 위팔을 보내고 어깨뼈는 자연스럽게 움직이게 둡니다.",
       "watch": "팔꿈치가 점점 굽혀지면 로우로 바뀌고 있는 상태입니다. 굽힘 각도를 일정하게 두고 가슴이 패드에서 뜨면 부하를 낮춥니다."
-    }
+    },
+    "equipmentType": "machine"
   },
   {
     "id": "standing-lateral-raise-machine",
@@ -5410,7 +5488,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "추가 시 참고 예시입니다. 덤벨 래터럴 레이즈와 교체해 총세트 수를 관리하세요.",
     "alt": [],
     "aka": [],
-    "searchTerms": "스탠딩 래터럴 레이즈 스탠딩 레터럴 레이즈 스탠딩레터럴 스탠딩래터럴 사이드 레터럴 사레레 머신 standing lateral raise 측면 어깨 삼각근",
+    "searchTerms": "스탠딩 래터럴 레이즈 스탠딩 레터럴 레이즈 스탠딩레터럴 스탠딩래터럴 사이드 레터럴 사레레 머신 standing lateral raise 측면 어깨 삼각근 머신",
     "source": {
       "type": "user",
       "date": "2026-10-29",
@@ -5463,7 +5541,8 @@ window.EXERCISE_LIBRARY=[
       "drive": "몸 옆 위팔 → 양옆·위로 벌리기. 손보다 팔꿈치가 옆으로 멀어진다고 생각하기.",
       "feel": "위팔·팔꿈치를 양옆으로 보내 어깨 옆으로 부하를 받습니다. 패드형은 지정 팔 지지부로 운동암을 밀고, 복귀할 때 같은 경로로 천천히 내립니다.",
       "watch": "팔을 벌릴 때 몸이 들리면 팔 지지 높이와 발 위치를 맞춥니다. 무릎 반동·허리 젖힘이 남으면 중량을 낮춥니다."
-    }
+    },
+    "equipmentType": "machine"
   },
   {
     "id": "cybex-triceps-arm-extension",
@@ -5492,7 +5571,7 @@ window.EXERCISE_LIBRARY=[
     "setsNote": "편성 예시입니다. 삼두 보조 종목과 교체할 때 해당 날짜의 목표 세트 수를 따르세요.",
     "alt": [],
     "aka": [],
-    "searchTerms": "사이벡스 트라이셉스 암 익스텐션 머신 싸이벡스 암 익스텐션 머신 Cybex 암 익스텐션 머신 사이벡스 암 익스텐션 암익스텐션 삼두 머신 Cybex arm extension Cybex triceps extension",
+    "searchTerms": "사이벡스 트라이셉스 암 익스텐션 머신 싸이벡스 암 익스텐션 머신 Cybex 암 익스텐션 머신 사이벡스 암 익스텐션 암익스텐션 삼두 머신 Cybex arm extension Cybex triceps extension 머신",
     "source": {
       "type": "user",
       "date": "2026-11-02",
@@ -5543,6 +5622,1578 @@ window.EXERCISE_LIBRARY=[
       "drive": "굽힌 팔꿈치를 펴면서 아래팔로 손잡이를 기구의 궤도 끝 쪽으로 보냅니다. 위팔은 그대로 두고 돌아올 때 팔꿈치를 천천히 굽힙니다.",
       "feel": "팔꿈치가 펴질 때 위팔 뒤쪽에 힘이 모이는지 봅니다. 어깨가 앞으로 쏠리며 손잡이를 밀면 마지막 구간을 짧게 줄입니다.",
       "watch": "끝에서만 손목이 접히면 손잡이를 손바닥 안에 다시 잡습니다. 첫 반복부터 몸을 앞으로 숙여야 하면 좌석과 축을 맞춘 뒤 중량을 낮춥니다."
+    },
+    "equipmentType": "machine"
+  },
+  {
+    "id": "cable-lateral",
+    "name": "올데이 감일 · 케이블 원암 래터럴 레이즈",
+    "displayName": "케이블 원암 래터럴 레이즈",
+    "cat": "push",
+    "vol": {
+      "p": "측면삼각",
+      "s": []
+    },
+    "mus": "측면 삼각근",
+    "sets": "2×12–20",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 300,
+    "orderPhase": "late",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "DRAX",
+    "equipmentType": "cable",
+    "equipmentRole": "accessory",
+    "stationId": "drax-cable-station",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-21",
+      "title": "사용자 제공 현장 사진",
+      "file": "IMG_5861.jpeg"
+    },
+    "searchTerms": "케이블 원암 래터럴 레이즈 케이블머신 cable DRAX 드랙스 사이드 레터럴 사레레 lateral raise",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [
+      "small"
+    ],
+    "movementPattern": "어깨 외전",
+    "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
+    "recordingNote": "사용한 한 스택의 핀 표기값을 기록합니다. 풀리 높이·손잡이·타워를 고정하고 다른 케이블과 kg을 환산하지 않습니다. 한 세트에 양쪽을 각각 수행하고 반복 칸에는 한쪽 횟수를 기록합니다. 좌우 차이는 메모에 남깁니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "풀리를 낮게 놓고 운동할 팔이 타워 반대쪽에 오도록 옆으로 섭니다. 손잡이는 몸 앞을 가로질러 잡고 케이블이 다리에 닿지 않게 섭니다.",
+      "grip": "한 손으로 D손잡이를 감싸고 손목은 전완과 나란히 둡니다. 반대 손은 타워의 고정 프레임을 잡습니다.",
+      "brace": "골반과 가슴은 정면을 유지하고 팔꿈치를 조금 굽힌 각도를 고정합니다. 어깨뼈는 팔과 함께 자연스럽게 위로 회전하게 둡니다.",
+      "drive": "위팔을 몸 옆보다 약간 앞쪽으로 벌려 팔꿈치를 어깨 높이 부근까지 보냅니다. 손부터 위로 꺾어 올리지 않습니다.",
+      "feel": "손을 끌어올리기보다 어깨 옆으로 위팔을 바깥쪽에 보낸다고 생각합니다. 내려올 때도 옆어깨로 케이블의 당김을 받습니다.",
+      "watch": "몸이 반대쪽으로 기울거나 무릎 반동이 생기면 중량을 낮춥니다. 어깨만 먼저 으쓱하면 들어 올리는 높이와 부하를 줄입니다."
+    },
+    "setup": "풀리를 낮게 놓고 운동할 팔이 타워 반대쪽에 오도록 옆으로 섭니다. 손잡이는 몸 앞을 가로질러 잡고 케이블이 다리에 닿지 않게 섭니다.",
+    "grip": "한 손으로 D손잡이를 감싸고 손목은 전완과 나란히 둡니다. 반대 손은 타워의 고정 프레임을 잡습니다.",
+    "target": "손을 끌어올리기보다 어깨 옆으로 위팔을 바깥쪽에 보낸다고 생각합니다. 내려올 때도 옆어깨로 케이블의 당김을 받습니다.",
+    "tip": "위팔을 몸 옆보다 약간 앞쪽으로 벌려 팔꿈치를 어깨 높이 부근까지 보냅니다. 손부터 위로 꺾어 올리지 않습니다.",
+    "warn": "몸이 반대쪽으로 기울거나 무릎 반동이 생기면 중량을 낮춥니다. 어깨만 먼저 으쓱하면 들어 올리는 높이와 부하를 줄입니다.",
+    "rom": "몸통을 기울이지 않고 올릴 수 있는 높이까지. 손잡이가 몸 뒤로 끌려가는 깊이는 만들지 않습니다.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "골반과 가슴은 정면을 유지하고 팔꿈치를 조금 굽힌 각도를 고정합니다. 어깨뼈는 팔과 함께 자연스럽게 위로 회전하게 둡니다.",
+        "위팔을 몸 옆보다 약간 앞쪽으로 벌려 팔꿈치를 어깨 높이 부근까지 보냅니다. 손부터 위로 꺾어 올리지 않습니다.",
+        "몸이 반대쪽으로 기울거나 무릎 반동이 생기면 중량을 낮춥니다. 어깨만 먼저 으쓱하면 들어 올리는 높이와 부하를 줄입니다."
+      ],
+      "position": "골반과 가슴은 정면을 유지하고 팔꿈치를 조금 굽힌 각도를 고정합니다. 어깨뼈는 팔과 함께 자연스럽게 위로 회전하게 둡니다.",
+      "feel": "손을 끌어올리기보다 어깨 옆으로 위팔을 바깥쪽에 보낸다고 생각합니다. 내려올 때도 옆어깨로 케이블의 당김을 받습니다.",
+      "steps": [
+        "풀리를 낮게 놓고 운동할 팔이 타워 반대쪽에 오도록 옆으로 섭니다. 손잡이는 몸 앞을 가로질러 잡고 케이블이 다리에 닿지 않게 섭니다. 한 손으로 D손잡이를 감싸고 손목은 전완과 나란히 둡니다. 반대 손은 타워의 고정 프레임을 잡습니다.",
+        "위팔을 몸 옆보다 약간 앞쪽으로 벌려 팔꿈치를 어깨 높이 부근까지 보냅니다. 손부터 위로 꺾어 올리지 않습니다.",
+        "팔꿈치 각도와 몸통 위치를 유지해 손을 허벅지 앞까지 천천히 돌려놓고 양쪽 같은 횟수를 수행합니다."
+      ],
+      "errors": "몸이 반대쪽으로 기울거나 무릎 반동이 생기면 중량을 낮춥니다. 어깨만 먼저 으쓱하면 들어 올리는 높이와 부하를 줄입니다.",
+      "corrections": [
+        {
+          "sign": "몸통을 기울여 손잡이를 올림",
+          "fix": "타워를 가볍게 지지하고 더 가벼운 핀으로 같은 높이를 반복합니다."
+        },
+        {
+          "sign": "팔꿈치를 굽혀 컬처럼 당김",
+          "fix": "위팔과 전완의 각도를 고정하고 팔꿈치가 옆으로 이동하게 합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "cable-curl",
+    "name": "올데이 감일 · 케이블 바이셉스 컬",
+    "displayName": "케이블 바이셉스 컬",
+    "cat": "pull",
+    "vol": {
+      "p": "이두",
+      "s": [
+        "전완"
+      ]
+    },
+    "mus": "상완이두근·상완근",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 300,
+    "orderPhase": "late",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "DRAX",
+    "equipmentType": "cable",
+    "equipmentRole": "accessory",
+    "stationId": "drax-cable-station",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-21",
+      "title": "사용자 제공 현장 사진",
+      "file": "IMG_5861.jpeg"
+    },
+    "searchTerms": "케이블 바이셉스 컬 케이블머신 cable DRAX 드랙스 이두 컬 cable curl",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [
+      "small"
+    ],
+    "movementPattern": "팔꿈치 굴곡",
+    "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
+    "recordingNote": "사용한 한 스택의 핀 표기값을 기록합니다. 풀리 높이·손잡이·타워를 고정하고 다른 케이블과 kg을 환산하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "낮은 풀리에 컬 바를 연결하고 타워를 마주 봅니다. 팔을 내렸을 때 케이블이 팽팽한 거리에서 발을 골반 너비로 둡니다.",
+      "grip": "손바닥이 위를 향하게 어깨 너비로 잡습니다. 직선 바에서 손목이 꺾이면 곡선 손잡이나 한 손 손잡이로 바꿉니다.",
+      "brace": "위팔을 몸 옆에 두고 골반·갈비뼈를 포갭니다. 팔꿈치를 뒤로 당기거나 어깨를 앞으로 밀어 올리지 않습니다.",
+      "drive": "팔꿈치를 중심으로 전완을 접어 손잡이를 가슴 아래로 가져옵니다. 위팔이 앞으로 따라가기 직전에서 멈춥니다.",
+      "feel": "손목을 말아 올리지 않고 위팔 앞쪽으로 팔꿈치를 굽힙니다. 내려올 때도 이두가 길어지는 속도를 조절합니다.",
+      "watch": "상체를 뒤로 젖혀 시작하면 중량을 낮춥니다. 손목이 접히면 손잡이 종류와 그립 폭을 조절한 뒤 같은 자세를 유지합니다."
+    },
+    "setup": "낮은 풀리에 컬 바를 연결하고 타워를 마주 봅니다. 팔을 내렸을 때 케이블이 팽팽한 거리에서 발을 골반 너비로 둡니다.",
+    "grip": "손바닥이 위를 향하게 어깨 너비로 잡습니다. 직선 바에서 손목이 꺾이면 곡선 손잡이나 한 손 손잡이로 바꿉니다.",
+    "target": "손목을 말아 올리지 않고 위팔 앞쪽으로 팔꿈치를 굽힙니다. 내려올 때도 이두가 길어지는 속도를 조절합니다.",
+    "tip": "팔꿈치를 중심으로 전완을 접어 손잡이를 가슴 아래로 가져옵니다. 위팔이 앞으로 따라가기 직전에서 멈춥니다.",
+    "warn": "상체를 뒤로 젖혀 시작하면 중량을 낮춥니다. 손목이 접히면 손잡이 종류와 그립 폭을 조절한 뒤 같은 자세를 유지합니다.",
+    "rom": "팔꿈치가 자연스럽게 펴지는 지점부터 위팔을 앞으로 밀지 않고 접을 수 있는 지점까지.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "위팔을 몸 옆에 두고 골반·갈비뼈를 포갭니다. 팔꿈치를 뒤로 당기거나 어깨를 앞으로 밀어 올리지 않습니다.",
+        "팔꿈치를 중심으로 전완을 접어 손잡이를 가슴 아래로 가져옵니다. 위팔이 앞으로 따라가기 직전에서 멈춥니다.",
+        "상체를 뒤로 젖혀 시작하면 중량을 낮춥니다. 손목이 접히면 손잡이 종류와 그립 폭을 조절한 뒤 같은 자세를 유지합니다."
+      ],
+      "position": "위팔을 몸 옆에 두고 골반·갈비뼈를 포갭니다. 팔꿈치를 뒤로 당기거나 어깨를 앞으로 밀어 올리지 않습니다.",
+      "feel": "손목을 말아 올리지 않고 위팔 앞쪽으로 팔꿈치를 굽힙니다. 내려올 때도 이두가 길어지는 속도를 조절합니다.",
+      "steps": [
+        "낮은 풀리에 컬 바를 연결하고 타워를 마주 봅니다. 팔을 내렸을 때 케이블이 팽팽한 거리에서 발을 골반 너비로 둡니다. 손바닥이 위를 향하게 어깨 너비로 잡습니다. 직선 바에서 손목이 꺾이면 곡선 손잡이나 한 손 손잡이로 바꿉니다.",
+        "팔꿈치를 중심으로 전완을 접어 손잡이를 가슴 아래로 가져옵니다. 위팔이 앞으로 따라가기 직전에서 멈춥니다.",
+        "위팔 위치를 유지하며 팔꿈치를 천천히 펴고 스택을 떨어뜨리지 않은 상태에서 다음 반복을 시작합니다."
+      ],
+      "errors": "상체를 뒤로 젖혀 시작하면 중량을 낮춥니다. 손목이 접히면 손잡이 종류와 그립 폭을 조절한 뒤 같은 자세를 유지합니다.",
+      "corrections": [
+        {
+          "sign": "골반을 앞으로 튕김",
+          "fix": "한 발을 조금 뒤로 두고 몸통이 움직이지 않는 부하로 낮춥니다."
+        },
+        {
+          "sign": "손목부터 말아 올림",
+          "fix": "손등과 전완을 일직선으로 맞추고 바를 손바닥 안에 다시 둡니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "cable-straight-arm",
+    "name": "올데이 감일 · 케이블 스트레이트 암 풀다운",
+    "displayName": "케이블 스트레이트 암 풀다운",
+    "cat": "pull",
+    "vol": {
+      "p": "등",
+      "s": []
+    },
+    "mus": "광배근·대원근",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 235,
+    "orderPhase": "middle",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "DRAX",
+    "equipmentType": "cable",
+    "equipmentRole": "accessory",
+    "stationId": "drax-cable-station",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-21",
+      "title": "사용자 제공 현장 사진",
+      "file": "IMG_5861.jpeg"
+    },
+    "searchTerms": "케이블 스트레이트 암 풀다운 케이블머신 cable DRAX 드랙스 케이블 풀오버 스트레이트암 straight arm pulldown",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "어깨 신전",
+    "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
+    "recordingNote": "사용한 한 스택의 핀 표기값을 기록합니다. 풀리 높이·손잡이·타워를 고정하고 다른 케이블과 kg을 환산하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "높은 풀리에 바나 로프를 연결하고 한두 걸음 물러납니다. 무릎을 조금 굽히고 고관절에서 몸통을 살짝 기울입니다.",
+      "grip": "바는 손등이 위로 향하게 어깨 너비로 잡습니다. 로프라면 손바닥을 마주 보고 팔꿈치는 조금 굽혀 둡니다.",
+      "brace": "팔꿈치 각도와 몸통 기울기를 유지합니다. 갈비뼈를 들거나 엉덩이를 앞뒤로 흔들어 손잡이를 내리지 않습니다.",
+      "drive": "위팔을 앞·위쪽에서 몸 옆으로 내려 손을 허벅지 앞까지 보냅니다. 팔꿈치를 접어 로우 동작으로 바꾸지 않습니다.",
+      "feel": "겨드랑이 뒤쪽으로 위팔을 골반 쪽에 끌어온다고 생각합니다. 삼두로 팔꿈치를 펴기보다 어깨 관절에서 팔이 이동합니다.",
+      "watch": "팔꿈치가 계속 굽혀지거나 허리가 젖혀지면 중량을 낮춥니다. 손이 허벅지에 닿은 뒤 몸 뒤로 더 밀지 않습니다."
+    },
+    "setup": "높은 풀리에 바나 로프를 연결하고 한두 걸음 물러납니다. 무릎을 조금 굽히고 고관절에서 몸통을 살짝 기울입니다.",
+    "grip": "바는 손등이 위로 향하게 어깨 너비로 잡습니다. 로프라면 손바닥을 마주 보고 팔꿈치는 조금 굽혀 둡니다.",
+    "target": "겨드랑이 뒤쪽으로 위팔을 골반 쪽에 끌어온다고 생각합니다. 삼두로 팔꿈치를 펴기보다 어깨 관절에서 팔이 이동합니다.",
+    "tip": "위팔을 앞·위쪽에서 몸 옆으로 내려 손을 허벅지 앞까지 보냅니다. 팔꿈치를 접어 로우 동작으로 바꾸지 않습니다.",
+    "warn": "팔꿈치가 계속 굽혀지거나 허리가 젖혀지면 중량을 낮춥니다. 손이 허벅지에 닿은 뒤 몸 뒤로 더 밀지 않습니다.",
+    "rom": "팔을 올릴 때 허리를 젖히지 않는 높이에서 허벅지 앞까지.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "팔꿈치 각도와 몸통 기울기를 유지합니다. 갈비뼈를 들거나 엉덩이를 앞뒤로 흔들어 손잡이를 내리지 않습니다.",
+        "위팔을 앞·위쪽에서 몸 옆으로 내려 손을 허벅지 앞까지 보냅니다. 팔꿈치를 접어 로우 동작으로 바꾸지 않습니다.",
+        "팔꿈치가 계속 굽혀지거나 허리가 젖혀지면 중량을 낮춥니다. 손이 허벅지에 닿은 뒤 몸 뒤로 더 밀지 않습니다."
+      ],
+      "position": "팔꿈치 각도와 몸통 기울기를 유지합니다. 갈비뼈를 들거나 엉덩이를 앞뒤로 흔들어 손잡이를 내리지 않습니다.",
+      "feel": "겨드랑이 뒤쪽으로 위팔을 골반 쪽에 끌어온다고 생각합니다. 삼두로 팔꿈치를 펴기보다 어깨 관절에서 팔이 이동합니다.",
+      "steps": [
+        "높은 풀리에 바나 로프를 연결하고 한두 걸음 물러납니다. 무릎을 조금 굽히고 고관절에서 몸통을 살짝 기울입니다. 바는 손등이 위로 향하게 어깨 너비로 잡습니다. 로프라면 손바닥을 마주 보고 팔꿈치는 조금 굽혀 둡니다.",
+        "위팔을 앞·위쪽에서 몸 옆으로 내려 손을 허벅지 앞까지 보냅니다. 팔꿈치를 접어 로우 동작으로 바꾸지 않습니다.",
+        "몸통 각도를 유지한 채 위팔을 앞·위로 돌려보내고 갈비뼈가 들리기 전에서 방향을 바꿉니다."
+      ],
+      "errors": "팔꿈치가 계속 굽혀지거나 허리가 젖혀지면 중량을 낮춥니다. 손이 허벅지에 닿은 뒤 몸 뒤로 더 밀지 않습니다.",
+      "corrections": [
+        {
+          "sign": "팔꿈치가 접히며 로우로 변함",
+          "fix": "부하를 낮추고 팔꿈치 각도를 일정하게 유지합니다."
+        },
+        {
+          "sign": "손을 내릴 때 몸통이 일어남",
+          "fix": "엉덩이를 뒤로 둔 자세를 고정하고 팔만 움직이는 범위를 줄여 연습합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "cable-pallof",
+    "name": "올데이 감일 · 케이블 팔로프 프레스",
+    "displayName": "케이블 팔로프 프레스",
+    "cat": "core",
+    "vol": {
+      "p": "코어",
+      "s": []
+    },
+    "mus": "복사근·복부 안정화 근육",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 400,
+    "orderPhase": "late",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "DRAX",
+    "equipmentType": "cable",
+    "equipmentRole": "accessory",
+    "stationId": "drax-cable-station",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-21",
+      "title": "사용자 제공 현장 사진",
+      "file": "IMG_5861.jpeg"
+    },
+    "searchTerms": "케이블 팔로프 프레스 케이블머신 cable DRAX 드랙스 팔로프 팰로프 pallof anti rotation",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "회전 저항",
+    "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
+    "recordingNote": "사용한 한 스택의 핀 표기값을 기록합니다. 풀리 높이·손잡이·타워를 고정하고 다른 케이블과 kg을 환산하지 않습니다. 한 세트에 양쪽을 각각 수행하고 반복 칸에는 한쪽 횟수를 기록합니다. 좌우 차이는 메모에 남깁니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "풀리를 가슴 높이에 맞추고 타워에 옆으로 섭니다. 발을 어깨 너비로 두고 손잡이를 가슴 중앙에 붙입니다.",
+      "grip": "한 손으로 D손잡이를 잡고 다른 손으로 감쌉니다. 양손은 가슴 중앙에 두고 손목을 곧게 유지합니다.",
+      "brace": "가슴·배꼽·골반이 같은 정면을 향하게 유지합니다. 무릎은 조금 굽히고 타워 쪽으로 몸이 돌아가지 않게 버팁니다.",
+      "drive": "손을 가슴에서 정면으로 천천히 뻗어 1–2초 유지한 뒤 다시 가져옵니다. 몸통을 돌려 케이블을 당기는 운동이 아닙니다.",
+      "feel": "옆에서 잡아당기는 케이블에 맞서 복부 전체로 몸통을 지킵니다. 팔이 멀어질수록 커지는 회전 힘을 배로 받습니다.",
+      "watch": "골반이 돌거나 몸이 옆으로 기울면 타워에 조금 가까이 서거나 중량을 낮춥니다. 손을 끝까지 뻗는 것보다 정면 유지를 우선합니다."
+    },
+    "setup": "풀리를 가슴 높이에 맞추고 타워에 옆으로 섭니다. 발을 어깨 너비로 두고 손잡이를 가슴 중앙에 붙입니다.",
+    "grip": "한 손으로 D손잡이를 잡고 다른 손으로 감쌉니다. 양손은 가슴 중앙에 두고 손목을 곧게 유지합니다.",
+    "target": "옆에서 잡아당기는 케이블에 맞서 복부 전체로 몸통을 지킵니다. 팔이 멀어질수록 커지는 회전 힘을 배로 받습니다.",
+    "tip": "손을 가슴에서 정면으로 천천히 뻗어 1–2초 유지한 뒤 다시 가져옵니다. 몸통을 돌려 케이블을 당기는 운동이 아닙니다.",
+    "warn": "골반이 돌거나 몸이 옆으로 기울면 타워에 조금 가까이 서거나 중량을 낮춥니다. 손을 끝까지 뻗는 것보다 정면 유지를 우선합니다.",
+    "rom": "몸통 정면이 유지되는 거리만 뻗습니다. 뻗고 돌아오기 1회를 양쪽 각각 수행합니다.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "가슴·배꼽·골반이 같은 정면을 향하게 유지합니다. 무릎은 조금 굽히고 타워 쪽으로 몸이 돌아가지 않게 버팁니다.",
+        "손을 가슴에서 정면으로 천천히 뻗어 1–2초 유지한 뒤 다시 가져옵니다. 몸통을 돌려 케이블을 당기는 운동이 아닙니다.",
+        "골반이 돌거나 몸이 옆으로 기울면 타워에 조금 가까이 서거나 중량을 낮춥니다. 손을 끝까지 뻗는 것보다 정면 유지를 우선합니다."
+      ],
+      "position": "가슴·배꼽·골반이 같은 정면을 향하게 유지합니다. 무릎은 조금 굽히고 타워 쪽으로 몸이 돌아가지 않게 버팁니다.",
+      "feel": "옆에서 잡아당기는 케이블에 맞서 복부 전체로 몸통을 지킵니다. 팔이 멀어질수록 커지는 회전 힘을 배로 받습니다.",
+      "steps": [
+        "풀리를 가슴 높이에 맞추고 타워에 옆으로 섭니다. 발을 어깨 너비로 두고 손잡이를 가슴 중앙에 붙입니다. 한 손으로 D손잡이를 잡고 다른 손으로 감쌉니다. 양손은 가슴 중앙에 두고 손목을 곧게 유지합니다.",
+        "손을 가슴에서 정면으로 천천히 뻗어 1–2초 유지한 뒤 다시 가져옵니다. 몸통을 돌려 케이블을 당기는 운동이 아닙니다.",
+        "손잡이를 가슴으로 천천히 되돌리고 자세를 다시 맞춥니다. 반대 방향으로 돌아서 같은 횟수를 수행합니다."
+      ],
+      "errors": "골반이 돌거나 몸이 옆으로 기울면 타워에 조금 가까이 서거나 중량을 낮춥니다. 손을 끝까지 뻗는 것보다 정면 유지를 우선합니다.",
+      "corrections": [
+        {
+          "sign": "상체가 타워 쪽으로 돌아감",
+          "fix": "중량 또는 팔을 뻗는 거리를 줄여 정면을 유지합니다."
+        },
+        {
+          "sign": "허리를 젖혀 균형을 잡음",
+          "fix": "갈비뼈를 골반 위로 맞추고 무릎을 약간 굽혀 발 전체로 지지합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "cable-pullthrough",
+    "name": "올데이 감일 · 케이블 풀스루",
+    "displayName": "케이블 풀스루",
+    "cat": "legs",
+    "vol": {
+      "p": "후면사슬",
+      "s": []
+    },
+    "mus": "둔근·햄스트링",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 235,
+    "orderPhase": "middle",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "DRAX",
+    "equipmentType": "cable",
+    "equipmentRole": "accessory",
+    "stationId": "drax-cable-station",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-21",
+      "title": "사용자 제공 현장 사진",
+      "file": "IMG_5861.jpeg"
+    },
+    "searchTerms": "케이블 풀스루 케이블머신 cable DRAX 드랙스 풀 스루 풀쓰루 pull through",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "힌지",
+    "equipmentNote": "DRAX 듀얼 조절식 케이블 스테이션을 사진으로 확인했습니다. 풀리 높이·손잡이·사용한 타워를 함께 저장하세요. 양손이 서로 다른 스택을 쓰면 한쪽 핀 표기값 기준으로 기록하고 양쪽이 같았는지 메모합니다. 로프 하나를 양손으로 잡는 운동은 그 로프에 연결된 한 스택의 표기값을 기록합니다. 풀리 배율은 미확인입니다.",
+    "recordingNote": "사용한 한 스택의 핀 표기값을 기록합니다. 풀리 높이·손잡이·타워를 고정하고 다른 케이블과 kg을 환산하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "낮은 풀리에 로프를 연결하고 타워에 등을 돌려 다리 사이로 잡습니다. 로프가 팽팽한 거리에서 발을 어깨 너비로 벌립니다.",
+      "grip": "로프 끝을 양손으로 감싸고 팔은 아래로 길게 둡니다. 손으로 로프를 끌어올리지 않고 부하를 연결하는 역할만 합니다.",
+      "brace": "무릎을 조금 굽힌 상태로 배·옆구리에 힘을 줍니다. 머리·등·골반의 관계를 유지한 채 고관절을 접습니다.",
+      "drive": "엉덩이를 뒤로 보내 손을 다리 사이로 통과시킨 뒤, 발 전체로 바닥을 눌러 고관절을 펴고 똑바로 섭니다.",
+      "feel": "내려갈 때 허벅지 뒤가 길어지고 올라올 때 엉덩이가 앞으로 돌아옵니다. 허리를 뒤로 꺾어 마무리하지 않습니다.",
+      "watch": "뒤로 끌려가 발뒤꿈치로만 버티면 중량을 낮춥니다. 무릎을 많이 굽혀 주저앉으면 엉덩이를 뒤로 보내는 범위부터 다시 잡습니다."
+    },
+    "setup": "낮은 풀리에 로프를 연결하고 타워에 등을 돌려 다리 사이로 잡습니다. 로프가 팽팽한 거리에서 발을 어깨 너비로 벌립니다.",
+    "grip": "로프 끝을 양손으로 감싸고 팔은 아래로 길게 둡니다. 손으로 로프를 끌어올리지 않고 부하를 연결하는 역할만 합니다.",
+    "target": "내려갈 때 허벅지 뒤가 길어지고 올라올 때 엉덩이가 앞으로 돌아옵니다. 허리를 뒤로 꺾어 마무리하지 않습니다.",
+    "tip": "엉덩이를 뒤로 보내 손을 다리 사이로 통과시킨 뒤, 발 전체로 바닥을 눌러 고관절을 펴고 똑바로 섭니다.",
+    "warn": "뒤로 끌려가 발뒤꿈치로만 버티면 중량을 낮춥니다. 무릎을 많이 굽혀 주저앉으면 엉덩이를 뒤로 보내는 범위부터 다시 잡습니다.",
+    "rom": "허벅지 뒤의 길어짐을 느끼되 허리가 둥글어지기 전까지만 접습니다.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "무릎을 조금 굽힌 상태로 배·옆구리에 힘을 줍니다. 머리·등·골반의 관계를 유지한 채 고관절을 접습니다.",
+        "엉덩이를 뒤로 보내 손을 다리 사이로 통과시킨 뒤, 발 전체로 바닥을 눌러 고관절을 펴고 똑바로 섭니다.",
+        "뒤로 끌려가 발뒤꿈치로만 버티면 중량을 낮춥니다. 무릎을 많이 굽혀 주저앉으면 엉덩이를 뒤로 보내는 범위부터 다시 잡습니다."
+      ],
+      "position": "무릎을 조금 굽힌 상태로 배·옆구리에 힘을 줍니다. 머리·등·골반의 관계를 유지한 채 고관절을 접습니다.",
+      "feel": "내려갈 때 허벅지 뒤가 길어지고 올라올 때 엉덩이가 앞으로 돌아옵니다. 허리를 뒤로 꺾어 마무리하지 않습니다.",
+      "steps": [
+        "낮은 풀리에 로프를 연결하고 타워에 등을 돌려 다리 사이로 잡습니다. 로프가 팽팽한 거리에서 발을 어깨 너비로 벌립니다. 로프 끝을 양손으로 감싸고 팔은 아래로 길게 둡니다. 손으로 로프를 끌어올리지 않고 부하를 연결하는 역할만 합니다.",
+        "엉덩이를 뒤로 보내 손을 다리 사이로 통과시킨 뒤, 발 전체로 바닥을 눌러 고관절을 펴고 똑바로 섭니다.",
+        "서 있는 자세에서 무릎 각도를 조금만 바꾸며 엉덩이를 뒤로 보내고 로프에 몸통이 끌려가지 않게 조절합니다."
+      ],
+      "errors": "뒤로 끌려가 발뒤꿈치로만 버티면 중량을 낮춥니다. 무릎을 많이 굽혀 주저앉으면 엉덩이를 뒤로 보내는 범위부터 다시 잡습니다.",
+      "corrections": [
+        {
+          "sign": "무릎을 접어 스쿼트처럼 내려감",
+          "fix": "정강이 기울기를 크게 바꾸지 않고 엉덩이를 뒤로 이동합니다."
+        },
+        {
+          "sign": "정점에서 허리를 과하게 젖힘",
+          "fix": "갈비뼈와 골반이 포개지는 선에서 고관절 펴기를 끝냅니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-bench",
+    "name": "올데이 감일 · 바벨 벤치프레스",
+    "displayName": "바벨 벤치프레스",
+    "cat": "push",
+    "vol": {
+      "p": "가슴",
+      "s": [
+        "삼두",
+        "전면삼각"
+      ]
+    },
+    "mus": "대흉근·삼두근·전면 삼각근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 벤치프레스 바벨 barbell 프리웨이트 플랫 벤치 bench press",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "수평 프레스",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "평벤치에 누워 눈을 바 아래에 두고 발 전체·엉덩이·등 위쪽을 지지합니다. 안전바는 가슴이 받지 않도록, 정상 반복을 방해하지 않는 높이에 둡니다.",
+      "grip": "엄지로 바를 감싸고 아래에서 전완이 수직에 가까운 폭을 잡습니다. 바를 손가락 쪽에 얹지 말고 손바닥 아래쪽으로 받칩니다.",
+      "brace": "견갑을 벤치에 안정시키고 엉덩이를 붙입니다. 허리의 자연스러운 곡선은 유지하되 가슴을 따라 골반까지 들지 않습니다.",
+      "drive": "바를 가슴 중하부 쪽으로 내려 전완 정렬을 유지한 뒤 어깨 위쪽으로 밀어 올립니다. 팔꿈치를 옆으로 일자로 벌리지 않습니다.",
+      "feel": "가슴으로 위팔을 몸 앞에 모으며 바를 밀고 삼두로 팔꿈치를 폅니다. 바를 튕기지 않고 가슴에서 방향을 바꿉니다.",
+      "watch": "엉덩이가 들리거나 바가 한쪽으로 기울면 중량을 낮춥니다. 안전바를 쓸 수 없으면 보조자와 랙 복귀를 확보한 뒤 수행합니다."
+    },
+    "setup": "평벤치에 누워 눈을 바 아래에 두고 발 전체·엉덩이·등 위쪽을 지지합니다. 안전바는 가슴이 받지 않도록, 정상 반복을 방해하지 않는 높이에 둡니다.",
+    "grip": "엄지로 바를 감싸고 아래에서 전완이 수직에 가까운 폭을 잡습니다. 바를 손가락 쪽에 얹지 말고 손바닥 아래쪽으로 받칩니다.",
+    "target": "가슴으로 위팔을 몸 앞에 모으며 바를 밀고 삼두로 팔꿈치를 폅니다. 바를 튕기지 않고 가슴에서 방향을 바꿉니다.",
+    "tip": "바를 가슴 중하부 쪽으로 내려 전완 정렬을 유지한 뒤 어깨 위쪽으로 밀어 올립니다. 팔꿈치를 옆으로 일자로 벌리지 않습니다.",
+    "warn": "엉덩이가 들리거나 바가 한쪽으로 기울면 중량을 낮춥니다. 안전바를 쓸 수 없으면 보조자와 랙 복귀를 확보한 뒤 수행합니다.",
+    "rom": "등 위쪽과 골반 지지가 유지되는 깊이까지 내립니다. 가슴에 닿으려 어깨를 앞으로 말지 않습니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "견갑을 벤치에 안정시키고 엉덩이를 붙입니다. 허리의 자연스러운 곡선은 유지하되 가슴을 따라 골반까지 들지 않습니다.",
+        "바를 가슴 중하부 쪽으로 내려 전완 정렬을 유지한 뒤 어깨 위쪽으로 밀어 올립니다. 팔꿈치를 옆으로 일자로 벌리지 않습니다.",
+        "엉덩이가 들리거나 바가 한쪽으로 기울면 중량을 낮춥니다. 안전바를 쓸 수 없으면 보조자와 랙 복귀를 확보한 뒤 수행합니다."
+      ],
+      "position": "견갑을 벤치에 안정시키고 엉덩이를 붙입니다. 허리의 자연스러운 곡선은 유지하되 가슴을 따라 골반까지 들지 않습니다.",
+      "feel": "가슴으로 위팔을 몸 앞에 모으며 바를 밀고 삼두로 팔꿈치를 폅니다. 바를 튕기지 않고 가슴에서 방향을 바꿉니다.",
+      "steps": [
+        "평벤치에 누워 눈을 바 아래에 두고 발 전체·엉덩이·등 위쪽을 지지합니다. 안전바는 가슴이 받지 않도록, 정상 반복을 방해하지 않는 높이에 둡니다. 엄지로 바를 감싸고 아래에서 전완이 수직에 가까운 폭을 잡습니다. 바를 손가락 쪽에 얹지 말고 손바닥 아래쪽으로 받칩니다.",
+        "바를 가슴 중하부 쪽으로 내려 전완 정렬을 유지한 뒤 어깨 위쪽으로 밀어 올립니다. 팔꿈치를 옆으로 일자로 벌리지 않습니다.",
+        "바를 어깨 위에서 안정시킨 뒤 같은 가슴 위치로 천천히 내립니다. 마지막에는 팔을 편 상태로 랙 위치를 확인해 걸어 둡니다."
+      ],
+      "errors": "엉덩이가 들리거나 바가 한쪽으로 기울면 중량을 낮춥니다. 안전바를 쓸 수 없으면 보조자와 랙 복귀를 확보한 뒤 수행합니다.",
+      "corrections": [
+        {
+          "sign": "엉덩이를 들며 바를 밀음",
+          "fix": "발 위치를 몸에 맞추고 벤치 접촉을 유지할 수 있는 중량으로 낮춥니다."
+        },
+        {
+          "sign": "손목이 뒤로 꺾이고 팔꿈치가 벌어짐",
+          "fix": "바를 손바닥 아래쪽에 두고 하단에서 손목과 팔꿈치가 겹치는 폭을 다시 맞춥니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-incline",
+    "name": "올데이 감일 · 바벨 인클라인 벤치프레스",
+    "displayName": "바벨 인클라인 벤치프레스",
+    "cat": "push",
+    "vol": {
+      "p": "가슴",
+      "s": [
+        "전면삼각",
+        "삼두"
+      ]
+    },
+    "mus": "대흉근 쇄골부·전면 삼각근·삼두근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 인클라인 벤치프레스 바벨 barbell 프리웨이트 인클라인 프레스 incline bench",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "경사 프레스",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "조절 벤치를 약 15–30도로 시작해 랙 중앙에 둡니다. 바가 쇄골 아래 윗가슴으로 내려오고 발·엉덩이·등이 지지되도록 맞춥니다.",
+      "grip": "엄지로 바를 감싸고 내렸을 때 손목이 팔꿈치 위에 오는 폭으로 잡습니다. 손목은 과하게 뒤로 젖히지 않습니다.",
+      "brace": "등 위쪽을 벤치에 붙이고 갈비뼈가 들리지 않게 배에 힘을 줍니다. 바를 내릴 때 어깨가 앞으로 따라가지 않게 합니다.",
+      "drive": "윗가슴 방향으로 바를 내린 뒤 어깨 위로 밀어 올립니다. 팔꿈치는 바 아래에서 따라가고 목 쪽으로 바를 내리지 않습니다.",
+      "feel": "윗가슴 쪽에서 위팔을 앞·위로 모으며 밀어냅니다. 어깨 앞만 쓰이게 벤치를 세우거나 팔꿈치를 과하게 벌리지 않습니다.",
+      "watch": "허리를 젖혀 평벤치처럼 밀면 각도와 중량을 낮춥니다. 바를 빼려고 어깨가 들리면 랙 높이를 다시 맞추고 안전바·보조자를 확보합니다."
+    },
+    "setup": "조절 벤치를 약 15–30도로 시작해 랙 중앙에 둡니다. 바가 쇄골 아래 윗가슴으로 내려오고 발·엉덩이·등이 지지되도록 맞춥니다.",
+    "grip": "엄지로 바를 감싸고 내렸을 때 손목이 팔꿈치 위에 오는 폭으로 잡습니다. 손목은 과하게 뒤로 젖히지 않습니다.",
+    "target": "윗가슴 쪽에서 위팔을 앞·위로 모으며 밀어냅니다. 어깨 앞만 쓰이게 벤치를 세우거나 팔꿈치를 과하게 벌리지 않습니다.",
+    "tip": "윗가슴 방향으로 바를 내린 뒤 어깨 위로 밀어 올립니다. 팔꿈치는 바 아래에서 따라가고 목 쪽으로 바를 내리지 않습니다.",
+    "warn": "허리를 젖혀 평벤치처럼 밀면 각도와 중량을 낮춥니다. 바를 빼려고 어깨가 들리면 랙 높이를 다시 맞추고 안전바·보조자를 확보합니다.",
+    "rom": "어깨가 앞으로 말리지 않는 깊이부터 팔꿈치를 펴는 지점까지.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "등 위쪽을 벤치에 붙이고 갈비뼈가 들리지 않게 배에 힘을 줍니다. 바를 내릴 때 어깨가 앞으로 따라가지 않게 합니다.",
+        "윗가슴 방향으로 바를 내린 뒤 어깨 위로 밀어 올립니다. 팔꿈치는 바 아래에서 따라가고 목 쪽으로 바를 내리지 않습니다.",
+        "허리를 젖혀 평벤치처럼 밀면 각도와 중량을 낮춥니다. 바를 빼려고 어깨가 들리면 랙 높이를 다시 맞추고 안전바·보조자를 확보합니다."
+      ],
+      "position": "등 위쪽을 벤치에 붙이고 갈비뼈가 들리지 않게 배에 힘을 줍니다. 바를 내릴 때 어깨가 앞으로 따라가지 않게 합니다.",
+      "feel": "윗가슴 쪽에서 위팔을 앞·위로 모으며 밀어냅니다. 어깨 앞만 쓰이게 벤치를 세우거나 팔꿈치를 과하게 벌리지 않습니다.",
+      "steps": [
+        "조절 벤치를 약 15–30도로 시작해 랙 중앙에 둡니다. 바가 쇄골 아래 윗가슴으로 내려오고 발·엉덩이·등이 지지되도록 맞춥니다. 엄지로 바를 감싸고 내렸을 때 손목이 팔꿈치 위에 오는 폭으로 잡습니다. 손목은 과하게 뒤로 젖히지 않습니다.",
+        "윗가슴 방향으로 바를 내린 뒤 어깨 위로 밀어 올립니다. 팔꿈치는 바 아래에서 따라가고 목 쪽으로 바를 내리지 않습니다.",
+        "등 접촉을 유지하고 바를 같은 윗가슴 지점으로 천천히 돌려보냅니다. 좌우가 함께 내려오는지 확인합니다."
+      ],
+      "errors": "허리를 젖혀 평벤치처럼 밀면 각도와 중량을 낮춥니다. 바를 빼려고 어깨가 들리면 랙 높이를 다시 맞추고 안전바·보조자를 확보합니다.",
+      "corrections": [
+        {
+          "sign": "바가 목 쪽으로 내려옴",
+          "fix": "벤치 위치를 조절하고 쇄골 아래 윗가슴 쪽으로 내립니다."
+        },
+        {
+          "sign": "엉덩이를 들거나 허리 아치를 크게 만듦",
+          "fix": "벤치 각도와 부하를 낮추고 발·골반 지지부터 다시 맞춥니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-overhead",
+    "name": "올데이 감일 · 바벨 오버헤드 프레스",
+    "displayName": "바벨 오버헤드 프레스",
+    "cat": "push",
+    "vol": {
+      "p": "전면삼각",
+      "s": [
+        "측면삼각",
+        "삼두"
+      ]
+    },
+    "mus": "전면·측면 삼각근·삼두근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 오버헤드 프레스 바벨 barbell 프리웨이트 밀리터리 숄더 프레스 OHP overhead press",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "수직 프레스",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "바를 윗가슴 높이 랙에서 꺼내 발을 골반 너비로 둡니다. 팔꿈치는 바 아래보다 조금 앞, 바는 윗가슴 앞에 놓습니다.",
+      "grip": "어깨보다 약간 넓게 엄지로 바를 감싸고 손바닥 아래쪽으로 받칩니다. 아래에서 전완이 수직에 가까운 폭을 찾습니다.",
+      "brace": "배와 엉덩이에 힘을 줘 갈비뼈·골반을 포갭니다. 무릎 반동은 쓰지 않고 팔이 올라갈 때 견갑의 위쪽 회전은 허용합니다.",
+      "drive": "턱을 살짝 뒤로 빼 바가 얼굴 앞을 지나게 밀고, 머리를 통과하면 바 아래로 몸을 정렬합니다. 목 뒤로 내리지 않습니다.",
+      "feel": "어깨 앞·옆으로 위팔을 위로 보내고 삼두로 팔꿈치를 폅니다. 위에서 바·어깨·골반이 발 위에 쌓이도록 받칩니다.",
+      "watch": "바가 멀리 앞을 돌거나 허리가 젖혀지면 부하를 낮춥니다. 무릎으로 튕겨야 시작된다면 그 중량은 엄격한 프레스 범위를 넘은 것입니다."
+    },
+    "setup": "바를 윗가슴 높이 랙에서 꺼내 발을 골반 너비로 둡니다. 팔꿈치는 바 아래보다 조금 앞, 바는 윗가슴 앞에 놓습니다.",
+    "grip": "어깨보다 약간 넓게 엄지로 바를 감싸고 손바닥 아래쪽으로 받칩니다. 아래에서 전완이 수직에 가까운 폭을 찾습니다.",
+    "target": "어깨 앞·옆으로 위팔을 위로 보내고 삼두로 팔꿈치를 폅니다. 위에서 바·어깨·골반이 발 위에 쌓이도록 받칩니다.",
+    "tip": "턱을 살짝 뒤로 빼 바가 얼굴 앞을 지나게 밀고, 머리를 통과하면 바 아래로 몸을 정렬합니다. 목 뒤로 내리지 않습니다.",
+    "warn": "바가 멀리 앞을 돌거나 허리가 젖혀지면 부하를 낮춥니다. 무릎으로 튕겨야 시작된다면 그 중량은 엄격한 프레스 범위를 넘은 것입니다.",
+    "rom": "몸통을 뒤로 젖히지 않고 윗가슴 앞에서 머리 위로 이동하는 범위.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "배와 엉덩이에 힘을 줘 갈비뼈·골반을 포갭니다. 무릎 반동은 쓰지 않고 팔이 올라갈 때 견갑의 위쪽 회전은 허용합니다.",
+        "턱을 살짝 뒤로 빼 바가 얼굴 앞을 지나게 밀고, 머리를 통과하면 바 아래로 몸을 정렬합니다. 목 뒤로 내리지 않습니다.",
+        "바가 멀리 앞을 돌거나 허리가 젖혀지면 부하를 낮춥니다. 무릎으로 튕겨야 시작된다면 그 중량은 엄격한 프레스 범위를 넘은 것입니다."
+      ],
+      "position": "배와 엉덩이에 힘을 줘 갈비뼈·골반을 포갭니다. 무릎 반동은 쓰지 않고 팔이 올라갈 때 견갑의 위쪽 회전은 허용합니다.",
+      "feel": "어깨 앞·옆으로 위팔을 위로 보내고 삼두로 팔꿈치를 폅니다. 위에서 바·어깨·골반이 발 위에 쌓이도록 받칩니다.",
+      "steps": [
+        "바를 윗가슴 높이 랙에서 꺼내 발을 골반 너비로 둡니다. 팔꿈치는 바 아래보다 조금 앞, 바는 윗가슴 앞에 놓습니다. 어깨보다 약간 넓게 엄지로 바를 감싸고 손바닥 아래쪽으로 받칩니다. 아래에서 전완이 수직에 가까운 폭을 찾습니다.",
+        "턱을 살짝 뒤로 빼 바가 얼굴 앞을 지나게 밀고, 머리를 통과하면 바 아래로 몸을 정렬합니다. 목 뒤로 내리지 않습니다.",
+        "턱을 살짝 뒤로 보내 바가 얼굴 앞을 지나 윗가슴 앞으로 내려오게 하고 복부 긴장을 다시 맞춥니다."
+      ],
+      "errors": "바가 멀리 앞을 돌거나 허리가 젖혀지면 부하를 낮춥니다. 무릎으로 튕겨야 시작된다면 그 중량은 엄격한 프레스 범위를 넘은 것입니다.",
+      "corrections": [
+        {
+          "sign": "바를 밀 때 허리가 젖혀짐",
+          "fix": "엉덩이와 배에 힘을 주고 서 있는 몸통이 유지되는 중량으로 낮춥니다."
+        },
+        {
+          "sign": "어깨를 아래로 누르며 팔만 올림",
+          "fix": "견갑의 위쪽 회전을 허용하고 바 아래에 어깨를 정렬합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-row",
+    "name": "올데이 감일 · 바벨 벤트오버 로우",
+    "displayName": "바벨 벤트오버 로우",
+    "cat": "pull",
+    "vol": {
+      "p": "등",
+      "s": [
+        "이두",
+        "후면삼각"
+      ]
+    },
+    "mus": "광배근·견갑 주변 근육·이두근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 벤트오버 로우 바벨 barbell 프리웨이트 바벨로우 벤트 오버 bent over row",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "수평 당기기",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "발을 골반 너비로 두고 무릎을 조금 굽혀 엉덩이를 뒤로 보냅니다. 허리 모양을 유지할 수 있는 몸통 기울기를 정하고 바를 무릎 아래에 둡니다.",
+      "grip": "어깨보다 약간 넓게 손등이 위로 향하도록 잡습니다. 그립이 먼저 풀리면 스트랩의 감김·조임을 가벼운 바로 확인합니다.",
+      "brace": "배·옆구리의 긴장과 고관절 각도를 유지합니다. 팔을 내밀 때 어깨뼈는 움직이되 허리까지 둥글게 따라가지 않게 합니다.",
+      "drive": "팔꿈치를 몸통 옆으로 뒤로 보내 바를 배꼽과 아랫갈비뼈 사이로 당깁니다. 몸통을 일으켜 바를 만나지 않습니다.",
+      "feel": "겨드랑이 뒤와 등 가운데로 위팔을 당깁니다. 팔꿈치가 몸 옆에 닿은 뒤 어깨를 앞으로 밀며 더 깊이 당기지 않습니다.",
+      "watch": "매 반복 상체가 일어나면 중량을 낮춥니다. 스트랩을 조여도 손이 열리면 증량보다 부하 조정이나 가슴 지지 로우 대체를 우선합니다."
+    },
+    "setup": "발을 골반 너비로 두고 무릎을 조금 굽혀 엉덩이를 뒤로 보냅니다. 허리 모양을 유지할 수 있는 몸통 기울기를 정하고 바를 무릎 아래에 둡니다.",
+    "grip": "어깨보다 약간 넓게 손등이 위로 향하도록 잡습니다. 그립이 먼저 풀리면 스트랩의 감김·조임을 가벼운 바로 확인합니다.",
+    "target": "겨드랑이 뒤와 등 가운데로 위팔을 당깁니다. 팔꿈치가 몸 옆에 닿은 뒤 어깨를 앞으로 밀며 더 깊이 당기지 않습니다.",
+    "tip": "팔꿈치를 몸통 옆으로 뒤로 보내 바를 배꼽과 아랫갈비뼈 사이로 당깁니다. 몸통을 일으켜 바를 만나지 않습니다.",
+    "warn": "매 반복 상체가 일어나면 중량을 낮춥니다. 스트랩을 조여도 손이 열리면 증량보다 부하 조정이나 가슴 지지 로우 대체를 우선합니다.",
+    "rom": "몸통이 움직이지 않는 당김 범위. 바를 배에 꼭 닿게 하려고 어깨를 앞으로 말지 않습니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "배·옆구리의 긴장과 고관절 각도를 유지합니다. 팔을 내밀 때 어깨뼈는 움직이되 허리까지 둥글게 따라가지 않게 합니다.",
+        "팔꿈치를 몸통 옆으로 뒤로 보내 바를 배꼽과 아랫갈비뼈 사이로 당깁니다. 몸통을 일으켜 바를 만나지 않습니다.",
+        "매 반복 상체가 일어나면 중량을 낮춥니다. 스트랩을 조여도 손이 열리면 증량보다 부하 조정이나 가슴 지지 로우 대체를 우선합니다."
+      ],
+      "position": "배·옆구리의 긴장과 고관절 각도를 유지합니다. 팔을 내밀 때 어깨뼈는 움직이되 허리까지 둥글게 따라가지 않게 합니다.",
+      "feel": "겨드랑이 뒤와 등 가운데로 위팔을 당깁니다. 팔꿈치가 몸 옆에 닿은 뒤 어깨를 앞으로 밀며 더 깊이 당기지 않습니다.",
+      "steps": [
+        "발을 골반 너비로 두고 무릎을 조금 굽혀 엉덩이를 뒤로 보냅니다. 허리 모양을 유지할 수 있는 몸통 기울기를 정하고 바를 무릎 아래에 둡니다. 어깨보다 약간 넓게 손등이 위로 향하도록 잡습니다. 그립이 먼저 풀리면 스트랩의 감김·조임을 가벼운 바로 확인합니다.",
+        "팔꿈치를 몸통 옆으로 뒤로 보내 바를 배꼽과 아랫갈비뼈 사이로 당깁니다. 몸통을 일으켜 바를 만나지 않습니다.",
+        "몸통 기울기를 유지하면서 팔을 천천히 펴 바를 무릎 아래로 돌려보냅니다. 다음 당김 전에 바가 흔들리지 않게 합니다."
+      ],
+      "errors": "매 반복 상체가 일어나면 중량을 낮춥니다. 스트랩을 조여도 손이 열리면 증량보다 부하 조정이나 가슴 지지 로우 대체를 우선합니다.",
+      "corrections": [
+        {
+          "sign": "무릎과 허리 반동으로 당김",
+          "fix": "중량을 낮추고 첫 반복과 마지막 반복의 몸통 기울기를 같게 유지합니다."
+        },
+        {
+          "sign": "등보다 그립이 먼저 풀림",
+          "fix": "스트랩을 바에 밀착해 장력을 잡고 그래도 유지가 안 되면 부하를 낮추거나 지지형 로우를 선택합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-deadlift",
+    "name": "올데이 감일 · 바벨 컨벤셔널 데드리프트",
+    "displayName": "바벨 컨벤셔널 데드리프트",
+    "cat": "legs",
+    "vol": {
+      "p": "후면사슬",
+      "s": [
+        "대퇴사두",
+        "등"
+      ]
+    },
+    "mus": "둔근·햄스트링·대퇴사두근·몸통 안정화 근육",
+    "sets": "2×5–8",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 컨벤셔널 데드리프트 바벨 barbell 프리웨이트 일반 데드리프트 컨벤셔널 conventional deadlift",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "힌지",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "발을 골반 너비로 두고 바를 발 중간 위에 놓습니다. 고관절과 무릎을 굽혀 정강이를 바에 가까이 두고 어깨는 바 위나 약간 앞에 둡니다.",
+      "grip": "다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 느슨함을 없애고 팔꿈치는 편 채 유지합니다.",
+      "brace": "들기 전 배·옆구리를 단단히 하고 바의 유격을 먼저 없앱니다. 겨드랑이에 힘을 줘 바를 몸 가까이 두고 허리 모양을 유지합니다.",
+      "drive": "바닥을 발 전체로 밀며 무릎과 고관절을 함께 폅니다. 바가 정강이·허벅지 가까이 올라오게 하고 선 자세에서 멈춥니다.",
+      "feel": "바닥을 밀 때 허벅지 앞, 일어설 때 엉덩이와 허벅지 뒤가 힘을 씁니다. 등은 허리를 꺾어 드는 대신 몸통과 바의 거리를 지킵니다.",
+      "watch": "엉덩이만 먼저 솟거나 바가 앞으로 뜨면 시작 자세와 중량을 조정합니다. 스트랩을 써도 손이 열리면 중량을 낮추고 스트랩 장착을 다시 확인합니다."
+    },
+    "setup": "발을 골반 너비로 두고 바를 발 중간 위에 놓습니다. 고관절과 무릎을 굽혀 정강이를 바에 가까이 두고 어깨는 바 위나 약간 앞에 둡니다.",
+    "grip": "다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 느슨함을 없애고 팔꿈치는 편 채 유지합니다.",
+    "target": "바닥을 밀 때 허벅지 앞, 일어설 때 엉덩이와 허벅지 뒤가 힘을 씁니다. 등은 허리를 꺾어 드는 대신 몸통과 바의 거리를 지킵니다.",
+    "tip": "바닥을 발 전체로 밀며 무릎과 고관절을 함께 폅니다. 바가 정강이·허벅지 가까이 올라오게 하고 선 자세에서 멈춥니다.",
+    "warn": "엉덩이만 먼저 솟거나 바가 앞으로 뜨면 시작 자세와 중량을 조정합니다. 스트랩을 써도 손이 열리면 중량을 낮추고 스트랩 장착을 다시 확인합니다.",
+    "rom": "바닥에서 똑바로 서는 지점까지. 바닥 높이에서 허리 모양을 유지하지 못하면 올바른 원판 높이와 시작 자세를 먼저 맞춥니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "들기 전 배·옆구리를 단단히 하고 바의 유격을 먼저 없앱니다. 겨드랑이에 힘을 줘 바를 몸 가까이 두고 허리 모양을 유지합니다.",
+        "바닥을 발 전체로 밀며 무릎과 고관절을 함께 폅니다. 바가 정강이·허벅지 가까이 올라오게 하고 선 자세에서 멈춥니다.",
+        "엉덩이만 먼저 솟거나 바가 앞으로 뜨면 시작 자세와 중량을 조정합니다. 스트랩을 써도 손이 열리면 중량을 낮추고 스트랩 장착을 다시 확인합니다."
+      ],
+      "position": "들기 전 배·옆구리를 단단히 하고 바의 유격을 먼저 없앱니다. 겨드랑이에 힘을 줘 바를 몸 가까이 두고 허리 모양을 유지합니다.",
+      "feel": "바닥을 밀 때 허벅지 앞, 일어설 때 엉덩이와 허벅지 뒤가 힘을 씁니다. 등은 허리를 꺾어 드는 대신 몸통과 바의 거리를 지킵니다.",
+      "steps": [
+        "발을 골반 너비로 두고 바를 발 중간 위에 놓습니다. 고관절과 무릎을 굽혀 정강이를 바에 가까이 두고 어깨는 바 위나 약간 앞에 둡니다. 다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 느슨함을 없애고 팔꿈치는 편 채 유지합니다.",
+        "바닥을 발 전체로 밀며 무릎과 고관절을 함께 폅니다. 바가 정강이·허벅지 가까이 올라오게 하고 선 자세에서 멈춥니다.",
+        "엉덩이를 뒤로 보내 바를 허벅지에서 무릎까지 내리고, 무릎을 굽혀 바닥에 놓습니다. 매 반복 바닥에서 자세와 장력을 다시 잡습니다."
+      ],
+      "errors": "엉덩이만 먼저 솟거나 바가 앞으로 뜨면 시작 자세와 중량을 조정합니다. 스트랩을 써도 손이 열리면 중량을 낮추고 스트랩 장착을 다시 확인합니다.",
+      "corrections": [
+        {
+          "sign": "엉덩이만 먼저 들리고 바는 바닥에 남음",
+          "fix": "바의 유격을 먼저 없애고 가벼운 중량에서 가슴과 골반이 함께 올라오게 연습합니다."
+        },
+        {
+          "sign": "스트랩을 써도 그립이 열림",
+          "fix": "감는 방향과 길이를 현장에서 확인하고 손이 유지되는 부하로 낮춥니다. 등을 키우려 그립 실패 중량을 강행하지 않습니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "barbell-curl",
+    "name": "올데이 감일 · 바벨 바이셉스 컬",
+    "displayName": "바벨 바이셉스 컬",
+    "cat": "pull",
+    "vol": {
+      "p": "이두",
+      "s": [
+        "전완"
+      ]
+    },
+    "mus": "상완이두근·상완근",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 300,
+    "orderPhase": "late",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "바벨",
+    "equipmentType": "barbell",
+    "equipmentRole": "accessory",
+    "stationId": "barbell-rack",
+    "gym": "allday-gamil",
+    "status": "confirmed",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "photo",
+      "date": "2026-10-17",
+      "title": "바벨 랙·플랫폼 현장 사진",
+      "file": "IMG_5807.JPEG"
+    },
+    "searchTerms": "바벨 바이셉스 컬 바벨 barbell 프리웨이트 바벨컬 이두 biceps curl",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [
+      "small"
+    ],
+    "movementPattern": "팔꿈치 굴곡",
+    "equipmentNote": "랙·바벨 보유는 IMG_5807 사진으로 확인했습니다. 벤치·안전바·봉 무게는 실제 사용 장비를 확인하세요. 랙 사진을 스미스 머신의 근거로 사용하지 않습니다.",
+    "recordingNote": "바 무게를 확인하고 좌우 원판과 합친 총중량을 기록합니다. 바 무게를 기구 기본 중량으로 설정했다면 입력값에 다시 더하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "발을 골반 너비로 두고 바를 허벅지 앞에 둡니다. 무릎을 살짝 풀고 가슴과 골반이 같은 방향을 향하게 섭니다.",
+      "grip": "손바닥이 위를 향하게 어깨 너비로 잡고 엄지를 감쌉니다. 직선 바가 손목을 비틀면 다른 컬 손잡이를 선택합니다.",
+      "brace": "위팔을 몸 옆에 두고 갈비뼈와 골반을 포갭니다. 팔꿈치가 뒤로 빠지거나 앞으로 크게 이동하지 않게 합니다.",
+      "drive": "팔꿈치를 접어 바를 가슴 아래까지 올립니다. 어깨를 앞으로 밀어 바를 더 높이 올리지 않고 팔꿈치 굽힘으로 움직입니다.",
+      "feel": "위팔 앞쪽으로 팔꿈치를 굽히고 내려갈 때도 이두로 바를 받습니다. 손목을 접거나 승모근으로 어깨를 끌어올리지 않습니다.",
+      "watch": "상체를 뒤로 젖히거나 무릎을 펴며 튕기면 중량을 낮춥니다. 팔꿈치 위치가 매번 바뀌면 반복 높이를 줄여 같은 궤도를 만듭니다."
+    },
+    "setup": "발을 골반 너비로 두고 바를 허벅지 앞에 둡니다. 무릎을 살짝 풀고 가슴과 골반이 같은 방향을 향하게 섭니다.",
+    "grip": "손바닥이 위를 향하게 어깨 너비로 잡고 엄지를 감쌉니다. 직선 바가 손목을 비틀면 다른 컬 손잡이를 선택합니다.",
+    "target": "위팔 앞쪽으로 팔꿈치를 굽히고 내려갈 때도 이두로 바를 받습니다. 손목을 접거나 승모근으로 어깨를 끌어올리지 않습니다.",
+    "tip": "팔꿈치를 접어 바를 가슴 아래까지 올립니다. 어깨를 앞으로 밀어 바를 더 높이 올리지 않고 팔꿈치 굽힘으로 움직입니다.",
+    "warn": "상체를 뒤로 젖히거나 무릎을 펴며 튕기면 중량을 낮춥니다. 팔꿈치 위치가 매번 바뀌면 반복 높이를 줄여 같은 궤도를 만듭니다.",
+    "rom": "위팔을 앞뒤로 흔들지 않고 접고 펼 수 있는 범위.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "위팔을 몸 옆에 두고 갈비뼈와 골반을 포갭니다. 팔꿈치가 뒤로 빠지거나 앞으로 크게 이동하지 않게 합니다.",
+        "팔꿈치를 접어 바를 가슴 아래까지 올립니다. 어깨를 앞으로 밀어 바를 더 높이 올리지 않고 팔꿈치 굽힘으로 움직입니다.",
+        "상체를 뒤로 젖히거나 무릎을 펴며 튕기면 중량을 낮춥니다. 팔꿈치 위치가 매번 바뀌면 반복 높이를 줄여 같은 궤도를 만듭니다."
+      ],
+      "position": "위팔을 몸 옆에 두고 갈비뼈와 골반을 포갭니다. 팔꿈치가 뒤로 빠지거나 앞으로 크게 이동하지 않게 합니다.",
+      "feel": "위팔 앞쪽으로 팔꿈치를 굽히고 내려갈 때도 이두로 바를 받습니다. 손목을 접거나 승모근으로 어깨를 끌어올리지 않습니다.",
+      "steps": [
+        "발을 골반 너비로 두고 바를 허벅지 앞에 둡니다. 무릎을 살짝 풀고 가슴과 골반이 같은 방향을 향하게 섭니다. 손바닥이 위를 향하게 어깨 너비로 잡고 엄지를 감쌉니다. 직선 바가 손목을 비틀면 다른 컬 손잡이를 선택합니다.",
+        "팔꿈치를 접어 바를 가슴 아래까지 올립니다. 어깨를 앞으로 밀어 바를 더 높이 올리지 않고 팔꿈치 굽힘으로 움직입니다.",
+        "위팔을 고정하고 바를 허벅지 앞으로 천천히 내립니다. 아래에서 바를 튕기지 않고 팔꿈치를 자연스럽게 폅니다."
+      ],
+      "errors": "상체를 뒤로 젖히거나 무릎을 펴며 튕기면 중량을 낮춥니다. 팔꿈치 위치가 매번 바뀌면 반복 높이를 줄여 같은 궤도를 만듭니다.",
+      "corrections": [
+        {
+          "sign": "몸을 뒤로 젖혀 바를 올림",
+          "fix": "배와 엉덩이에 힘을 주고 반동 없이 올릴 수 있는 중량으로 낮춥니다."
+        },
+        {
+          "sign": "손목을 말아 높이를 더함",
+          "fix": "손등과 전완의 선을 유지하고 팔꿈치 굽힘에서 반복을 끝냅니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-squat",
+    "name": "올데이 감일 · 스미스 스쿼트",
+    "displayName": "스미스 스쿼트",
+    "cat": "legs",
+    "vol": {
+      "p": "대퇴사두",
+      "s": [
+        "후면사슬"
+      ]
+    },
+    "mus": "대퇴사두근·둔근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 스쿼트 스미스머신 스미스 머신 smith 스미스머신 스쿼트 smith squat",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "스쿼트",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "바를 목이 아닌 등 위쪽에 얹고 발을 어깨 너비로 둡니다. 빈 바로 내려가 발 전체가 붙는 앞뒤 위치를 찾고 안전받침을 하단 바로 아래에 둡니다.",
+      "grip": "양손으로 바를 감싸 등 위쪽에 밀착시킵니다. 손목을 꺾어 바를 받치지 말고 팔꿈치를 몸통 아래쪽으로 향하게 합니다.",
+      "brace": "갈비뼈와 골반을 포개고 배·옆구리에 힘을 줍니다. 발 전체를 붙이고 무릎이 발끝 방향을 따라가게 유지합니다.",
+      "drive": "레일을 따라 무릎과 고관절을 함께 굽혀 앉은 뒤 발 전체로 바닥을 밀어 일어납니다. 엉덩이만 먼저 들지 않습니다.",
+      "feel": "허벅지 앞과 엉덩이로 몸을 위로 보냅니다. 발을 무조건 멀리 내밀기보다 고정된 레일에서도 발 전체가 지지되는 위치를 찾습니다.",
+      "watch": "뒤꿈치가 뜨거나 골반이 말리면 발 위치와 깊이를 조절합니다. 등이 바에 밀려 몸통이 접히면 중량을 낮추고 레일 방향부터 다시 확인합니다."
+    },
+    "setup": "바를 목이 아닌 등 위쪽에 얹고 발을 어깨 너비로 둡니다. 빈 바로 내려가 발 전체가 붙는 앞뒤 위치를 찾고 안전받침을 하단 바로 아래에 둡니다.",
+    "grip": "양손으로 바를 감싸 등 위쪽에 밀착시킵니다. 손목을 꺾어 바를 받치지 말고 팔꿈치를 몸통 아래쪽으로 향하게 합니다.",
+    "target": "허벅지 앞과 엉덩이로 몸을 위로 보냅니다. 발을 무조건 멀리 내밀기보다 고정된 레일에서도 발 전체가 지지되는 위치를 찾습니다.",
+    "tip": "레일을 따라 무릎과 고관절을 함께 굽혀 앉은 뒤 발 전체로 바닥을 밀어 일어납니다. 엉덩이만 먼저 들지 않습니다.",
+    "warn": "뒤꿈치가 뜨거나 골반이 말리면 발 위치와 깊이를 조절합니다. 등이 바에 밀려 몸통이 접히면 중량을 낮추고 레일 방향부터 다시 확인합니다.",
+    "rom": "발 지지와 몸통 형태가 유지되는 깊이까지. 레일 각도에 따라 발 위치가 달라집니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "갈비뼈와 골반을 포개고 배·옆구리에 힘을 줍니다. 발 전체를 붙이고 무릎이 발끝 방향을 따라가게 유지합니다.",
+        "레일을 따라 무릎과 고관절을 함께 굽혀 앉은 뒤 발 전체로 바닥을 밀어 일어납니다. 엉덩이만 먼저 들지 않습니다.",
+        "뒤꿈치가 뜨거나 골반이 말리면 발 위치와 깊이를 조절합니다. 등이 바에 밀려 몸통이 접히면 중량을 낮추고 레일 방향부터 다시 확인합니다."
+      ],
+      "position": "갈비뼈와 골반을 포개고 배·옆구리에 힘을 줍니다. 발 전체를 붙이고 무릎이 발끝 방향을 따라가게 유지합니다.",
+      "feel": "허벅지 앞과 엉덩이로 몸을 위로 보냅니다. 발을 무조건 멀리 내밀기보다 고정된 레일에서도 발 전체가 지지되는 위치를 찾습니다.",
+      "steps": [
+        "바를 목이 아닌 등 위쪽에 얹고 발을 어깨 너비로 둡니다. 빈 바로 내려가 발 전체가 붙는 앞뒤 위치를 찾고 안전받침을 하단 바로 아래에 둡니다. 양손으로 바를 감싸 등 위쪽에 밀착시킵니다. 손목을 꺾어 바를 받치지 말고 팔꿈치를 몸통 아래쪽으로 향하게 합니다.",
+        "레일을 따라 무릎과 고관절을 함께 굽혀 앉은 뒤 발 전체로 바닥을 밀어 일어납니다. 엉덩이만 먼저 들지 않습니다.",
+        "서 있는 자세에서 호흡을 정리하고 같은 발 위치로 천천히 내려갑니다. 마지막에는 양쪽 걸쇠가 걸린 것을 확인한 뒤 몸을 뺍니다."
+      ],
+      "errors": "뒤꿈치가 뜨거나 골반이 말리면 발 위치와 깊이를 조절합니다. 등이 바에 밀려 몸통이 접히면 중량을 낮추고 레일 방향부터 다시 확인합니다.",
+      "corrections": [
+        {
+          "sign": "바가 몸을 앞뒤로 밀어냄",
+          "fix": "빈 바로 레일과 발 위치를 다시 맞추고 그 위치에서도 무너지면 다른 스쿼트를 선택합니다."
+        },
+        {
+          "sign": "엉덩이만 먼저 솟음",
+          "fix": "부하를 낮추고 가슴과 골반이 함께 올라오는 깊이로 줄입니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-split-squat",
+    "name": "올데이 감일 · 스미스 스플릿 스쿼트",
+    "displayName": "스미스 스플릿 스쿼트",
+    "cat": "legs",
+    "vol": {
+      "p": "대퇴사두",
+      "s": [
+        "후면사슬"
+      ]
+    },
+    "mus": "대퇴사두근·둔근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 스플릿 스쿼트 스미스머신 스미스 머신 smith 스미스 런지 split squat",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "런지",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다. 한 세트에 양쪽을 각각 수행하고 반복 칸에는 한쪽 횟수를 기록합니다. 좌우 차이는 메모에 남깁니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "바를 등 위에 얹고 양발을 앞뒤로 벌립니다. 뒷발은 바닥에 둔 채 빈 바로 내려가 앞발 전체가 붙는 보폭과 안전받침 높이를 맞춥니다.",
+      "grip": "바를 양손으로 감싸고 등 위에 밀착합니다. 손목으로 바를 떠받치지 않고 어깨 위에 안정적으로 얹습니다.",
+      "brace": "골반을 정면으로 두고 앞무릎이 발끝 방향을 따르게 합니다. 뒷발은 균형을 돕고 가슴과 골반이 함께 내려갑니다.",
+      "drive": "앞무릎과 고관절을 굽혀 몸을 아래로 내린 뒤 앞발 전체로 밀어 올라옵니다. 몸을 앞뒤로 흔들며 레일을 따라가지 않습니다.",
+      "feel": "앞다리 허벅지와 엉덩이가 몸을 들어 올립니다. 뒤쪽 종아리로 강하게 차서 앞다리의 일을 덜어내지 않습니다.",
+      "watch": "앞뒤 한 줄로 서서 흔들리면 좌우 발 간격을 조금 벌립니다. 앞발 뒤꿈치가 뜨거나 골반이 돌아가면 보폭·깊이·중량을 조절합니다."
+    },
+    "setup": "바를 등 위에 얹고 양발을 앞뒤로 벌립니다. 뒷발은 바닥에 둔 채 빈 바로 내려가 앞발 전체가 붙는 보폭과 안전받침 높이를 맞춥니다.",
+    "grip": "바를 양손으로 감싸고 등 위에 밀착합니다. 손목으로 바를 떠받치지 않고 어깨 위에 안정적으로 얹습니다.",
+    "target": "앞다리 허벅지와 엉덩이가 몸을 들어 올립니다. 뒤쪽 종아리로 강하게 차서 앞다리의 일을 덜어내지 않습니다.",
+    "tip": "앞무릎과 고관절을 굽혀 몸을 아래로 내린 뒤 앞발 전체로 밀어 올라옵니다. 몸을 앞뒤로 흔들며 레일을 따라가지 않습니다.",
+    "warn": "앞뒤 한 줄로 서서 흔들리면 좌우 발 간격을 조금 벌립니다. 앞발 뒤꿈치가 뜨거나 골반이 돌아가면 보폭·깊이·중량을 조절합니다.",
+    "rom": "앞발 전체와 골반 정면이 유지되는 깊이까지. 뒷발을 벤치에 올리는 불가리안 변형과 구분합니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "골반을 정면으로 두고 앞무릎이 발끝 방향을 따르게 합니다. 뒷발은 균형을 돕고 가슴과 골반이 함께 내려갑니다.",
+        "앞무릎과 고관절을 굽혀 몸을 아래로 내린 뒤 앞발 전체로 밀어 올라옵니다. 몸을 앞뒤로 흔들며 레일을 따라가지 않습니다.",
+        "앞뒤 한 줄로 서서 흔들리면 좌우 발 간격을 조금 벌립니다. 앞발 뒤꿈치가 뜨거나 골반이 돌아가면 보폭·깊이·중량을 조절합니다."
+      ],
+      "position": "골반을 정면으로 두고 앞무릎이 발끝 방향을 따르게 합니다. 뒷발은 균형을 돕고 가슴과 골반이 함께 내려갑니다.",
+      "feel": "앞다리 허벅지와 엉덩이가 몸을 들어 올립니다. 뒤쪽 종아리로 강하게 차서 앞다리의 일을 덜어내지 않습니다.",
+      "steps": [
+        "바를 등 위에 얹고 양발을 앞뒤로 벌립니다. 뒷발은 바닥에 둔 채 빈 바로 내려가 앞발 전체가 붙는 보폭과 안전받침 높이를 맞춥니다. 바를 양손으로 감싸고 등 위에 밀착합니다. 손목으로 바를 떠받치지 않고 어깨 위에 안정적으로 얹습니다.",
+        "앞무릎과 고관절을 굽혀 몸을 아래로 내린 뒤 앞발 전체로 밀어 올라옵니다. 몸을 앞뒤로 흔들며 레일을 따라가지 않습니다.",
+        "앞다리로 체중을 받으며 같은 위치로 내려옵니다. 한쪽을 마친 뒤 바를 걸고 발을 바꿔 같은 횟수를 수행합니다."
+      ],
+      "errors": "앞뒤 한 줄로 서서 흔들리면 좌우 발 간격을 조금 벌립니다. 앞발 뒤꿈치가 뜨거나 골반이 돌아가면 보폭·깊이·중량을 조절합니다.",
+      "corrections": [
+        {
+          "sign": "뒤쪽 종아리로 밀어 올라옴",
+          "fix": "앞발 전체에 지지를 두고 뒷다리는 균형만 돕도록 중량을 낮춥니다."
+        },
+        {
+          "sign": "골반이 옆으로 회전함",
+          "fix": "발 사이 좌우 간격과 보폭을 조절하고 내려가는 깊이를 줄입니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-rdl",
+    "name": "올데이 감일 · 스미스 루마니안 데드리프트",
+    "displayName": "스미스 루마니안 데드리프트",
+    "cat": "legs",
+    "vol": {
+      "p": "후면사슬",
+      "s": []
+    },
+    "mus": "햄스트링·둔근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 루마니안 데드리프트 스미스머신 스미스 머신 smith 스미스 RDL 루마니안 데드리프트",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "힌지",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "바를 허벅지 앞 높이에 놓고 발을 골반 너비로 둡니다. 빈 바로 접었을 때 바가 다리 가까이 지나가는 위치를 찾고 안전받침을 맞춥니다.",
+      "grip": "다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 조이고 팔꿈치는 편 상태로 둡니다.",
+      "brace": "무릎을 조금 굽힌 각도와 배·옆구리 긴장을 유지합니다. 어깨를 뒤로 과하게 젖히지 않고 바가 몸에서 멀어지지 않게 합니다.",
+      "drive": "엉덩이를 뒤로 보내 바를 허벅지에서 정강이 방향으로 내립니다. 허벅지 뒤가 길어지는 지점에서 발을 눌러 고관절을 폅니다.",
+      "feel": "허벅지 뒤가 늘어나는 부하를 받고 엉덩이로 일어섭니다. 레그컬처럼 무릎을 접거나 종아리로 발끝을 밀어 올라오지 않습니다.",
+      "watch": "바를 더 내리려 허리가 둥글어지면 하단을 높입니다. 레일이 바를 몸에서 멀어지게 밀거나 그립이 먼저 풀리면 발 위치·스트랩·중량을 다시 맞춥니다."
+    },
+    "setup": "바를 허벅지 앞 높이에 놓고 발을 골반 너비로 둡니다. 빈 바로 접었을 때 바가 다리 가까이 지나가는 위치를 찾고 안전받침을 맞춥니다.",
+    "grip": "다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 조이고 팔꿈치는 편 상태로 둡니다.",
+    "target": "허벅지 뒤가 늘어나는 부하를 받고 엉덩이로 일어섭니다. 레그컬처럼 무릎을 접거나 종아리로 발끝을 밀어 올라오지 않습니다.",
+    "tip": "엉덩이를 뒤로 보내 바를 허벅지에서 정강이 방향으로 내립니다. 허벅지 뒤가 길어지는 지점에서 발을 눌러 고관절을 폅니다.",
+    "warn": "바를 더 내리려 허리가 둥글어지면 하단을 높입니다. 레일이 바를 몸에서 멀어지게 밀거나 그립이 먼저 풀리면 발 위치·스트랩·중량을 다시 맞춥니다.",
+    "rom": "원판을 바닥에 닿게 할 필요가 없습니다. 허리 모양을 유지하며 고관절을 접을 수 있는 깊이까지.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "무릎을 조금 굽힌 각도와 배·옆구리 긴장을 유지합니다. 어깨를 뒤로 과하게 젖히지 않고 바가 몸에서 멀어지지 않게 합니다.",
+        "엉덩이를 뒤로 보내 바를 허벅지에서 정강이 방향으로 내립니다. 허벅지 뒤가 길어지는 지점에서 발을 눌러 고관절을 폅니다.",
+        "바를 더 내리려 허리가 둥글어지면 하단을 높입니다. 레일이 바를 몸에서 멀어지게 밀거나 그립이 먼저 풀리면 발 위치·스트랩·중량을 다시 맞춥니다."
+      ],
+      "position": "무릎을 조금 굽힌 각도와 배·옆구리 긴장을 유지합니다. 어깨를 뒤로 과하게 젖히지 않고 바가 몸에서 멀어지지 않게 합니다.",
+      "feel": "허벅지 뒤가 늘어나는 부하를 받고 엉덩이로 일어섭니다. 레그컬처럼 무릎을 접거나 종아리로 발끝을 밀어 올라오지 않습니다.",
+      "steps": [
+        "바를 허벅지 앞 높이에 놓고 발을 골반 너비로 둡니다. 빈 바로 접었을 때 바가 다리 가까이 지나가는 위치를 찾고 안전받침을 맞춥니다. 다리 바깥에서 양손 오버그립으로 잡습니다. 스트랩은 바에 밀착해 조이고 팔꿈치는 편 상태로 둡니다.",
+        "엉덩이를 뒤로 보내 바를 허벅지에서 정강이 방향으로 내립니다. 허벅지 뒤가 길어지는 지점에서 발을 눌러 고관절을 폅니다.",
+        "고관절을 편 선 자세에서 멈춘 뒤 무릎 굽힘을 일정하게 유지해 다시 엉덩이를 뒤로 보냅니다."
+      ],
+      "errors": "바를 더 내리려 허리가 둥글어지면 하단을 높입니다. 레일이 바를 몸에서 멀어지게 밀거나 그립이 먼저 풀리면 발 위치·스트랩·중량을 다시 맞춥니다.",
+      "corrections": [
+        {
+          "sign": "무릎을 굽혀 스쿼트로 변함",
+          "fix": "무릎 각도를 크게 바꾸지 말고 엉덩이를 뒤로 보내는 범위를 찾습니다."
+        },
+        {
+          "sign": "하단에서 바가 다리에서 멀어짐",
+          "fix": "레일과 발 위치를 빈 바로 다시 맞추고 힌지가 맞지 않으면 바벨·덤벨 변형으로 바꿉니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-hip-thrust",
+    "name": "올데이 감일 · 스미스 힙 쓰러스트",
+    "displayName": "스미스 힙 쓰러스트",
+    "cat": "legs",
+    "vol": {
+      "p": "후면사슬",
+      "s": []
+    },
+    "mus": "둔근",
+    "sets": "2×10–15",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 힙 쓰러스트 스미스머신 스미스 머신 smith 힙쓰러스트 hip thrust",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "고관절 신전",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "움직이지 않는 벤치에 등 위쪽을 기대고 바에 패드를 대 골반 접히는 부분에 둡니다. 정점에서 정강이가 수직에 가까운 발 위치와 안전받침을 맞춥니다.",
+      "grip": "양손으로 바를 잡아 패드 위치와 걸쇠를 제어합니다. 팔로 바를 들거나 벤치를 밀어 몸을 이동시키지 않습니다.",
+      "brace": "턱을 가볍게 당기고 갈비뼈를 들지 않습니다. 등 위쪽의 벤치 접촉과 발 전체 지지를 유지하고 무릎은 발끝 방향을 향하게 합니다.",
+      "drive": "발 전체로 바닥을 밀어 골반을 위로 올립니다. 몸통과 허벅지가 한 선이 되는 지점에서 엉덩이를 조이고 허리를 더 젖히지 않습니다.",
+      "feel": "뒤꿈치만 들거나 발끝으로 밀지 않고 엉덩이로 골반을 들어 올립니다. 정점에서 허리가 아닌 둔근이 단단해지는지 봅니다.",
+      "watch": "벤치가 밀리거나 패드가 배로 굴러가면 세팅부터 다시 합니다. 레일에서 골반이 당겨지거나 걸쇠 조작이 어렵다면 전용 힙 쓰러스트를 선택합니다."
+    },
+    "setup": "움직이지 않는 벤치에 등 위쪽을 기대고 바에 패드를 대 골반 접히는 부분에 둡니다. 정점에서 정강이가 수직에 가까운 발 위치와 안전받침을 맞춥니다.",
+    "grip": "양손으로 바를 잡아 패드 위치와 걸쇠를 제어합니다. 팔로 바를 들거나 벤치를 밀어 몸을 이동시키지 않습니다.",
+    "target": "뒤꿈치만 들거나 발끝으로 밀지 않고 엉덩이로 골반을 들어 올립니다. 정점에서 허리가 아닌 둔근이 단단해지는지 봅니다.",
+    "tip": "발 전체로 바닥을 밀어 골반을 위로 올립니다. 몸통과 허벅지가 한 선이 되는 지점에서 엉덩이를 조이고 허리를 더 젖히지 않습니다.",
+    "warn": "벤치가 밀리거나 패드가 배로 굴러가면 세팅부터 다시 합니다. 레일에서 골반이 당겨지거나 걸쇠 조작이 어렵다면 전용 힙 쓰러스트를 선택합니다.",
+    "rom": "벤치·골반·바의 위치가 안정되는 범위. 정점에서 갈비뼈를 들며 추가 높이를 만들지 않습니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "턱을 가볍게 당기고 갈비뼈를 들지 않습니다. 등 위쪽의 벤치 접촉과 발 전체 지지를 유지하고 무릎은 발끝 방향을 향하게 합니다.",
+        "발 전체로 바닥을 밀어 골반을 위로 올립니다. 몸통과 허벅지가 한 선이 되는 지점에서 엉덩이를 조이고 허리를 더 젖히지 않습니다.",
+        "벤치가 밀리거나 패드가 배로 굴러가면 세팅부터 다시 합니다. 레일에서 골반이 당겨지거나 걸쇠 조작이 어렵다면 전용 힙 쓰러스트를 선택합니다."
+      ],
+      "position": "턱을 가볍게 당기고 갈비뼈를 들지 않습니다. 등 위쪽의 벤치 접촉과 발 전체 지지를 유지하고 무릎은 발끝 방향을 향하게 합니다.",
+      "feel": "뒤꿈치만 들거나 발끝으로 밀지 않고 엉덩이로 골반을 들어 올립니다. 정점에서 허리가 아닌 둔근이 단단해지는지 봅니다.",
+      "steps": [
+        "움직이지 않는 벤치에 등 위쪽을 기대고 바에 패드를 대 골반 접히는 부분에 둡니다. 정점에서 정강이가 수직에 가까운 발 위치와 안전받침을 맞춥니다. 양손으로 바를 잡아 패드 위치와 걸쇠를 제어합니다. 팔로 바를 들거나 벤치를 밀어 몸을 이동시키지 않습니다.",
+        "발 전체로 바닥을 밀어 골반을 위로 올립니다. 몸통과 허벅지가 한 선이 되는 지점에서 엉덩이를 조이고 허리를 더 젖히지 않습니다.",
+        "등 위쪽 지지를 유지하며 골반을 천천히 내리고 패드 위치가 변하지 않는 범위에서 다시 올립니다."
+      ],
+      "errors": "벤치가 밀리거나 패드가 배로 굴러가면 세팅부터 다시 합니다. 레일에서 골반이 당겨지거나 걸쇠 조작이 어렵다면 전용 힙 쓰러스트를 선택합니다.",
+      "corrections": [
+        {
+          "sign": "정점에서 허리를 꺾음",
+          "fix": "갈비뼈를 낮추고 골반이 몸통과 한 선에 오면 멈춥니다."
+        },
+        {
+          "sign": "벤치가 밀리고 바가 배로 이동함",
+          "fix": "벤치 고정과 패드를 재설정합니다. 안정적으로 고정할 수 없으면 전용 머신을 사용합니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-bench",
+    "name": "올데이 감일 · 스미스 벤치프레스",
+    "displayName": "스미스 벤치프레스",
+    "cat": "push",
+    "vol": {
+      "p": "가슴",
+      "s": [
+        "삼두",
+        "전면삼각"
+      ]
+    },
+    "mus": "대흉근·삼두근·전면 삼각근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 벤치프레스 스미스머신 스미스 머신 smith 스미스 플랫 벤치 smith bench press",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "수평 프레스",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "평벤치를 레일 중앙에 두고 바가 가슴 중하부로 내려오게 맞춥니다. 빈 바로 궤도를 확인하고 바가 가슴을 누르기 전에 받치는 안전받침을 설정합니다.",
+      "grip": "엄지로 바를 감싸고 하단에서 전완이 수직에 가까운 폭으로 잡습니다. 손목을 돌려 걸쇠를 조작한 뒤 손바닥 아래쪽으로 받칩니다.",
+      "brace": "발 전체·엉덩이·등 위쪽을 벤치와 바닥에 고정합니다. 견갑을 안정시키고 밀 때 어깨가 앞으로 들리지 않게 합니다.",
+      "drive": "레일을 따라 가슴 쪽으로 내렸다가 위로 밀어 올립니다. 바벨처럼 바를 임의로 앞뒤로 움직이려 하지 않고 팔꿈치가 바 아래를 따라가게 합니다.",
+      "feel": "가슴으로 위팔을 앞으로 모으며 밀고 삼두로 팔꿈치를 폅니다. 어깨만 앞으로 내밀거나 몸을 벤치 위로 밀어내지 않습니다.",
+      "watch": "내릴수록 손목과 팔꿈치가 어긋나면 벤치 위치·그립을 조절합니다. 빈 바로도 궤도가 맞지 않으면 해당 레일에서 이 변형을 강행하지 않습니다."
+    },
+    "setup": "평벤치를 레일 중앙에 두고 바가 가슴 중하부로 내려오게 맞춥니다. 빈 바로 궤도를 확인하고 바가 가슴을 누르기 전에 받치는 안전받침을 설정합니다.",
+    "grip": "엄지로 바를 감싸고 하단에서 전완이 수직에 가까운 폭으로 잡습니다. 손목을 돌려 걸쇠를 조작한 뒤 손바닥 아래쪽으로 받칩니다.",
+    "target": "가슴으로 위팔을 앞으로 모으며 밀고 삼두로 팔꿈치를 폅니다. 어깨만 앞으로 내밀거나 몸을 벤치 위로 밀어내지 않습니다.",
+    "tip": "레일을 따라 가슴 쪽으로 내렸다가 위로 밀어 올립니다. 바벨처럼 바를 임의로 앞뒤로 움직이려 하지 않고 팔꿈치가 바 아래를 따라가게 합니다.",
+    "warn": "내릴수록 손목과 팔꿈치가 어긋나면 벤치 위치·그립을 조절합니다. 빈 바로도 궤도가 맞지 않으면 해당 레일에서 이 변형을 강행하지 않습니다.",
+    "rom": "어깨가 벤치에서 들리지 않고 안전받침 위에서 통제되는 깊이까지.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "발 전체·엉덩이·등 위쪽을 벤치와 바닥에 고정합니다. 견갑을 안정시키고 밀 때 어깨가 앞으로 들리지 않게 합니다.",
+        "레일을 따라 가슴 쪽으로 내렸다가 위로 밀어 올립니다. 바벨처럼 바를 임의로 앞뒤로 움직이려 하지 않고 팔꿈치가 바 아래를 따라가게 합니다.",
+        "내릴수록 손목과 팔꿈치가 어긋나면 벤치 위치·그립을 조절합니다. 빈 바로도 궤도가 맞지 않으면 해당 레일에서 이 변형을 강행하지 않습니다."
+      ],
+      "position": "발 전체·엉덩이·등 위쪽을 벤치와 바닥에 고정합니다. 견갑을 안정시키고 밀 때 어깨가 앞으로 들리지 않게 합니다.",
+      "feel": "가슴으로 위팔을 앞으로 모으며 밀고 삼두로 팔꿈치를 폅니다. 어깨만 앞으로 내밀거나 몸을 벤치 위로 밀어내지 않습니다.",
+      "steps": [
+        "평벤치를 레일 중앙에 두고 바가 가슴 중하부로 내려오게 맞춥니다. 빈 바로 궤도를 확인하고 바가 가슴을 누르기 전에 받치는 안전받침을 설정합니다. 엄지로 바를 감싸고 하단에서 전완이 수직에 가까운 폭으로 잡습니다. 손목을 돌려 걸쇠를 조작한 뒤 손바닥 아래쪽으로 받칩니다.",
+        "레일을 따라 가슴 쪽으로 내렸다가 위로 밀어 올립니다. 바벨처럼 바를 임의로 앞뒤로 움직이려 하지 않고 팔꿈치가 바 아래를 따라가게 합니다.",
+        "등과 골반 접촉을 유지하며 같은 위치로 바를 돌려보냅니다. 마지막에는 양쪽 걸쇠가 걸렸는지 확인합니다."
+      ],
+      "errors": "내릴수록 손목과 팔꿈치가 어긋나면 벤치 위치·그립을 조절합니다. 빈 바로도 궤도가 맞지 않으면 해당 레일에서 이 변형을 강행하지 않습니다.",
+      "corrections": [
+        {
+          "sign": "가슴 대신 목 쪽으로 바가 내려옴",
+          "fix": "빈 바 상태에서 벤치의 앞뒤 위치와 사용 방향을 현장 안내에 맞춰 조절합니다."
+        },
+        {
+          "sign": "엉덩이가 들리고 몸이 벤치 위로 밀림",
+          "fix": "발 지지를 다시 맞추고 접촉을 유지할 수 있는 부하로 낮춥니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-incline",
+    "name": "올데이 감일 · 스미스 인클라인 벤치프레스",
+    "displayName": "스미스 인클라인 벤치프레스",
+    "cat": "push",
+    "vol": {
+      "p": "가슴",
+      "s": [
+        "전면삼각",
+        "삼두"
+      ]
+    },
+    "mus": "대흉근 쇄골부·전면 삼각근·삼두근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 인클라인 벤치프레스 스미스머신 스미스 머신 smith 스미스 인클라인 incline press",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "경사 프레스",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "벤치를 약 15–30도로 시작해 바가 쇄골 아래 윗가슴으로 내려오게 둡니다. 빈 바로 레일 궤도와 걸쇠 복귀를 확인하고 안전받침을 맞춥니다.",
+      "grip": "하단에서 손목이 팔꿈치 위에 오는 폭으로 엄지를 감싸 잡습니다. 바는 손가락이 아닌 손바닥 아래쪽으로 받칩니다.",
+      "brace": "등 위쪽·골반을 벤치에 붙이고 발 전체로 지지합니다. 갈비뼈를 들거나 어깨를 으쓱해 바를 받지 않습니다.",
+      "drive": "레일을 따라 윗가슴 쪽으로 내리고 팔꿈치가 바 아래를 따라가게 밀어 올립니다. 바를 목에 닿게 내리지 않습니다.",
+      "feel": "윗가슴에서 위팔을 앞·위로 모으는 힘을 씁니다. 어깨 앞에만 몰리면 벤치 각도와 팔꿈치 위치를 다시 맞춥니다.",
+      "watch": "허리를 젖혀 경사를 없애거나 어깨가 앞으로 밀리면 중량·깊이를 줄입니다. 손목과 팔꿈치가 계속 어긋나면 벤치 위치를 다시 조절합니다."
+    },
+    "setup": "벤치를 약 15–30도로 시작해 바가 쇄골 아래 윗가슴으로 내려오게 둡니다. 빈 바로 레일 궤도와 걸쇠 복귀를 확인하고 안전받침을 맞춥니다.",
+    "grip": "하단에서 손목이 팔꿈치 위에 오는 폭으로 엄지를 감싸 잡습니다. 바는 손가락이 아닌 손바닥 아래쪽으로 받칩니다.",
+    "target": "윗가슴에서 위팔을 앞·위로 모으는 힘을 씁니다. 어깨 앞에만 몰리면 벤치 각도와 팔꿈치 위치를 다시 맞춥니다.",
+    "tip": "레일을 따라 윗가슴 쪽으로 내리고 팔꿈치가 바 아래를 따라가게 밀어 올립니다. 바를 목에 닿게 내리지 않습니다.",
+    "warn": "허리를 젖혀 경사를 없애거나 어깨가 앞으로 밀리면 중량·깊이를 줄입니다. 손목과 팔꿈치가 계속 어긋나면 벤치 위치를 다시 조절합니다.",
+    "rom": "윗가슴 쪽에서 어깨가 앞으로 말리지 않는 깊이까지. 레일에 몸을 억지로 맞추지 않습니다.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "등 위쪽·골반을 벤치에 붙이고 발 전체로 지지합니다. 갈비뼈를 들거나 어깨를 으쓱해 바를 받지 않습니다.",
+        "레일을 따라 윗가슴 쪽으로 내리고 팔꿈치가 바 아래를 따라가게 밀어 올립니다. 바를 목에 닿게 내리지 않습니다.",
+        "허리를 젖혀 경사를 없애거나 어깨가 앞으로 밀리면 중량·깊이를 줄입니다. 손목과 팔꿈치가 계속 어긋나면 벤치 위치를 다시 조절합니다."
+      ],
+      "position": "등 위쪽·골반을 벤치에 붙이고 발 전체로 지지합니다. 갈비뼈를 들거나 어깨를 으쓱해 바를 받지 않습니다.",
+      "feel": "윗가슴에서 위팔을 앞·위로 모으는 힘을 씁니다. 어깨 앞에만 몰리면 벤치 각도와 팔꿈치 위치를 다시 맞춥니다.",
+      "steps": [
+        "벤치를 약 15–30도로 시작해 바가 쇄골 아래 윗가슴으로 내려오게 둡니다. 빈 바로 레일 궤도와 걸쇠 복귀를 확인하고 안전받침을 맞춥니다. 하단에서 손목이 팔꿈치 위에 오는 폭으로 엄지를 감싸 잡습니다. 바는 손가락이 아닌 손바닥 아래쪽으로 받칩니다.",
+        "레일을 따라 윗가슴 쪽으로 내리고 팔꿈치가 바 아래를 따라가게 밀어 올립니다. 바를 목에 닿게 내리지 않습니다.",
+        "가슴과 골반 지지를 유지한 채 같은 윗가슴 방향으로 천천히 돌려보내고 마지막에는 걸쇠를 확인합니다."
+      ],
+      "errors": "허리를 젖혀 경사를 없애거나 어깨가 앞으로 밀리면 중량·깊이를 줄입니다. 손목과 팔꿈치가 계속 어긋나면 벤치 위치를 다시 조절합니다.",
+      "corrections": [
+        {
+          "sign": "어깨 앞이 들리며 바를 받음",
+          "fix": "벤치 각도·앞뒤 위치를 조정하고 어깨가 벤치에 안정되는 깊이로 줄입니다."
+        },
+        {
+          "sign": "허리를 크게 젖혀 밀음",
+          "fix": "갈비뼈와 골반을 맞추고 그 자세로 반복 가능한 부하로 낮춥니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-shoulder",
+    "name": "올데이 감일 · 스미스 시티드 숄더 프레스",
+    "displayName": "스미스 시티드 숄더 프레스",
+    "cat": "push",
+    "vol": {
+      "p": "전면삼각",
+      "s": [
+        "측면삼각",
+        "삼두"
+      ]
+    },
+    "mus": "전면·측면 삼각근·삼두근",
+    "sets": "2×8–12",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 135,
+    "orderPhase": "early",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 시티드 숄더 프레스 스미스머신 스미스 머신 smith 스미스 숄더프레스 오버헤드 shoulder press",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [],
+    "movementPattern": "수직 프레스",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "등받이를 약 75–85도로 세우고 바가 얼굴 앞을 지나도록 벤치를 둡니다. 빈 바로 윗가슴 앞 시작 위치와 걸쇠·안전받침을 확인합니다.",
+      "grip": "어깨보다 약간 넓게 엄지를 감싸고 팔꿈치가 바 아래에 오게 잡습니다. 손바닥 아래쪽으로 바를 받쳐 손목 꺾임을 줄입니다.",
+      "brace": "발·골반·등을 지지하고 배에 힘을 줘 허리가 젖혀지지 않게 합니다. 어깨뼈는 위로 회전하게 두고 아래로 꽉 누르지 않습니다.",
+      "drive": "바를 얼굴 앞에서 위로 밀어 팔꿈치를 폅니다. 돌아올 때는 목 뒤가 아니라 얼굴 앞·윗가슴 방향으로 내립니다.",
+      "feel": "어깨 앞·옆으로 위팔을 올리고 삼두로 밀기를 마무리합니다. 턱을 내밀어 바를 피하거나 가슴을 과하게 들어 올리지 않습니다.",
+      "watch": "레일 때문에 바가 얼굴에 걸리거나 팔꿈치가 뒤로 밀리면 벤치 위치를 바꿉니다. 허리를 꺾어야만 밀 수 있으면 부하를 낮추거나 다른 프레스를 씁니다."
+    },
+    "setup": "등받이를 약 75–85도로 세우고 바가 얼굴 앞을 지나도록 벤치를 둡니다. 빈 바로 윗가슴 앞 시작 위치와 걸쇠·안전받침을 확인합니다.",
+    "grip": "어깨보다 약간 넓게 엄지를 감싸고 팔꿈치가 바 아래에 오게 잡습니다. 손바닥 아래쪽으로 바를 받쳐 손목 꺾임을 줄입니다.",
+    "target": "어깨 앞·옆으로 위팔을 올리고 삼두로 밀기를 마무리합니다. 턱을 내밀어 바를 피하거나 가슴을 과하게 들어 올리지 않습니다.",
+    "tip": "바를 얼굴 앞에서 위로 밀어 팔꿈치를 폅니다. 돌아올 때는 목 뒤가 아니라 얼굴 앞·윗가슴 방향으로 내립니다.",
+    "warn": "레일 때문에 바가 얼굴에 걸리거나 팔꿈치가 뒤로 밀리면 벤치 위치를 바꿉니다. 허리를 꺾어야만 밀 수 있으면 부하를 낮추거나 다른 프레스를 씁니다.",
+    "rom": "팔꿈치가 몸통 뒤로 빠지지 않는 시작 높이에서 몸통을 젖히지 않는 정점까지.",
+    "breath": "내리기 전 배·옆구리의 긴장을 만들고 몸통 모양을 유지합니다. 힘을 쓰며 호흡을 조절하고 안정된 위치에서 다음 반복의 호흡을 다시 잡습니다.",
+    "coaching": {
+      "cues": [
+        "발·골반·등을 지지하고 배에 힘을 줘 허리가 젖혀지지 않게 합니다. 어깨뼈는 위로 회전하게 두고 아래로 꽉 누르지 않습니다.",
+        "바를 얼굴 앞에서 위로 밀어 팔꿈치를 폅니다. 돌아올 때는 목 뒤가 아니라 얼굴 앞·윗가슴 방향으로 내립니다.",
+        "레일 때문에 바가 얼굴에 걸리거나 팔꿈치가 뒤로 밀리면 벤치 위치를 바꿉니다. 허리를 꺾어야만 밀 수 있으면 부하를 낮추거나 다른 프레스를 씁니다."
+      ],
+      "position": "발·골반·등을 지지하고 배에 힘을 줘 허리가 젖혀지지 않게 합니다. 어깨뼈는 위로 회전하게 두고 아래로 꽉 누르지 않습니다.",
+      "feel": "어깨 앞·옆으로 위팔을 올리고 삼두로 밀기를 마무리합니다. 턱을 내밀어 바를 피하거나 가슴을 과하게 들어 올리지 않습니다.",
+      "steps": [
+        "등받이를 약 75–85도로 세우고 바가 얼굴 앞을 지나도록 벤치를 둡니다. 빈 바로 윗가슴 앞 시작 위치와 걸쇠·안전받침을 확인합니다. 어깨보다 약간 넓게 엄지를 감싸고 팔꿈치가 바 아래에 오게 잡습니다. 손바닥 아래쪽으로 바를 받쳐 손목 꺾임을 줄입니다.",
+        "바를 얼굴 앞에서 위로 밀어 팔꿈치를 폅니다. 돌아올 때는 목 뒤가 아니라 얼굴 앞·윗가슴 방향으로 내립니다.",
+        "몸통 지지를 유지하며 바를 얼굴 앞으로 내립니다. 전완 정렬을 잃기 전 깊이에서 다시 밀어 올립니다."
+      ],
+      "errors": "레일 때문에 바가 얼굴에 걸리거나 팔꿈치가 뒤로 밀리면 벤치 위치를 바꿉니다. 허리를 꺾어야만 밀 수 있으면 부하를 낮추거나 다른 프레스를 씁니다.",
+      "corrections": [
+        {
+          "sign": "허리 아치를 키워 바를 밀음",
+          "fix": "부하를 낮추고 발·골반·등 지지가 유지되는 벤치 각도로 맞춥니다."
+        },
+        {
+          "sign": "턱을 내밀고 머리를 비틀어 바를 피함",
+          "fix": "빈 바에서 벤치 위치를 조절하고 레일이 맞지 않으면 전용 숄더 프레스로 바꿉니다."
+        }
+      ],
+      "variant": []
+    }
+  },
+  {
+    "id": "smith-calf",
+    "name": "올데이 감일 · 스미스 스탠딩 카프 레이즈",
+    "displayName": "스미스 스탠딩 카프 레이즈",
+    "cat": "legs",
+    "vol": {
+      "p": "종아리",
+      "s": []
+    },
+    "mus": "비복근·가자미근",
+    "sets": "2×12–20",
+    "setsNote": "편성 예시입니다. 현재 날짜의 실제 목표는 운동 화면의 계획을 따릅니다.",
+    "weight": 300,
+    "orderPhase": "late",
+    "orderReason": "실제 순서는 해당 날짜 루틴을 따릅니다. 도감에서 선택할 수 있는 대체 운동입니다.",
+    "brand": "브랜드 미확인",
+    "equipmentType": "smith",
+    "equipmentRole": "accessory",
+    "stationId": "smith-station",
+    "gym": "allday-gamil",
+    "status": "reported",
+    "loadType": "normal",
+    "archived": false,
+    "source": {
+      "type": "reported",
+      "date": "2026-11-06",
+      "title": "사용자 보유 확인 · 스미스 머신"
+    },
+    "searchTerms": "스미스 스탠딩 카프 레이즈 스미스머신 스미스 머신 smith 스미스 종아리 calf raise",
+    "aka": [],
+    "alt": [],
+    "libraryGroups": [
+      "small"
+    ],
+    "movementPattern": "발목 저측굴곡",
+    "equipmentNote": "사용자가 스미스 머신 보유를 확인했습니다. 브랜드·레일 각도·빈 바 저항은 미확인입니다. 빈 바로 걸쇠 해제·복귀 방향을 확인하고 양쪽 안전받침을 같은 높이에 맞추세요. 벤치를 쓰는 운동은 벤치 고정과 레일 궤적이 맞는 경우에 수행합니다.",
+    "recordingNote": "좌우 추가 원판 합계를 기록합니다. 빈 바 저항은 명판으로 확인한 경우에만 기구 기본 중량으로 설정하세요. 기구·벤치 각도·발 위치를 고정하고 바벨 기록과 비교하지 않습니다.",
+    "reviewed": "2026-11-06",
+    "reviewedAt": "2026-11-06",
+    "executionReviewedAt": "2026-11-06",
+    "execution": {
+      "setup": "바를 등 위에 얹고 발을 골반 너비로 바닥에 둡니다. 발판을 쓰면 미끄러지지 않는 전용 발판을 사용하고 안전받침을 세팅합니다.",
+      "grip": "바를 양손으로 감싸 등 위에 고정합니다. 손목으로 중량을 받지 않고 걸쇠를 확실히 조작할 수 있는 폭을 잡습니다.",
+      "brace": "무릎을 편 상태에서 잠그지 않고 같은 각도를 유지합니다. 몸통을 세우고 발목이 안팎으로 꺾이지 않게 합니다.",
+      "drive": "엄지발가락 쪽과 새끼발가락 쪽 발볼로 고르게 밀어 뒤꿈치를 올립니다. 정점에서 잠시 멈춘 뒤 천천히 내립니다.",
+      "feel": "종아리로 뒤꿈치를 위로 올리고 내려올 때 길어지는 부하를 받습니다. 무릎과 고관절을 펴는 반동으로 높이를 만들지 않습니다.",
+      "watch": "무릎이 매번 접히거나 몸이 앞뒤로 흔들리면 부하를 낮춥니다. 발판에서 발이 밀리면 바닥 버전으로 바꿔 안정된 범위를 확보합니다."
+    },
+    "setup": "바를 등 위에 얹고 발을 골반 너비로 바닥에 둡니다. 발판을 쓰면 미끄러지지 않는 전용 발판을 사용하고 안전받침을 세팅합니다.",
+    "grip": "바를 양손으로 감싸 등 위에 고정합니다. 손목으로 중량을 받지 않고 걸쇠를 확실히 조작할 수 있는 폭을 잡습니다.",
+    "target": "종아리로 뒤꿈치를 위로 올리고 내려올 때 길어지는 부하를 받습니다. 무릎과 고관절을 펴는 반동으로 높이를 만들지 않습니다.",
+    "tip": "엄지발가락 쪽과 새끼발가락 쪽 발볼로 고르게 밀어 뒤꿈치를 올립니다. 정점에서 잠시 멈춘 뒤 천천히 내립니다.",
+    "warn": "무릎이 매번 접히거나 몸이 앞뒤로 흔들리면 부하를 낮춥니다. 발판에서 발이 밀리면 바닥 버전으로 바꿔 안정된 범위를 확보합니다.",
+    "rom": "바닥 버전은 바닥부터 발뒤꿈치를 올리는 범위. 발판 아래로 억지로 깊게 내리지 않습니다.",
+    "breath": "힘을 쓰며 내쉬고 돌아오며 들이쉽니다. 복귀를 약 2–3초로 조절하며 몸통과 관절 위치를 확인합니다.",
+    "coaching": {
+      "cues": [
+        "무릎을 편 상태에서 잠그지 않고 같은 각도를 유지합니다. 몸통을 세우고 발목이 안팎으로 꺾이지 않게 합니다.",
+        "엄지발가락 쪽과 새끼발가락 쪽 발볼로 고르게 밀어 뒤꿈치를 올립니다. 정점에서 잠시 멈춘 뒤 천천히 내립니다.",
+        "무릎이 매번 접히거나 몸이 앞뒤로 흔들리면 부하를 낮춥니다. 발판에서 발이 밀리면 바닥 버전으로 바꿔 안정된 범위를 확보합니다."
+      ],
+      "position": "무릎을 편 상태에서 잠그지 않고 같은 각도를 유지합니다. 몸통을 세우고 발목이 안팎으로 꺾이지 않게 합니다.",
+      "feel": "종아리로 뒤꿈치를 위로 올리고 내려올 때 길어지는 부하를 받습니다. 무릎과 고관절을 펴는 반동으로 높이를 만들지 않습니다.",
+      "steps": [
+        "바를 등 위에 얹고 발을 골반 너비로 바닥에 둡니다. 발판을 쓰면 미끄러지지 않는 전용 발판을 사용하고 안전받침을 세팅합니다. 바를 양손으로 감싸 등 위에 고정합니다. 손목으로 중량을 받지 않고 걸쇠를 확실히 조작할 수 있는 폭을 잡습니다.",
+        "엄지발가락 쪽과 새끼발가락 쪽 발볼로 고르게 밀어 뒤꿈치를 올립니다. 정점에서 잠시 멈춘 뒤 천천히 내립니다.",
+        "발볼 접촉을 유지하고 뒤꿈치를 천천히 내립니다. 바닥에서는 뒤꿈치가 닿기 직전, 전용 발판에서는 통제되는 깊이까지만 내립니다."
+      ],
+      "errors": "무릎이 매번 접히거나 몸이 앞뒤로 흔들리면 부하를 낮춥니다. 발판에서 발이 밀리면 바닥 버전으로 바꿔 안정된 범위를 확보합니다.",
+      "corrections": [
+        {
+          "sign": "무릎 반동으로 반복함",
+          "fix": "무릎 각도를 고정하고 정점에서 잠깐 멈출 수 있는 중량으로 낮춥니다."
+        },
+        {
+          "sign": "발목이 바깥쪽으로 꺾임",
+          "fix": "양쪽 발볼에 압력을 고르게 분산하고 높이를 줄여 발목을 곧게 움직입니다."
+        }
+      ],
+      "variant": []
     }
   }
 ];

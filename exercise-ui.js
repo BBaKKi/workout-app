@@ -165,7 +165,7 @@ const LibApp={
     const COL={push:'#D85A30',pull:'#185FA5',legs:'#27500A',core:'#888',small:'#BA7517'};
     const items=InterfaceTools.filterExercises(lib.filter(e=>this.matchesCategory(e,this.cat)&&(!q||(e.searchTerms||'').toLowerCase().includes(q)||(e.displayName||'').toLowerCase().includes(q)||e.name.toLowerCase().indexOf(q)>=0||(e.mus||'').toLowerCase().indexOf(q)>=0||(e.aka||[]).some(a=>a.toLowerCase().indexOf(q)>=0))));
     this._items=items;
-    if(!items.length){box.innerHTML='<div class="lib-empty">검색 결과가 없습니다.</div>';return;}
+    if(!items.length){box.innerHTML='<div class="lib-empty">선택한 부위·기구·검색 조건에 맞는 운동이 없습니다.<br><button type="button" onclick="GymInventory.select()">전체 운동 보기</button></div>';return;}
     // Detailed guidance is built only when an exercise is opened.
     box.innerHTML=items.map(function(e,i){
       return '<details class="lib-card" data-i="'+i+'"><summary><span class="lib-dot" style="background:'+(COL[e.cat]||'#888')+'"></span><span class="lib-nm">'+(e.displayName||e.name)+GymInventory.badge(e)+'</span><span class="lib-mus">'+(e.mus||'')+'</span><span class="chev">▾</span></summary>'
