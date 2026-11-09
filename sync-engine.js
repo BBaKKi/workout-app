@@ -90,7 +90,7 @@
     if(j.apiVersion!==7)throw new Error('Apps Script API v7를 새 버전으로 배포하세요.');return j;
    }finally{clearTimeout(timer);}
   },
-  state(url){const s=read('record_sync_v5',{})[url]||{base:{workout:{},weight:{},inbody:{}},initialized:false};s.base.session||={};if(s.comparisonVersion!==2){
+  state(url){const s=read('record_sync_v6',read('record_sync_v5',{}))[url]||{base:{workout:{},weight:{},inbody:{}},initialized:false};s.base.session||={};if(s.comparisonVersion!==2){
    for(const kind of kinds)for(const b of Object.values(s.base[kind]||{})){try{
     const h=JSON.parse(b.hash);if(h===null)continue;
     let record;
@@ -100,12 +100,12 @@
     b.hash=this.fingerprint(record,kind);
    }catch(_){/* Unknown baselines stay intact so an edit cannot become clean by accident. */}}
    s.format7=true;s.comparisonVersion=2;
-  }s.pending||={};for(const kind of kinds)s.pending[kind]||={};return s;},
-  statesWith(url,state){return {...read('record_sync_v5',{}),[url]:state};},
+  }s.pending||={};for(const kind of kinds)s.pending[kind]||={};return StorageDigest.compactState(s);},
+  statesWith(url,state){const states={...read('record_sync_v6',read('record_sync_v5',{})),[url]:state};for(const s of Object.values(states))StorageDigest.compactState(s);return states;},
   noteLocal(kind,date){
    const url=localStorage.getItem('gs_script_url');if(!url)return;const state=this.state(url);
    // Only edits made after this device has seen the server can create a known-empty base.
-   if(state.initialized&&!state.base[kind][date]){state.base[kind][date]={revision:'0',hash:this.fingerprint(this.empty(date,kind),kind)};window.storage.set('record_sync_v5',JSON.stringify(this.statesWith(url,state))).catch(e=>SafeStore.report(e));}
+   if(state.initialized&&!state.base[kind][date]){state.base[kind][date]={revision:'0',hash:this.fingerprint(this.empty(date,kind),kind)};window.storage.set('record_sync_v6',JSON.stringify(this.statesWith(url,state))).catch(e=>SafeStore.report(e));}
   },
   uuid(){return crypto.randomUUID();},
   async digest(value){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(value))))].map(b=>b.toString(16).padStart(2,'0')).join('');},
@@ -152,7 +152,7 @@
   },
   isDirty(kind,date,local,base){
    const queued=kind==='workout'?ExLog._dirty.has(date):Object.hasOwn(read(kind==='weight'?'daily_weight_dirty':kind==='session'?'session_dirty_v1':'inbody_dirty',{}),date);
-   return queued||!!(base&&base.hash!==this.fingerprint(local,kind));
+   return queued||!!(base&&base.hash!==StorageDigest.digest(this.fingerprint(local,kind)));
   },
   acknowledge(kind,date,hash){
    const now=this.local(kind)[date]||this.empty(date,kind);if(this.fingerprint(now,kind)!==hash)return;
@@ -177,7 +177,7 @@
    }else{InBody._log=InBody._log.filter(x=>x.date!==date);if(record.entry)InBody._log.push(record.entry);InBody._log.sort((a,b)=>a.date.localeCompare(b.date));}
   },
   persist(url,state){
-   const values={...this.queueWrites,record_sync_v5:JSON.stringify(this.statesWith(url,state)),sync_dirty:JSON.stringify([...ExLog._dirty]),sync_del:JSON.stringify(ExLog._delQ.filter(k=>ExLog._dirty.has(k.date))),inbody_log:JSON.stringify(InBody._log||[]),daily_weight_v1:JSON.stringify(AppFeatures.weights)};
+   const values={...this.queueWrites,record_sync_v6:JSON.stringify(this.statesWith(url,state)),sync_dirty:JSON.stringify([...ExLog._dirty]),sync_del:JSON.stringify(ExLog._delQ.filter(k=>ExLog._dirty.has(k.date))),inbody_log:JSON.stringify(InBody._log||[]),daily_weight_v1:JSON.stringify(AppFeatures.weights)};
    for(const m of ExLog._dirtyMonths)values['wl_v2:'+m]=JSON.stringify(Object.fromEntries(Object.entries(ExLog.data).filter(([d])=>d.slice(0,7)===m)));
    SafeStore.transaction(values);ExLog._dirtyMonths.clear();ExLog._delQ=JSON.parse(values.sync_del);this.queueWrites={};
   },
@@ -205,7 +205,7 @@
      for(const date of dates){
       const r=remote[date]||this.empty(date,kind),l=locals[date]||this.empty(date,kind);let b=base[date];
       const lh=this.fingerprint(l,kind),rh=this.fingerprint(r,kind),pending=state.pending[kind][date];
-      if(remote[date]&&pending&&pending.baseRevision===(b?.revision??null)&&pending.hash===this.writeFingerprint(r,kind)){
+      if(remote[date]&&pending&&pending.baseRevision===(b?.revision??null)&&pending.hash===StorageDigest.digest(this.writeFingerprint(r,kind))){
        // The server committed our previous request, but its response was lost.
        // Advance only the baseline: keep any sets/edits entered since that request.
        b=base[date]={revision:r.revision,hash:rh};delete state.pending[kind][date];recovered.push(date);

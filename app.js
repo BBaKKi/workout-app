@@ -9,7 +9,7 @@ const Backup={
   KEYS:['retired_links_v7','exercise_favorites_v1','plan_v3','routine_profile','brand_coef','ex_load','deload_v1','inbody_dirty','sync_dirty','sync_del','sync_last_ok','plan_v2','inbody_log','plan_blood_v1','gs_script_url','ex_alias','block_v1','last_backup','ex_base','ex_memo','ex_rest','dl_grip_start'],
   PREFIXES:['wl_v2:'], // 운동 기록 월 키 (wl_v2:YYYY-MM) — 단일 키(wl_v2)는 내보내지 않음(이관 후 낡은 사본이라 백업 부풀림 방지)
   MERGE_KEYS:['ex_memo','ex_base','ex_rest','ex_alias','brand_coef','ex_load'], // 가져오기 시 덮어쓰기 대신 병합 — 로컬에서 저장한 세팅 메모·기본무게·휴식·별칭이 지워지지 않게
-  async restoreSnapshot(){const r=await window.storage.get('restore_backup');if(!r){this._msg('복원 전 백업이 없습니다.');return;}document.getElementById('bk-ta').value=r.value;this._msg('복원 전 백업을 열었습니다. 파일 저장 또는 가져오기를 선택하세요.');},
+  async restoreSnapshot(){try{const r=await window.storage.get('restore_backup');if(!r){this._msg('복원 전 백업이 없습니다.');return;}document.getElementById('bk-ta').value=r.value;this._msg('복원 전 백업을 열었습니다. 파일 저장 또는 가져오기를 선택하세요.');}catch(e){this._msg('복원 전 백업을 열지 못했어요. '+e.message,true);}},
   _allowed(k){return this.KEYS.includes(k)||k==='wl_v2'/*레거시 백업 파일 가져오기 호환*/||this.PREFIXES.some(p=>k.startsWith(p));},
   _msg(t,err){const el=document.getElementById('bk-msg');if(!el)return;el.textContent=t;el.classList.toggle('err',!!err);},
   // ── 데이터 점검: 도감 미매칭·0kg 본세트·미래 날짜 등 이상치 나열 ──
