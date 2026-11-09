@@ -66,7 +66,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.locator('.af-current .exercise-guide>summary').click();
   assert.equal(await p.locator('.af-current .coach-group').count(),2);
   await p.locator('.af-current .coach-group').nth(1).locator('summary').click();
-  const guide=await p.locator('.af-current .coach-body').innerText();for(const word of ['팔꿈치','수행 순서','가동범위','자세가 흐트러지면'])assert(guide.includes(word),word);
+  const guide=await p.locator('.af-current .coach-body').innerText();for(const word of ['팔꿈치','복귀·다음 반복','가동범위','놓치기 쉬운 2가지'])assert(guide.includes(word),word);
   await p.locator('.rm-toggle').click();await p.locator('.rm-end').click();
   assert(!(await p.locator('.rest-mini').isVisible()));assert.equal(await p.evaluate(()=>document.activeElement.htmlFor),'tw');
   assert.equal(await p.evaluate(()=>JSON.stringify(ExLog.data)),before);assert.deepEqual(errors,[]);
