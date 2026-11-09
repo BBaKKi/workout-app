@@ -225,6 +225,7 @@ const ExLog={
       if(i<0)continue;
       return EL_CYCLE[(i+1)%EL_CYCLE.length];
     }
+    const last=window.RecordCache?.lastDay(null,d),i=last?EL_CYCLE.indexOf(this._baseType(last.day)):-1;if(i>=0)return EL_CYCLE[(i+1)%EL_CYCLE.length];
     return 'Push A';
   },
   fmt(d){const today=_todayKey();const s=new Date(d+'T12:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});return d===today?'오늘 ('+s+')':s;},
@@ -482,6 +483,7 @@ const ExLog={
       if(!s||this._baseType(s.day)!==t)continue;
       if((s.exercises||[]).some(e=>(e.sets||[]).some(_isWorkSet)))return Math.round((new Date(this.date+'T12:00:00')-new Date(k+'T12:00:00'))/864e5);
     }
+    const last=window.RecordCache?.lastDay(t,this.date);if(last)return Math.round((Date.parse(this.date+'T12:00:00')-Date.parse(last.date+'T12:00:00'))/864e5);
     return 999; // 수행 기록 없음
   },
   _typeDeficit(t){
@@ -952,7 +954,7 @@ const ExLog={
 
   _prE1(s){return _e1Of(_ldW(s),s.reps);},
   _priorSets(name){
-    let arr=[];const cn=this.canon(name);
+    let arr=window.RecordCache?RecordCache.bestSets(this.canon(name)):[];const cn=this.canon(name);
     for(const dk in this.activeData){(this.activeData[dk].exercises||[]).forEach(e=>{if(this.canon(e.name)===cn)arr=arr.concat(e.sets||[]);});}
     return arr.filter(_isWorkSet);
   },
@@ -1042,7 +1044,7 @@ const ExLog={
       const ws=(e.sets||[]).filter(_isWorkSet);if(!ws.length)return;
       const cn=this.canon(e.name);
       let today=-1;ws.forEach(st=>{const v=_ldW(st)>0?_e1Of(_ldW(st),st.reps):st.reps;if(v>today)today=v;});
-      let prior=-1;
+      let prior=Math.max(-1,...(window.RecordCache?RecordCache.bestSets(cn,this.date):[]).map(st=>_ldW(st)>0?_e1Of(_ldW(st),st.reps):st.reps));
       this._exFor(cn).forEach(r=>{if(r.date>=this.date)return; // 종목 인덱스 — 전체 날짜 풀스캔 제거
         (r.ex.sets||[]).filter(_isWorkSet).forEach(st=>{const v=_ldW(st)>0?_e1Of(_ldW(st),st.reps):st.reps;if(v>prior)prior=v;});});
       if(prior>=0&&today>prior+0.05)prs++;
@@ -1196,6 +1198,7 @@ const ExLog={
     const ck=this.date+'|'+cn;
     const hit=this._pbCache[ck];if(hit)return hit;
     let bestE1=-1,bestReps=-1;
+    for(const st of window.RecordCache?RecordCache.bestSets(cn,this.date):[]){if(RecordModel.unit(name,st)!==RecordModel.unit(name))continue;if(_ldW(st)>0)bestE1=Math.max(bestE1,_e1Of(_ldW(st),st.reps));else bestReps=Math.max(bestReps,st.reps);}
     for(const r of this._exFor(cn)){
       if(r.date>=this.date)continue;
       r.ex.sets.forEach(st=>{if(_isWorkSet(st)&&RecordModel.unit(name,st)===RecordModel.unit(name)){if(_ldW(st)>0){const e1=_e1Of(_ldW(st),st.reps);if(e1>bestE1)bestE1=e1;}else if(st.reps>bestReps)bestReps=st.reps;}});
@@ -1354,7 +1357,7 @@ const ExLog={
       document.body.appendChild(m);
     }
     document.getElementById('hist-hd').textContent='📈 '+cn;
-    document.getElementById('hist-sub').textContent='전체 기록 '+rows.length+'회 (워밍업 제외 · 이 종목의 기록만)';
+    document.getElementById('hist-sub').textContent='기기에 보관된 기록 '+rows.length+'회 (워밍업 제외 · 이 종목의 기록만)';
     const body=document.getElementById('hist-body');
     if(!rows.length){body.innerHTML='<div class="hist-empty">아직 기록이 없습니다.</div>';}
     else{
@@ -1379,6 +1382,7 @@ const ExLog={
       }).join('');
       body.innerHTML=spark+stat+'<div class="hist-rows">'+list+'</div>';
     }
+    const older=document.createElement('button');older.type='button';older.textContent='이전 기간은 시트에서 조회';older.onclick=()=>{this.closeHistory();RecordCache.openHistory();};body.appendChild(older);
     m.style.display='flex';
   },
   closeHistory(){const m=document.getElementById('hist-modal');if(m)m.style.display='none';},
@@ -1447,7 +1451,7 @@ const ExLog={
     if(typeof PlanApp==='undefined'||!PlanApp._weekKeys)return'';
     const wkKeys=PlanApp._weekKeys(0),wkSet=new Set(wkKeys);
     // 이번 주 PR — 주간요약(renderWeekSummary)과 동일한 1패스 러닝베스트 방식
-    const prs=[];const best={};let top=null;
+    const prs=[];const best=window.RecordCache?RecordCache.seedBest():{};let top=null;
     Object.keys(this.activeData).sort().forEach(dk=>{
       const inWeek=wkSet.has(dk);
       (this.activeData[dk].exercises||[]).forEach(e=>{
@@ -1550,7 +1554,7 @@ const ExLog={
     for(let i=1;i<a.length;i++){const d=Math.round((a[i]-a[i-1])*100)/100;if(d>0&&(!g||d<g))g=d;}
     // 표본이 얕으면(서로 다른 무게 3개 미만) 추론을 믿지 않는다. 상식 범위 밖도 버린다.
     const ok=a.length>=3&&g>=0.5&&g<=25;
-    return c[cn]=ok?Math.max(1,g):2.5;
+    const archived=window.RecordCache?.summary()?.exercises[cn]?.step;return c[cn]=ok?Math.min(Math.max(1,g),archived||Infinity):(archived||2.5);
   },
   // 다음 목표 무게: 증량분을 스택 단위의 배수로 올림. 실제로 걸 수 있는 무게만 제안한다.
   nextWeight(name,lastW){
@@ -1619,7 +1623,7 @@ const ExLog={
       if(r.date>=this.date)continue;
       if((r.ex.sets||[]).some(_isWorkSet))return{date:r.date,sets:r.ex.sets.filter(_isWorkSet)};
     }
-    return null;
+    return window.RecordCache?RecordCache.last(cn,this.date):null;
   },
   _targetNote(name){const type=this.loadTypeOf(name),e=this.libByName(name);return e?.recordingNote?' · '+_esc(e.recordingNote):type==='assist'?' · 같은 기구에서 보조량을 줄이면 난도가 올라갑니다.':type==='time'?' · 반복 칸은 초, 중량 칸은 추가 중량입니다.':'';},
   suggestTarget(name){
@@ -2042,7 +2046,7 @@ const ExLog={
     const today=new Date(this.date+'T12:00:00');
     const dow=(today.getDay()+6)%7;
     const monday=new Date(today);monday.setDate(today.getDate()-dow);
-    let wk=0,total=0;
+    let wk=0,total=window.RecordCache?RecordCache.priorCount():0;
     for(const k in this.activeData){
       if(!this.activeData[k].exercises?.some(e=>(e.sets||[]).some(_isWorkSet)))continue;
       total++;

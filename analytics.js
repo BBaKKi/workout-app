@@ -325,6 +325,7 @@ const PlanApp={
         for(const k in RECO_CAT){if(RECO_CAT[k].includes(b)){c=k;break;}}
         (ex.sets||[]).forEach(st=>{if(!_isWorkSet(st))return;const v=(st.weight||0)*st.reps;cat[c]+=v;tot+=v;});
       });});
+      for(const [name,value] of window.RecordCache?RecordCache.week(keys[0]):[]){const b=this.muscleOf(name)?.p;let c='etc';for(const k in RECO_CAT)if(RECO_CAT[k].includes(b)){c=k;break;}cat[c]+=value.volume;tot+=value.volume;}
       weeks.push({lbl:keys[0].slice(5).replace('-','/'),tot,cat});
     }
     if(!weeks.some(w=>w.tot>0)){box.innerHTML='<div class="plan-vol-empty">기록이 쌓이면 주 단위 볼륨 추이가 여기 표시됩니다.</div>';return;}
@@ -424,7 +425,9 @@ const PlanApp={
   async renderPRBoard(){
     const box=document.getElementById('pr-board');if(!box)return;
     const data=await this._logData();
-    const best={}; // canon명 → {e1,w,r,date}
+    const best={};
+    for(const [name,e] of Object.entries(window.RecordCache?.summary()?.exercises||{})){if(!RecordModel.activeName(name))continue;const v=e.best['reps:loaded'];if(v&&v.set.weight>0)best[name]={e1:v.score,w:v.set.weight,r:v.set.reps,date:v.date};}
+    // canon명 → {e1,w,r,date}
     for(const dk in data){
       (data[dk].exercises||[]).forEach(ex=>{
         const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name;
@@ -456,7 +459,7 @@ const PlanApp={
     const volPct=volL?Math.round((volT-volL)/volL*100):0;
     // PR 수 (이번 주) — 날짜 오름차순 1패스. 종목별 '직전 날짜까지 최고값'을 누적하며 비교(기존 O(날짜²) 재스캔 제거).
     let prCount=0;const seen={};const thisSet=new Set(thisWk);
-    const best={};                                   // name → 그 날짜 '이전'까지의 최고 (e1RM 또는 맨몸 reps)
+    const best=window.RecordCache?RecordCache.seedBest():{}; // name → 그 날짜 '이전'까지의 최고 (e1RM 또는 맨몸 reps)
     const allDates=Object.keys(data).sort();
     allDates.forEach(dk=>{
       const inWeek=thisSet.has(dk);

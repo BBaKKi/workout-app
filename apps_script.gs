@@ -4,7 +4,7 @@
  * 이전 flag 열과 새 wu/rpe/pain 열, 한글·영문 헤더를 모두 읽습니다.
  */
 var API_VERSION = 7;
-var SERVER_BUILD = '7.2.0';
+var SERVER_BUILD = '7.3.0';
 var _requestDateZone = null;
 var WORKOUT_SHEET = '운동기록';
 var INBODY_SHEET = '인바디기록';
@@ -49,6 +49,8 @@ function doPost(e) {
   _authorize(b); // Authentication must precede any spreadsheet access or lock acquisition.
   lock=LockService.getScriptLock();lock.waitLock(20000);
   if(b.mode==='sync_pull')return _json(_syncPull());
+  if(b.mode==='sync_window')return _json(_syncWindow(b));
+  if(b.mode==='history_range')return _json(_historyRange(b));
   if(b.mode==='sync_diagnose')return _json(_diagnose());
   if(b.mode==='sync_write')return _json(_syncWrite(b));
   if(b.mode==='settings_get')return _json(_settingsGet());
@@ -204,6 +206,44 @@ function _syncPull(){
  var out={ok:true,apiVersion:API_VERSION,type:'snapshot',source:_source()};
  ['workout','weight','inbody','session'].forEach(function(kind){var t=_readKind(kind,false);out[kind]=Object.values(_records(t,kind));out.source.sheets[kind]=_sheetStatus(t,out[kind]);});return out;
 }
+// Explicitly scoped reads. Legacy sync_pull remains available for old clients.
+function _cacheRange(b,maxDays){
+ var from=_date(b.from),to=_date(b.to),days=(Date.parse(to+'T12:00:00Z')-Date.parse(from+'T12:00:00Z'))/86400000+1;
+ if(days<1||days>maxDays)throw new Error('조회 기간은 최대 '+maxDays+'일입니다.');return {from:from,to:to};
+}
+function _syncWindow(b){
+ var range=_cacheRange(b,30),extras={},kinds=['workout','weight','inbody','session'];
+ kinds.forEach(function(k){var list=(b.extra||{})[k]||[];if(!Array.isArray(list)||list.length>500)throw new Error('추가 확인은 종류별 최대 500일입니다.');extras[k]=Array.from(new Set(list.map(_date))).sort();});
+ if(b.inbodyLimit!==8)throw new Error('인바디 보관 개수는 8회입니다.');
+ var out=_syncPull(),all={};kinds.forEach(function(k){all[k]=out[k];});
+ var ibDates=all.inbody.filter(function(r){return !r.deleted;}).map(function(r){return r.date;}).sort().slice(-8);
+ out.scope={version:1,from:range.from,to:range.to,inbodyDates:ibDates,extra:extras};
+ kinds.forEach(function(k){out[k]=all[k].filter(function(r){return extras[k].indexOf(r.date)>=0||(k==='inbody'?ibDates.indexOf(r.date)>=0:r.date>=range.from&&r.date<=range.to);});});
+ out.summary=_historySummary(all,b,range);return out;
+}
+function _historySummary(all,b,range){
+ if(!Array.isArray(b.gymNames)||b.gymNames.length>500||b.gymNames.some(function(n){return typeof n!=='string'||n.length>200||/[<>]/.test(n);}))throw new Error('기구 목록 형식 오류');
+ var active=function(n){return b.gymNames.indexOf(n)>=0||n.indexOf('올데이 직접 · ')===0;},totalDays=0,dayLast=Object.create(null);
+ var start=_date(b.gymStart),names=Object.create(null),days=Object.create(null),first=all.inbody.filter(function(r){return !r.deleted;}).sort(function(a,b){return a.date.localeCompare(b.date);})[0];
+ var weekFrom=new Date(range.to+'T12:00:00Z');weekFrom.setUTCDate(weekFrom.getUTCDate()-((weekFrom.getUTCDay()+6)%7)-49);weekFrom=weekFrom.toISOString().slice(0,10);
+ all.workout.filter(function(r){return r.date>=start&&r.date<range.from;}).sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(record){
+  var byName=Object.create(null);record.rows.forEach(function(r){if(r.wu||r.name.indexOf('🏃')===0||!active(r.name))return;(byName[r.name]||(byName[r.name]=[])).push(r);});
+  if(Object.keys(byName).length){totalDays++;var firstRow=byName[Object.keys(byName)[0]][0];dayLast[firstRow.day]={date:record.date,day:firstRow.day};}
+  Object.keys(byName).forEach(function(name){
+   var rows=byName[name].sort(function(a,b){return a.setNo-b.setNo;}),item=names[name]||(names[name]={last:null,best:{},weights:Object.create(null)});
+   item.last={date:record.date,day:rows[0].day,sets:rows.map(function(r){return Object.assign({weight:r.weight,reps:r.reps},r.meta||{},r.rpe?{rpe:r.rpe}:{});})};
+   rows.forEach(function(r){if(r.weight>0)item.weights[Math.round(r.weight*100)/100]=true;var unit=(r.meta||{}).unit||'reps',w=unit==='reps'?(Number.isFinite((r.meta||{}).ew)?r.meta.ew:r.weight):0,score=w>0?w*(r.reps<=10?1+r.reps/30:1+10/30+(r.reps-10)/60):r.reps,key=unit+(w>0?':loaded':':reps'),prev=item.best[key];if(!prev||score>prev.score)item.best[key]={score:score,date:record.date,set:Object.assign({weight:r.weight,reps:r.reps},r.meta||{})};});
+   if(record.date>=weekFrom){var group=days[record.date]||(days[record.date]=Object.create(null)),v=group[name]||(group[name]={sets:0,volume:0});rows.forEach(function(r){v.sets++;v.volume+=r.weight*r.reps;});}
+  });
+ });
+ Object.keys(names).forEach(function(n){var x=names[n],a=Object.keys(x.weights).map(Number).sort(function(a,b){return a-b;}),g=0;for(var i=1;i<a.length;i++){var d=Math.round((a[i]-a[i-1])*100)/100;if(d>0&&(!g||d<g))g=d;}x.step=a.length>=3&&g>=0.5&&g<=25?Math.max(1,g):null;delete x.weights;});
+ return {version:1,totalDays:totalDays,dayLast:dayLast,before:range.from,through:range.to,gymStart:start,exercises:names,days:days,firstInbody:first?first.entry:null};
+}
+function _historyRange(b){
+ var range=_cacheRange(b,31),out=_syncPull();out.type='history';out.scope={version:1,from:range.from,to:range.to};
+ ['workout','weight','inbody','session'].forEach(function(k){out[k]=out[k].filter(function(r){return r.date>=range.from&&r.date<=range.to;});});return out;
+}
+
 // Read-only diagnosis also reports malformed tabs, without reading tokens or writing cells.
 function _diagnose(){
  var out={ok:true,apiVersion:API_VERSION,type:'diagnosis',source:_source()};

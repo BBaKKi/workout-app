@@ -101,15 +101,15 @@ const InBody={
       {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,col:'#085041',dir:-1,wide:true,
        sub:()=>IB_GOALS.wt+'kg은 참고값 · 체지방률과 골격근량으로 목표 확인'},
       {key:'sm',lbl:'골격근량',unit:'kg',goal:IB_GOALS.sm,col:'#3B6D11',dir:1,
-       sub:v=>{const s=log[0]?.sm??v;const d=(v-s).toFixed(1);const r=(IB_GOALS.sm-v).toFixed(1);return(d>=0?'+':'')+d+'kg 변화 · 잔여 +'+Math.max(0,r)+'kg';}},
+       sub:v=>{const s=(window.RecordCache?.summary()?.firstInbody||log[0])?.sm??v;const d=(v-s).toFixed(1);const r=(IB_GOALS.sm-v).toFixed(1);return(d>=0?'+':'')+d+'kg 변화 · 잔여 +'+Math.max(0,r)+'kg';}},
       {key:'bf',lbl:'체지방률',unit:'%',goal:IB_GOALS.bf,col:'#185FA5',dir:-1,
-       sub:v=>{const s=log[0]?.bf??v;const d=(v-s).toFixed(1);const r=(v-IB_GOALS.bf).toFixed(1);return(d<0?d:'+'+d)+'%p 변화 · 잔여 −'+Math.max(0,r)+'%p';}}
+       sub:v=>{const s=(window.RecordCache?.summary()?.firstInbody||log[0])?.bf??v;const d=(v-s).toFixed(1);const r=(v-IB_GOALS.bf).toFixed(1);return(d<0?d:'+'+d)+'%p 변화 · 잔여 −'+Math.max(0,r)+'%p';}}
     ];
 
     const pct=(f,v)=>{
       if(f.key==='wt')return null;
       if(f.dir===1?v>=f.goal:v<=f.goal)return 100;
-      const start=log[0]?.[f.key]??v,goal=f.goal;
+      const start=(window.RecordCache?.summary()?.firstInbody||log[0])?.[f.key]??v,goal=f.goal;
       const total=Math.abs(goal-start);if(!total)return 0;
       const done=f.dir===1?(v-start):(start-v);
       return Math.min(100,Math.max(0,Math.round(done/total*100)));
