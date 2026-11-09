@@ -17,7 +17,7 @@ await b.evaluate(async url=>ExLog.syncToSheets(url,true),url);assert.equal(cloud
 await a.evaluate(()=>{const s=ExLog.data['2026-10-19'];s.exercises[0].sets[0].weight=65;ExLog.setSession(s);});await sync(a);
 await b.evaluate(()=>{const s=ExLog.data['2026-10-19'];s.exercises[0].sets[0].weight=50;ExLog.setSession(s);});await sync(b);
 assert.equal(await b.evaluate(()=>DataSync.conflicts.length),1);assert.equal(cloud.post({mode:'sync_pull'}).workout[0].rows[0].weight,65);
-await b.evaluate(()=>DataSync.resolve(0,'cloud'));assert.equal(await b.evaluate(()=>ExLog.data['2026-10-19'].exercises[0].sets[0].weight),65);assert.equal(await b.evaluate(()=>!!localStorage.getItem('restore_backup')),true);
+await b.evaluate(()=>DataSync.resolve(0,'cloud'));assert.equal(await b.evaluate(()=>ExLog.data['2026-10-19'].exercises[0].sets[0].weight),65);assert.equal(await b.evaluate(async()=>!!(await window.storage.get('restore_backup'))?.value),true);
 // Delete the final set; another device must see deletion, not resurrect it.
 await a.evaluate(()=>{ExLog.setSession({day:'Push A',exercises:[]});});await sync(a);await sync(b);assert.equal(await b.evaluate(()=>ExLog.data['2026-10-19'].exercises.length),0);await b.evaluate(async url=>ExLog.syncToSheets(url,true),url);assert.equal(cloud.post({mode:'sync_pull'}).workout[0].rows.length,0);
 // Two devices editing daily weight must conflict too.

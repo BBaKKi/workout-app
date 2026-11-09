@@ -72,7 +72,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   // An unjournaled partial record remains a conflict: upgrading is not blanket
   // permission to overwrite the old sheet or infer missing sets.
   drop='workout';await append();assert((await sync()).error);await append();
-  await p.evaluate(url=>{const states=JSON.parse(localStorage.getItem('record_sync_v5'));delete states[url].pending;localStorage.setItem('record_sync_v5',JSON.stringify(states));},url);
+  await p.evaluate(url=>{const states=JSON.parse(localStorage.getItem('record_sync_v6'));delete states[url].pending;localStorage.setItem('record_sync_v6',JSON.stringify(states));},url);
   const count=writes;assert.equal((await sync()).conflicts,1);assert.equal(writes,count);
   await p.evaluate(()=>DataSync.resolve(0,'cloud'));await sync();
   // The checkpoint itself must be durable before sending anything.
@@ -81,7 +81,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   assert.equal(failed,'checkpoint unavailable');assert.equal(writes,beforeWrites);await sync();
   // No ledger or connection secret enters a portable backup. Returning to the
   // app schedules a retry even when the calendar date and network do not change.
-  const check=await p.evaluate(async()=>{clearTimeout(ExLog._syncTimer);const backup=await Backup._collect();Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'));return {hasLedger:Object.hasOwn(backup,'record_sync_v5'),hasToken:Object.hasOwn(backup,'gs_tokens_v5'),scheduled:!!ExLog._syncTimer};});
+  const check=await p.evaluate(async()=>{clearTimeout(ExLog._syncTimer);const backup=await Backup._collect();Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'));return {hasLedger:Object.hasOwn(backup,'record_sync_v6'),hasToken:Object.hasOwn(backup,'gs_tokens_v5'),scheduled:!!ExLog._syncTimer};});
   assert.deepEqual(check,{hasLedger:false,hasToken:false,scheduled:true});
   console.log('PASS: lost receipts + later sets + restart, pre-send failure, exact-ID recovery, real edits/deletions stay conflicts, explicit resolution, all four record kinds, unjournaled history, durable checkpoint, foreground retry and private backup exclusion');
  }finally{await browser.close();server.close();}
