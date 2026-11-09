@@ -53,7 +53,7 @@
     clearTimeout(ExLog._syncTimer);if(ExLog._syncP)await ExLog._syncP;
     if(DataSync.busy)throw new Error('동기화가 끝난 뒤 다시 시도하세요.');
     await ExLog.save();const old=await Backup._collect();await window.storage.set('restore_backup',JSON.stringify({app:'fit-tracker',version:2,exported:new Date().toISOString(),data:old}));
-    const keys=Object.keys(values),hasWorkout=keys.some(k=>k==='wl_v2'||k.startsWith('wl_v2:')),remove=['record_sync_v5','record_sync_v6','settings_sync_v1','workout_resume_v1','workout_drafts_v1','workout_undo_v1'];
+    const keys=Object.keys(values),hasWorkout=keys.some(k=>k==='wl_v2'||k.startsWith('wl_v2:')),remove=['record_sync_v5','record_sync_v6','record_cache_v1','settings_sync_v1','workout_resume_v1','workout_drafts_v1','workout_undo_v1'];
     if(hasWorkout){remove.push(...Object.keys(localStorage).filter(k=>k.startsWith('wl_v2:')),'wl_v2');const months={};for(const k of keys.filter(k=>k==='wl_v2'||k.startsWith('wl_v2:'))){Object.entries(JSON.parse(values[k])).forEach(([d,s])=>(months[d.slice(0,7)]||={})[d]=s);delete values[k];}for(const [m,v] of Object.entries(months))values['wl_v2:'+m]=JSON.stringify(v);values.sync_dirty=JSON.stringify(Object.values(months).flatMap(x=>Object.keys(x)));values.sync_del='[]';values.session_dirty_v1=JSON.stringify(Object.fromEntries(Object.values(months).flatMap(x=>Object.entries(x)).filter(([,s])=>s.routineSnapshots||s.dayOverrides||s.cond||s.note!==undefined).map(([d])=>[d,true])));}
     for(const key of Backup.MERGE_KEYS)if(values[key])values[key]=JSON.stringify({...JSON.parse(localStorage.getItem(key)||'{}'),...JSON.parse(values[key])});
     if(values.inbody_log)values.inbody_dirty=JSON.stringify(Object.fromEntries(JSON.parse(values.inbody_log).map(x=>[x.date,x])));

@@ -22,18 +22,19 @@
    const s=this.source,box=document.getElementById('sync-diagnosis');if(!s||!box)return;box.hidden=false;
    box.innerHTML='<b>'+esc(s.name)+'</b><p>앱 '+esc(document.querySelector('.brand-version')?.textContent||'')+' · 서버 '+esc(this.serverBuild||'확인 전')+'</p>'+
     (/^[A-Za-z0-9_-]+$/.test(s.id)?'<a href="https://docs.google.com/spreadsheets/d/'+s.id+'/edit" target="_blank" rel="noopener noreferrer">연결된 구글 시트 열기 ↗</a>':'')+
-    '<div class="sync-source-rows">'+kinds.map(k=>{const d=s.sheets[k]||{},n=Object.values(this.local(k)).filter(r=>!['null','[]'].includes(this.fingerprint(r,k))).length;return '<div><strong>'+this.kindLabel(k)+' · 기기 '+n+'일</strong><span>'+esc(d.error||(d.status==='missing'?'해당 탭 없음':(d.name+' · '+d.rows+'행 / 유효 기록 '+d.activeDates+'일')))+'</span></div>';}).join('')+'</div><p>파일의 탭: '+esc((s.tabs||[]).join(' · '))+'</p><small>진단은 셀을 변경하지 않습니다. 빈 목록은 삭제의 증거가 아닙니다.</small>';
+    '<div class="sync-source-rows">'+kinds.map(k=>{const d=s.sheets[k]||{},n=Object.values(this.local(k)).filter(r=>!['null','[]'].includes(this.fingerprint(r,k))).length;return '<div><strong>'+this.kindLabel(k)+' · 기기 '+n+'일</strong><span>'+esc(d.error||(d.status==='missing'?'해당 탭 없음':(d.name+' · '+d.rows+'행 / 유효 기록 '+d.activeDates+'일')))+'</span></div>';}).join('')+'</div><p>파일의 탭: '+esc((s.tabs||[]).join(' · '))+'</p><small>기기에는 최근 기록을, 시트에는 전체 기록을 보관하므로 전체 건수는 다를 수 있어요. 진단은 셀을 변경하지 않으며 빈 목록은 삭제의 증거가 아닙니다.</small>';
   },
   async inspect(){
    if(this.busy||ExLog._syncP)return;this.busy=true;this.comparisonError='';this.render();
    try{
     const url=await ExLog.getScriptUrl();if(!url)throw new Error('연결 설정에서 URL과 연결키를 먼저 저장하세요.');
-    const snapshot=await this.request(url,{mode:'sync_pull'});this.validateSnapshot(snapshot);
+    const snapshot=await RecordCache.pull(url);
     this.currentUrl=url;this.source=snapshot.source;this.serverBuild=snapshot.serverBuild;this.renderDiagnosis();
     const known=this.state(url).sourceId;if(known&&snapshot.source?.id&&known!==snapshot.source.id)throw new Error('연결된 파일이 변경됐습니다. 연결된 구글 시트 링크를 확인하세요.');
     const conflicts=[];
     for(const kind of kinds){const locals=this.local(kind),remote=Object.fromEntries(snapshot[kind].map(r=>[r.date,r]));
      for(const date of new Set([...Object.keys(locals),...Object.keys(remote)])){
+      if(!RecordCache.covers(snapshot.scope,kind,date))continue;
       const l=locals[date]||this.empty(date,kind),r=remote[date]||this.empty(date,kind);
       if(this.fingerprint(l,kind)!==this.fingerprint(r,kind))conflicts.push(this.conflict(kind,l,r));
      }
@@ -188,10 +189,10 @@
   },
   async run(url){
    if(SafeStore.error)throw new Error('기기 저장 오류를 먼저 해결하세요.');
-   this.currentUrl=url;this.busy=true;this.comparisonError='';this.render();this.queueWrites={};const originalDirty=new Set(ExLog._dirty);
+   this.currentUrl=url;this.busy=true;this.comparisonError='';this.render();this.queueWrites={};const originalDirty=new Set(ExLog._dirty),evicted=new Set();
    try{
     await InBody.load();await this.prepareIds();
-    const snapshot=await ExLog.api(url,{mode:'sync_pull'});this.validateSnapshot(snapshot);
+    let snapshot=await RecordCache.pull(url);let wrote=false;
     const state=this.state(url),conflicts=[];
     this.serverBuild=snapshot.serverBuild;this.source=snapshot.source||null;
     if(snapshot.source){this.source=snapshot.source;this.serverBuild=snapshot.serverBuild;this.renderDiagnosis();
@@ -203,6 +204,7 @@
      const remote=Object.fromEntries(snapshot[kind].map(r=>[r.date,r])),locals=this.local(kind),base=state.base[kind],writes=[],received=[],recovered=[];
      const dates=new Set([...Object.keys(remote),...Object.keys(locals),...Object.keys(base)]);
      for(const date of dates){
+      if(!RecordCache.covers(snapshot.scope,kind,date))continue;
       const r=remote[date]||this.empty(date,kind),l=locals[date]||this.empty(date,kind);let b=base[date];
       const lh=this.fingerprint(l,kind),rh=this.fingerprint(r,kind),pending=state.pending[kind][date];
       if(remote[date]&&pending&&pending.baseRevision===(b?.revision??null)&&pending.hash===StorageDigest.digest(this.writeFingerprint(r,kind))){
@@ -229,7 +231,7 @@
      for(let i=0;i<writes.length;i+=50){
       const sent=writes.slice(i,i+50),hashes=new Map(sent.map(x=>[x.date,this.fingerprint(x,kind)]));
       this.rememberWrite(url,state,kind,sent);
-      const response=await ExLog.api(url,{mode:'sync_write',kind,items:sent});
+      const response=await ExLog.api(url,{mode:'sync_write',kind,items:sent});wrote=true;
       if(response.type!=='write'||response.kind!==kind||response.results?.length!==sent.length)throw new Error('저장 확인 건수가 일치하지 않습니다.');
       const returned=new Set();
       for(const item of response.results){const r=item.record;if(!r||!hashes.has(r.date)||returned.has(r.date))throw new Error('저장 확인 날짜가 일치하지 않습니다.');returned.add(r.date);
@@ -241,9 +243,11 @@
      }
     }
     state.initialized=true;this.persist(url,state);this.conflicts=conflicts;kinds.forEach(k=>this.log('conflict',k,conflicts.filter(c=>c.kind===k).map(c=>c.date)));
+    if(wrote){snapshot=await RecordCache.pull(url);if(snapshot.source?.id!==state.sourceId)throw new Error('연결된 시트가 변경됐습니다.');}
+    await RecordCache.prune(url,state,snapshot,evicted);
     await AppFeatures.syncPreferences(url);AppFeatures.renderSettings();
     await window.storage.set('sync_last_ok',new Date().toISOString());
-   }catch(e){this.comparisonError=e.message;this.log('error','',[],e.message);originalDirty.forEach(d=>ExLog._dirty.add(d));throw e;}
+   }catch(e){this.comparisonError=e.message;this.log('error','',[],e.message);originalDirty.forEach(d=>{if(!evicted.has(d))ExLog._dirty.add(d);});throw e;}
    finally{this.busy=false;this.refreshUI();}
   },
   async resolve(index,choice){
@@ -255,7 +259,7 @@
    if(this.fingerprint(local,c.kind)!==c.localHash){ExLog.syncMessage='비교 중 이 기기 기록이 바뀌었어요. 다시 동기화해 비교하세요.';ExLog.renderSyncStatus();return;}
    const url=await ExLog.getScriptUrl();if(c.url&&c.url!==url){ExLog.syncMessage='연결 대상이 바뀌었어요. 다시 동기화해 비교하세요.';ExLog.renderSyncStatus();return;}this.busy=true;this.render();
    try{
-    const all=await ExLog.api(url,{mode:'sync_pull'});this.validateSnapshot(all);
+    const all=await RecordCache.pull(url,c.date);
     const knownSource=this.state(url).sourceId;if(knownSource&&all.source?.id&&knownSource!==all.source.id)throw new Error('연결된 파일이 변경됐습니다. 기록을 적용하지 않았습니다.');
     const r=all[c.kind].find(x=>x.date===c.date)||this.empty(c.date,c.kind);
     if(r.revision!==c.remote.revision){this.conflicts[index]=this.conflict(c.kind,local,r);throw new Error('비교 중 시트 기록이 바뀌었어요. 최신 내용을 다시 선택하세요.');}
@@ -298,8 +302,8 @@
    const blocked=this.busy||!!this.comparisonError;
    box.innerHTML='<div class="af-card-title">기록 차이 확인 <span class="count-badge">'+this.conflicts.length+'</span></div>'+
     (this.comparisonError?'<p role="alert">최신 비교 실패: '+esc(this.comparisonError)+'<br>아래 결과는 최신이 아닐 수 있어요. 다시 비교한 뒤 선택하세요.</p>':'')+
-    (this.lastComparedAt?'<p>마지막 시트 비교 · '+esc(new Date(this.lastComparedAt).toLocaleString())+'</p>':'')+
-    '<p>'+(this.conflicts.length?'날짜·종류별 차이이며 중복행 수가 아닙니다. 다른 항목을 확인하고 선택하세요.':'마지막 비교에서 기록 차이가 없습니다.')+'</p><div class="af-tool-row"><button type="button" data-inspect '+(this.busy?'disabled':'')+'>다시 비교 · 읽기 전용</button><button type="button" data-diagnose>연결 진단</button></div>'+
+    (this.lastComparedAt?'<p>최근 30일·인바디 8회 및 기기 보유 기록 비교 · '+esc(new Date(this.lastComparedAt).toLocaleString())+'</p>':'')+
+    '<p>'+(this.conflicts.length?'날짜·종류별 차이이며 중복행 수가 아닙니다. 다른 항목을 확인하고 선택하세요.':'조회 범위에서 기록 차이가 없습니다.')+'</p><div class="af-tool-row"><button type="button" data-inspect '+(this.busy?'disabled':'')+'>다시 비교 · 읽기 전용</button><button type="button" data-diagnose>연결 진단</button></div>'+
     this.conflicts.slice(0,this.visibleConflicts).map((c,i)=>'<details class="sync-diff"><summary><b>'+esc(c.date)+'</b><span>'+this.kindLabel(c.kind)+'</span><small>'+esc(this.differenceLabel(c))+'</small></summary><p class="sync-diff-reasons"><b>다른 항목</b> · '+esc(this.differences(c.local,c.remote,c.kind).join(' · '))+'</p><div class="af-pref-values"><div><b>이 기기</b><pre>'+esc(this.summary(c.local,c.kind))+'</pre></div><div><b>시트</b><pre>'+esc(this.summary(c.remote,c.kind))+'</pre></div></div><p>선택 전 이 기기의 복구용 백업을 보관합니다.</p><div class="af-tool-row"><button type="button" data-choice="local" data-index="'+i+'" '+(blocked||c.local.revision==='0'?'disabled':'')+'>이 기기 기록을 시트에 저장</button><button type="button" data-choice="cloud" data-index="'+i+'" '+(blocked||c.remote.revision==='0'?'disabled':'')+'>시트 기록 적용</button></div></details>').join('')+
     (this.conflicts.length>this.visibleConflicts?'<button type="button" data-more>다음 8건 보기</button>':'');
   },

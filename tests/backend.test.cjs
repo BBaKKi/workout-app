@@ -38,7 +38,7 @@ const mixedHeader=['date','day','name','setNo','weight','reps','vol','setId','de
 for(const order of ['blank-first','existing-first']){
  const blank=[june,'Push A',machine,2,40,9,360,'',false,{formula:'=E2*F2',value:360}],existing=[june,'Push A',machine,1,20,10,200,legacyId(1),false,''];
  const mixed=backend({'운동기록':[mixedHeader,...(order==='blank-first'?[blank,existing]:[existing,blank])]});
- const before=JSON.stringify(mixed.db['운동기록'].rows),first=mixed.post({mode:'sync_pull'});assert.equal(first.ok,true);assert.equal(mixed.get().serverBuild,'7.2.0');
+ const before=JSON.stringify(mixed.db['운동기록'].rows),first=mixed.post({mode:'sync_pull'});assert.equal(first.ok,true);assert.equal(mixed.get().serverBuild,'7.3.0');
  assert.equal(JSON.stringify(mixed.db['운동기록'].rows),before); // Read must not mutate the actual sheet.
  const day=first.workout[0];assert.equal(day.rows.length,2);assert.equal(new Set(day.rows.map(x=>x.setId)).size,2);assert.equal(new Set(day.rows.map(x=>x.setNo)).size,2);
  assert.equal(day.rows.find(x=>x.weight===20).setId,legacyId(1));assert.equal(day.rows.find(x=>x.weight===40).setId,legacyId(2));
