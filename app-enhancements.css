@@ -252,9 +252,9 @@ html {touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:1
  .lp-txt {white-space:normal;font-size:12px;text-align:right}
 }
 
-.coach-step-label {display:block;font-size:12px;color:var(--ui-accent);margin-bottom:4px}
 .equipment-summary {order:0;font-size:13px;line-height:1.65;color:var(--ui-text);margin:4px 0 10px;overflow-wrap:anywhere}
 
 .storage-error {max-height:55dvh;overflow:auto;padding-bottom:max(12px,env(safe-area-inset-bottom))}.storage-error small {display:block;margin-top:6px;font-size:11px;overflow-wrap:anywhere}
 
 #cloud-history .af-fields {grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}#cloud-history input {font-size:16px;max-width:100%;min-width:0}#cloud-history-results pre {white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}#cloud-history-results details {padding:10px 0;border-bottom:1px solid var(--ui-border)}#cloud-history button {min-height:44px;padding:8px 12px}
+.trend-note,.trend-next,.body-trend-pair {font-size:13px;line-height:1.7;color:var(--ui-muted);overflow-wrap:anywhere}.trend-name {background:none;border:0;padding:7px 0;text-align:left;font:inherit;font-weight:700;min-height:44px;overflow-wrap:anywhere;color:var(--ui-text)}.trend-state {font-size:11px;white-space:nowrap;border-radius:6px;padding:4px 7px;background:var(--ui-canvas);color:var(--ui-muted)}.trend-state.positive {background:#eaf3ed;color:#28633c}.tr-top {flex-wrap:wrap}.trend-sessions,.body-trend-rows {margin:10px 0}.trend-session {margin:8px 0}.trend-session dt {font-size:11px;color:var(--ui-muted)}.trend-session dd {margin:3px 0;font-size:13px;line-height:1.8;overflow-wrap:anywhere}.body-trend-row {padding:8px 0;border-bottom:1px solid var(--ui-border)}.body-trend-row dt {font-size:12px;color:var(--ui-muted)}.body-trend-row dd {margin:4px 0;font-size:15px}.body-trend-row small {display:inline-block;margin-left:10px;color:var(--ui-muted);font-size:12px}.ib-recomp .rc-note {font-size:12px;line-height:1.7}.coach-group-body .coach-section p {line-height:1.8}

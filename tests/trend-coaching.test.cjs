@@ -1,0 +1,41 @@
+const fs=require('fs'),http=require('http'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict');
+const {chromium}=require('playwright');const root=path.resolve(__dirname,'..');
+const context={window:{}};vm.runInNewContext(fs.readFileSync(path.join(root,'trend-model.js'),'utf8'),context);const M=context.window.TrendModel;
+const set=(reps=10,weight=40,extra={})=>({reps,weight,...extra});
+const previous={date:'2026-11-01',sets:[set(10,40,{rpe:7}),set(10,40,{rpe:8})]},current={date:'2026-11-09',sets:[set(12,40,{rpe:7}),set(12,40,{rpe:8})]};
+assert.equal(M.compare(previous,current).delta,4);
+assert.equal(M.compare(previous,{...current,sets:[set()]}).label,'세트 수 변경');
+assert.equal(M.compare(previous,{...current,sets:[set(10,40),set(10,45)]}).label,'중량 구성 변경');
+assert.equal(M.compare(previous,{...current,sets:[set(10,40,{unit:'seconds'}),set(10,40)]}).label,'기록 단위 변경');
+assert.equal(M.compare(previous,{...current,date:'2026-12-01'}).label,'공백 후 기록');
+assert.equal(M.compare(undefined,current).label,'첫 비교 대기');
+assert.equal(M.compare(previous,{...current,sets:[set(10),set(10)]}).label,'반복 유지');
+assert.equal(M.compare(previous,{...current,sets:[set(11,40,{rpe:8}),set(11,40,{rpe:9})]}).note.includes('체감 강도도 높아'),true);
+assert.equal(M.workSets([set(),set(10,40,{warmup:true}),set(NaN),set(10,-1)]).length,1);
+assert.equal(M.compare({...previous,sets:[set(10,20,{bw:80,ew:60})]},{...current,sets:[set(10,20,{bw:81,ew:61})]}).comparable,false);
+const body=[{date:'2026-11-09',wt:81,sm:34.4,bf:24},{date:'2026-11-01',wt:80,sm:34,bf:24.3},{date:'2026-10-20',wt:81,sm:34,bf:25},{date:'2026-08-01',wt:90,bf:30},{date:'2027-01-01',wt:99,bf:99}];
+const original=JSON.stringify(body),t=M.body(body,'2026-11-10');assert.equal(t.count,3);assert.equal(t.first.date,'2026-10-20');assert(Math.abs(t.fatDelta)<1e-9);assert.equal(t.span,20);assert.equal(JSON.stringify(body),original);assert.equal(M.body([{date:'bad',wt:80,bf:24}],'2026-11-10'),null);
+const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index.html':q.url.split('?')[0]);if(!fs.existsSync(f)){r.writeHead(404);return r.end();}r.setHeader('Content-Type',f.endsWith('.js')?'application/javascript':f.endsWith('.css')?'text/css':'text/html');r.end(fs.readFileSync(f));});
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/tmp/chromium',args:['--no-sandbox']});
+try{const page=await browser.newPage({viewport:{width:390,height:844},serviceWorkers:'block',timezoneId:'Asia/Seoul'}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.clock.install({time:new Date('2026-11-10T08:00:00Z')});await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.InterfaceTools?.ready);
+ const lib=await page.evaluate(()=>EXERCISE_LIBRARY.map(e=>({id:e.id,execution:e.execution,coaching:e.coaching,html:ExerciseCoaching.html(e)})));
+ for(const e of lib){assert.equal(Object.keys(e.execution).length,6);assert.equal(e.coaching.steps,undefined);assert.equal(e.coaching.corrections.length,2);assert(e.coaching.corrections.every(c=>c.sign&&c.fix.length>25));for(const c of Object.values(e.execution))assert.equal(e.html.split(c).length,2,e.id+' must display each cue once');assert(!e.html.includes('시작 자세</b>'));}
+ const state=await page.evaluate(()=>JSON.stringify({plan:ExLog.plan,data:ExLog.data}));
+ await page.evaluate(({previous,current,body})=>{
+  const name=GymInventory.find('올데이 감일 · Cybex 45도 레그프레스').name;
+  window.testTrendName=name;
+  ExLog.data={};for(const r of [previous,current])ExLog.data[r.date]={day:'Legs B',exercises:[{name,sets:r.sets}]};
+  ExLog._invalidateIdx();InBody._log=body.filter(x=>x.date<='2026-11-10').sort((a,b)=>a.date.localeCompare(b.date));
+ },{previous,current,body});
+ const records=await page.evaluate(()=>JSON.stringify({plan:ExLog.plan,data:ExLog.data,body:InBody._log}));
+ await page.evaluate(async()=>{await PlanApp.renderTrends();await InBody.render();});
+ assert((await page.locator('#plan-trend').innerText()).includes('반복 증가'));assert.equal(await page.locator('#plan-trend .tr-plat,#plan-trend .tr-alt-btn').count(),0);
+ assert((await page.locator('#inbody-recomp').innerText()).includes('변화는 0.1kg 미만'));assert(!(await page.locator('#inbody-recomp').innerText()).includes('리컴프 성공'));assert(!(await page.locator('#inbody-recomp').innerText()).includes('근육이 감소'));
+ for(const width of [320,390,768,1200]){await page.setViewportSize({width,height:850});for(const tab of ['tp','tb']){const label=page.locator('label[for='+tab+']');if(await label.count())await label.click();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}}
+ await page.locator('.lbl-l').click();await page.clock.runFor(100);await page.evaluate(()=>LibApp.goto(GymInventory.entries.find(e=>e.id==='lexco-masterpro-curl').name));await page.locator('.lib-card .exercise-guide>summary').click();await page.locator('.lib-card .coach-group').nth(1).locator('summary').click();
+ assert((await page.locator('.lib-card .coach-body').innerText()).includes('롤러가 발목을 따라'));assert.equal(await page.evaluate(()=>JSON.stringify({plan:ExLog.plan,data:ExLog.data,body:InBody._log})),records);
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/tmp/trend-coaching-guide.png',fullPage:true});
+ await page.locator('.lbl-p').click();await page.locator('#plan-trend').scrollIntoViewIfNeeded();await page.screenshot({path:'/tmp/trend-coaching-analysis.png'});
+ await page.evaluate(async()=>{InBody._log=[];await InBody.render();});assert.equal(await page.locator('#inbody-recomp').innerText(),'');
+ assert.deepEqual(errors,[]);console.log('PASS: comparable work sets, changed load/count/unit/assistance and gaps, recent body composition arithmetic, future exclusion, 87 non-repeated guides, unchanged records and mobile layout');
+}finally{await browser.close();server.close();}})().catch(e=>{console.error(e);server.close();process.exitCode=1;});

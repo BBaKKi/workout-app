@@ -1,6 +1,25 @@
-# 올데이 운동 설명 검토 · 2026-10-30 수행 가이드 정리
+# 올데이 운동 설명 검토 · 2026-11-10
 
-현재 67개 운동에 대해 수행 핵심 6항목(높이·몸 위치 / 그립 / 유지할 자세 / 이동 경로 / 힘·자극 방향 / 자세 교정)을 작성했습니다. 기구별 지지대·손잡이·궤적의 차이를 구분하며 기존 이름·ID·분류·기록 키는 그대로입니다.
+현재 87개 운동에 대해 수행 핵심 6항목(높이·몸 위치 / 그립 / 유지할 자세 / 이동 경로 / 힘·자극 방향 / 자세 교정)을 작성했습니다. 기구별 지지대·손잡이·궤적의 차이를 구분하며 기존 이름·ID·분류·기록 키는 그대로입니다.
+
+## 11월 10일 보완
+
+- 87개 운동의 수행 핵심 6항목을 한 번씩만 표시합니다. 동일한 세팅·힘쓰는 구간을 반복하던 상세 필드를 제거하고, 복귀·가동범위·호흡과 운동별 관찰 포인트 두 가지를 남겼습니다.
+- 시티드 레그컬: 접을 때 허벅지가 뜨는 것 외에 **펴 보낼 때 골반이 따라 나오는지**, **롤러가 종아리 위로 굴러가는지**를 구분합니다. 등받이 거리·무릎 회전축·롤러 위치를 재확인합니다. 라잉 레그컬은 골반과 롤러 이동, 발목을 과하게 움직이는 보상을 확인합니다.
+- 레그프레스·스쿼트: 바닥 깊이 자체보다 골반 패드 접촉, 복부에 허벅지가 닿은 뒤 골반이 말리는 시점, 뒤꿈치가 뜨는지를 확인합니다.
+- 암컬·익스텐션: 위팔 접촉과 팔꿈치 회전축, 손목으로 마지막 범위를 만드는 보상을 구분합니다. Cybex 익스텐션은 제조사 설명의 **앞·아래로 미는 경로**를 반영했습니다. Cybex 암컬 사진의 문구·그림 모순 안내는 유지합니다.
+- 당기기·플라이·래터럴: 몸통 접촉, 팔꿈치 각도, 손목과 전완의 방향, 돌아갈 때 어깨뼈의 자연스러운 움직임을 구분합니다. 견갑을 계속 아래로 고정하도록 요구하지 않습니다.
+- RDL·데드리프트: 무릎 굽힘 변화, 바와 다리의 간격, 마지막 반복에서 스트랩이 풀리기 시작하는 것을 확인합니다. 그립 제한을 햄스트링·등 근력 부족으로 단정하지 않습니다.
+- 현재 설치 모델의 새 사진을 검증한 작업은 아닙니다. 제조사 매뉴얼은 해당 운동의 동작 확인 자료이며, 사진으로 식별되지 않은 조절 장치·좌석 번호·레일 각도를 추정하지 않습니다.
+
+검토 자료:
+
+- [Cybex Arm Curl 12070 매뉴얼 14쪽](https://kb.cybexintl.com/Owners_Manuals/Strength/12070-999-4.pdf#page=14): 위팔 지지·팔꿈치 축 정렬·어깨 방향으로 당기기.
+- [Cybex Arm Extension 12080 매뉴얼 14쪽](https://kb.cybexintl.com/Owners_Manuals/Strength/12080-999-4.pdf#page=14): 위팔 지지·팔꿈치 축 정렬·앞과 바닥 방향으로 밀기.
+- [Cybex Seated Leg Curl 12060 매뉴얼 14쪽](https://kb.cybexintl.com/Owners_Manuals/Strength/12060-999-4.pdf#page=14): 무릎 축·허벅지 고정·발목 뒤 패드의 일반적인 확인. LEXCO 설치 모델의 조절 방식 확인 근거는 아닙니다.
+- [ACE 시티드 레그프레스](https://www.acefitness.org/resources/everyone/exercise-library/154/seated-leg-press/), [시티드 로우](https://www.acefitness.org/resources/everyone/exercise-library/168/seated-row/), [랫풀다운](https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/), [래터럴 레이즈](https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/): 몸통 지지·접촉·통제된 복귀의 기본 동작 참고.
+- [NSCA RDL](https://dxpprod.nsca.com/education/articles/kinetic-select/romanian-deadlift-rdl/): 고관절 이동·무릎 각도·바의 위치.
+- [InBody 측정 전 준비](https://inbodyusa.com/general/inbody-test/): 체성분 비교 화면의 수분·식사·운동 조건 안내 참고.
 
 ## 10월 30일 보완
 

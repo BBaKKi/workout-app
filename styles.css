@@ -258,23 +258,7 @@ details[open]>summary .ic{transform:rotate(180deg)}
 .rules-card .rule:last-child{border-bottom:none}
 .bk-check-row{font-size:11.5px;line-height:1.55;color:#7A5A12;background:#FFF6E5;border:1px solid #EED9A8;border-radius:8px;padding:6px 9px;margin-top:6px}
 .bk-check-row.ok{color:#3B6D11;background:#EAF3DE;border-color:#C9DCB0}
-.tr-plat{font-size:10px;font-weight:700;color:#fff;background:#BA7517;padding:1px 6px;border-radius:8px}
-.tr-mid{display:flex;align-items:center;gap:10px}
 .tr-spark{flex-shrink:0}
-.tr-stat{font-size:11px;color:var(--color-text-secondary)}
-.tr-e1{font-weight:700;color:var(--color-text-primary)}
-.tr-up{color:#3B6D11;font-weight:700}
-.tr-dn{color:#E24B4A;font-weight:700}
-.tr-eq{color:#999}
-.tr-set{color:var(--color-text-tertiary)}
-.tr-alt-btn{font-size:10px;font-weight:700;color:#185FA5;background:none;border:0.5px solid #185FA5;border-radius:8px;padding:2px 8px;cursor:pointer;margin-left:2px}
-.tr-alt{display:none;margin-top:8px;padding-top:8px;border-top:0.5px dashed var(--color-border-tertiary)}
-.tr-alt.open{display:block}
-.tr-alt-hd{font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px}
-.tr-alt-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0}
-.tr-alt-nm{font-size:12px;color:var(--color-text-secondary)}
-.tr-alt-add{font-size:11px;font-weight:700;color:#fff;background:#085041;border:none;border-radius:7px;padding:4px 10px;cursor:pointer;flex-shrink:0}
-.tr-alt-add:disabled{background:#3B6D11}
 .mm-wrap{padding:14px 16px 80px}
 .mm-title{font-size:15px;font-weight:800;color:var(--color-text-primary);margin-bottom:4px}
 .mm-sub{font-size:12px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px}
@@ -483,11 +467,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 .vol-goal-bar{height:7px;background:var(--color-border-tertiary);border-radius:4px;overflow:hidden}
 .vol-goal-fill{height:100%;background:linear-gradient(90deg,#185FA5,#3B6D11);border-radius:4px;transition:width .3s}
 /* ── 신규: e1RM 마일스톤 ── */
-.tr-ms{display:flex;align-items:center;gap:7px;margin-top:4px}
-.tr-ms-txt{font-size:11px;color:var(--color-text-tertiary);flex:0 0 auto}
-.tr-ms-txt b{color:#BA7517}
-.tr-ms-bar{flex:1;height:4px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
-.tr-ms-fill{height:100%;background:#BA7517;border-radius:2px}
 /* ── 신규: 주간 리포트 (REST) ── */
 .wr-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;margin:12px 16px 0;text-align:left}
 .wr-hd{font-size:14px;font-weight:800;color:var(--color-text-primary);margin-bottom:9px}
@@ -580,7 +559,6 @@ details.plan-fold[open]>summary::after{content:'▴'}
 /* 레그데이 리마인더 */
 .legday-note{font-size:11px;line-height:1.6;color:#27500A;background:#F0F6EA;border:0.5px solid #D8E8C8;border-radius:var(--border-radius-md);padding:7px 10px;margin:6px 16px 0;text-align:center}
 /* 상대강도 */
-.tr-bw{font-size:10px;color:#6B4FA0;background:#F1EDF8;border-radius:6px;padding:1px 5px}
 /* 기본무게 */
 .ex-base-btn{font-size:10.5px;color:#63635c;background:#f4f4f1;border:.5px solid #e5e5de;border-radius:20px;padding:4px 10px;margin:0 5px 7px 0;cursor:pointer;display:inline-block;width:auto;vertical-align:middle}
 .ex-base-btn.has{color:#3a3a34;font-weight:600}

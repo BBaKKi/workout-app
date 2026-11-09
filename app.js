@@ -95,7 +95,7 @@ const InBody={
     const box=document.getElementById('inbody-cards');
     const note=document.getElementById('plan-inbody-note');
     if(!box)return;
-    if(!last){box.innerHTML='<div class="ib-no-data">아직 측정 기록이 없습니다.<br>아래 버튼으로 첫 인바디 수치를 입력하세요.</div>';if(note)note.textContent='';return;}
+    if(!last){box.innerHTML='<div class="ib-no-data">아직 측정 기록이 없습니다.<br>아래 버튼으로 첫 인바디 수치를 입력하세요.</div>';if(note)note.textContent='';this.renderRecomp([]);return;}
 
     const FIELDS=[
       {key:'wt',lbl:'체중',unit:'kg',goal:IB_GOALS.wt,col:'#085041',dir:-1,wide:true,
@@ -181,55 +181,21 @@ const InBody={
     html+='</div>';
     box.innerHTML=html;
     if(note){const d=new Date(last.date+'T12:00:00');note.textContent='📅 최근 측정: '+d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'})+' · '+log.length+'회 누적';}
-    this._renderAdvice(log);
     this.renderRecomp(log);
     this.renderProjection();
   },
-  // ── 리컴프 누적 재해석 ────────────────────────────────────────────────────
-  // 기존 trendAdvice는 '최근 2주' 한 줄뿐이라, 체중이 제자리면 전체가 정체처럼 읽힌다.
-  // 첫 측정 대비 누적으로 근육/지방을 분리해 보여주면 '체중 변화 0'이 성과로 읽힌다.
+  // Use an explicit recent window; cache retention must not redefine a lifetime trend.
   renderRecomp(log){
     const el=document.getElementById('inbody-recomp');if(!el)return;
-    log=log||this._log||[];
-    if(log.length<2){el.innerHTML='';return;}
-    const a=log[0],b=log[log.length-1];
-    const days=Math.round((new Date(b.date+'T12:00:00')-new Date(a.date+'T12:00:00'))/864e5);
-    if(days<7){el.innerHTML='';return;}
-    const fm=e=>(e.wt!=null&&e.bf!=null)?e.wt*e.bf/100:null;
-    const dWt=b.wt-a.wt, dSm=(b.sm!=null&&a.sm!=null)?b.sm-a.sm:null;
-    const fmA=fm(a),fmB=fm(b), dFm=(fmA!=null&&fmB!=null)?fmB-fmA:null;
-    const dWaist=(b.waist!=null&&a.waist!=null)?b.waist-a.waist:null;
-    const sg=(v,d)=>(v>0?'+':(v<0?'−':''))+Math.abs(v).toFixed(d);
-    let chips='<span class="rc-chip">체중 <b>'+sg(dWt,1)+'kg</b></span>';
-    if(dSm!=null)chips+='<span class="rc-chip'+(dSm>0.1?' good':'')+'">근육 <b>'+sg(dSm,1)+'kg</b></span>';
-    if(dFm!=null)chips+='<span class="rc-chip'+(dFm<-0.1?' good':'')+'">지방 <b>'+sg(dFm,1)+'kg</b></span>';
-    if(dWaist!=null)chips+='<span class="rc-chip'+(dWaist<-0.5?' good':'')+'">허리 <b>'+sg(dWaist,1)+'cm</b></span>';
-    // 핵심 문구 — 체중계가 못 보여주는 변화량을 명시한다
-    let verdict;
-    if(dSm!=null&&dFm!=null&&dSm>0.2&&dFm<-0.3&&Math.abs(dWt)<0.8)
-      verdict='체중은 <b>'+sg(dWt,1)+'kg</b>로 거의 정지지만, 근육 '+sg(dSm,1)+'kg · 지방 '+sg(dFm,1)+'kg — <b>체중계가 못 보여주는 변화</b>입니다. 리컴프가 정상 작동 중입니다.';
-    else if(dSm!=null&&dFm!=null&&dSm>0.2&&dFm<-0.3)
-      verdict='근육과 지방이 <b>동시에 반대 방향</b>으로 움직였습니다 — 리컴프 성공 구간입니다.';
-    else if(dFm!=null&&dFm<-0.3&&(dSm==null||dSm<=0.2))
-      verdict='지방은 줄고 있으나 근육이 함께 늘지 않았습니다 — 단백질·수면·볼륨 중 어디가 부족한지 점검하세요.';
-    else if(dSm!=null&&dSm<-0.3)
-      verdict='근육이 감소했습니다 — 적자폭이 과하거나 회복(수면)이 부족한 신호입니다.';
-    else verdict='아직 방향을 판단할 만한 변화폭이 아닙니다.';
-    el.innerHTML='<div class="ib-recomp"><div class="rc-hd">🔄 누적 '+days+'일 · '+log.length+'회 측정</div>'
-      +'<div class="rc-chips">'+chips+'</div><div class="rc-verdict">'+verdict+'</div>'
-      +(log.length<4?'<div class="rc-note">측정 '+log.length+'회 기준 — 4회 이상 누적되면 신뢰도가 올라갑니다.</div>':'')
-      +'</div>';
-  },
-  trendAdvice(log){
-    if(!log||log.length<2)return null;const b=log[log.length-1];
-    const a=log.slice(0,-1).reverse().find(x=>(new Date(b.date+'T12:00:00')-new Date(x.date+'T12:00:00'))/864e5>=12);
-    if(!a)return null;const dw=(b.wt-a.wt).toFixed(1),sm=b.sm!=null&&a.sm!=null?(b.sm-a.sm).toFixed(1):null;
-    return {type:'recomp',msg:_esc(a.date)+' 대비 체중 '+dw+'kg'+(sm!==null?' · 골격근량 '+sm+'kg':'')+'. 수분·측정 조건의 영향이 있어 단독으로 근육 증감이나 정체를 확정하지 않습니다.'};
-  },
-  _renderAdvice(log){
-    const el=document.getElementById('inbody-advice');if(!el)return;
-    const a=this.trendAdvice(log||this._log||[]);
-    el.innerHTML=a?'<div class="ib-advice '+a.type+'">'+a.msg+'</div>':'';
+    const t=TrendModel.body(log||this._log||[],_todayKey());
+    if(!t){el.innerHTML='';return;}
+    const sign=v=>{const n=Math.round(v*10)/10;return (n>0?'+':'')+n.toFixed(1);};
+    const row=(label,a,b,unit,deltaUnit=unit)=>'<div class="body-trend-row"><dt>'+label+'</dt><dd>'+a.toFixed(1)+unit+' → <strong>'+b.toFixed(1)+unit+'</strong><small>'+sign(b-a)+deltaUnit+'</small></dd></div>';
+    let rows=row('체중',t.first.wt,t.last.wt,'kg')+row('체지방량 · 계산',t.fatStart,t.fat,'kg')+row('체지방률',t.first.bf,t.last.bf,'%','%p');
+    if(t.smStart!==null&&t.smLast!==null)rows+=row('골격근량 · 측정',t.smStart,t.smLast,'kg');
+    let pair='';
+    if(t.previous){const d=sign(t.fatDelta);pair='<p class="body-trend-pair">직전 '+_esc(t.previous.date)+' 대비 체지방량 '+d+'kg. '+(t.last.bf<t.previous.bf&&Math.abs(t.fatDelta)<0.1?'체지방률은 낮아졌지만 계산한 지방량 변화는 0.1kg 미만입니다.':'체지방률과 체중을 함께 계산한 값입니다.')+'</p>';}
+    el.innerHTML='<section class="ib-recomp"><div class="rc-hd">최근 측정 비교 · '+t.span+'일 / '+t.count+'회</div><p class="trend-note">'+_esc(t.first.date)+' → '+_esc(t.last.date)+' · 마지막 측정 기준 최근 28일 안의 기록</p><dl class="body-trend-rows">'+rows+'</dl>'+pair+'<p class="rc-note">체지방량 = 체중 × 체지방률 ÷ 100. 수분·식사·운동 시점에 따라 수치가 달라집니다. 골격근량 변화만으로 실제 근육 증감이나 식사 부족을 단정하지 않습니다.'+(t.count<3||t.span<14?' 관찰 기간이 짧아 같은 조건의 측정이 더 필요합니다.':'')+(t.age>14?' 마지막 측정은 '+t.age+'일 전입니다. 현재 상태를 확인하려면 새 측정이 필요합니다.':'')+'</p></section>';
   },
   renderProjection(){
     const box=document.getElementById('inbody-projection');if(!box)return;

@@ -43,7 +43,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
     assert.equal(await a.locator('.lib-card .gym-source a').count(),0);
     assert.equal(await a.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   }
-  const dip=await a.evaluate(()=>{const e=GymInventory.confirmed.find(e=>e.id==='seated-dip-press');return {type:ExLog.loadTypeOf(e.name),steps:ExerciseCoaching.get(e).steps.join(' '),variant:ExerciseCoaching.get(e).variant};});
+  const dip=await a.evaluate(()=>{const e=GymInventory.confirmed.find(e=>e.id==='seated-dip-press');return {type:ExLog.loadTypeOf(e.name),steps:ExerciseCoaching.get(e).returnCue,variant:ExerciseCoaching.get(e).variant};});
   assert.equal(dip.type,'normal');assert(dip.steps.includes('손잡이를 아래로'));assert(!/보조판|몸을 올립니다/.test(dip.steps));assert.deepEqual(dip.variant,[]);
   for(const id of ['db-calf','cable-rear','cable-overhead','tbar-available']){
     await a.evaluate(id=>LibApp.goto(GymInventory.accessories.find(e=>e.id===id).name),id);

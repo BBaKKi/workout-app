@@ -348,71 +348,34 @@ const PlanApp={
   },
   async renderTrends(){
     const box=document.getElementById('plan-trend');if(!box)return;
-    const data=await this._logData();const byEx={};
-    Object.keys(data).sort().forEach(dk=>{
-      (data[dk].exercises||[]).forEach(ex=>{
-        if(this._isTimed(ex.name))return;
-        const sets=(ex.sets||[]).filter(s=>s.weight>0&&_isWorkSet(s));if(!sets.length)return;
-        const e1=Math.max.apply(null,sets.map(s=>this._e1rm(s)));
-        const heavy=sets.reduce((a,s)=>s.weight>a.weight?s:a,sets[0]);
-        const cn=(typeof ExLog!=='undefined')?ExLog.canon(ex.name):ex.name; // 원래 종목명별로 독립 집계
-        (byEx[cn]=byEx[cn]||[]).push({dk,e1,w:heavy.weight,r:heavy.reps,sc:sets.length});
-      });
-    });
-    const names=Object.keys(byEx).filter(n=>byEx[n].length>=2);
-    if(!names.length){box.innerHTML='<div class="plan-vol-empty">추세를 보려면 같은 종목을 2회 이상 기록하세요. 점진 과부하가 쌓이면 여기서 추정 1RM 흐름과 정체를 확인할 수 있습니다.</div>';return;}
-    names.sort((a,b)=>byEx[b][byEx[b].length-1].dk.localeCompare(byEx[a][byEx[a].length-1].dk));
-    // 상대강도(×BW): 인바디 최신 체중 기준 — 커팅 중 절대중량 유지 = 상대강도 상승을 가시화
-    let bwKg=null;
-    try{if(typeof InBody!=='undefined'){if(!InBody._log)await InBody.load();if(InBody._log&&InBody._log.length)bwKg=InBody._log[InBody._log.length-1].wt||null;}}catch(_){}
-    const rowFor=(n)=>{
-      const arr=byEx[n];const last=arr[arr.length-1],prev=arr[arr.length-2];
-      const delta=last.e1-prev.e1;
-      const arrow=delta>0.3?'<span class="tr-up">▲</span>':(delta<-0.3?'<span class="tr-dn">▼</span>':'<span class="tr-eq">—</span>');
-      let plateau=false;
-      if(arr.length>=3){const a=arr.slice(-3).map(x=>x.e1);plateau=(a[2]<=a[1]+0.3&&a[1]<=a[0]+0.3);}
-      // e1RM 마일스톤 — 복합 종목만: 역대 최고 e1RM 기준 다음 10kg 단위까지 진행 바 (커팅 중에도 반복수로 움직이는 지표)
-      let ms='';
-      if(typeof ExLog!=='undefined'&&ExLog.isCompound(n)){
-        const best=Math.max.apply(null,arr.map(x=>x.e1));
-        const next=Math.floor(best/10)*10+10;
-        const p=Math.round((best-(next-10))/10*100);
-        ms='<div class="tr-ms"><span class="tr-ms-txt">🏁 <b>'+next+'kg</b>까지 '+(next-best).toFixed(1)+'kg</span><div class="tr-ms-bar"><div class="tr-ms-fill" style="width:'+p+'%"></div></div></div>';
+    const data=await this._logData(),byEx=Object.create(null),today=_todayKey();
+    for(const date of Object.keys(data).sort()){
+      if(date>today)continue;
+      for(const ex of data[date].exercises||[]){
+        const sets=TrendModel.workSets(ex.sets);if(!sets.length)continue;
+        const name=ExLog.canon(ex.name),rows=byEx[name]||=[];
+        const existing=rows.find(r=>r.date===date);
+        if(existing)existing.sets.push(...sets);else rows.push({date,sets});
       }
-      return '<div class="tr-row"><div class="tr-top"><span class="tr-nm" onclick="ExLog.showHistory(\''+n.replace(/'/g,"\\'")+'\')" title="탭하면 전체 기록">'+n+'</span>'+(plateau?'<span class="tr-plat">정체</span><button class="tr-alt-btn" onclick="PlanApp.toggleAlt(this,\''+n.replace(/'/g,"\\'")+'\')">🔄 대체 종목</button>':'')+'</div><div class="tr-mid">'+this._spark(arr.map(x=>x.e1))+'<div class="tr-stat"><span class="tr-e1">e1RM '+last.e1.toFixed(1)+'kg</span>'+((bwKg&&typeof ExLog!=='undefined'&&ExLog.isCompound(n))?' <span class="tr-bw">'+(last.e1/bwKg).toFixed(2)+'×BW</span>':'')+' '+arrow+' <span class="tr-set">최근 '+last.w+'×'+last.r+'</span></div></div>'+ms+(plateau?'<div class="tr-alt"></div>':'')+'</div>';
+    }
+    const names=Object.keys(byEx);
+    for(const name of names){const old=window.RecordCache?.last(name,byEx[name][0].date);if(old)byEx[name].unshift(old);}
+    if(!names.length){box.innerHTML='<p class="plan-vol-empty">본세트를 기록하면 같은 종목의 직전 수행과 비교합니다.</p>';return;}
+    names.sort((a,b)=>byEx[b].at(-1).date.localeCompare(byEx[a].at(-1).date));
+    const catOf=n=>{const mu=this.muscleOf(n),bucket=_effBucket(n,mu?.p);for(const c in RECO_CAT)if(RECO_CAT[c].includes(bucket))return c;return 'etc';};
+    const labels={push:'푸시',pull:'풀',legs:'하체',etc:'기타'},groups={push:[],pull:[],legs:[],etc:[]};names.forEach(n=>groups[catOf(n)].push(n));
+    const session=(name,r,label)=>r?'<div class="trend-session"><dt>'+label+' · '+_esc(r.date.slice(5))+'</dt><dd>'+r.sets.map(st=>_esc((ExLog.loadTypeOf(name)==='assist'?'보조 ':ExLog.loadTypeOf(name)==='bw'?'추가 ':'')+RecordModel.formatSet(name,st))).join(' / ')+'</dd></div>':'';
+    const rowFor=name=>{
+      const rows=byEx[name],last=rows.at(-1),previous=rows.at(-2),c=TrendModel.compare(previous,last);
+      const short=GymInventory.find(name)?.displayName||name;
+      return '<article class="tr-row"><div class="tr-top"><button type="button" class="trend-name" data-history="'+_esc(name)+'">'+_esc(short)+'</button><span class="trend-state '+c.tone+'">'+c.label+'</span></div><dl class="trend-sessions">'+session(name,previous,'직전')+session(name,last,'최근')+'</dl><p class="trend-next">'+_esc(c.note)+'</p></article>';
     };
-    // ── 가독성: 부위 그룹핑 + 그룹당 기본 5개(전체 펼치기) — 최근 기록순 단일 긴 목록이던 것을 푸시/풀/하체로 구획 ──
-    const catLbl={push:'🔴 푸시',pull:'🔵 풀',legs:'🟢 하체',etc:'⚪ 기타'};
-    const catOf=n=>{const mu=this.muscleOf(n);const b=_effBucket(n,mu&&mu.p);for(const c in RECO_CAT){if(RECO_CAT[c].includes(b))return c;}return 'etc';};
-    const groups={push:[],pull:[],legs:[],etc:[]};
-    names.forEach(n=>groups[catOf(n)].push(n));
-    const LIMIT=this._trAll?999:5;
-    let rowsHtml='';let hidden=0;
-    ['push','pull','legs','etc'].forEach(c=>{
-      const g=groups[c];if(!g.length)return;
-      rowsHtml+='<div class="tr-grp">'+catLbl[c]+' <span class="tr-grp-n">'+g.length+'</span></div>'+g.slice(0,LIMIT).map(rowFor).join('');
-      if(g.length>LIMIT){hidden+=g.length-LIMIT;rowsHtml+='<div class="tr-more-note">… '+(g.length-LIMIT)+'개 숨김</div>';}
-    });
-    if(hidden)rowsHtml+='<button class="tr-more-btn" onclick="PlanApp._trAll=true;PlanApp.renderTrends()">전체 펼치기 ('+hidden+'개 더)</button>';
-    else if(this._trAll)rowsHtml+='<button class="tr-more-btn" onclick="PlanApp._trAll=false;PlanApp.renderTrends()">접기</button>';
-    let sleepBanner='';
-    try{
-      const sb=(typeof ExLog!=='undefined'&&ExLog.sleepBottleneck)?ExLog.sleepBottleneck():null;
-      if(sb)sleepBanner='<div class="tr-sleep">🛏 <b>회복 병목: 수면</b> — 2주 평균 <b>'+sb.avg.toFixed(1)+'h</b> (이번 주 '+sb.w0.toFixed(1)+'h · 전주 '+sb.w1.toFixed(1)+'h). '
-        +'수면 부족은 회복 용량 자체를 낮춰 훈련량을 줄여도 원인이 남습니다. 지금은 증량 페이스보다 <b>수면 복구가 상한</b>입니다.</div>';
-    }catch(_){}
-    box.innerHTML=sleepBanner+rowsHtml;
-  },
-  toggleAlt(btn,name){
-    const row=btn.closest('.tr-row');const panel=row&&row.querySelector('.tr-alt');if(!panel)return;
-    if(panel.classList.contains('open')){panel.classList.remove('open');panel.innerHTML='';return;}
-    const mu=this.muscleOf(name);const bucket=mu?mu.p:null;
-    const lib=(window.EXERCISE_LIBRARY||[]).filter(e=>!e.archived);
-    const self=this;
-    const alts=lib.filter(function(e){const m=self.muscleOf(e.name);return m&&m.p===bucket&&e.name!==name;}).slice(0,6);
-    if(!alts.length){panel.innerHTML='<div class="tr-alt-empty">같은 부위 대체 종목이 도감에 없습니다.</div>';}
-    else{panel.innerHTML='<div class="tr-alt-hd">같은 부위('+(bucket||'')+') 대체 종목 — 반복 정체 시 교체 고려</div>'+alts.map(function(e){return '<div class="tr-alt-row"><span class="tr-alt-nm">'+e.name+'</span><button class="tr-alt-add" onclick="ExLog.addExternal(\''+e.name.replace(/'/g,"\\'")+'\');this.textContent=\'✓ 추가됨\';this.disabled=true">＋추가</button></div>';}).join('');}
-    panel.classList.add('open');
+    const limit=this._trAll?Infinity:5;let html='<p class="trend-note">같은 종목끼리 비교합니다. 세팅·가동범위·휴식이 같았는지도 확인하세요. 최근 한두 번의 결과로 정체를 단정하거나 종목 교체를 권하지 않습니다.</p>',hidden=0;
+    for(const cat of Object.keys(groups)){const group=groups[cat];if(!group.length)continue;html+='<div class="tr-grp">'+labels[cat]+' <span class="tr-grp-n">'+group.length+'</span></div>'+group.slice(0,limit).map(rowFor).join('');hidden+=Math.max(0,group.length-limit);}
+    if(hidden||this._trAll)html+='<button type="button" class="tr-more-btn" data-trend-more>'+ (this._trAll?'접기':'전체 펼치기 ('+hidden+'개 더)')+'</button>';
+    box.innerHTML=html;
+    box.querySelectorAll('[data-history]').forEach(btn=>btn.onclick=()=>ExLog.showHistory(btn.dataset.history));
+    const more=box.querySelector('[data-trend-more]');if(more)more.onclick=()=>{this._trAll=!this._trAll;this.renderTrends();};
   },
   _weekKeys(offset){
     const now=new Date();const dow=now.getDay();
