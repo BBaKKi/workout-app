@@ -12,7 +12,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.goto('http://127.0.0.1:'+server.address().port);await p.waitForFunction(()=>InterfaceTools.ready);
   const unchanged=await p.evaluate(()=>JSON.stringify({plan:TRAINING_PLAN,custom:ExLog.plan,records:ExLog.data}));
   const guides=await p.evaluate(()=>EXERCISE_LIBRARY.map(e=>({id:e.id,execution:e.execution,html:ExerciseCoaching.html(e),cat:e.cat,groups:e.libraryGroups})));
-  assert.equal(guides.length,87);assert.equal(new Set(guides.map(e=>e.id)).size,87);
+  assert.equal(guides.length,88);assert.equal(new Set(guides.map(e=>e.id)).size,88);
   for(const e of guides){
    assert.deepEqual(Object.keys(e.execution),['setup','grip','brace','drive','feel','watch']);
    for(const [key,text]of Object.entries(e.execution)){assert(text.length>=15&&text.length<=130,e.id+' '+key+' must stay concise');assert(e.html.includes('data-cue="'+key+'"'));}
@@ -20,7 +20,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
    assert(!/coach-stop|coach-safety|날카로운 통증·저림/.test(e.html),e.id+' repeats generic advice');
    assert(e.html.indexOf('coach-action')<e.html.indexOf('<details class="exercise-guide"'));
   }
-  await p.locator('.lbl-l').click();await p.waitForFunction(()=>document.querySelectorAll('.lib-card').length===87);
+  await p.locator('.lbl-l').click();await p.waitForFunction(()=>document.querySelectorAll('.lib-card').length===88);
   for(const cat of ['push','pull','legs','core','small']){
    await p.locator('.lib-chip[data-c='+cat+']').click();
    const expected=guides.filter(e=>e.cat===cat||e.groups.includes(cat));
@@ -54,7 +54,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   // Both workout cards and library cards use the same six-cue renderer.
   await p.locator('.lbl-w').click();assert.equal(await p.locator('.af-current .coach-action-row').count(),6);
   await p.locator('.lbl-l').click();await p.clock.runFor(100);
-  for(const id of ['lexco-masterpro-curl','cybex-arm-curl','cybex-triceps-arm-extension','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine','standing-lateral-raise-machine']){
+  for(const id of ['lexco-masterpro-curl','cybex-arm-curl','cybex-triceps-arm-extension','newtech-cable-row','hammer-front-lat','cybex-hack','newtech-assisted-dip','db-lateral','pec-deck-fly','rear-delt-fly-machine','standing-lateral-raise-machine','gymleco-incline-fly']){
    await p.evaluate(id=>LibApp.goto(EXERCISE_LIBRARY.find(e=>e.id===id).name),id);
    assert.equal(await p.locator('.lib-card .coach-action-row:visible').count(),6);
    await p.locator('.lib-card .exercise-guide>summary').click();
@@ -71,6 +71,6 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const escaped=await p.evaluate(()=>{const e=structuredClone(EXERCISE_LIBRARY.find(e=>e.id==='cybex-arm-curl'));e.execution.grip='<img src=x onerror=alert(1)>';e.executionNotice.text='<script>bad()</script>';e.coaching.corrections=[{sign:'<img src=x>',fix:'<script>bad()</script>'}];return ExerciseCoaching.html(e);});
   assert(!escaped.includes('<img'));assert(!escaped.includes('<script>'));assert(escaped.includes('&lt;img'));
   assert.deepEqual(errors,[]);
-  console.log('PASS: 87 practical six-cue guides, specific corrections, collapsed references, 19 overlapping small-muscle entries, Cybex label warning, unchanged records/plans, 320–1200px and escaped content');
+  console.log('PASS: 88 practical six-cue guides, specific corrections, collapsed references, 19 overlapping small-muscle entries, Cybex label warning, unchanged records/plans, 320–1200px and escaped content');
  }finally{await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
