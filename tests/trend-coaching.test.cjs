@@ -37,5 +37,5 @@ try{const page=await browser.newPage({viewport:{width:390,height:844},serviceWor
  await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/tmp/trend-coaching-guide.png',fullPage:true});
  await page.locator('.lbl-p').click();await page.locator('#plan-trend').scrollIntoViewIfNeeded();await page.screenshot({path:'/tmp/trend-coaching-analysis.png'});
  await page.evaluate(async()=>{InBody._log=[];await InBody.render();});assert.equal(await page.locator('#inbody-recomp').innerText(),'');
- assert.deepEqual(errors,[]);console.log('PASS: comparable work sets, changed load/count/unit/assistance and gaps, recent body composition arithmetic, future exclusion, 87 non-repeated guides, unchanged records and mobile layout');
+ assert.deepEqual(errors,[]);console.log('PASS: comparable work sets, changed load/count/unit/assistance and gaps, recent body composition arithmetic, future exclusion, 88 non-repeated guides, unchanged records and mobile layout');
 }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);server.close();process.exitCode=1;});

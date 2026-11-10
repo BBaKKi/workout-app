@@ -29,7 +29,7 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   await p.locator('.library-filter-panel>summary').click();await p.locator('#library-equipment').selectOption('Newtech');
   assert.deepEqual(await p.evaluate(()=>LibApp._items.map(e=>e.id)),['newtech-cable-row']);
   await p.locator('#library-type').selectOption('smith');assert.equal(await p.locator('.lib-card').count(),0);
-  await p.locator('.lib-empty button').click();assert.equal(await p.locator('.lib-card').count(),87);
+  await p.locator('.lib-empty button').click();assert.equal(await p.locator('.lib-card').count(),88);
   assert.deepEqual(await p.evaluate(()=>[InterfaceTools.equipmentType,InterfaceTools.equipment,LibApp.cat,LibApp.q]),['all','all','all','']);
   const names=await p.evaluate(()=>['smith-bench','barbell-bench','hammer-horizontal'].map(id=>EXERCISE_LIBRARY.find(e=>e.id===id).name));
   for(const id of ['cable-pallof','barbell-deadlift','smith-split-squat','smith-bench']){
