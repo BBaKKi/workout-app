@@ -11,7 +11,7 @@
   'Pull B':[['hammer-iso-high-row',3,8,12],['gym80-pullover',2,10,15],['cable-rear',3,12,20],['db-hammer',2,10,15]],
   'Legs B':[['cybex-45-legpress',3,10,15],['lexco-masterpro-curl',3,10,15],['booty-hip-thrust',2,10,15],['forward-leg-extension',3,10,15],['cable-crunch',1,10,15]]
  };
- const revisionDate='2026-11-02';
+ const firstRevisionDate='2026-11-02',revisionDate='2026-11-17';
  // Replacements apply only to new templates from this date. Rows are [id, sets, min, max].
  const changes={
   'Legs A':{'cable-crunch':['combo-a-abduction',2,15,20]},
@@ -22,15 +22,27 @@
   const [id,...dose]=(revised&&changes[day]?.[row[0]])||row;
   return [station(id),...dose];
  })]));
- const priorItems=buildItems(false),items=buildItems(true);
- const isPrior=date=>date&&date<revisionDate;
- const itemsAt=date=>isPrior(date)?priorItems:items;
- const focus={'Push A':'어깨 움직임 · 가슴·측면 어깨','Pull A':'가슴 지지 로우 · 후면 어깨','Legs A':'허벅지 앞·뒤 · 시티드 컬','Push B':'어깨 움직임 · 프레스','Pull B':'등 · 후면 어깨','Legs B':'허벅지·둔근 · 그립 부담 분산'};
+ const balanceChanges={
+  'Push B':{'paramount-triceps':['cable-overhead',2,10,15]},
+  'Legs B':{'forward-leg-extension':['booty-loaded-back-extension',2,10,15]}
+ };
+ const priorItems=buildItems(false),novemberItems=buildItems(true);
+ const items=Object.fromEntries(cycle.map(day=>[day,novemberItems[day].map(row=>{
+  const replacement=Object.entries(balanceChanges[day]||{}).find(([old])=>station(old)===row[0])?.[1];
+  return replacement?[station(replacement[0]),...replacement.slice(1)]:[...row];
+ })]));
+ // Hinge before isolated knee flexion; this only orders new templates.
+ items['Legs B']=['cybex-45-legpress','booty-loaded-back-extension','lexco-masterpro-curl','booty-hip-thrust','cable-crunch'].map(id=>items['Legs B'].find(row=>row[0]===station(id)));
+ const isPrior=date=>date&&date<firstRevisionDate;
+ const isBalanced=date=>!date||date>=revisionDate;
+ const itemsAt=date=>isPrior(date)?priorItems:isBalanced(date)?items:novemberItems;
+ const focus={'Push A':'가슴·측면 어깨 · 푸시다운','Pull A':'수직 당기기 · 가슴 지지 로우','Legs A':'앞허벅지 · 시티드 컬 · 외전','Push B':'어깨·가슴 · 오버헤드 삼두','Pull B':'등 · 후면 어깨','Legs B':'레그프레스 · 힌지 · 햄스트링·둔근'};
  const lib=window.EXERCISE_LIBRARY||[];
  const canonical=n=>{const e=lib.find(e=>e.name===n)||lib.find(e=>(e.aka||[]).includes(n));return e?e.name:n;};
  // The declared day sequence is the training order; library priority is only explanatory.
  const makeDefaults=rows=>Object.fromEntries(cycle.map(day=>[day,Object.fromEntries(rows[day].map(x=>[x[0],{sets:x[1],min:x[2],max:x[3]}]))]));
- const defaults=makeDefaults(items),priorDefaults=makeDefaults(priorItems);
+ const defaults=makeDefaults(items),novemberDefaults=makeDefaults(novemberItems),priorDefaults=makeDefaults(priorItems);
+ const defaultsAt=date=>isPrior(date)?priorDefaults:isBalanced(date)?defaults:novemberDefaults;
  const config={start:'2026-10-12',end:'2026-12-31',weightMin:83.5,weightMax:84.5};
  try{const c=JSON.parse(localStorage.getItem('training_config_v1')||'null');if(c&&/^\d{4}-\d{2}-\d{2}$/.test(c.start)&&/^\d{4}-\d{2}-\d{2}$/.test(c.end)&&c.end>c.start&&Number.isFinite(c.weightMin)&&Number.isFinite(c.weightMax)&&c.weightMin>=20&&c.weightMax<=300&&c.weightMax>c.weightMin)Object.assign(config,c);}catch(_){}
  // Old weight bounds remain transport-compatible but no longer drive goals or pass/fail.
@@ -41,27 +53,41 @@
   'Legs B':{[station('booty-hip-thrust')]:station('barbell-rdl')}
  };
  const revisionSlots=Object.fromEntries(Object.entries(changes).map(([day,rows])=>[day,Object.fromEntries(Object.entries(rows).map(([old,[next]])=>[station(next),station(old)]))]));
- const P=window.TRAINING_PLAN={version:'2026-11-02.allday',revisionDate,config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
+ const balanceSlots=Object.fromEntries(Object.entries(balanceChanges).map(([day,rows])=>[day,Object.fromEntries(Object.entries(rows).map(([old,[next]])=>[station(next),station(old)]))]));
+ const P=window.TRAINING_PLAN={version:'2026-11-17.allday',revisionDate,config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
   storageKey:'plan_v3',start:config.start,end:config.end,
   exercises:Object.fromEntries(cycle.map(d=>[d,items[d].map(x=>x[0])])),
   exercisesFor(day,date){return date<equipmentDate?[]:(itemsAt(date)[day]||[]).map(x=>x[0]);},
-  defaultsFor(day,date){return (isPrior(date)?priorDefaults:defaults)[day];},
+  defaultsFor(day,date){return defaultsAt(date)[day];},
   cardio:{sessions:3,min:20,max:25},
   preparation(day){return /^Legs/.test(day)?[
    ['준비 세트','첫 하체 종목은 가벼운 중량부터 필요한 만큼 올립니다. 준비운동은 기록하지 않고, 실제 본세트부터 입력하세요.'],
    ['시티드 레그컬','무릎 옆을 회전축에 맞추고 허벅지 패드·등받이로 몸을 고정합니다. 발목은 편안한 각도를 유지하고, 종아리가 먼저 지치면 중량과 롤러 위치를 다시 맞추세요.'],
-   ['그립이 먼저 풀리면','기본 Legs B는 시티드 컬과 힙 쓰러스트로 허벅지 뒤·둔근을 나누어 훈련합니다. 힙 쓰러스트는 RDL과 같은 햄스트링 운동이 아닙니다. RDL을 선택했다면 스트랩 체결·유격을 먼저 점검하고 그립 한계로 증량을 강행하지 마세요.']
-  ]:[
+   ['그립이 먼저 풀리면','로디드 백 익스텐션도 손잡이를 잡아야 합니다. 손이 먼저 풀리면 중량·손잡이·스트랩 체결을 확인하고, 하체가 한계에 도달한 것으로 판단해 증량하지 않습니다.']
+  ].concat(day==='Legs B'?[
+   ['뒤쪽 하체의 역할 나누기','백 익스텐션은 고관절을 접었다 펴기, 시티드 컬은 무릎 굽히기, 힙 쓰러스트는 둔근 중심 고관절 펴기입니다. 서로의 기록과 중량을 합치지 않습니다.'],
+   ['백 익스텐션 · 몸통과 골반','패드가 골반 접힘선을 막지 않게 맞춥니다. 무릎 각도와 등의 모양을 유지하며 고관절에서 접고, 몸통과 다리가 이어지는 지점까지만 올라옵니다. 허리를 뒤로 젖히거나 팔꿈치를 굽혀 손잡이를 당기지 않습니다.']
+  ]:[]):[
    ['주 2–3회 · 약 5분','상체 운동 전 아래 두 동작을 맨손이나 아주 가볍게 연습합니다. 4회 이상 더 할 여유를 남기고 본운동 전에 지치지 않게 하세요. 본세트와 별도로 진행하는 준비동작입니다.'],
    ['전완 월슬라이드 · 2×8–12','전완을 어깨너비로 벽에 대고 가볍게 밀며 위로 미끄러뜨립니다. 갈비뼈·허리가 들리지 않는 높이까지만 올리세요. 날개뼈가 갈비뼈를 따라 위로 돌게 두고 뒤·아래로 묶지 않습니다.'],
    ['가슴 지지 Y 레이즈 · 2×10–12','인클라인 벤치에 가슴을 대고 엄지를 위로 향한 채 팔을 Y자로 뻗습니다. 가슴 지지를 유지한 범위에서 작게 들고, 턱·허리가 들리면 팔 높이나 부하를 낮추세요.'],
    ['본운동','첫 프레스·로우는 별도 준비 세트로 중량을 올립니다. 가슴 지지 로우는 팔을 보낼 때 견갑골도 자연스럽게 움직이고, 머리 위로 미는 종목은 팔과 함께 견갑골이 위로 회전하게 둡니다.']
-  ];},
+  ].concat(day==='Push B'?[
+   ['오버헤드 삼두 · 머신 대안','위팔을 머리 옆에 두고 갈비뼈·골반 정렬을 유지합니다. 가벼운 부하에서도 허리를 젖혀야 팔이 올라가면 종목 교체에서 Paramount 또는 Cybex 트라이셉스 암 익스텐션을 선택하세요. 머신 기록의 kg을 케이블에 그대로 적용하지 않습니다.'],
+   ['가슴 플라이 · 한 자리 선택','펙덱 자리는 Gymleco 인클라인 플라이나 케이블 플라이로 교체할 수 있습니다. 플라이를 추가하기보다 같은 자리를 바꾸고, 새 기구의 중량은 따로 정합니다.']
+  ]:[]);},
   cardioHint(day){return (/^Legs/.test(day)?'하체 날은 웨이트 우선. 추가 유산소는 필수가 아니며 가벼운 걷기 정도로 마칩니다. ':'상체 운동 후 주 '+this.cardio.sessions+'회, 회당 '+this.cardio.min+'–'+this.cardio.max+'분부터 시작하세요. ')+
    '문장으로 대화 가능한 강도. 걷기는 경사 0–3%부터 조절하고, 종아리가 먼저 지치면 경사를 낮추거나 낮은 저항의 자전거로 바꾸세요.';},
-  previousSlot(day,name,date){return (!isPrior(date)&&revisionSlots[day]?.[name])||previousSlots[day]?.[name];},
-  replacedDose(day,name,date){return !isPrior(date)&&revisionSlots[day]?.[name]?priorDefaults[day][revisionSlots[day][name]]:null;},
-  currentSlot(day,name){return Object.entries({...previousSlots[day],...revisionSlots[day]}).find(([,old])=>old===name)?.[0]||name;},
+  previousSlot(day,name,date){return (isBalanced(date)&&balanceSlots[day]?.[name])||(!isPrior(date)&&revisionSlots[day]?.[name])||previousSlots[day]?.[name];},
+  replacedDose(day,name,date){
+   if(isBalanced(date)&&balanceSlots[day]?.[name])return novemberDefaults[day][balanceSlots[day][name]];
+   return !isPrior(date)&&revisionSlots[day]?.[name]?priorDefaults[day][revisionSlots[day][name]]:null;
+  },
+  currentSlot(day,name){
+   // Overhead -> machine -> overhead spans two revisions; a current slot must never map backwards.
+   if(items[day]?.some(row=>row[0]===name))return name;
+   return Object.entries({...previousSlots[day],...revisionSlots[day],...balanceSlots[day]}).find(([next,old])=>old===name&&items[day]?.some(row=>row[0]===next))?.[0]||name;
+  },
   prescription(name,day,date){if(date<equipmentDate)return null;const cn=canonical(name);
    const rows=itemsAt(date);
    const all=Object.values(rows).flat(), row=(rows[day]||[]).find(x=>canonical(x[0])===cn)||all.find(x=>canonical(x[0])===cn);
