@@ -14,9 +14,10 @@ const server=http.createServer((q,r)=>{const f=path.join(root,q.url==='/'?'index
   const base=await p.evaluate(async()=>{
    await InBody.render();PlanApp.renderPhase();
    const rows=date=>Object.fromEntries(TRAINING_PLAN.cycle.map(d=>[d,AppFeatures.templateRoutine(d,date).map(r=>({id:GymInventory.find(r.name).id,sets:r.sets}))]));
-   return {early:rows('2026-10-19'),today:rows('2026-10-30'),before:rows('2026-11-01'),revised:rows('2026-11-02'),balanced:rows('2026-11-17'),late:rows('2026-12-30'),goals:IB_GOALS,end:TRAINING_PLAN.end,pass:GOAL_MODEL.judge(82,19.9,38.1),fail:GOAL_MODEL.judge(84,20.1,37.9),missing:GOAL_MODEL.judge(84,null,null),removed:[TRAINING_PLAN.phase,TRAINING_PLAN.schedule,ExLog.startDeload,ExLog.deloadDay,ExLog.startBlock,PlanApp.renderBlock].every(x=>x===undefined)};
+   return {early:rows('2026-10-19'),today:rows('2026-10-30'),before:rows('2026-11-01'),revised:rows('2026-11-02'),balanced:rows('2026-11-17'),adduction:rows('2026-11-18'),late:rows('2026-12-30'),goals:IB_GOALS,end:TRAINING_PLAN.end,pass:GOAL_MODEL.judge(82,19.9,38.1),fail:GOAL_MODEL.judge(84,20.1,37.9),missing:GOAL_MODEL.judge(84,null,null),removed:[TRAINING_PLAN.phase,TRAINING_PLAN.schedule,ExLog.startDeload,ExLog.deloadDay,ExLog.startBlock,PlanApp.renderBlock].every(x=>x===undefined)};
   });
-  assert.deepEqual(base.early,base.today);assert.deepEqual(base.before,base.today);assert.deepEqual(base.late,base.balanced);assert(base.removed);
+  assert.deepEqual(base.early,base.today);assert.deepEqual(base.before,base.today);assert.deepEqual(base.late,base.adduction);
+  assert.deepEqual(base.adduction['Legs B'].at(-2),{id:'combo-a-adduction',sets:2});assert(base.removed);
   assert.deepEqual(base.goals,{wt:84,sm:38,bf:20,ab:0.9});assert.equal(base.end,'2026-12-31');
   assert(base.pass.cond.every(x=>x.ok));assert(base.fail.cond.every(x=>!x.ok));assert(base.missing.cond.every(x=>!x.ok));assert.equal(base.pass.cond.length,2);
   assert.deepEqual(Object.values(base.today).map(rows=>rows.reduce((n,r)=>n+r.sets,0)),[10,11,10,11,10,12]);
