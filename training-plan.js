@@ -11,7 +11,7 @@
   'Pull B':[['hammer-iso-high-row',3,8,12],['gym80-pullover',2,10,15],['cable-rear',3,12,20],['db-hammer',2,10,15]],
   'Legs B':[['cybex-45-legpress',3,10,15],['lexco-masterpro-curl',3,10,15],['booty-hip-thrust',2,10,15],['forward-leg-extension',3,10,15],['cable-crunch',1,10,15]]
  };
- const firstRevisionDate='2026-11-02',revisionDate='2026-11-17';
+ const firstRevisionDate='2026-11-02',balanceDate='2026-11-17',revisionDate='2026-11-18';
  // Replacements apply only to new templates from this date. Rows are [id, sets, min, max].
  const changes={
   'Legs A':{'cable-crunch':['combo-a-abduction',2,15,20]},
@@ -27,22 +27,27 @@
   'Legs B':{'forward-leg-extension':['booty-loaded-back-extension',2,10,15]}
  };
  const priorItems=buildItems(false),novemberItems=buildItems(true);
- const items=Object.fromEntries(cycle.map(day=>[day,novemberItems[day].map(row=>{
+ const balancedItems=Object.fromEntries(cycle.map(day=>[day,novemberItems[day].map(row=>{
   const replacement=Object.entries(balanceChanges[day]||{}).find(([old])=>station(old)===row[0])?.[1];
   return replacement?[station(replacement[0]),...replacement.slice(1)]:[...row];
  })]));
  // Hinge before isolated knee flexion; this only orders new templates.
- items['Legs B']=['cybex-45-legpress','booty-loaded-back-extension','lexco-masterpro-curl','booty-hip-thrust','cable-crunch'].map(id=>items['Legs B'].find(row=>row[0]===station(id)));
+ balancedItems['Legs B']=['cybex-45-legpress','booty-loaded-back-extension','lexco-masterpro-curl','booty-hip-thrust','cable-crunch'].map(id=>balancedItems['Legs B'].find(row=>row[0]===station(id)));
+ // Use the catalog name so previously added adduction sets retain their identity.
+ const items={...balancedItems,'Legs B':balancedItems['Legs B'].flatMap(row=>
+  row[0]===station('booty-hip-thrust')?[row,[station('combo-a-adduction'),2,12,15]]:[row])};
  const isPrior=date=>date&&date<firstRevisionDate;
- const isBalanced=date=>!date||date>=revisionDate;
- const itemsAt=date=>isPrior(date)?priorItems:isBalanced(date)?items:novemberItems;
+ const isBalanced=date=>!date||date>=balanceDate;
  const focus={'Push A':'가슴·측면 어깨 · 푸시다운','Pull A':'수직 당기기 · 가슴 지지 로우','Legs A':'앞허벅지 · 시티드 컬 · 외전','Push B':'어깨·가슴 · 오버헤드 삼두','Pull B':'등 · 후면 어깨','Legs B':'레그프레스 · 힌지 · 햄스트링·둔근'};
  const lib=window.EXERCISE_LIBRARY||[];
  const canonical=n=>{const e=lib.find(e=>e.name===n)||lib.find(e=>(e.aka||[]).includes(n));return e?e.name:n;};
  // The declared day sequence is the training order; library priority is only explanatory.
  const makeDefaults=rows=>Object.fromEntries(cycle.map(day=>[day,Object.fromEntries(rows[day].map(x=>[x[0],{sets:x[1],min:x[2],max:x[3]}]))]));
- const defaults=makeDefaults(items),novemberDefaults=makeDefaults(novemberItems),priorDefaults=makeDefaults(priorItems);
- const defaultsAt=date=>isPrior(date)?priorDefaults:isBalanced(date)?defaults:novemberDefaults;
+ const revisions=[[revisionDate,items],[balanceDate,balancedItems],[firstRevisionDate,novemberItems],['',priorItems]]
+  .map(([start,rows])=>({start,rows,defaults:makeDefaults(rows)}));
+ const revisionAt=date=>!date?revisions[0]:revisions.find(r=>date>=r.start);
+ const itemsAt=date=>revisionAt(date).rows,defaultsAt=date=>revisionAt(date).defaults;
+ const defaults=defaultsAt(),novemberDefaults=defaultsAt(firstRevisionDate),priorDefaults=defaultsAt(equipmentDate);
  const config={start:'2026-10-12',end:'2026-12-31',weightMin:83.5,weightMax:84.5};
  try{const c=JSON.parse(localStorage.getItem('training_config_v1')||'null');if(c&&/^\d{4}-\d{2}-\d{2}$/.test(c.start)&&/^\d{4}-\d{2}-\d{2}$/.test(c.end)&&c.end>c.start&&Number.isFinite(c.weightMin)&&Number.isFinite(c.weightMax)&&c.weightMin>=20&&c.weightMax<=300&&c.weightMax>c.weightMin)Object.assign(config,c);}catch(_){}
  // Old weight bounds remain transport-compatible but no longer drive goals or pass/fail.
@@ -54,7 +59,7 @@
  };
  const revisionSlots=Object.fromEntries(Object.entries(changes).map(([day,rows])=>[day,Object.fromEntries(Object.entries(rows).map(([old,[next]])=>[station(next),station(old)]))]));
  const balanceSlots=Object.fromEntries(Object.entries(balanceChanges).map(([day,rows])=>[day,Object.fromEntries(Object.entries(rows).map(([old,[next]])=>[station(next),station(old)]))]));
- const P=window.TRAINING_PLAN={version:'2026-11-17.allday',revisionDate,config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
+ const P=window.TRAINING_PLAN={version:'2026-11-18.allday',revisionDate,config,goals:{wt:84,sm:38,bf:20,ab:0.90},mode:'current',items,defaults,focus,equipmentDate,cycle,
   storageKey:'plan_v3',start:config.start,end:config.end,
   exercises:Object.fromEntries(cycle.map(d=>[d,items[d].map(x=>x[0])])),
   exercisesFor(day,date){return date<equipmentDate?[]:(itemsAt(date)[day]||[]).map(x=>x[0]);},

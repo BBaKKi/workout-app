@@ -15,18 +15,18 @@ function fixture(){
  const rows=(day,date)=>context.AppFeatures.templateRoutine(day,date);
  return {...context,name,rows};
 }
-test('historical templates remain stable across both revision boundaries',()=>{
+test('historical templates remain stable across revision boundaries',()=>{
  const c=fixture(),all=date=>plain(c.TRAINING_PLAN.cycle.map(day=>c.rows(day,date).map(r=>[r.name,r.sets,r.min,r.max])));
  assert.deepEqual(all('2026-10-19'),all('2026-11-01'));
  assert.deepEqual(all('2026-11-02'),all('2026-11-16'));
- assert.deepEqual(all('2026-11-17'),all('2026-12-31'));
+ assert.deepEqual(all('2026-11-18'),all('2026-12-31'));
  assert.deepEqual(all('2026-10-17'),[[],[],[],[],[],[]]);
  assert.equal(c.rows('Push B','2026-11-01').at(-1).name,c.name('cable-overhead'));
  assert.equal(c.rows('Push B','2026-11-16').at(-1).name,c.name('paramount-triceps'));
  assert.equal(c.rows('Push B','2026-11-17').at(-1).name,c.name('cable-overhead'));
  assert(c.rows('Legs B','2026-11-16').some(r=>r.name===c.name('forward-leg-extension')));
 });
-test('new cycle has 64 sets with hinge before knee flexion, while other sessions stay stable',()=>{
+test('November 17 cycle has 64 sets with hinge before knee flexion, while other sessions stay stable',()=>{
  const c=fixture();
  assert.deepEqual(plain(c.TRAINING_PLAN.cycle.map(d=>c.rows(d).reduce((n,r)=>n+r.sets,0))),[10,11,11,11,10,11]);
  assert.deepEqual(plain(c.rows('Legs B').map(r=>[c.GymInventory.find(r.name).id,r.sets,r.min,r.max])),[
@@ -105,4 +105,19 @@ test('saved snapshots and original records remain unchanged, including future sa
  }
  c.rows('Push B');c.rows('Legs B');c.TRAINING_PLAN.preparation('Legs B');
  assert.equal(JSON.stringify({data:c.ExLog.activeData,plan:c.ExLog.plan}),before);
+});
+
+test('Nov 18 adds only catalog adduction before crunch; preserves personal settings and snapshots',()=>{
+ const c=fixture(),day='Legs B',prev='2026-11-17',date='2026-11-18',name=c.name('combo-a-adduction');
+ const before=plain(c.rows(day,prev)),rows=c.rows(day,date);
+ assert.deepEqual(plain(rows.map(r=>r.name)),[...before.slice(0,-1).map(r=>r.name),name,before.at(-1).name]);
+ assert.deepEqual(plain(rows.slice(-2,-1).map(r=>[r.sets,r.min,r.max])),[[2,12,15]]);
+ const total=date=>c.TRAINING_PLAN.cycle.reduce((n,d)=>n+c.rows(d,date).reduce((s,r)=>s+r.sets,0),0);
+ assert.equal(total(prev),64);assert.equal(total(date),66);
+ for(const d of c.TRAINING_PLAN.cycle.filter(d=>d!==day))assert.deepEqual(plain(c.rows(d,prev)),plain(c.rows(d,date)));
+ c.ExLog.plan[day]={add:[name],config:{[name]:{sets:3,min:10,max:12}}};
+ assert.deepEqual(plain(c.rows(day,date).filter(r=>r.name===name).map(r=>[r.sets,r.min,r.max])),[[3,10,12]]);
+ c.ExLog.plan[day].rm=[name];assert(!c.rows(day,date).some(r=>r.name===name));
+ c.ExLog.activeData[date]={routineSnapshots:{[day]:{rows:before}}};
+ assert.deepEqual(plain(c.AppFeatures.routine(day,date)),before);
 });
